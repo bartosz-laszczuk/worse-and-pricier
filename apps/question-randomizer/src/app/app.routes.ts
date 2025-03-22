@@ -4,7 +4,9 @@ export const appRoutes: Route[] = [
   {
     path: 'auth',
     loadChildren: () =>
-      import('@regsys/sppr/dashboard/shell').then((r) => r.routes),
+      import('@my-nx-monorepo/question-randomizer-auth-shell').then(
+        (r) => r.authShellRoutes
+      ),
   },
   //   {
   //     path: '',
