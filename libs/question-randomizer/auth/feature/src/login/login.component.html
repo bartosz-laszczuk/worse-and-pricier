@@ -1,4 +1,21 @@
-<form
+<form [formGroup]="myForm">
+  <lib-input-text
+    label="Username"
+    placeholder="Enter username"
+    formControlName="username"
+    [errorMessages]="customErrorMessages"
+  ></lib-input-text>
+
+  <lib-input-text
+    label="Email"
+    type="email"
+    placeholder="Enter email"
+    formControlName="email"
+  ></lib-input-text>
+
+  <button type="submit" [disabled]="myForm.invalid">Submit</button>
+</form>
+<!-- <form
   [formGroup]="form"
   novalidate
   autocomplete="off"
@@ -34,4 +51,4 @@
   <my-projects-nx-shared-ui-buttons-button type="submit"
     >Log in >></my-projects-nx-shared-ui-buttons-button
   >
-</form>
+</form> -->

@@ -1,3 +1,3 @@
-export * from './lib/login/login.component';
-export * from './lib/email-config/email-config.component';
-export * from './lib/registration/registration.component';
+export * from './login/login.component';
+export * from './email-config/email-config.component';
+export * from './registration/registration.component';

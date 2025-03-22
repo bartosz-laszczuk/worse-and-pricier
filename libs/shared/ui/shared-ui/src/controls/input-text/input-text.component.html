@@ -1,0 +1,26 @@
+<div class="form-group">
+  <label *ngIf="label" for="inputField">{{ label }}</label>
+
+  <input
+    id="inputField"
+    [type]="type"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="disabled"
+    (input)="onInputChange($event)"
+    (blur)="markAsTouched()"
+    class="form-control"
+    [ngClass]="{
+      'is-invalid': control.invalid && (control.touched || control.dirty)
+    }"
+  />
+
+  <small class="text-muted" *ngIf="hint">{{ hint }}</small>
+
+  <div
+    *ngIf="control.invalid && (control.touched || control.dirty)"
+    class="invalid-feedback"
+  >
+    {{ getErrorMessage() }}
+  </div>
+</div>
