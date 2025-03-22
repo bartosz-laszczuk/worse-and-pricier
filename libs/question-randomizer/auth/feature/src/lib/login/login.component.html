@@ -1,0 +1,37 @@
+<form
+  [formGroup]="form"
+  novalidate
+  autocomplete="off"
+  (submit)="onSubmit()"
+  (keyup.enter)="onSubmit()"
+>
+  <div class="app-page__content">
+    <my-projects-nx-shared-crt-ui-controls-form-field
+      label="Email"
+      [required]="true"
+      [control]="form.controls['email']"
+      [isInline]="false"
+      [patternError]="regexErrors.email"
+    >
+      <my-projects-nx-shared-crt-ui-controls-input
+        formControlName="email"
+      ></my-projects-nx-shared-crt-ui-controls-input>
+    </my-projects-nx-shared-crt-ui-controls-form-field>
+
+    <my-projects-nx-shared-crt-ui-controls-form-field
+      label="Password"
+      [required]="true"
+      [control]="form.controls['password']"
+      [isInline]="false"
+      [patternError]="regexErrors.password"
+    >
+      <my-projects-nx-shared-crt-ui-controls-password
+        formControlName="password"
+      ></my-projects-nx-shared-crt-ui-controls-password>
+    </my-projects-nx-shared-crt-ui-controls-form-field>
+  </div>
+
+  <my-projects-nx-shared-ui-buttons-button type="submit"
+    >Log in >></my-projects-nx-shared-ui-buttons-button
+  >
+</form>

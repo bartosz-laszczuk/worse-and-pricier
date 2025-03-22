@@ -5,7 +5,7 @@ export const appRoutes: Route[] = [
     path: 'auth',
     loadChildren: () =>
       import('@my-nx-monorepo/question-randomizer-auth-shell').then(
-        (r) => r.authShellRoutes
+        (r) => r.questionRandomizerAuthShellRoutes
       ),
   },
   //   {
