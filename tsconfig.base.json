@@ -21,10 +21,14 @@
       "@my-nx-monorepo/question-randomizer-auth-shell": [
         "libs/question-randomizer/auth/shell/src/index.ts"
       ],
+      "@my-nx-monorepo/question-randomizer-auth-util": [
+        "libs/question-randomizer/auth/util/src/index.ts"
+      ],
       "@my-nx-monorepo/question-randomizer-data-access": [
         "libs/question-randomizer/auth/data-access/src/index.ts"
       ],
-      "@my-nx-monorepo/shared-ui": ["libs/shared/ui/shared-ui/src/index.ts"]
+      "@my-nx-monorepo/shared-ui": ["libs/shared/ui/shared-ui/src/index.ts"],
+      "@my-nx-monorepo/shared-util": ["libs/shared/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

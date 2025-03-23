@@ -1,12 +1,18 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextComponent } from '@my-nx-monorepo/shared-ui';
 import {
+  FormBuilder,
   FormControl,
-  FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
+
+interface LoginForm {
+  email: FormControl<string>;
+  password: FormControl<string>;
+}
 
 @Component({
   selector: 'lib-login',
@@ -16,18 +22,33 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-  myForm = new FormGroup({
-    username: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.pattern(/^[a-zA-Z0-9]+$/),
-    ]),
-    email: new FormControl('', [Validators.required, Validators.email]),
+  private readonly fb = inject(FormBuilder);
+
+  public form = this.fb.group<LoginForm>({
+    email: this.fb.control<string>('', {
+      validators: [
+        Validators.required,
+        Validators.maxLength(128),
+        Validators.email,
+      ],
+      nonNullable: true,
+    }),
+    password: this.fb.control<string>('', {
+      validators: [Validators.required, Validators.maxLength(128)],
+      nonNullable: true,
+    }),
   });
 
-  customErrorMessages = {
-    required: 'This field cannot be empty!',
-    minlength: 'Your username must be at least 3 characters long.',
-    pattern: 'Only letters and numbers are allowed for the username.',
-  };
+  public onSubmit(): void {
+    if (this.form.valid) {
+      const credentials: EmailPasswordCredentials = {
+        email: this.form.controls.email.value,
+        password: this.form.controls.password.value,
+      };
+      // @my-projects-nx/question-randomizer/auth/data-access/store
+      // this.store.dispatch(signInEmail({ credentials }));
+    } else {
+      this.form.markAllAsTouched();
+    }
+  }
 }
