@@ -4,6 +4,7 @@ import { InputTextComponent } from '@my-nx-monorepo/shared-ui';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
 import { LoginFacade } from './login.facade';
+import { LoginService } from '@my-nx-monorepo/question-randomizer-auth-data-access';
 
 @Component({
   selector: 'lib-login',
@@ -11,7 +12,7 @@ import { LoginFacade } from './login.facade';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [LoginFacade],
+  providers: [LoginFacade, LoginService],
 })
 export class LoginComponent {
   private readonly loginFacade = inject(LoginFacade);

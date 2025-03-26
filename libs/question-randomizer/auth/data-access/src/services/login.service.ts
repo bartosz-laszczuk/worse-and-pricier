@@ -9,12 +9,14 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { User } from '../models';
 import { firstValueFrom } from 'rxjs';
 import { serverTimestamp } from 'firebase/firestore';
+import { APP_CONFIG } from '@my-nx-monorepo/question-randomizer-shared-util';
 
 @Injectable()
 export class LoginService {
   private readonly fb = inject(FormBuilder);
   private readonly afAuth = inject(AngularFireAuth);
   private readonly afDb = inject(AngularFirestore);
+  private readonly appConfig = inject(APP_CONFIG);
 
   public form = this.fb.group<LoginForm>({
     email: this.fb.control<string>('', {
@@ -73,7 +75,7 @@ export class LoginService {
 
     // Send email verification
     await signUpState.user.sendEmailVerification(
-      environment.firebase.actionCodeSettings
+      this.appConfig.firebase.actionCodeSettings
     );
 
     return signUpState.user.uid;
