@@ -1,5 +1,9 @@
-import { signalStore, withState } from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { User } from '../../models/user.models';
+import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
+import { LoginService } from '../../services';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 type UserState = {
   entity: User | null;
@@ -17,5 +21,142 @@ const initialState: UserState = {
 
 export const UserStore = signalStore(
   { providedIn: 'root' },
-  withState(initialState)
+  withState(initialState),
+  withMethods(
+    (store, router = inject(Router), loginService = inject(LoginService)) => ({
+      async initUser() {
+        patchState(store, { isLoading: true, error: null });
+
+        try {
+          const authUser = await loginService.getAuthenticatedUser();
+
+          if (authUser) {
+            patchState(store, {
+              entity: authUser.entity,
+              uid: authUser.uid,
+              isLoading: false,
+              error: null,
+            });
+          } else {
+            patchState(store, {
+              entity: null,
+              uid: null,
+              isLoading: false,
+              error: null,
+            });
+          }
+        } catch (error: any) {
+          patchState(store, {
+            isLoading: false,
+            error: error.message || 'User initialization failed',
+          });
+        }
+      },
+
+      async signInEmail(credentials: EmailPasswordCredentials) {
+        patchState(store, { isLoading: true, error: null });
+
+        try {
+          const user = await loginService.signInEmail(credentials);
+
+          patchState(store, {
+            entity: user || null,
+            uid: user?.uid || null,
+            isLoading: false,
+            error: null,
+          });
+
+          router.navigate(['/randomization']);
+        } catch (error: any) {
+          // notification.error(error.message);
+          patchState(store, {
+            isLoading: false,
+            error: error.message || 'Login failed',
+          });
+        }
+      },
+
+      async signUpEmail(credentials: EmailPasswordCredentials) {
+        patchState(store, { isLoading: true, error: null });
+
+        try {
+          const uid = await loginService.signUpEmail(credentials);
+
+          patchState(store, { uid, isLoading: false, error: null });
+
+          router.navigate(['/auth', 'email-confirm']);
+        } catch (error: any) {
+          patchState(store, {
+            isLoading: false,
+            error: error.message || 'Sign-up failed',
+          });
+        }
+      },
+
+      async signOut() {
+        patchState(store, { isLoading: true, error: null });
+
+        try {
+          await loginService.signOut();
+
+          patchState(store, {
+            entity: null,
+            uid: null,
+            isLoading: false,
+            error: null,
+          });
+
+          router.navigate(['/auth/login']);
+        } catch (error: any) {
+          patchState(store, {
+            isLoading: false,
+            error: error.message || 'Sign-out failed',
+          });
+        }
+      },
+
+      async createUser(request: Partial<User>) {
+        patchState(store, { isLoading: true, error: null });
+
+        try {
+          const entity = await loginService.createUser(request);
+
+          patchState(store, {
+            entity,
+            uid: entity.uid,
+            isLoading: false,
+            error: null,
+          });
+
+          router.navigate(['/profile', entity.uid]);
+        } catch (error: any) {
+          patchState(store, {
+            isLoading: false,
+            error: error.message || 'User creation failed',
+          });
+        }
+      },
+
+      async updateUser(entity: User) {
+        patchState(store, { isLoading: true, error: null });
+
+        try {
+          const updatedEntity = await loginService.updateUser(entity);
+
+          patchState(store, {
+            entity: updatedEntity,
+            isLoading: false,
+            error: null,
+          });
+
+          router.navigate(['/profile', updatedEntity.uid]);
+        } catch (error: any) {
+          patchState(store, {
+            isLoading: false,
+            error: error.message || 'User update failed',
+          });
+        }
+      },
+    })
+  )
 );
