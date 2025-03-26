@@ -1,7 +1,7 @@
-# question-randomizer-data-access
+# question-randomizer-auth-data-access
 
 This library was generated with [Nx](https://nx.dev).
 
 ## Running unit tests
 
-Run `nx test question-randomizer-data-access` to execute the unit tests.
+Run `nx test question-randomizer-auth-data-access` to execute the unit tests.

@@ -1,5 +1,5 @@
 export default {
-  displayName: 'question-randomizer-data-access',
+  displayName: 'question-randomizer-auth-data-access',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:

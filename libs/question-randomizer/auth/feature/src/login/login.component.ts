@@ -1,18 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextComponent } from '@my-nx-monorepo/shared-ui';
-import {
-  FormBuilder,
-  FormControl,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
-
-interface LoginForm {
-  email: FormControl<string>;
-  password: FormControl<string>;
-}
+import { LoginFacade } from './login.facade';
 
 @Component({
   selector: 'lib-login',
@@ -20,24 +11,11 @@ interface LoginForm {
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [LoginFacade],
 })
 export class LoginComponent {
-  private readonly fb = inject(FormBuilder);
-
-  public form = this.fb.group<LoginForm>({
-    email: this.fb.control<string>('', {
-      validators: [
-        Validators.required,
-        Validators.maxLength(128),
-        Validators.email,
-      ],
-      nonNullable: true,
-    }),
-    password: this.fb.control<string>('', {
-      validators: [Validators.required, Validators.maxLength(128)],
-      nonNullable: true,
-    }),
-  });
+  private readonly loginFacade = inject(LoginFacade);
+  public form = this.loginFacade.form;
 
   public onSubmit(): void {
     if (this.form.valid) {
@@ -47,6 +25,7 @@ export class LoginComponent {
       };
       // @my-projects-nx/question-randomizer/auth/data-access/store
       // this.store.dispatch(signInEmail({ credentials }));
+      this.loginFacade.signInEmail(credentials);
     } else {
       this.form.markAllAsTouched();
     }

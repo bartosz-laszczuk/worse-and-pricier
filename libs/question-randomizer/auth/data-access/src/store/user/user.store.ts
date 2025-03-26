@@ -1,16 +1,21 @@
 import { signalStore, withState } from '@ngrx/signals';
-import { Book } from './book.model';
+import { User } from '../../models/user.models';
 
-type BooksState = {
-  books: Book[];
-  isLoading: boolean;
-  filter: { query: string; order: 'asc' | 'desc' };
+type UserState = {
+  entity: User | null;
+  uid: string | null;
+  isLoading: boolean | null;
+  error: string | null;
 };
 
-const initialState: BooksState = {
-  books: [],
-  isLoading: false,
-  filter: { query: '', order: 'asc' },
+const initialState: UserState = {
+  entity: null,
+  uid: null,
+  isLoading: null,
+  error: null,
 };
 
-export const BooksStore = signalStore(withState(initialState));
+export const UserStore = signalStore(
+  { providedIn: 'root' },
+  withState(initialState)
+);

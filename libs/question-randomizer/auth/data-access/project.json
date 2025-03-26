@@ -1,5 +1,5 @@
 {
-  "name": "question-randomizer-data-access",
+  "name": "question-randomizer-auth-data-access",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/question-randomizer/auth/data-access/src",
   "prefix": "lib",
