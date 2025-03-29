@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { AuthCanActivate } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 
 export const questionRandomizerAuthShellRoutes: Route[] = [
   {
@@ -7,7 +8,7 @@ export const questionRandomizerAuthShellRoutes: Route[] = [
       import('@my-nx-monorepo/question-randomizer-auth-feature').then(
         (x) => x.LoginComponent
       ),
-    // canActivate: [UnauthGuard],
+    canActivate: [AuthCanActivate],
   },
   // {
   //   path: 'registration',

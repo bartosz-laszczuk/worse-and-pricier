@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { AuthCanActivate } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 
 export const appRoutes: Route[] = [
   {
@@ -8,54 +9,44 @@ export const appRoutes: Route[] = [
         (r) => r.questionRandomizerAuthShellRoutes
       ),
   },
-  //   {
-  //     path: '',
-  //     children: [
-  //       {
-  //         path: '',
-  //         pathMatch: 'full',
-  //         redirectTo: 'randomization',
-  //       },
-  //       {
-  //         path: 'questions',
-  //         loadChildren: () =>
-  //           import('../questions/questions.module').then(
-  //             (m) => m.QuestionsModule
-  //           ),
-  //         canActivate: [AuthCanActivate],
-  //       },
-  //       {
-  //         path: 'settings',
-  //         loadComponent: () =>
-  //           import('../settings/settings.component').then(
-  //             (m) => m.SettingsComponent
-  //           ),
-  //         canActivate: [AuthCanActivate],
-  //       },
-  //       // {
-  //       //   path: 'demo',
-  //       //   loadChildren: () =>
-  //       //     import('../demo/demo.module').then((m) => m.DemoModule),
-  //       // },
-  //       // {
-  //       //   path: 'auth',
-  //       //   loadChildren: () =>
-  //       //     import('../auth/auth.module').then((m) => m.AuthModule),
-  //       // },
-  //       {
-  //         path: 'randomization',
-  //         loadChildren: () =>
-  //           import('../randomization/randomization.module').then(
-  //             (m) => m.RandomizationModule
-  //           ),
-  //         canActivate: [AuthCanActivate],
-  //       },
-  //       {
-  //         path: 'static',
-  //         loadChildren: () =>
-  //           import('../static/static.module').then((m) => m.StaticModule),
-  //       },
-  //     ],
-  //   },
-  //   { path: '**', pathMatch: 'full', redirectTo: '/static/404' },
+  {
+    path: '',
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'randomization',
+      },
+      // {
+      //   path: 'questions',
+      //   loadChildren: () =>
+      //     import('../questions/questions.module').then(
+      //       (m) => m.QuestionsModule
+      //     ),
+      //   canActivate: [AuthCanActivate],
+      // },
+      // {
+      //   path: 'settings',
+      //   loadComponent: () =>
+      //     import('../settings/settings.component').then(
+      //       (m) => m.SettingsComponent
+      //     ),
+      //   canActivate: [AuthCanActivate],
+      // },
+      {
+        path: 'randomization',
+        loadChildren: () =>
+          import(
+            '@my-nx-monorepo/question-randomizer-randomization-shell'
+          ).then((r) => r.questionRandomizerRandomizationShellRoutes),
+        canActivate: [AuthCanActivate],
+      },
+      // {
+      //   path: 'static',
+      //   loadChildren: () =>
+      //     import('../static/static.module').then((m) => m.StaticModule),
+      // },
+    ],
+  },
+  { path: '**', pathMatch: 'full', redirectTo: '/static/404' },
 ];
