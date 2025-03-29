@@ -1,8 +1,13 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { User } from '../../models/user.models';
 import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
-import { LoginService } from '../../services';
-import { inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -23,6 +28,9 @@ const initialState: UserState = {
 export const UserStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
+  withComputed((store) => ({
+    isAuthenticated: computed(() => !!store.uid),
+  })),
   withMethods(
     (store, router = inject(Router), authService = inject(AuthService)) => ({
       async initUser() {

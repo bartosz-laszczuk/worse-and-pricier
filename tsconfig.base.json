@@ -27,6 +27,9 @@
       "@my-nx-monorepo/question-randomizer-auth-util": [
         "libs/question-randomizer/auth/util/src/index.ts"
       ],
+      "@my-nx-monorepo/question-randomizer-shared-data-access": [
+        "libs/question-randomizer/shared/data-access/src/index.ts"
+      ],
       "@my-nx-monorepo/question-randomizer-shared-util": [
         "libs/question-randomizer/shared/util/src/index.ts"
       ],

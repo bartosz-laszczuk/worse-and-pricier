@@ -16,10 +16,10 @@ import {
   getDoc,
   docData,
 } from '@angular/fire/firestore';
-import { User } from '../models';
 import { firstValueFrom } from 'rxjs';
 import { serverTimestamp } from 'firebase/firestore';
 import { APP_CONFIG } from '@my-nx-monorepo/question-randomizer-shared-util';
+import { User } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
