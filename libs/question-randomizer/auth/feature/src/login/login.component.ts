@@ -24,8 +24,6 @@ export class LoginComponent {
         email: this.form.controls.email.value,
         password: this.form.controls.password.value,
       };
-      // @my-projects-nx/question-randomizer/auth/data-access/store
-      // this.store.dispatch(signInEmail({ credentials }));
       this.loginFacade.signInEmail(credentials);
     } else {
       this.form.markAllAsTouched();

@@ -13,6 +13,6 @@ export class LoginFacade {
   public form = this.loginService.form;
 
   public signInEmail(credentials: EmailPasswordCredentials) {
-    this.loginService.signInEmail(credentials);
+    this.userStore.signInEmail(credentials);
   }
 }

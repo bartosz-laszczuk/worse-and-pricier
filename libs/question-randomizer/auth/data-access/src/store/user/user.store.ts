@@ -4,6 +4,7 @@ import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-au
 import { LoginService } from '../../services';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 type UserState = {
   entity: User | null;
@@ -23,12 +24,12 @@ export const UserStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods(
-    (store, router = inject(Router), loginService = inject(LoginService)) => ({
+    (store, router = inject(Router), authService = inject(AuthService)) => ({
       async initUser() {
         patchState(store, { isLoading: true, error: null });
 
         try {
-          const authUser = await loginService.getAuthenticatedUser();
+          const authUser = await authService.getAuthenticatedUser();
 
           if (authUser) {
             patchState(store, {
@@ -57,7 +58,7 @@ export const UserStore = signalStore(
         patchState(store, { isLoading: true, error: null });
 
         try {
-          const user = await loginService.signInEmail(credentials);
+          const user = await authService.signInEmail(credentials);
 
           patchState(store, {
             entity: user || null,
@@ -68,6 +69,7 @@ export const UserStore = signalStore(
 
           router.navigate(['/randomization']);
         } catch (error: any) {
+          console.error(error);
           // notification.error(error.message);
           patchState(store, {
             isLoading: false,
@@ -80,7 +82,7 @@ export const UserStore = signalStore(
         patchState(store, { isLoading: true, error: null });
 
         try {
-          const uid = await loginService.signUpEmail(credentials);
+          const uid = await authService.signUpEmail(credentials);
 
           patchState(store, { uid, isLoading: false, error: null });
 
@@ -97,7 +99,7 @@ export const UserStore = signalStore(
         patchState(store, { isLoading: true, error: null });
 
         try {
-          await loginService.signOut();
+          await authService.signOut();
 
           patchState(store, {
             entity: null,
@@ -119,7 +121,7 @@ export const UserStore = signalStore(
         patchState(store, { isLoading: true, error: null });
 
         try {
-          const entity = await loginService.createUser(request);
+          const entity = await authService.createUser(request);
 
           patchState(store, {
             entity,
@@ -141,7 +143,7 @@ export const UserStore = signalStore(
         patchState(store, { isLoading: true, error: null });
 
         try {
-          const updatedEntity = await loginService.updateUser(entity);
+          const updatedEntity = await authService.updateUser(entity);
 
           patchState(store, {
             entity: updatedEntity,

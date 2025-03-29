@@ -4,12 +4,12 @@ export const environment: AppConfig = {
   production: true,
   firebase: {
     config: {
-      apiKey: 'AIzaSyD1AtRHU735g0zqtlIAOD-hrf8x69y-Bws',
-      authDomain: 'question-randomizer-1cf31.firebaseapp.com',
-      projectId: 'question-randomizer-1cf31',
-      storageBucket: 'question-randomizer-1cf31.appspot.com',
-      messagingSenderId: '673434361767',
-      appId: '1:673434361767:web:37991cdc5cb877aa14e082',
+      apiKey: 'AIzaSyAdyJqiJUMsOv2B5wnFyMkPo_iYWSwVmM8',
+      authDomain: 'question-randomizer-508e7.firebaseapp.com',
+      projectId: 'question-randomizer-508e7',
+      storageBucket: 'question-randomizer-508e7.firebasestorage.app',
+      messagingSenderId: '850105983052',
+      appId: '1:850105983052:web:ac5549a9b740d2966d94e9',
     },
     actionCodeSettings: {
       url: 'https://question-randomizer-1cf31.web.app/profile/new',

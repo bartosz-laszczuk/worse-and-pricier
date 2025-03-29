@@ -13,5 +13,7 @@
     formControlName="password"
   ></lib-input-text>
 
-  <button type="submit" [disabled]="form.invalid">Submit</button>
+  <button type="submit" [disabled]="form.invalid" (click)="onSubmit()">
+    Submit
+  </button>
 </form>
