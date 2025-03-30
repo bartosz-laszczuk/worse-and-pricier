@@ -4,6 +4,7 @@ import {
   AuthCanActivate,
   AuthVerifiedCanActivate,
 } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { EmailNotVerifiedComponent } from './ui/email-not-verified/email-not-verified.component';
 
 export const questionRandomizerDashboardShellRoutes: Route[] = [
   {
@@ -36,15 +37,12 @@ export const questionRandomizerDashboardShellRoutes: Route[] = [
         loadComponent: () =>
           import(
             '@my-nx-monorepo/question-randomizer-dashboard-randomization-feature'
-          ).then((r) => r.RandomizationDisplayComponent),
+          ).then((r) => r.RandomizationDetailsComponent),
         canActivate: [AuthVerifiedCanActivate],
       },
       {
         path: 'email-not-verified',
-        loadComponent: () =>
-          import(
-            '@my-nx-monorepo/question-randomizer-dashboard-shared-ui'
-          ).then((r) => r.EmailNotVerifiedComponent),
+        component: EmailNotVerifiedComponent,
         canActivate: [AuthCanActivate],
       },
       // {

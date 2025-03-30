@@ -30,6 +30,7 @@ export const UserStore = signalStore(
   withState(initialState),
   withComputed((store) => ({
     isAuthenticated: computed(() => !!store.uid()),
+    isVerified: computed(() => !!store.entity()),
   })),
   withMethods(
     (store, router = inject(Router), authService = inject(AuthService)) => ({

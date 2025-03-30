@@ -26,7 +26,7 @@ async function check(verificationRequired = false): Promise<boolean> {
     if (!isAuthenticated) {
       router.navigate(['/auth', 'login']);
     }
-    if (verificationRequired && !userStore.entity()?.emailVerified) {
+    if (verificationRequired && !userStore.isVerified) {
       router.navigate(['/dashboard', 'email-not-verified']);
     }
     return isAuthenticated;

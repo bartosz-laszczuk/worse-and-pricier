@@ -1,1 +1,1 @@
-export * from './display/randomization-display.component';
+export * from './details/randomization-details.component';
