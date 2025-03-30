@@ -48,5 +48,5 @@ export const appRoutes: Route[] = [
       // },
     ],
   },
-  { path: '**', pathMatch: 'full', redirectTo: '/static/404' },
+  // { path: '**', pathMatch: 'full', redirectTo: '/static/404' },
 ];

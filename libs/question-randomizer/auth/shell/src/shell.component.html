@@ -1,2 +1,12 @@
-<p>auth menu</p>
+<nav class="navigation">
+  <a class="app-a" [routerLink]="['login']" routerLinkActive="app-a_active"
+    >Log in</a
+  >
+  <a
+    class="app-a"
+    [routerLink]="['registration']"
+    routerLinkActive="app-a_active"
+    >Registration</a
+  >
+</nav>
 <router-outlet></router-outlet>
