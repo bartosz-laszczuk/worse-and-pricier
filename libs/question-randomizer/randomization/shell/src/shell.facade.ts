@@ -1,0 +1,11 @@
+import { inject, Injectable } from '@angular/core';
+import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+
+@Injectable()
+export class ShellFacade {
+  private readonly userStore = inject(UserStore);
+
+  public signOut() {
+    this.userStore.signOut();
+  }
+}

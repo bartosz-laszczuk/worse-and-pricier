@@ -29,7 +29,7 @@ export const UserStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withComputed((store) => ({
-    isAuthenticated: computed(() => !!store.uid),
+    isAuthenticated: computed(() => !!store.uid()),
   })),
   withMethods(
     (store, router = inject(Router), authService = inject(AuthService)) => ({
