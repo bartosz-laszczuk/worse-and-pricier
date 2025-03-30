@@ -66,17 +66,21 @@ export const UserStore = signalStore(
         patchState(store, { isLoading: true, error: null });
 
         try {
-          const uid = await authService.signInEmail(credentials);
-          const user = await authService.getAuthenticatedUser();
+          await authService.signInEmail(credentials);
+          await this.initUser();
+          // const uid = store.uid();
+          // const user = store.entity();
 
-          patchState(store, {
-            entity: user || null,
-            uid: uid || null,
-            isLoading: false,
-            error: null,
-          });
+          // const user = await authService.getAuthenticatedUser();
 
-          router.navigate(['/randomization']);
+          // patchState(store, {
+          //   entity: user || null,
+          //   uid: uid || null,
+          //   isLoading: false,
+          //   error: null,
+          // });
+
+          router.navigate(['/dashboard/randomization']);
         } catch (error: any) {
           console.error(error);
           // notification.error(error.message);
