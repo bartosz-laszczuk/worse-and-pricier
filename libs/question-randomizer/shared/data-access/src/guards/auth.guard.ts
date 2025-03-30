@@ -3,11 +3,15 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserStore } from '../store';
 
+export const AuthVerifiedCanActivate: CanActivateFn = async (route, state) =>
+  check(true);
+export const AuthVerifiedCanActivateChild: CanActivateChildFn = async (
+  route,
+  state
+) => check(true);
 export const AuthCanActivate: CanActivateFn = async (route, state) => check();
-export const AuthCanActivateChild: CanActivateChildFn = async (route, state) =>
-  check();
 
-async function check(): Promise<boolean> {
+async function check(verificationRequired = false): Promise<boolean> {
   const router = inject(Router);
   const userStore = inject(UserStore);
 
@@ -16,14 +20,14 @@ async function check(): Promise<boolean> {
   if (isLoading === null) {
     await userStore.initUser();
   }
-
-  const newIsLoading = userStore.isLoading();
-  const newUid = userStore.uid();
-
-  if (newIsLoading === false) {
-    const isAuthenticated = !!newUid;
+  debugger;
+  if (userStore.isLoading() === false) {
+    const isAuthenticated = userStore.isAuthenticated();
     if (!isAuthenticated) {
       router.navigate(['auth', 'login']);
+    }
+    if (verificationRequired && !userStore.entity()?.emailVerified) {
+      router.navigate(['auth', 'email-not-verified']);
     }
     return isAuthenticated;
   }

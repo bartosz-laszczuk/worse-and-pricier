@@ -1,9 +1,9 @@
 export default {
-  displayName: 'question-randomizer-randomization-shell',
+  displayName: 'question-randomizer-dashboard-shell',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/question-randomizer/randomization/shell',
+    '../../../../coverage/libs/question-randomizer/dashboard/shell',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

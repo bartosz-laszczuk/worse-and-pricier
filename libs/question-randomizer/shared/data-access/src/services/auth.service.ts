@@ -29,7 +29,7 @@ export class AuthService {
 
   public async signInEmail(
     credentials: EmailPasswordCredentials
-  ): Promise<User | undefined> {
+  ): Promise<string | undefined> {
     const signInState = await signInWithEmailAndPassword(
       this.afAuth,
       credentials.email,
@@ -37,9 +37,10 @@ export class AuthService {
     );
     if (!signInState.user) throw new Error('User not found');
 
-    return firstValueFrom(
-      docData(doc(this.afDb, `users/${signInState.user.uid}`))
-    ) as Promise<User | undefined>;
+    return signInState.user.uid;
+    // return firstValueFrom(
+    //   docData(doc(this.afDb, `users/${signInState.user.uid}`))
+    // ) as Promise<User | undefined>;
   }
 
   public async getAuthenticatedUser(): Promise<{

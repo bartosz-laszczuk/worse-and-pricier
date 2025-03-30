@@ -66,11 +66,12 @@ export const UserStore = signalStore(
         patchState(store, { isLoading: true, error: null });
 
         try {
-          const user = await authService.signInEmail(credentials);
+          const uid = await authService.signInEmail(credentials);
+          const user = await authService.getAuthenticatedUser();
 
           patchState(store, {
             entity: user || null,
-            uid: user?.uid || null,
+            uid: uid || null,
             isLoading: false,
             error: null,
           });

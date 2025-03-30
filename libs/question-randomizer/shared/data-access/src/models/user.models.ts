@@ -6,4 +6,5 @@ export interface User {
   country?: string;
   about?: string;
   roleId?: string;
+  emailVerified?: boolean;
 }

@@ -1,0 +1,27 @@
+import { inject, Injectable } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { RegistrationForm } from '@my-nx-monorepo/question-randomizer-auth-util';
+
+@Injectable()
+export class RegistrationService {
+  private readonly fb = inject(FormBuilder);
+
+  public form = this.fb.group<RegistrationForm>({
+    email: this.fb.control<string>('', {
+      validators: [
+        Validators.required,
+        Validators.maxLength(128),
+        Validators.email,
+      ],
+      nonNullable: true,
+    }),
+    password: this.fb.control<string>('', {
+      validators: [Validators.required, Validators.maxLength(128)],
+      nonNullable: true,
+    }),
+    passwordRepeat: this.fb.control<string>('', {
+      validators: [Validators.required, Validators.maxLength(128)],
+      nonNullable: true,
+    }),
+  });
+}

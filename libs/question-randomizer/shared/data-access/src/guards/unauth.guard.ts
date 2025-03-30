@@ -5,12 +5,13 @@ import { UserStore } from '../store';
 const checkUnauth = async (): Promise<boolean> => {
   const router = inject(Router);
   const userStore = inject(UserStore);
+  debugger;
   if (userStore.isLoading() === null) {
     await userStore.initUser();
   }
 
   if (userStore.isAuthenticated()) {
-    router.navigate(['/']);
+    router.navigate(['/dashboard']);
     return false;
   }
 

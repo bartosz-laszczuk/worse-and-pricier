@@ -1,10 +1,5 @@
 import { FormControl } from '@angular/forms';
 
-export interface EmailPasswordCredentials {
-  email: string;
-  password: string;
-}
-
 export interface User {
   uid: string;
   name?: string;

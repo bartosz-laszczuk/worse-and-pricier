@@ -1,1 +1,26 @@
-<p>registration works!</p>
+<form [formGroup]="form">
+  <lib-input-text
+    label="Email"
+    type="email"
+    placeholder="Enter email"
+    formControlName="email"
+  ></lib-input-text>
+
+  <lib-input-text
+    label="Password"
+    type="password"
+    placeholder="Enter password"
+    formControlName="password"
+  ></lib-input-text>
+
+  <lib-input-text
+    label="Repeat password"
+    type="password"
+    placeholder="Enter password"
+    formControlName="passwordRepeat"
+  ></lib-input-text>
+
+  <button type="submit" [disabled]="form.invalid" (click)="onSubmit()">
+    Submit
+  </button>
+</form>
