@@ -12,7 +12,7 @@ export const environment: AppConfig = {
       appId: '1:850105983052:web:ac5549a9b740d2966d94e9',
     },
     actionCodeSettings: {
-      url: 'https://question-randomizer-1cf31.web.app/profile/new',
+      url: 'https://question-randomizer-1cf31.web.app/dashboard/email-confirmed',
       handleCodeInApp: true,
     },
   },

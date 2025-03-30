@@ -1,20 +1,17 @@
 import { Route } from '@angular/router';
 import { ShellComponent } from './shell.component';
-import {
-  AuthCanActivate,
-  AuthVerifiedCanActivate,
-} from '@my-nx-monorepo/question-randomizer-shared-data-access';
-import { EmailNotVerifiedComponent } from './ui/email-not-verified/email-not-verified.component';
+import { AuthVerifiedCanActivate } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 
 export const questionRandomizerDashboardShellRoutes: Route[] = [
   {
     path: '',
     component: ShellComponent,
+    canActivate: [AuthVerifiedCanActivate],
     children: [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'dashboard/randomization',
+        redirectTo: 'randomization',
       },
       // {
       //   path: 'questions',
@@ -38,12 +35,6 @@ export const questionRandomizerDashboardShellRoutes: Route[] = [
           import(
             '@my-nx-monorepo/question-randomizer-dashboard-randomization-feature'
           ).then((r) => r.RandomizationDetailsComponent),
-        canActivate: [AuthVerifiedCanActivate],
-      },
-      {
-        path: 'email-not-verified',
-        component: EmailNotVerifiedComponent,
-        canActivate: [AuthCanActivate],
       },
       // {
       //   path: 'static',

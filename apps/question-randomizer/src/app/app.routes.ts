@@ -1,7 +1,11 @@
 import { Route } from '@angular/router';
-import { AuthCanActivate } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 
 export const appRoutes: Route[] = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard/randomization',
+  },
   {
     path: 'auth',
     loadChildren: () =>

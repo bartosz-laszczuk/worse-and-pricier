@@ -37,6 +37,15 @@ export class AuthService {
     );
     if (!signInState.user) throw new Error('User not found');
 
+    if (signInState.user.emailVerified) {
+      const userDoc = await firstValueFrom(
+        docData(doc(this.afDb, `users/${signInState.user.uid}`))
+      );
+      if (!userDoc) {
+        await this.createUser();
+      }
+    }
+
     return signInState.user.uid;
     // return firstValueFrom(
     //   docData(doc(this.afDb, `users/${signInState.user.uid}`))
@@ -45,6 +54,7 @@ export class AuthService {
 
   public async getAuthenticatedUser(): Promise<{
     uid: string;
+    verified: boolean;
     entity: User | null;
   } | null> {
     return new Promise((resolve) => {
@@ -52,12 +62,14 @@ export class AuthService {
         this.afAuth,
         async (authState: FirebaseUser | null) => {
           if (!authState) return resolve(null);
-
+          console.log('getAuthenticatedUser() authState', authState);
           const userDoc = await getDoc(
             doc(this.afDb, `users/${authState.uid}`)
           );
+          console.log('getAuthenticatedUser() userDoc.data', userDoc.data());
           resolve({
             uid: authState.uid,
+            verified: authState.emailVerified,
             entity: userDoc.exists() ? (userDoc.data() as User) : null,
           });
         }
@@ -73,7 +85,11 @@ export class AuthService {
       credentials.email,
       credentials.password
     );
+
     if (!signUpState.user) throw new Error('User registration failed');
+    console.log('user created signUpState.user', signUpState.user);
+
+    // await this.createUser();
 
     await sendEmailVerification(
       signUpState.user,
@@ -86,7 +102,7 @@ export class AuthService {
     await signOut(this.afAuth);
   }
 
-  public async createUser(request: Partial<User>): Promise<User> {
+  public async createUser(request: Partial<User> = {}): Promise<User> {
     const authState = this.afAuth.currentUser;
     if (!authState) throw new Error('No authenticated user found');
 

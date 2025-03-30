@@ -16,7 +16,7 @@ export const environment: AppConfig = {
       appId: '1:850105983052:web:ac5549a9b740d2966d94e9',
     },
     actionCodeSettings: {
-      url: 'http://localhost:5200/profile/new',
+      url: 'http://localhost:4200/auth/email/verified',
       handleCodeInApp: true,
     },
   },

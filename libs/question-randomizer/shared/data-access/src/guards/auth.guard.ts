@@ -3,13 +3,18 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserStore } from '../store';
 
-export const AuthVerifiedCanActivate: CanActivateFn = async (route, state) =>
-  check(true);
+export const AuthVerifiedCanActivate: CanActivateFn = async (route, state) => {
+  console.log('AuthVerifiedCanActive starts');
+  return check(true);
+};
 export const AuthVerifiedCanActivateChild: CanActivateChildFn = async (
   route,
   state
 ) => check(true);
-export const AuthCanActivate: CanActivateFn = async (route, state) => check();
+export const AuthCanActivate: CanActivateFn = async (route, state) => {
+  console.log('AuthCanActive starts');
+  return check();
+};
 
 async function check(verificationRequired = false): Promise<boolean> {
   const router = inject(Router);
@@ -26,8 +31,8 @@ async function check(verificationRequired = false): Promise<boolean> {
     if (!isAuthenticated) {
       router.navigate(['/auth', 'login']);
     }
-    if (verificationRequired && !userStore.isVerified) {
-      router.navigate(['/dashboard', 'email-not-verified']);
+    if (verificationRequired && !userStore.isVerified()) {
+      router.navigate(['/auth', 'email', 'not-verified']);
     }
     return isAuthenticated;
   }

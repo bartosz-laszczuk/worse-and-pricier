@@ -14,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
 type UserState = {
   entity: User | null;
   uid: string | null;
+  verified: boolean | null;
   isLoading: boolean | null;
   error: string | null;
 };
@@ -21,6 +22,7 @@ type UserState = {
 const initialState: UserState = {
   entity: null,
   uid: null,
+  verified: null,
   isLoading: null,
   error: null,
 };
@@ -30,7 +32,7 @@ export const UserStore = signalStore(
   withState(initialState),
   withComputed((store) => ({
     isAuthenticated: computed(() => !!store.uid()),
-    isVerified: computed(() => !!store.entity()),
+    isVerified: computed(() => !!store.verified()),
   })),
   withMethods(
     (store, router = inject(Router), authService = inject(AuthService)) => ({
@@ -39,11 +41,12 @@ export const UserStore = signalStore(
 
         try {
           const authUser = await authService.getAuthenticatedUser();
-
+          console.log('initUser() authUser:', authUser);
           if (authUser) {
             patchState(store, {
               entity: authUser.entity,
               uid: authUser.uid,
+              verified: authUser.verified,
               isLoading: false,
               error: null,
             });
@@ -51,6 +54,7 @@ export const UserStore = signalStore(
             patchState(store, {
               entity: null,
               uid: null,
+              verified: null,
               isLoading: false,
               error: null,
             });
@@ -100,7 +104,7 @@ export const UserStore = signalStore(
 
           patchState(store, { uid, isLoading: false, error: null });
 
-          router.navigate(['/auth', 'email-confirm']);
+          router.navigate(['/auth', 'email', 'verify']);
         } catch (error: any) {
           patchState(store, {
             isLoading: false,
@@ -122,7 +126,7 @@ export const UserStore = signalStore(
             error: null,
           });
 
-          router.navigate(['/auth/login']);
+          router.navigate(['/auth', 'login']);
         } catch (error: any) {
           patchState(store, {
             isLoading: false,
@@ -131,7 +135,7 @@ export const UserStore = signalStore(
         }
       },
 
-      async createUser(request: Partial<User>) {
+      async createUser(request: Partial<User> = {}) {
         patchState(store, { isLoading: true, error: null });
 
         try {
