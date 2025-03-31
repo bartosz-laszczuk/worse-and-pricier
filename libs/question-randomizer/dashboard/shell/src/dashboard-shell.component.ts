@@ -12,9 +12,13 @@ import { DashboardShellFacade } from './dashboard-shell.facade';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardShellComponent {
-  private readonly shellFacade = inject(DashboardShellFacade);
+  private readonly dashboardShellFacade = inject(DashboardShellFacade);
+
+  public constructor() {
+    this.dashboardShellFacade.loadLists();
+  }
 
   public onSignOut() {
-    this.shellFacade.signOut();
+    this.dashboardShellFacade.signOut();
   }
 }

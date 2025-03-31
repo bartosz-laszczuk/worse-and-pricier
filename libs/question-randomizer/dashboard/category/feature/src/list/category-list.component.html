@@ -1,1 +1,6 @@
 <p>category-list works!</p>
+<button (click)="getCategories()">Log Categories</button>
+<button (click)="editCategoryOpened = !editCategoryOpened">Add Category</button>
+@if (editCategoryOpened) {
+<lib-edit-category (save)="onCreate($event)"></lib-edit-category>
+}
