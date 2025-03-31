@@ -2,9 +2,7 @@
   "name": "@my-nx-monorepo/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {
-    "qr": "nx serve question-randomizer"
-  },
+  "scripts": {},
   "private": true,
   "dependencies": {
     "@angular/common": "~19.2.0",

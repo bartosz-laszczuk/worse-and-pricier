@@ -27,8 +27,32 @@
       "@my-nx-monorepo/question-randomizer-auth-util": [
         "libs/question-randomizer/auth/util/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-randomization-feature": [
-        "libs/question-randomizer/dashboard/randomization/feature/src/index.ts"
+      "@my-nx-monorepo/question-randomizer-dashboard-category-feature": [
+        "libs/question-randomizer/dashboard/category/feature/src/index.ts"
+      ],
+      "@my-nx-monorepo/question-randomizer-dashboard-category-ui": [
+        "libs/question-randomizer/dashboard/category/ui/src/index.ts"
+      ],
+      "@my-nx-monorepo/question-randomizer-dashboard-interview-shell": [
+        "libs/question-randomizer/dashboard/interview/shell/src/index.ts"
+      ],
+      "@my-nx-monorepo/question-randomizer-dashboard-qualification-feature": [
+        "libs/question-randomizer/dashboard/qualification/feature/src/index.ts"
+      ],
+      "@my-nx-monorepo/question-randomizer-dashboard-qualification-ui": [
+        "libs/question-randomizer/dashboard/qualification/ui/src/index.ts"
+      ],
+      "@my-nx-monorepo/question-randomizer-dashboard-question-feature": [
+        "libs/question-randomizer/dashboard/question/feature/src/index.ts"
+      ],
+      "@my-nx-monorepo/question-randomizer-dashboard-question-ui": [
+        "libs/question-randomizer/dashboard/question/ui/src/index.ts"
+      ],
+      "@my-nx-monorepo/question-randomizer-dashboard-randomization-shell": [
+        "libs/question-randomizer/dashboard/randomization/shell/src/index.ts"
+      ],
+      "@my-nx-monorepo/question-randomizer-dashboard-randomization-ui": [
+        "libs/question-randomizer/dashboard/randomization/ui/src/index.ts"
       ],
       "@my-nx-monorepo/question-randomizer-dashboard-shared-ui": [
         "libs/question-randomizer/dashboard/shared/ui/src/index.ts"

@@ -1,1 +1,1 @@
-export * from './lib.routes';
+export * from './dashboard-shell.routes';

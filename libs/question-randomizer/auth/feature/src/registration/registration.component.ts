@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegistrationFacade } from './registration.facade';
 import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
@@ -7,10 +7,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RegistrationService } from '@my-nx-monorepo/question-randomizer-auth-data-access';
 
 @Component({
+  selector: 'lib-registration',
   imports: [CommonModule, InputTextComponent, ReactiveFormsModule],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
   providers: [RegistrationFacade, RegistrationService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistrationComponent {
   private readonly registrationFacade = inject(RegistrationFacade);

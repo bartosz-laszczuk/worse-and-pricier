@@ -7,6 +7,7 @@ import { LoginFacade } from './login.facade';
 import { LoginService } from '@my-nx-monorepo/question-randomizer-auth-data-access';
 
 @Component({
+  selector: 'lib-login',
   imports: [CommonModule, InputTextComponent, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

@@ -1,0 +1,26 @@
+<div class="container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h1>Hudson 8</h1>
+    <button class="general-btn">General</button>
+    <button class="project-btn">Project</button>
+    <nav class="nav">
+      <ul>
+        <li><a [routerLink]="['randomization']">Randomization</a></li>
+        <li><a [routerLink]="['questions']">Questions</a></li>
+        <li><a [routerLink]="['categories']">Categories</a></li>
+        <li><a [routerLink]="['qualifications']">Qualifications</a></li>
+        <li><a [routerLink]="['interview']">Interview</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <h1>Dashboard</h1>
+    <div class="divider"></div>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+<!-- dashboard shell page <button (click)="onSignOut()">Sign out</button>
+<router-outlet></router-outlet> -->

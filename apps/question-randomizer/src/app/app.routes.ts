@@ -10,14 +10,14 @@ export const appRoutes: Route[] = [
     path: 'auth',
     loadChildren: () =>
       import('@my-nx-monorepo/question-randomizer-auth-shell').then(
-        (r) => r.questionRandomizerAuthShellRoutes
+        (r) => r.authShellRoutes
       ),
   },
   {
     path: 'dashboard',
     loadChildren: () =>
       import('@my-nx-monorepo/question-randomizer-dashboard-shell').then(
-        (r) => r.questionRandomizerDashboardShellRoutes
+        (r) => r.dashboardShellRoutes
       ),
   },
   // { path: '**', pathMatch: 'full', redirectTo: '/static/404' },
