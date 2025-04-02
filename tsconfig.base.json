@@ -27,17 +27,11 @@
       "@my-nx-monorepo/question-randomizer-auth-util": [
         "libs/question-randomizer/auth/util/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-category-data-access": [
-        "libs/question-randomizer/dashboard/category/data-access/src/index.ts"
-      ],
       "@my-nx-monorepo/question-randomizer-dashboard-category-feature": [
         "libs/question-randomizer/dashboard/category/feature/src/index.ts"
       ],
       "@my-nx-monorepo/question-randomizer-dashboard-category-ui": [
         "libs/question-randomizer/dashboard/category/ui/src/index.ts"
-      ],
-      "@my-nx-monorepo/question-randomizer-dashboard-category-util": [
-        "libs/question-randomizer/dashboard/category/util/src/index.ts"
       ],
       "@my-nx-monorepo/question-randomizer-dashboard-interview-shell": [
         "libs/question-randomizer/dashboard/interview/shell/src/index.ts"

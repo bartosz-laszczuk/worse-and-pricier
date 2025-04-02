@@ -1,0 +1,18 @@
+<form [formGroup]="form">
+  <lib-input-text
+    label="Name"
+    type="text"
+    placeholder="Enter name"
+    formControlName="name"
+  ></lib-input-text>
+  <button type="submit" [disabled]="form.invalid" (click)="onSubmit()">
+    Submit
+  </button>
+  <button
+    type="button"
+    [disabled]="form.invalid"
+    (click)="this.closed.emit(undefined)"
+  >
+    Close
+  </button>
+</form>

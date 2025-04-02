@@ -1,1 +1,16 @@
 <p>qualification-list works!</p>
+
+@for (qualification of qualifications(); track qualification) {
+{{ qualification.name }}
+<button (click)="qualificationToEdit = qualification">Edit</button>
+<button (click)="onDelete(qualification.id)">Delete</button>
+<br />
+}
+
+<button (click)="onAdd()">Add Qualification</button>
+@if (qualificationToEdit) {
+<lib-edit-qualification
+  [qualification]="qualificationToEdit"
+  (closed)="onClose($event)"
+></lib-edit-qualification>
+}
