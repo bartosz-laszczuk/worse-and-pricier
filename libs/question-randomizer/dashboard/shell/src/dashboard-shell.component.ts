@@ -5,6 +5,7 @@ import { DashboardShellFacade } from './dashboard-shell.facade';
 import {
   CategoryListStore,
   QualificationListStore,
+  QuestionListStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 
 @Component({
@@ -12,7 +13,12 @@ import {
   imports: [CommonModule, RouterModule],
   templateUrl: './dashboard-shell.component.html',
   styleUrl: './dashboard-shell.component.scss',
-  providers: [DashboardShellFacade, CategoryListStore, QualificationListStore],
+  providers: [
+    DashboardShellFacade,
+    CategoryListStore,
+    QualificationListStore,
+    QuestionListStore,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardShellComponent {

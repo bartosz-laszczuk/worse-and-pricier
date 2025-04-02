@@ -13,7 +13,7 @@ import {
 } from '@angular/fire/firestore';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { lastValueFrom, Observable, take } from 'rxjs';
-import { CreateCategoryRequest } from '../models/category.models';
+import { CreateCategoryRequest } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
