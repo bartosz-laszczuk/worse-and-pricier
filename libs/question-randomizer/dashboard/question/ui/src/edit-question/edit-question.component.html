@@ -1,10 +1,35 @@
 <form [formGroup]="form">
   <lib-input-text
-    label="Name"
+    label="Question"
     type="text"
-    placeholder="Enter name"
-    formControlName="name"
+    placeholder="Enter question"
+    formControlName="question"
   ></lib-input-text>
+  <lib-input-text
+    label="Answer"
+    type="text"
+    placeholder="Enter answer"
+    formControlName="answer"
+  ></lib-input-text>
+  <lib-input-text
+    label="Answer Pl"
+    type="text"
+    placeholder="Enter answer Pl"
+    formControlName="answerPl"
+  ></lib-input-text>
+  <lib-input-text
+    label="Category"
+    type="text"
+    placeholder="Choose category"
+    formControlName="categoryId"
+  ></lib-input-text>
+  <lib-input-text
+    label="Qualification"
+    type="text"
+    placeholder="Choose qualification"
+    formControlName="qualificationId"
+  ></lib-input-text>
+  <input type="checkbox" formControlName="isActive" /><span>Is active</span>
   <button type="submit" [disabled]="form.invalid" (click)="onSubmit()">
     Submit
   </button>

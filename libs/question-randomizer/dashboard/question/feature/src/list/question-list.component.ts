@@ -22,7 +22,16 @@ export class QuestionListComponent {
   }
 
   public onAdd() {
-    this.questionToEdit = { id: '', name: '', userId: '' };
+    this.questionToEdit = {
+      id: '',
+      question: '',
+      answer: '',
+      answerPl: '',
+      categoryId: '',
+      qualificationId: '',
+      isActive: true,
+      userId: '',
+    };
   }
 
   public onClose(editedQuestion?: Question) {

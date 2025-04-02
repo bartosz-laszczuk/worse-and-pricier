@@ -33,12 +33,14 @@ export class QuestionListFacade {
   }
 
   public async updateQuestion(updatedQuestion: Question) {
-    await this.questionService.updateQuestion(updatedQuestion.id, {
-      name: updatedQuestion.name,
-    });
-    this.questionListStore.updateQuestionInList(updatedQuestion.id, {
-      name: updatedQuestion.name,
-    });
+    await this.questionService.updateQuestion(
+      updatedQuestion.id,
+      updatedQuestion
+    );
+    this.questionListStore.updateQuestionInList(
+      updatedQuestion.id,
+      updatedQuestion
+    );
   }
 
   public async deleteQuestion(questionId: string) {

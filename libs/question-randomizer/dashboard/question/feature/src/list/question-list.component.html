@@ -1,7 +1,7 @@
 <p>question-list works!</p>
 
 @for (question of questions(); track question) {
-{{ question.name }}
+{{ question.question }}
 <button (click)="questionToEdit = question">Edit</button>
 <button (click)="onDelete(question.id)">Delete</button>
 <br />

@@ -49,7 +49,12 @@ export class QuestionService {
     userId: string
   ): Promise<string> {
     const request: CreateQuestionRequest = {
-      name: question.name,
+      question: question.question,
+      answer: question.answer,
+      answerPl: question.answerPl,
+      categoryId: question.categoryId,
+      qualificationId: question.qualificationId,
+      isActive: question.isActive,
       userId,
     };
     const docRef = await addDoc(this.questionsCollection, request);
@@ -65,7 +70,8 @@ export class QuestionService {
     questionId: string,
     data: Partial<Question>
   ): Promise<void> {
+    const { id, ...request } = data;
     const questionDoc = doc(this.afDb, `questions/${questionId}`);
-    return updateDoc(questionDoc, data);
+    return updateDoc(questionDoc, request);
   }
 }
