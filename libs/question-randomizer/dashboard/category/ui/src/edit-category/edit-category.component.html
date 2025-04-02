@@ -8,4 +8,11 @@
   <button type="submit" [disabled]="form.invalid" (click)="onSubmit()">
     Submit
   </button>
+  <button
+    type="button"
+    [disabled]="form.invalid"
+    (click)="this.closed.emit(undefined)"
+  >
+    Close
+  </button>
 </form>

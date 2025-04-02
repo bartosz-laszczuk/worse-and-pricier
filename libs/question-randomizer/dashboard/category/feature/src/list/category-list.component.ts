@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EditCategoryComponent } from '@my-nx-monorepo/question-randomizer-dashboard-category-ui';
-import { EditCategoryFormValue } from '@my-nx-monorepo/question-randomizer-dashboard-category-util';
 import { CategoryListFacade } from './category-list.facade';
+import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 
 @Component({
   selector: 'lib-category-list',
@@ -14,13 +14,27 @@ import { CategoryListFacade } from './category-list.facade';
 })
 export class CategoryListComponent {
   private readonly categoryListFacade = inject(CategoryListFacade);
-  public editCategoryOpened = false;
+  public categories = this.categoryListFacade.categories;
+  public categoryToEdit?: Category = undefined;
 
-  public onCreate(formValue: EditCategoryFormValue) {
-    this.categoryListFacade.createCategory(formValue);
+  public constructor() {
+    this.categoryListFacade.loadLists();
   }
 
-  public getCategories() {
-    // this.categoryListFacade.getCategories;
+  public onAdd() {
+    this.categoryToEdit = { id: '', name: '', userId: '' };
+  }
+
+  public onClose(editedCategory?: Category) {
+    if (editedCategory) {
+      if (editedCategory.id)
+        this.categoryListFacade.updateCategory(editedCategory);
+      else this.categoryListFacade.createCategory(editedCategory);
+    }
+    this.categoryToEdit = undefined;
+  }
+
+  public onDelete(categoryId: string) {
+    this.categoryListFacade.deleteCategory(categoryId);
   }
 }

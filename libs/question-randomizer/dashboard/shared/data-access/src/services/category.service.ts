@@ -3,6 +3,7 @@ import {
   addDoc,
   collection,
   collectionData,
+  deleteDoc,
   doc,
   Firestore,
   getDoc,
@@ -11,10 +12,11 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable, take } from 'rxjs';
+import { CreateCategoryRequest } from '../models/category.models';
 
 @Injectable({ providedIn: 'root' })
-export class CategoriesService {
+export class CategoryService {
   private readonly afDb = inject(Firestore);
 
   private categoriesCollection = collection(this.afDb, 'categories');
@@ -28,18 +30,32 @@ export class CategoriesService {
     });
   }
 
-  public getCategories(userId: string): Observable<Category[]> {
+  public getCategories(userId: string): Promise<Category[]> {
     const categoriesQuery = query(
       this.categoriesCollection,
       where('userId', '==', userId)
     );
-    return collectionData(categoriesQuery, { idField: 'id' }) as Observable<
-      Category[]
-    >;
+    return lastValueFrom(
+      (
+        collectionData(categoriesQuery, { idField: 'id' }) as Observable<
+          Category[]
+        >
+      ).pipe(take(1))
+    );
   }
 
-  public createCategory(category: Category): Promise<void> {
-    return addDoc(this.categoriesCollection, category).then(() => {});
+  public async createCategory(
+    category: Category,
+    userId: string
+  ): Promise<string> {
+    const request: CreateCategoryRequest = { name: category.name, userId };
+    const docRef = await addDoc(this.categoriesCollection, request);
+    return docRef.id;
+  }
+
+  public async deleteCategory(categoryId: string): Promise<void> {
+    const categoryDoc = doc(this.afDb, `categories/${categoryId}`);
+    return await deleteDoc(categoryDoc);
   }
 
   public updateCategory(

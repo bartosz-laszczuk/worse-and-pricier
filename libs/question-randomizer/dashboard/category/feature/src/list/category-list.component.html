@@ -1,6 +1,16 @@
 <p>category-list works!</p>
-<button (click)="getCategories()">Log Categories</button>
-<button (click)="editCategoryOpened = !editCategoryOpened">Add Category</button>
-@if (editCategoryOpened) {
-<lib-edit-category (save)="onCreate($event)"></lib-edit-category>
+
+@for (category of categories(); track category) {
+{{ category.name }}
+<button (click)="categoryToEdit = category">Edit</button>
+<button (click)="onDelete(category.id)">Delete</button>
+<br />
+}
+
+<button (click)="onAdd()">Add Category</button>
+@if (categoryToEdit) {
+<lib-edit-category
+  [category]="categoryToEdit"
+  (closed)="onClose($event)"
+></lib-edit-category>
 }

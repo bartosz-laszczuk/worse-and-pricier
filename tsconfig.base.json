@@ -60,6 +60,9 @@
       "@my-nx-monorepo/question-randomizer-dashboard-randomization-ui": [
         "libs/question-randomizer/dashboard/randomization/ui/src/index.ts"
       ],
+      "@my-nx-monorepo/question-randomizer-dashboard-shared-data-access": [
+        "libs/question-randomizer/dashboard/shared/data-access/src/index.ts"
+      ],
       "@my-nx-monorepo/question-randomizer-dashboard-shared-ui": [
         "libs/question-randomizer/dashboard/shared/ui/src/index.ts"
       ],

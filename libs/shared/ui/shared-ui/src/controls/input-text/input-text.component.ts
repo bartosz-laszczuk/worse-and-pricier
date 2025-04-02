@@ -1,7 +1,9 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   forwardRef,
+  inject,
   Input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -40,10 +42,12 @@ export class InputTextComponent implements ControlValueAccessor, Validator {
   @Input() hint?: string;
   @Input() errorMessages: { [key: string]: string } = {};
 
+  private readonly cdr = inject(ChangeDetectorRef);
+
   value: any = '';
   touched = false;
   disabled = false;
-  control!: AbstractControl; // This will reference the parent form control
+  control!: AbstractControl;
 
   onInputChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
@@ -56,6 +60,7 @@ export class InputTextComponent implements ControlValueAccessor, Validator {
 
   writeValue(value: any): void {
     this.value = value;
+    this.cdr.markForCheck();
   }
 
   registerOnChange(fn: any): void {
