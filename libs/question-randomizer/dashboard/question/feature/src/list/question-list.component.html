@@ -1,10 +1,13 @@
 <p>question-list works!</p>
 
-@for (question of questions(); track question) {
+<!-- @for (question of questions(); track question) {
 {{ question.question }}
 <button (click)="questionToEdit = question">Edit</button>
 <button (click)="onDelete(question.id)">Delete</button>
 <br />
+} -->
+@if(questions()) {
+<lib-table [data]="questions()" [columns]="columns"></lib-table>
 }
 
 <button (click)="onAdd()">Add Question</button>

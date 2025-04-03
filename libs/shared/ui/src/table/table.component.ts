@@ -1,10 +1,76 @@
-import { Component } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ContentChildren,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IColumn, IFilterSelected, SortDefinition } from './table.models';
+import { ColumnDirective } from './column-directive/column.directive';
+import { TableService } from './table.service';
+import { SortableHeaderComponent } from './sortable-header/sortable-header.component';
 
 @Component({
   selector: 'lib-table',
-  imports: [CommonModule],
+  imports: [CommonModule, SortableHeaderComponent],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
+  providers: [TableService],
 })
-export class TableComponent {}
+export class TableComponent<T> implements AfterViewInit {
+  @Input() set data(value: T[]) {
+    this.dataSource = value;
+  }
+  @Input() columns: IColumn[] = [];
+  @Input() title = '';
+  @Input() filterSelected: IFilterSelected[] = [];
+  @Input() sortDefinition: SortDefinition<T> | null = null;
+  @Input() trackBy = (index: number, item: T) => item;
+
+  @Input() cellTextWrap = false;
+
+  // @Output() sortByEv: EventEmitter<{ column: string; ascending: boolean }> =
+  //   new EventEmitter<{
+  //     column: string;
+  //     ascending: boolean;
+  //   }>();
+  @Output() sort = new EventEmitter<IColumn>();
+  @Output() menuCloseEv: EventEmitter<string> = new EventEmitter<string>();
+  @Output() rowClick = new EventEmitter<T>();
+
+  @ContentChildren(ColumnDirective) columnTemps: QueryList<ColumnDirective> =
+    new QueryList<ColumnDirective>();
+
+  dataSource: T[] = [];
+  columnTemplates: Record<string, ColumnDirective> = {};
+  filterTemplates: Record<string, ColumnDirective> = {};
+
+  get displayedColumns(): string[] {
+    return [...this.columns.map((item: IColumn) => item.propertyName)];
+  }
+  constructor(
+    private tableService: TableService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngAfterViewInit(): void {
+    const { columns, filters } = this.tableService.getTemplates(
+      this.columnTemps
+    );
+    this.columnTemplates = columns;
+    this.filterTemplates = filters;
+    this.cdr.detectChanges();
+  }
+
+  onSort(column: IColumn): void {
+    this.sort.emit(column);
+  }
+
+  onRowClick(row: T) {
+    this.rowClick.emit(row);
+  }
+}

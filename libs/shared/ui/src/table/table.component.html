@@ -1,1 +1,60 @@
-<p>table works!</p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th *ngFor="let col of columns" [ngStyle]="{ width: col.width }">
+          <ng-container
+            *ngIf="
+              !filterTemplates[col.propertyName]?.templateRef && !col.sortable
+            "
+          >
+            {{ col.displayName }}
+          </ng-container>
+          <ng-container
+            *ngIf="
+              filterTemplates[col.propertyName]?.templateRef || col.sortable
+            "
+          >
+            <ng-container
+              *ngIf="col.sortable"
+              [ngTemplateOutlet]="sortHeader"
+              [ngTemplateOutletContext]="{ column: col }"
+            ></ng-container>
+          </ng-container>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let element of dataSource; let i = index"
+        (click)="onRowClick(element)"
+      >
+        <td *ngFor="let col of columns" [class.text-wrap]="cellTextWrap">
+          <ng-container
+            *ngTemplateOutlet="
+              columnTemplates[col.propertyName]?.templateRef || defaultCell;
+              context: { item: element, col: col.propertyName, i: i }
+            "
+          ></ng-container>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td *ngFor="let col of columns"></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<ng-template #defaultCell let-item="item" let-col="col">
+  <span>{{ item[col] }}</span>
+</ng-template>
+
+<ng-template #sortHeader let-column="column">
+  <lib-sortable-header
+    [sortDefinition]="sortDefinition"
+    [column]="column"
+    (sort)="onSort($event)"
+  ></lib-sortable-header>
+</ng-template>

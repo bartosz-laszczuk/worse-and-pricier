@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { QuestionListFacade } from './question-list.facade';
 import { EditQuestionComponent } from '@my-nx-monorepo/question-randomizer-dashboard-question-ui';
+import { IColumn, TableComponent } from '@my-nx-monorepo/shared-ui';
 
 @Component({
   selector: 'lib-question-list',
-  imports: [CommonModule, EditQuestionComponent],
+  imports: [CommonModule, EditQuestionComponent, TableComponent],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,6 +18,15 @@ export class QuestionListComponent {
   public questions = this.questionListFacade.questions;
   public questionToEdit?: Question = undefined;
   public categoryListOptions = this.questionListFacade.categoryListOptions;
+
+  public columns: IColumn[] = [
+    { displayName: 'Question', propertyName: 'question' },
+    { displayName: 'Answer', propertyName: 'answer' },
+    { displayName: 'Answer Pl', propertyName: 'answerPl' },
+    { displayName: 'Category', propertyName: 'categoryId' },
+    { displayName: 'Qualification', propertyName: 'qualificationId' },
+    { displayName: 'Is active', propertyName: 'isActive' },
+  ];
 
   public constructor() {
     this.questionListFacade.loadLists();
