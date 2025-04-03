@@ -1,0 +1,27 @@
+<div class="select app-input" [class.select_disabled]="isDisabled">
+  <select
+    [value]="value"
+    [disabled]="isDisabled"
+    (change)="onChangedPureHtmlSelect($event)"
+    (blur)="onBlur()"
+  >
+    <option value=""></option>
+    <option
+      *ngFor="let option of options()"
+      [value]="option.value"
+      [attr.selected]="option.value === value ? true : null"
+    >
+      {{ option.label }}
+    </option>
+  </select>
+  <!-- <mat-select
+    [value]="value"
+    [disabled]="isDisabled"
+    (selectionChange)="onChanged($event)"
+    (blur)="onBlur()"
+  >
+    <mat-option *ngFor="let item of items" [value]="item.value">
+      {{ item.label }}
+    </mat-option>
+  </mat-select> -->
+</div>

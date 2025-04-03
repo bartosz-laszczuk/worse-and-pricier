@@ -11,6 +11,7 @@
 @if (questionToEdit) {
 <lib-edit-question
   [question]="questionToEdit"
+  [categoryList]="categoryListOptions()"
   (closed)="onClose($event)"
 ></lib-edit-question>
 }

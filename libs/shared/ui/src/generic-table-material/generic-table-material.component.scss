@@ -1,0 +1,138 @@
+// $sepis-blue-dark: #0052a5;
+// $sepis-blue: #006cd7;
+// $sepis-black: #1b1b1b;
+// $sepis-gray-1: #767676;
+// $mat-xs: 'screen and (max-width: 599px)';
+// $mat-sm: 'screen and (min-width: 600px)';
+// $mat-md: 'screen and (min-width: 1000px)';
+
+// .mobile-only {
+//   display: block;
+// }
+
+// .desktop-only {
+//   display: none;
+// }
+
+// @media #{$mat-sm} {
+//   .mobile-only {
+//     display: none;
+//   }
+
+//   .desktop-only {
+//     display: block;
+//   }
+// }
+
+// .panel-table {
+//   width: 100%;
+//   background-color: #efefef;
+//   padding-bottom: 30px;
+// }
+
+// .full-table {
+//   width: 100%;
+// }
+
+// tr.mat-header-row {
+//   height: 44px;
+//   th.mat-header-cell {
+//     font-weight: 700;
+//     font-size: 14px;
+//     line-height: 20px;
+//     padding-right: 10px;
+//     color: $sepis-black;
+//     border-bottom-width: 2px;
+//     border-bottom-color: $sepis-gray-1;
+//   }
+
+//   th.mat-menu-trigger {
+//     cursor: pointer;
+//   }
+// }
+
+// tr.mat-row {
+//   height: 54px;
+// }
+
+// th.mat-header-cell:last-of-type {
+//   padding-right: 0;
+// }
+
+// td.mat-cell:last-of-type {
+//   padding-right: 0;
+//   text-align: right;
+// }
+
+// th.mat-header-cell:first-of-type,
+// td.mat-cell:first-of-type {
+//   padding-left: 0;
+// }
+
+// .sort-indicator {
+//   color: $sepis-blue;
+// }
+
+// .list-table {
+//   padding: 20px;
+//   box-sizing: border-box;
+//   overflow-x: auto;
+//   table {
+//     width: 100%;
+//     .new-status {
+//       font-weight: 700;
+//     }
+//   }
+// }
+
+// td {
+//   &.mat-table-sticky-border-elem-left {
+//     box-shadow: 10px 10px 15px -2px rgb(0 0 0 / 10%);
+//   }
+
+//   &.mat-table-sticky-border-elem-right {
+//     box-shadow: -4px 14px 40px 2px rgb(0 0 0 / 10%);
+//   }
+// }
+
+// .mat-table {
+//   overflow-x: scroll;
+// }
+
+// .mat-cell,
+// .mat-header-cell {
+//   word-wrap: initial;
+//   display: table-cell;
+//   padding: 0 10px;
+//   line-break: unset;
+//   overflow: hidden;
+//   font-size: 1rem;
+// }
+
+// .mat-row,
+// .mat-header-row {
+//   display: table-row;
+// }
+
+// .column-left-space {
+//   padding-left: 2.5rem;
+// }
+
+// @media #{$mat-xs} {
+//   .list-show-sub-units-notices {
+//     padding: 6px 0 16px;
+//   }
+// }
+
+// @media #{$mat-md} {
+//   .list-header-container {
+//     display: flex;
+//     justify-content: space-between;
+//   }
+// }
+
+// .last-column-txt-left {
+//   td.mat-cell:last-of-type {
+//     text-align: left;
+//   }
+// }

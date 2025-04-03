@@ -6,7 +6,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { InputTextComponent } from '@my-nx-monorepo/shared-ui';
+import {
+  InputSelectComponent,
+  InputTextComponent,
+} from '@my-nx-monorepo/shared-ui';
 import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 
 interface EditQuestionForm {
@@ -20,12 +23,18 @@ interface EditQuestionForm {
 
 @Component({
   selector: 'lib-edit-question',
-  imports: [CommonModule, InputTextComponent, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    InputTextComponent,
+    ReactiveFormsModule,
+    InputSelectComponent,
+  ],
   templateUrl: './edit-question.component.html',
   styleUrl: './edit-question.component.scss',
 })
 export class EditQuestionComponent {
   public question = input.required<Question>();
+  public categoryList = input.required<any>();
   public closed = output<Question | undefined>();
   private readonly fb = inject(FormBuilder);
 
@@ -46,10 +55,7 @@ export class EditQuestionComponent {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    qualificationId: this.fb.control<string | null>(null, {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
+    qualificationId: this.fb.control<string | null>(null),
     isActive: this.fb.control<boolean>(true, {
       nonNullable: true,
       validators: [Validators.required],

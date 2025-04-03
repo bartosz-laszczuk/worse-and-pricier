@@ -1,0 +1,19 @@
+<span *ngIf="column" class="c-pointer" (click)="sortByColumn(column!)">
+  {{ column!.displayName
+  }}<ng-container *ngIf="sortDefinition">
+    <ng-container
+      *ngIf="
+        column.propertyName === sortDefinition.field &&
+        sortDefinition.direction === 'asc'
+      "
+      >▲</ng-container
+    >
+    <ng-container
+      *ngIf="
+        column.propertyName === sortDefinition.field &&
+        sortDefinition.direction === 'desc'
+      "
+      >▼</ng-container
+    >
+  </ng-container>
+</span>

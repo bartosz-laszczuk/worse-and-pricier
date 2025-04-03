@@ -17,6 +17,13 @@ export class QuestionListFacade {
   private readonly questionService = inject(QuestionService);
 
   public questions = computed(() => this.questionListStore.entities() ?? []);
+  public categoryListOptions = computed(() => {
+    const categories = this.categoryListStore.entities() ?? [];
+    return categories.map((category) => ({
+      value: category.id,
+      label: category.name,
+    }));
+  });
 
   public async createQuestion(createdQuestion: Question) {
     const userId = this.userStore.uid()!;

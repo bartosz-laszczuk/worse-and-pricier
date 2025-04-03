@@ -17,7 +17,19 @@
     placeholder="Enter answer Pl"
     formControlName="answerPl"
   ></lib-input-text>
-  <lib-input-text
+  <lib-input-select
+    label="Category"
+    placeholder="Choose category"
+    formControlName="categoryId"
+    [options]="categoryList()"
+  ></lib-input-select>
+  <lib-input-select
+    label="Qualification"
+    placeholder="Choose qualification"
+    formControlName="qualificationId"
+    [options]="[]"
+  ></lib-input-select>
+  <!-- <lib-input-text
     label="Category"
     type="text"
     placeholder="Choose category"
@@ -28,7 +40,7 @@
     type="text"
     placeholder="Choose qualification"
     formControlName="qualificationId"
-  ></lib-input-text>
+  ></lib-input-text> -->
   <input type="checkbox" formControlName="isActive" /><span>Is active</span>
   <button type="submit" [disabled]="form.invalid" (click)="onSubmit()">
     Submit
@@ -41,3 +53,4 @@
     Close
   </button>
 </form>
+{{ form.controls.categoryId.value }}

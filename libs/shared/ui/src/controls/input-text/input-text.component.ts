@@ -54,8 +54,10 @@ export class InputTextComponent implements ControlValueAccessor, Validator {
     this.onChange(inputElement.value);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   onChange = (value: any) => {};
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   onTouched = () => {};
 
   writeValue(value: any): void {

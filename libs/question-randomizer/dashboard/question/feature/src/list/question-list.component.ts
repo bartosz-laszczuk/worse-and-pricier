@@ -16,6 +16,7 @@ export class QuestionListComponent {
   private readonly questionListFacade = inject(QuestionListFacade);
   public questions = this.questionListFacade.questions;
   public questionToEdit?: Question = undefined;
+  public categoryListOptions = this.questionListFacade.categoryListOptions;
 
   public constructor() {
     this.questionListFacade.loadLists();
