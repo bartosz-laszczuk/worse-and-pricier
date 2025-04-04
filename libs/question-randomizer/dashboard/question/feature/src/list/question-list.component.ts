@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { QuestionListFacade } from './question-list.facade';
 import { EditQuestionComponent } from '@my-nx-monorepo/question-randomizer-dashboard-question-ui';
-import { IColumn, TableComponent } from '@my-nx-monorepo/shared-ui';
+import {
+  IColumn,
+  SortDefinition,
+  TableComponent,
+} from '@my-nx-monorepo/shared-ui';
 
 @Component({
   selector: 'lib-question-list',
@@ -16,11 +20,12 @@ import { IColumn, TableComponent } from '@my-nx-monorepo/shared-ui';
 export class QuestionListComponent {
   private readonly questionListFacade = inject(QuestionListFacade);
   public questions = this.questionListFacade.questions;
+  public sort = this.questionListFacade.sort;
   public questionToEdit?: Question = undefined;
   public categoryListOptions = this.questionListFacade.categoryListOptions;
 
   public columns: IColumn[] = [
-    { displayName: 'Question', propertyName: 'question' },
+    { displayName: 'Question', propertyName: 'question', sortable: true },
     { displayName: 'Answer', propertyName: 'answer' },
     { displayName: 'Answer Pl', propertyName: 'answerPl' },
     { displayName: 'Category', propertyName: 'categoryId' },
@@ -56,5 +61,9 @@ export class QuestionListComponent {
 
   public onDelete(questionId: string) {
     this.questionListFacade.deleteQuestion(questionId);
+  }
+
+  public onSort(sort: SortDefinition<Question>): void {
+    this.questionListFacade.setSort(sort);
   }
 }

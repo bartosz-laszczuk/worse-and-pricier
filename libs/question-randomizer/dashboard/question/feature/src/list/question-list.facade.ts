@@ -7,6 +7,7 @@ import {
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { SortDefinition } from '@my-nx-monorepo/shared-ui';
 
 @Injectable()
 export class QuestionListFacade {
@@ -16,7 +17,8 @@ export class QuestionListFacade {
   private readonly categoryListStore = inject(CategoryListStore);
   private readonly questionService = inject(QuestionService);
 
-  public questions = computed(() => this.questionListStore.entities() ?? []);
+  public questions = this.questionListStore.displayQuestions;
+  public sort = this.questionListStore.sort;
   public categoryListOptions = computed(() => {
     const categories = this.categoryListStore.entities() ?? [];
     return categories.map((category) => ({
@@ -24,6 +26,10 @@ export class QuestionListFacade {
       label: category.name,
     }));
   });
+
+  public setSort(sort: SortDefinition<Question>) {
+    this.questionListStore.setSort(sort);
+  }
 
   public async createQuestion(createdQuestion: Question) {
     const userId = this.userStore.uid()!;

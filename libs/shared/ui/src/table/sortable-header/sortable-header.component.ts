@@ -1,29 +1,36 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   input,
-  Input,
   output,
-  Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IColumn, SortDefinition } from '../table.models';
+import { IColumn, SortDefinition, SortDirection } from '../table.models';
 
 @Component({
   selector: 'lib-sortable-header',
   imports: [CommonModule],
   templateUrl: './sortable-header.component.html',
   styleUrl: './sortable-header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SortableHeaderComponent<T> {
-  // public column = input.required<IColumn>();
-  // public sortDefinition = input<SortDefinition<T> | undefined>(undefined);
-  // public sort = output<SortDefinition<T>>();
-  @Input() public column: IColumn | undefined;
-  @Input() public sortDefinition: SortDefinition<T> | null = null;
-  @Output() public sort = new EventEmitter<IColumn>();
+  public column = input.required<IColumn>();
+  public sortDefinition = input<SortDefinition<T> | undefined>(undefined);
+  public sort = output<SortDefinition<T>>();
 
   public sortByColumn(column: IColumn) {
-    this.sort.emit(column);
+    let sortDefinition = this.sortDefinition();
+    sortDefinition = {
+      field: column.propertyName as keyof T,
+      direction: this.getNextSortDirection(sortDefinition?.direction),
+    };
+    this.sort.emit(sortDefinition);
+  }
+
+  private getNextSortDirection(direction?: SortDirection): SortDirection {
+    if (!direction) return 'asc';
+    if (direction === 'asc') return 'desc';
+    return '';
   }
 }

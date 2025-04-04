@@ -7,7 +7,12 @@
 <br />
 } -->
 @if(questions()) {
-<lib-table [data]="questions()" [columns]="columns"></lib-table>
+<lib-table
+  [data]="questions()"
+  [columns]="columns"
+  [sortDefinition]="sort()"
+  (sort)="onSort($event)"
+></lib-table>
 }
 
 <button (click)="onAdd()">Add Question</button>

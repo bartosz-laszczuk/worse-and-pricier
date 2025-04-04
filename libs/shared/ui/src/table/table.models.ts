@@ -21,12 +21,14 @@ export const TypeOfTemplateEnum = {
 
 export type SortDirection = 'asc' | 'desc' | '';
 
-export interface IFilterSelected {
-  column: string;
-  filterSelected: boolean;
-}
-
 export interface SortDefinition<T> {
   field: keyof T;
   direction: SortDirection;
 }
+
+export interface PageParameters {
+  index: number;
+  size: number;
+}
+
+export type Filters<T> = Partial<Record<keyof T, string>>;

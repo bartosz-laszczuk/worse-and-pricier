@@ -9,7 +9,7 @@ import {
   QueryList,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IColumn, IFilterSelected, SortDefinition } from './table.models';
+import { IColumn, SortDefinition } from './table.models';
 import { ColumnDirective } from './column-directive/column.directive';
 import { TableService } from './table.service';
 import { SortableHeaderComponent } from './sortable-header/sortable-header.component';
@@ -27,18 +27,12 @@ export class TableComponent<T> implements AfterViewInit {
   }
   @Input() columns: IColumn[] = [];
   @Input() title = '';
-  @Input() filterSelected: IFilterSelected[] = [];
-  @Input() sortDefinition: SortDefinition<T> | null = null;
+  @Input() sortDefinition?: SortDefinition<T>;
   @Input() trackBy = (index: number, item: T) => item;
 
   @Input() cellTextWrap = false;
 
-  // @Output() sortByEv: EventEmitter<{ column: string; ascending: boolean }> =
-  //   new EventEmitter<{
-  //     column: string;
-  //     ascending: boolean;
-  //   }>();
-  @Output() sort = new EventEmitter<IColumn>();
+  @Output() sort = new EventEmitter<SortDefinition<T>>();
   @Output() menuCloseEv: EventEmitter<string> = new EventEmitter<string>();
   @Output() rowClick = new EventEmitter<T>();
 
@@ -66,8 +60,8 @@ export class TableComponent<T> implements AfterViewInit {
     this.cdr.detectChanges();
   }
 
-  onSort(column: IColumn): void {
-    this.sort.emit(column);
+  onSort(sortDefinition: SortDefinition<T>): void {
+    this.sort.emit(sortDefinition);
   }
 
   onRowClick(row: T) {
