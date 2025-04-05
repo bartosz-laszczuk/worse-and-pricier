@@ -7,6 +7,12 @@
 <br />
 } -->
 @if(questions()) {
+<lib-input-text
+  label="Search"
+  type="text"
+  placeholder="Enter search text"
+  [formControl]="searchTextControl"
+></lib-input-text>
 <lib-table
   [data]="questions()"
   [columns]="columns"

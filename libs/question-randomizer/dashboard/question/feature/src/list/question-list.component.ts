@@ -5,13 +5,23 @@ import { QuestionListFacade } from './question-list.facade';
 import { EditQuestionComponent } from '@my-nx-monorepo/question-randomizer-dashboard-question-ui';
 import {
   IColumn,
+  InputTextComponent,
   SortDefinition,
   TableComponent,
 } from '@my-nx-monorepo/shared-ui';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'lib-question-list',
-  imports: [CommonModule, EditQuestionComponent, TableComponent],
+  imports: [
+    CommonModule,
+    EditQuestionComponent,
+    TableComponent,
+    InputTextComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +33,9 @@ export class QuestionListComponent {
   public sort = this.questionListFacade.sort;
   public questionToEdit?: Question = undefined;
   public categoryListOptions = this.questionListFacade.categoryListOptions;
+  public searchTextControl = new FormControl('', {
+    nonNullable: true,
+  });
 
   public columns: IColumn[] = [
     { displayName: 'Question', propertyName: 'question', sortable: true },
@@ -35,6 +48,10 @@ export class QuestionListComponent {
 
   public constructor() {
     this.questionListFacade.loadLists();
+
+    this.searchTextControl.valueChanges
+      .pipe(debounceTime(200), takeUntilDestroyed())
+      .subscribe((value) => this.questionListFacade.setSearchText(value));
   }
 
   public onAdd() {

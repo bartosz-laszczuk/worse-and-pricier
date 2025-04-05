@@ -20,11 +20,12 @@ export class QuestionListFacade {
   public questions = this.questionListStore.displayQuestions;
   public sort = this.questionListStore.sort;
   public categoryListOptions = computed(() => {
-    const categories = this.categoryListStore.entities() ?? [];
-    return categories.map((category) => ({
-      value: category.id,
-      label: category.name,
-    }));
+    return (
+      this.categoryListStore.entities()?.map((category) => ({
+        value: category.id,
+        label: category.name,
+      })) ?? []
+    );
   });
 
   public setSort(sort: SortDefinition<Question>) {
@@ -65,5 +66,9 @@ export class QuestionListFacade {
     this.questionListStore.loadQuestionList();
     this.qualificationListStore.loadQualificationList();
     this.categoryListStore.loadCategoryList();
+  }
+
+  public setSearchText(searchText: string) {
+    this.questionListStore.setSearchText(searchText);
   }
 }

@@ -1,5 +1,9 @@
 import { computed, effect, inject } from '@angular/core';
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import {
+  filterByTextUsingORLogic,
+  filterSortPageEntities,
+  Question,
+} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import {
   getState,
   patchState,
@@ -22,6 +26,7 @@ type QuestionListState = {
   sort: SortDefinition<Question>;
   page: PageParameters;
   filters: Filters<Question>;
+  searchText: string;
   isLoading: boolean | null;
   error: string | null;
 };
@@ -31,6 +36,7 @@ const initialState: QuestionListState = {
   filters: {},
   sort: { field: 'question', direction: 'asc' },
   page: { index: 0, size: 10 },
+  searchText: '',
   isLoading: null,
   error: null,
 };
@@ -44,51 +50,25 @@ export const QuestionListStore = signalStore(
         const state = getState(store);
         console.log('question list state', state);
       });
-
-      // setInterval(() => store.increment(), 1_000);
     },
   }),
   withComputed((store) => ({
     displayQuestions: computed(() => {
       const entities = store.entities();
-      const filters = store.filters();
-      const sort = store.sort();
-      const page = store.page();
-
       if (!entities) return [];
 
-      // 1. Filter
-      const filtered = entities.filter((q) =>
-        Object.entries(filters).every(([key, value]) =>
-          value
-            ? String((q as any)[key])
-                .toLowerCase()
-                .includes(value.toLowerCase())
-            : true
-        )
+      const searched = filterByTextUsingORLogic(
+        entities,
+        ['question', 'answer', 'answerPl'],
+        store.searchText()
       );
 
-      // 2. Sort
-      if (sort.direction) {
-        filtered.sort((a, b) => {
-          const aValue = a[sort.field];
-          const bValue = b[sort.field];
-
-          if (aValue === bValue) return 0;
-          if (aValue == null) return sort.direction === 'asc' ? -1 : 1;
-          if (bValue == null) return sort.direction === 'asc' ? 1 : -1;
-
-          return sort.direction === 'asc'
-            ? String(aValue).localeCompare(String(bValue))
-            : String(bValue).localeCompare(String(aValue));
-        });
-      }
-
-      // 3. Pagination
-      const start = page.index * page.size;
-      const end = start + page.size;
-
-      return filtered.slice(start, end);
+      return filterSortPageEntities<Question>(
+        searched,
+        store.filters(),
+        store.sort(),
+        store.page()
+      );
     }),
   })),
   withMethods(
@@ -155,7 +135,7 @@ export const QuestionListStore = signalStore(
             ...state.filters,
             [parameter]: value,
           },
-          pageSettings: {
+          page: {
             ...state.page,
             index: 0,
           },
@@ -173,6 +153,13 @@ export const QuestionListStore = signalStore(
         patchState(store, (state) => ({
           ...state,
           page,
+        }));
+      },
+
+      setSearchText(searchText: string) {
+        patchState(store, (state) => ({
+          ...state,
+          searchText,
         }));
       },
     })
