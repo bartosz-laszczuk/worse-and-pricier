@@ -24,6 +24,10 @@ import {
 export class DashboardShellComponent {
   private readonly dashboardShellFacade = inject(DashboardShellFacade);
 
+  constructor() {
+    this.dashboardShellFacade.loadLists();
+  }
+
   public onSignOut() {
     this.dashboardShellFacade.signOut();
   }

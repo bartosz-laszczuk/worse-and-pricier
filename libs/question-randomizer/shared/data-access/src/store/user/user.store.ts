@@ -41,7 +41,6 @@ export const UserStore = signalStore(
 
         try {
           const authUser = await authService.getAuthenticatedUser();
-          console.log('initUser() authUser:', authUser);
           if (authUser) {
             patchState(store, {
               entity: authUser.entity,

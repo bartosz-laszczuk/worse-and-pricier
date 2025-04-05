@@ -40,8 +40,4 @@ export class CategoryListFacade {
     this.categoryListStore.deleteCategoryFromList(categoryId);
     this.questionListStore.deleteCategoryIdFromQuestions(categoryId);
   }
-
-  public loadLists() {
-    this.categoryListStore.loadCategoryList();
-  }
 }

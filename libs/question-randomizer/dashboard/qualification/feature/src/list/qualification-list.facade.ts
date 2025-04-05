@@ -52,8 +52,4 @@ export class QualificationListFacade {
     this.qualificationListStore.deleteQualificationFromList(qualificationId);
     this.questionListStore.deleteQualificationIdFromQuestions(qualificationId);
   }
-
-  public loadLists() {
-    this.qualificationListStore.loadQualificationList();
-  }
 }

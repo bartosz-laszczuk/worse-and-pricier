@@ -17,10 +17,6 @@ export class QualificationListComponent {
   public qualifications = this.qualificationListFacade.qualifications;
   public qualificationToEdit?: Qualification = undefined;
 
-  public constructor() {
-    this.qualificationListFacade.loadLists();
-  }
-
   public onAdd() {
     this.qualificationToEdit = { id: '', name: '', userId: '' };
   }

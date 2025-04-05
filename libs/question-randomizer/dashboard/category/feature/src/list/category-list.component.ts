@@ -17,10 +17,6 @@ export class CategoryListComponent {
   public categories = this.categoryListFacade.categories;
   public categoryToEdit?: Category = undefined;
 
-  public constructor() {
-    this.categoryListFacade.loadLists();
-  }
-
   public onAdd() {
     this.categoryToEdit = { id: '', name: '', userId: '' };
   }

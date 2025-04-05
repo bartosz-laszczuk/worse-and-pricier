@@ -69,18 +69,6 @@ export class QuestionListFacade {
     this.questionListStore.deleteQuestionFromList(questionId);
   }
 
-  public async loadLists() {
-    forkJoin([
-      this.qualificationListStore.loadQualificationList(),
-      this.categoryListStore.loadCategoryList(),
-    ]).subscribe(() => {
-      this.questionListStore.loadQuestionList(
-        this.categoryListStore.entities() ?? [],
-        this.qualificationListStore.entities() ?? []
-      );
-    });
-  }
-
   public setSearchText(searchText: string) {
     this.questionListStore.setSearchText(searchText);
   }

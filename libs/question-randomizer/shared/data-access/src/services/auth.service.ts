@@ -62,11 +62,11 @@ export class AuthService {
         this.afAuth,
         async (authState: FirebaseUser | null) => {
           if (!authState) return resolve(null);
-          console.log('getAuthenticatedUser() authState', authState);
+
           const userDoc = await getDoc(
             doc(this.afDb, `users/${authState.uid}`)
           );
-          console.log('getAuthenticatedUser() userDoc.data', userDoc.data());
+
           resolve({
             uid: authState.uid,
             verified: authState.emailVerified,
@@ -87,9 +87,6 @@ export class AuthService {
     );
 
     if (!signUpState.user) throw new Error('User registration failed');
-    console.log('user created signUpState.user', signUpState.user);
-
-    // await this.createUser();
 
     await sendEmailVerification(
       signUpState.user,

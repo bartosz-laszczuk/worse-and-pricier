@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { UserStore } from '../store';
 
 export const AuthVerifiedCanActivate: CanActivateFn = async (route, state) => {
-  console.log('AuthVerifiedCanActive starts');
   return check(true);
 };
 export const AuthVerifiedCanActivateChild: CanActivateChildFn = async (
@@ -12,7 +11,6 @@ export const AuthVerifiedCanActivateChild: CanActivateChildFn = async (
   state
 ) => check(true);
 export const AuthCanActivate: CanActivateFn = async (route, state) => {
-  console.log('AuthCanActive starts');
   return check();
 };
 
