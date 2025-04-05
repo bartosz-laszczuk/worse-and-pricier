@@ -27,30 +27,11 @@
     label="Qualification"
     placeholder="Choose qualification"
     formControlName="qualificationId"
-    [options]="[]"
+    [options]="qualificationList()"
   ></lib-input-select>
-  <!-- <lib-input-text
-    label="Category"
-    type="text"
-    placeholder="Choose category"
-    formControlName="categoryId"
-  ></lib-input-text>
-  <lib-input-text
-    label="Qualification"
-    type="text"
-    placeholder="Choose qualification"
-    formControlName="qualificationId"
-  ></lib-input-text> -->
   <input type="checkbox" formControlName="isActive" /><span>Is active</span>
   <button type="submit" [disabled]="form.invalid" (click)="onSubmit()">
     Submit
   </button>
-  <button
-    type="button"
-    [disabled]="form.invalid"
-    (click)="this.closed.emit(undefined)"
-  >
-    Close
-  </button>
+  <button type="button" (click)="this.closed.emit(undefined)">Close</button>
 </form>
-{{ form.controls.categoryId.value }}

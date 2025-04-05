@@ -7,9 +7,11 @@ import {
   doc,
   Firestore,
   getDoc,
+  getDocs,
   query,
   updateDoc,
   where,
+  writeBatch,
 } from '@angular/fire/firestore';
 import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { lastValueFrom, Observable, take } from 'rxjs';
@@ -53,7 +55,7 @@ export class QuestionService {
       answer: question.answer,
       answerPl: question.answerPl,
       categoryId: question.categoryId,
-      qualificationId: question.qualificationId,
+      qualificationId: question.qualificationId ?? null,
       isActive: question.isActive,
       userId,
     };
@@ -70,8 +72,53 @@ export class QuestionService {
     questionId: string,
     data: Partial<Question>
   ): Promise<void> {
-    const { id, ...request } = data;
+    const { id, category, qualification, ...request } = {
+      ...data,
+      qualificationId: data.qualificationId ?? null,
+    };
     const questionDoc = doc(this.afDb, `questions/${questionId}`);
     return updateDoc(questionDoc, request);
+  }
+
+  public async removeCategoryIdFromQuestions(
+    categoryId: string,
+    userId: string
+  ): Promise<void> {
+    const questionsQuery = query(
+      this.questionsCollection,
+      where('userId', '==', userId),
+      where('categoryId', '==', categoryId)
+    );
+
+    const snapshot = await getDocs(questionsQuery);
+
+    const batch = writeBatch(this.afDb);
+    snapshot.forEach((docSnap) => {
+      const questionRef = doc(this.afDb, `questions/${docSnap.id}`);
+      batch.update(questionRef, { categoryId: null });
+    });
+
+    await batch.commit();
+  }
+
+  public async removeQualificationIdFromQuestions(
+    qualificationId: string,
+    userId: string
+  ): Promise<void> {
+    const questionsQuery = query(
+      this.questionsCollection,
+      where('userId', '==', userId),
+      where('qualificationId', '==', qualificationId)
+    );
+
+    const snapshot = await getDocs(questionsQuery);
+
+    const batch = writeBatch(this.afDb);
+    snapshot.forEach((docSnap) => {
+      const questionRef = doc(this.afDb, `questions/${docSnap.id}`);
+      batch.update(questionRef, { qualificationId: null });
+    });
+
+    await batch.commit();
   }
 }

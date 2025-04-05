@@ -1,7 +1,9 @@
 import { computed, effect, inject } from '@angular/core';
 import {
+  Category,
   filterByTextUsingORLogic,
   filterSortPageEntities,
+  Qualification,
   Question,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import {
@@ -107,15 +109,28 @@ export const QuestionListStore = signalStore(
         }));
       },
 
-      async loadQuestionList(forceLoad = false) {
+      async loadQuestionList(
+        categories: Category[],
+        qualifications: Qualification[],
+        forceLoad = false
+      ) {
         if (!forceLoad && !!store.entities()) return;
 
         patchState(store, { isLoading: true, error: null });
 
         try {
-          const questions = await questionService.getQuestions(
-            userStore.uid()!
-          );
+          const questions = (
+            await questionService.getQuestions(userStore.uid()!)
+          ).map((question) => ({
+            ...question,
+            category:
+              categories.find((category) => category.id === question.categoryId)
+                ?.name ?? '',
+            qualification: qualifications.find(
+              (qualification) => qualification.id === question.qualificationId
+            )?.name,
+          }));
+
           patchState(store, {
             entities: questions,
             isLoading: false,
@@ -161,6 +176,58 @@ export const QuestionListStore = signalStore(
           ...state,
           searchText,
         }));
+      },
+
+      async deleteCategoryIdFromQuestions(categoryId: string) {
+        const entities = store.entities();
+        const userId = userStore.uid();
+        if (!entities || !userId) return;
+
+        try {
+          await questionService.removeCategoryIdFromQuestions(
+            categoryId,
+            userId
+          );
+          patchState(store, {
+            entities: entities.map((question) =>
+              question.categoryId === categoryId
+                ? { ...question, categoryId: '', category: '' }
+                : question
+            ),
+          });
+        } catch (error: any) {
+          patchState(store, {
+            error: error.message || 'Failed to update questions',
+          });
+        }
+      },
+
+      async deleteQualificationIdFromQuestions(qualificationId: string) {
+        const entities = store.entities();
+        const userId = userStore.uid();
+        if (!entities || !userId) return;
+
+        try {
+          await questionService.removeQualificationIdFromQuestions(
+            qualificationId,
+            userId
+          );
+          patchState(store, {
+            entities: entities.map((question) =>
+              question.qualificationId === qualificationId
+                ? {
+                    ...question,
+                    qualificationId: undefined,
+                    qualification: undefined,
+                  }
+                : question
+            ),
+          });
+        } catch (error: any) {
+          patchState(store, {
+            error: error.message || 'Failed to update questions',
+          });
+        }
       },
     })
   )

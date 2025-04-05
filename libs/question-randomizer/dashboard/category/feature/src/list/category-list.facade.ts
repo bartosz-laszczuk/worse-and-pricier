@@ -2,6 +2,7 @@ import { computed, inject, Injectable } from '@angular/core';
 import {
   CategoryListStore,
   CategoryService,
+  QuestionListStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
@@ -11,6 +12,7 @@ export class CategoryListFacade {
   private readonly userStore = inject(UserStore);
   private readonly categoryListStore = inject(CategoryListStore);
   private readonly categoryService = inject(CategoryService);
+  private readonly questionListStore = inject(QuestionListStore);
 
   public categories = computed(() => this.categoryListStore.entities() ?? []);
 
@@ -36,6 +38,7 @@ export class CategoryListFacade {
   public async deleteCategory(categoryId: string) {
     await this.categoryService.deleteCategory(categoryId);
     this.categoryListStore.deleteCategoryFromList(categoryId);
+    this.questionListStore.deleteCategoryIdFromQuestions(categoryId);
   }
 
   public loadLists() {

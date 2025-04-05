@@ -8,6 +8,7 @@ import {
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { SortDefinition } from '@my-nx-monorepo/shared-ui';
+import { forkJoin } from 'rxjs';
 
 @Injectable()
 export class QuestionListFacade {
@@ -19,14 +20,20 @@ export class QuestionListFacade {
 
   public questions = this.questionListStore.displayQuestions;
   public sort = this.questionListStore.sort;
-  public categoryListOptions = computed(() => {
-    return (
+  public categoryListOptions = computed(
+    () =>
       this.categoryListStore.entities()?.map((category) => ({
         value: category.id,
         label: category.name,
       })) ?? []
-    );
-  });
+  );
+  public qualificationListOptions = computed(
+    () =>
+      this.qualificationListStore.entities()?.map((category) => ({
+        value: category.id,
+        label: category.name,
+      })) ?? []
+  );
 
   public setSort(sort: SortDefinition<Question>) {
     this.questionListStore.setSort(sort);
@@ -62,10 +69,16 @@ export class QuestionListFacade {
     this.questionListStore.deleteQuestionFromList(questionId);
   }
 
-  public loadLists() {
-    this.questionListStore.loadQuestionList();
-    this.qualificationListStore.loadQualificationList();
-    this.categoryListStore.loadCategoryList();
+  public async loadLists() {
+    forkJoin([
+      this.qualificationListStore.loadQualificationList(),
+      this.categoryListStore.loadCategoryList(),
+    ]).subscribe(() => {
+      this.questionListStore.loadQuestionList(
+        this.categoryListStore.entities() ?? [],
+        this.qualificationListStore.entities() ?? []
+      );
+    });
   }
 
   public setSearchText(searchText: string) {

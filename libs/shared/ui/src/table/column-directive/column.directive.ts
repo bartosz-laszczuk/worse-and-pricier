@@ -5,6 +5,6 @@ import { IComlumInputDirective } from '../table.models';
   selector: '[libColumn]',
 })
 export class ColumnDirective {
-  @Input() sepisColumn!: IComlumInputDirective;
+  @Input() libColumn!: IComlumInputDirective;
   constructor(public templateRef: TemplateRef<any>) {}
 }

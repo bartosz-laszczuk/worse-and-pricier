@@ -11,6 +11,7 @@ import {
   InputTextComponent,
 } from '@my-nx-monorepo/shared-ui';
 import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { OptionItem } from '@my-nx-monorepo/shared-util';
 
 interface EditQuestionForm {
   question: FormControl<string>;
@@ -34,7 +35,8 @@ interface EditQuestionForm {
 })
 export class EditQuestionComponent {
   public question = input.required<Question>();
-  public categoryList = input.required<any>();
+  public categoryList = input.required<OptionItem[]>();
+  public qualificationList = input.required<OptionItem[]>();
   public closed = output<Question | undefined>();
   private readonly fb = inject(FormBuilder);
 
@@ -83,7 +85,15 @@ export class EditQuestionComponent {
         question: this.form.controls.question.value,
         answer: this.form.controls.answer.value,
         answerPl: this.form.controls.answerPl.value,
+        category:
+          this.categoryList().find(
+            (category) => category.value === this.form.controls.categoryId.value
+          )?.label ?? '',
         categoryId: this.form.controls.categoryId.value,
+        qualification: this.qualificationList().find(
+          (qualification) =>
+            qualification.value === this.form.controls.qualificationId.value
+        )?.label,
         qualificationId: this.form.controls.qualificationId.value ?? undefined,
         isActive: this.form.controls.isActive.value,
       };

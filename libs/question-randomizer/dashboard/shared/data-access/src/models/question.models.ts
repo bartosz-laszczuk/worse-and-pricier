@@ -3,7 +3,7 @@ export interface CreateQuestionRequest {
   answer: string;
   answerPl: string;
   categoryId: string;
-  qualificationId?: string;
+  qualificationId: string | null;
   isActive: boolean;
   userId: string;
 }

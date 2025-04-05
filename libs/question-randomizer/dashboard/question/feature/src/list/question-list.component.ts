@@ -4,6 +4,7 @@ import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-u
 import { QuestionListFacade } from './question-list.facade';
 import { EditQuestionComponent } from '@my-nx-monorepo/question-randomizer-dashboard-question-ui';
 import {
+  ColumnDirective,
   IColumn,
   InputTextComponent,
   SortDefinition,
@@ -21,6 +22,7 @@ import { debounceTime } from 'rxjs';
     TableComponent,
     InputTextComponent,
     ReactiveFormsModule,
+    ColumnDirective,
   ],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
@@ -33,6 +35,8 @@ export class QuestionListComponent {
   public sort = this.questionListFacade.sort;
   public questionToEdit?: Question = undefined;
   public categoryListOptions = this.questionListFacade.categoryListOptions;
+  public qualificationListOptions =
+    this.questionListFacade.qualificationListOptions;
   public searchTextControl = new FormControl('', {
     nonNullable: true,
   });
@@ -41,9 +45,10 @@ export class QuestionListComponent {
     { displayName: 'Question', propertyName: 'question', sortable: true },
     { displayName: 'Answer', propertyName: 'answer' },
     { displayName: 'Answer Pl', propertyName: 'answerPl' },
-    { displayName: 'Category', propertyName: 'categoryId' },
-    { displayName: 'Qualification', propertyName: 'qualificationId' },
+    { displayName: 'Category', propertyName: 'category' },
+    { displayName: 'Qualification', propertyName: 'qualification' },
     { displayName: 'Is active', propertyName: 'isActive' },
+    { displayName: '', propertyName: 'options' },
   ];
 
   public constructor() {
@@ -60,8 +65,8 @@ export class QuestionListComponent {
       question: '',
       answer: '',
       answerPl: '',
+      category: '',
       categoryId: '',
-      qualificationId: '',
       isActive: true,
       userId: '',
     };

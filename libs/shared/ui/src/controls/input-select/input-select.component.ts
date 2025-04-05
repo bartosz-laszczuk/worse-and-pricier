@@ -2,16 +2,14 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   forwardRef,
   inject,
   input,
-  Input,
   output,
-  Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { OptionItem } from '@my-nx-monorepo/shared-util';
 
 @Component({
   selector: 'lib-input-select',
@@ -29,7 +27,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputSelectComponent implements ControlValueAccessor {
-  public options = input<{ value: string; label: string }[] | undefined>();
+  public options = input<OptionItem[] | undefined>();
   public placeholder = input('');
   public changed = output<any>();
   private readonly cdr = inject(ChangeDetectorRef);

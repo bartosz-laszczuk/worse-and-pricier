@@ -1,11 +1,4 @@
-<p>question-list works!</p>
-
-<!-- @for (question of questions(); track question) {
-{{ question.question }}
-<button (click)="questionToEdit = question">Edit</button>
-<button (click)="onDelete(question.id)">Delete</button>
-<br />
-} -->
+<h3>Question List</h3>
 @if(questions()) {
 <lib-input-text
   label="Search"
@@ -18,7 +11,15 @@
   [columns]="columns"
   [sortDefinition]="sort()"
   (sort)="onSort($event)"
-></lib-table>
+>
+  <ng-template
+    [libColumn]="{ propertyName: 'options', type: 'COLUMN' }"
+    let-item="item"
+  >
+    <button (click)="questionToEdit = item">Edit</button>
+    <button (click)="onDelete(item.id)">Delete</button>
+  </ng-template>
+</lib-table>
 }
 
 <button (click)="onAdd()">Add Question</button>
@@ -26,6 +27,7 @@
 <lib-edit-question
   [question]="questionToEdit"
   [categoryList]="categoryListOptions()"
+  [qualificationList]="qualificationListOptions()"
   (closed)="onClose($event)"
 ></lib-edit-question>
 }

@@ -18,22 +18,22 @@ export class TableService {
 
   private setColumnsViewDef(columnTemps: QueryList<ColumnDirective>): void {
     this._columnTemplates = columnTemps
-      .filter((item) => item.sepisColumn.type === TypeOfTemplateEnum.COLUMN)
+      .filter((item) => item.libColumn.type === TypeOfTemplateEnum.COLUMN)
       .reduce((i, curr) => {
         return {
           ...i,
-          [curr.sepisColumn.propertyName]: curr,
+          [curr.libColumn.propertyName]: curr,
         };
       }, {});
   }
 
   private setColumnsFiltersDef(columnTemps: QueryList<ColumnDirective>): void {
     this._filterTemplates = columnTemps
-      .filter((item) => item.sepisColumn?.type === TypeOfTemplateEnum.FILTER)
+      .filter((item) => item.libColumn?.type === TypeOfTemplateEnum.FILTER)
       .reduce((i, curr) => {
         return {
           ...i,
-          [curr.sepisColumn.propertyName]: curr,
+          [curr.libColumn.propertyName]: curr,
         };
       }, {});
   }

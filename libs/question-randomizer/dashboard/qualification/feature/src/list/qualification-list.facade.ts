@@ -2,6 +2,7 @@ import { computed, inject, Injectable } from '@angular/core';
 import {
   QualificationListStore,
   QualificationService,
+  QuestionListStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
@@ -11,6 +12,7 @@ export class QualificationListFacade {
   private readonly userStore = inject(UserStore);
   private readonly qualificationListStore = inject(QualificationListStore);
   private readonly qualificationService = inject(QualificationService);
+  private readonly questionListStore = inject(QuestionListStore);
 
   public qualifications = computed(
     () => this.qualificationListStore.entities() ?? []
@@ -48,6 +50,7 @@ export class QualificationListFacade {
   public async deleteQualification(qualificationId: string) {
     await this.qualificationService.deleteQualification(qualificationId);
     this.qualificationListStore.deleteQualificationFromList(qualificationId);
+    this.questionListStore.deleteQualificationIdFromQuestions(qualificationId);
   }
 
   public loadLists() {
