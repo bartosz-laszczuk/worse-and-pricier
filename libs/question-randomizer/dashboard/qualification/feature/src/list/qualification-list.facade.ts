@@ -1,56 +1,28 @@
 import { computed, inject, Injectable } from '@angular/core';
 import {
+  QualificationListService,
   QualificationListStore,
-  QualificationService,
-  QuestionListStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 
 @Injectable()
 export class QualificationListFacade {
-  private readonly userStore = inject(UserStore);
   private readonly qualificationListStore = inject(QualificationListStore);
-  private readonly qualificationService = inject(QualificationService);
-  private readonly questionListStore = inject(QuestionListStore);
+  private readonly qualificationListService = inject(QualificationListService);
 
   public qualificationList = computed(
     () => this.qualificationListStore.qualificationList() ?? []
   );
 
-  public async createQualification(createdQualification: Qualification) {
-    const userId = this.userStore.uid();
-    if (!userId) return;
-    const qualificationId = await this.qualificationService.createQualification(
-      createdQualification,
-      userId
-    );
-    const qualification: Qualification = {
-      ...createdQualification,
-      id: qualificationId,
-      userId,
-    };
-    this.qualificationListStore.addQualificationToList(qualification);
+  public createQualification(createdQualification: Qualification) {
+    this.qualificationListService.createQualification(createdQualification);
   }
 
   public async updateQualification(updatedQualification: Qualification) {
-    await this.qualificationService.updateQualification(
-      updatedQualification.id,
-      {
-        name: updatedQualification.name,
-      }
-    );
-    this.qualificationListStore.updateQualificationInList(
-      updatedQualification.id,
-      {
-        name: updatedQualification.name,
-      }
-    );
+    this.qualificationListService.createQualification(updatedQualification);
   }
 
   public async deleteQualification(qualificationId: string) {
-    await this.qualificationService.deleteQualification(qualificationId);
-    this.qualificationListStore.deleteQualificationFromList(qualificationId);
-    this.questionListStore.deleteQualificationIdFromQuestions(qualificationId);
+    this.qualificationListService.deleteQualification(qualificationId);
   }
 }

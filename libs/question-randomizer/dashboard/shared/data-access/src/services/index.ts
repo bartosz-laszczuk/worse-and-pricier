@@ -1,3 +1,3 @@
-export * from './category.service';
-export * from './qualification.service';
-export * from './question.service';
+export * from './qualification-list.service';
+export * from './question-list.service';
+export * from './category-list.service';

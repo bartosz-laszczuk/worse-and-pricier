@@ -1,4 +1,4 @@
-import { computed, effect, inject } from '@angular/core';
+import { computed, effect } from '@angular/core';
 import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import {
   getState,
@@ -9,8 +9,6 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { QualificationService } from '../../services/qualification.service';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import { OptionItem } from '@my-nx-monorepo/shared-util';
 
 type QualificationState = {
@@ -56,94 +54,84 @@ export const QualificationListStore = signalStore(
     ),
   })),
 
-  withMethods(
-    (
-      store,
-      qualificationService = inject(QualificationService),
-      userStore = inject(UserStore)
-    ) => ({
-      addQualificationToList(qualification: Qualification) {
-        patchState(store, (state) => ({
+  withMethods((store) => ({
+    addQualificationToList(qualification: Qualification) {
+      patchState(store, (state) => ({
+        entities: {
+          ...(state.entities ?? {}),
+          [qualification.id]: qualification,
+        },
+        ids: [...(state.ids ?? []), qualification.id],
+        isLoading: false,
+        error: null,
+      }));
+    },
+
+    updateQualificationInList(
+      qualificationId: string,
+      data: Partial<Qualification>
+    ) {
+      patchState(store, (state) => {
+        if (!state.entities || !state.entities[qualificationId]) return state;
+
+        return {
           entities: {
-            ...(state.entities ?? {}),
-            [qualification.id]: qualification,
+            ...state.entities,
+            [qualificationId]: {
+              ...state.entities[qualificationId],
+              ...data,
+            },
           },
-          ids: [...(state.ids ?? []), qualification.id],
           isLoading: false,
           error: null,
-        }));
-      },
+        };
+      });
+    },
 
-      updateQualificationInList(
-        qualificationId: string,
-        data: Partial<Qualification>
-      ) {
-        patchState(store, (state) => {
-          if (!state.entities || !state.entities[qualificationId]) return state;
+    deleteQualificationFromList(qualificationId: string) {
+      patchState(store, (state) => {
+        if (!state.entities || !state.ids) return state;
 
-          return {
-            entities: {
-              ...state.entities,
-              [qualificationId]: {
-                ...state.entities[qualificationId],
-                ...data,
-              },
-            },
-            isLoading: false,
-            error: null,
-          };
-        });
-      },
+        const { [qualificationId]: _, ...remainingEntities } = state.entities;
 
-      deleteQualificationFromList(qualificationId: string) {
-        patchState(store, (state) => {
-          if (!state.entities || !state.ids) return state;
+        return {
+          entities: remainingEntities,
+          ids: state.ids.filter((id) => id !== qualificationId),
+          isLoading: false,
+          error: null,
+        };
+      });
+    },
 
-          const { [qualificationId]: _, ...remainingEntities } = state.entities;
-
-          return {
-            entities: remainingEntities,
-            ids: state.ids.filter((id) => id !== qualificationId),
-            isLoading: false,
-            error: null,
-          };
-        });
-      },
-
-      async loadQualificationList(forceLoad = false) {
-        if (!forceLoad && store.entities() !== null) return;
-
-        patchState(store, { isLoading: true, error: null });
-
-        try {
-          const qualifications = await qualificationService.getQualifications(
-            userStore.uid()!
-          );
-
-          const normalized = qualifications.reduce(
-            (acc, q) => {
-              acc.entities[q.id] = q;
-              acc.ids.push(q.id);
-              return acc;
-            },
-            {
-              entities: {} as Record<string, Qualification>,
-              ids: [] as string[],
-            }
-          );
-
-          patchState(store, {
-            ...normalized,
-            isLoading: false,
-            error: null,
-          });
-        } catch (error: any) {
-          patchState(store, {
-            isLoading: false,
-            error: error.message || 'User initialization failed',
-          });
+    loadQualificationList(qualifications: Qualification[]) {
+      const normalized = qualifications.reduce(
+        (acc, q) => {
+          acc.entities[q.id] = q;
+          acc.ids.push(q.id);
+          return acc;
+        },
+        {
+          entities: {} as Record<string, Qualification>,
+          ids: [] as string[],
         }
-      },
-    })
-  )
+      );
+
+      patchState(store, {
+        ...normalized,
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    startLoading() {
+      patchState(store, { isLoading: true, error: null });
+    },
+
+    logError(error: string) {
+      patchState(store, {
+        isLoading: false,
+        error,
+      });
+    },
+  }))
 );

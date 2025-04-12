@@ -3,8 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DashboardShellFacade } from './dashboard-shell.facade';
 import {
+  CategoryListService,
   CategoryListStore,
+  QualificationListService,
   QualificationListStore,
+  QuestionListService,
   QuestionListStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 
@@ -18,6 +21,9 @@ import {
     CategoryListStore,
     QualificationListStore,
     QuestionListStore,
+    CategoryListService,
+    QualificationListService,
+    QuestionListService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

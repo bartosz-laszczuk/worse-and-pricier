@@ -1,4 +1,4 @@
-import { computed, effect, inject } from '@angular/core';
+import { computed, effect } from '@angular/core';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import {
   getState,
@@ -9,9 +9,6 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { CategoryService } from '../../services/category.service';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
-import { OptionItem } from '@my-nx-monorepo/shared-util';
 
 type NormalizedCategoryState = {
   entities: Record<string, Category> | null;
@@ -51,88 +48,78 @@ export const CategoryListStore = signalStore(
     ),
   })),
 
-  withMethods(
-    (
-      store,
-      categoryService = inject(CategoryService),
-      userStore = inject(UserStore)
-    ) => ({
-      addCategoryToList(category: Category) {
-        patchState(store, (state) => ({
+  withMethods((store) => ({
+    addCategoryToList(category: Category) {
+      patchState(store, (state) => ({
+        entities: {
+          ...(state.entities ?? {}),
+          [category.id]: category,
+        },
+        ids: [...(state.ids ?? []), category.id],
+        isLoading: false,
+        error: null,
+      }));
+    },
+
+    updateCategoryInList(categoryId: string, data: Partial<Category>) {
+      patchState(store, (state) => {
+        if (!state.entities || !state.entities[categoryId]) return state;
+
+        return {
           entities: {
-            ...(state.entities ?? {}),
-            [category.id]: category,
+            ...state.entities,
+            [categoryId]: {
+              ...state.entities[categoryId],
+              ...data,
+            },
           },
-          ids: [...(state.ids ?? []), category.id],
           isLoading: false,
           error: null,
-        }));
-      },
+        };
+      });
+    },
 
-      updateCategoryInList(categoryId: string, data: Partial<Category>) {
-        patchState(store, (state) => {
-          if (!state.entities || !state.entities[categoryId]) return state;
+    deleteCategoryFromList(categoryId: string) {
+      patchState(store, (state) => {
+        if (!state.entities || !state.ids) return state;
 
-          return {
-            entities: {
-              ...state.entities,
-              [categoryId]: {
-                ...state.entities[categoryId],
-                ...data,
-              },
-            },
-            isLoading: false,
-            error: null,
-          };
-        });
-      },
+        const { [categoryId]: _, ...remainingEntities } = state.entities;
 
-      deleteCategoryFromList(categoryId: string) {
-        patchState(store, (state) => {
-          if (!state.entities || !state.ids) return state;
+        return {
+          entities: remainingEntities,
+          ids: state.ids.filter((id) => id !== categoryId),
+          isLoading: false,
+          error: null,
+        };
+      });
+    },
 
-          const { [categoryId]: _, ...remainingEntities } = state.entities;
+    async loadCategoryList(categories: Category[]) {
+      const normalized = categories.reduce(
+        (acc, category) => {
+          acc.entities[category.id] = category;
+          acc.ids.push(category.id);
+          return acc;
+        },
+        { entities: {} as Record<string, Category>, ids: [] as string[] }
+      );
 
-          return {
-            entities: remainingEntities,
-            ids: state.ids.filter((id) => id !== categoryId),
-            isLoading: false,
-            error: null,
-          };
-        });
-      },
+      patchState(store, {
+        ...normalized,
+        isLoading: false,
+        error: null,
+      });
+    },
 
-      async loadCategoryList(forceLoad = false) {
-        if (!forceLoad && store.entities() !== null) return;
+    startLoading() {
+      patchState(store, { isLoading: true, error: null });
+    },
 
-        patchState(store, { isLoading: true, error: null });
-
-        try {
-          const categories = await categoryService.getCategories(
-            userStore.uid()!
-          );
-
-          const normalized = categories.reduce(
-            (acc, category) => {
-              acc.entities[category.id] = category;
-              acc.ids.push(category.id);
-              return acc;
-            },
-            { entities: {} as Record<string, Category>, ids: [] as string[] }
-          );
-
-          patchState(store, {
-            ...normalized,
-            isLoading: false,
-            error: null,
-          });
-        } catch (error: any) {
-          patchState(store, {
-            isLoading: false,
-            error: error.message || 'User initialization failed',
-          });
-        }
-      },
-    })
-  )
+    logError(error: string) {
+      patchState(store, {
+        isLoading: false,
+        error,
+      });
+    },
+  }))
 );

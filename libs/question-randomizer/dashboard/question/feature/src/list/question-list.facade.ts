@@ -1,11 +1,10 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   CategoryListStore,
   QualificationListStore,
+  QuestionListService,
   QuestionListStore,
-  QuestionService,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import {
   EditQuestionFormValue,
   Question,
@@ -14,11 +13,10 @@ import { SortDefinition } from '@my-nx-monorepo/shared-ui';
 
 @Injectable()
 export class QuestionListFacade {
-  private readonly userStore = inject(UserStore);
   private readonly questionListStore = inject(QuestionListStore);
+  private readonly questionListService = inject(QuestionListService);
   private readonly qualificationListStore = inject(QualificationListStore);
   private readonly categoryListStore = inject(CategoryListStore);
-  private readonly questionService = inject(QuestionService);
 
   public questions = this.questionListStore.displayQuestions;
   public sort = this.questionListStore.sort;
@@ -31,30 +29,18 @@ export class QuestionListFacade {
   }
 
   public async createQuestion(createdQuestion: EditQuestionFormValue) {
-    const userId = this.userStore.uid()!;
-    const questionId = await this.questionService.createQuestion(
-      createdQuestion,
-      userId
-    );
-    const question: Question = {
-      ...createdQuestion,
-      id: questionId,
-      userId,
-    };
-    this.questionListStore.addQuestionToList(question);
+    this.questionListService.createQuestion(createdQuestion);
   }
 
   public async updateQuestion(
     questionId: string,
     updatedQuestion: EditQuestionFormValue
   ) {
-    await this.questionService.updateQuestion(questionId, updatedQuestion);
-    this.questionListStore.updateQuestionInList(questionId, updatedQuestion);
+    this.questionListService.updateQuestion(questionId, updatedQuestion);
   }
 
   public async deleteQuestion(questionId: string) {
-    await this.questionService.deleteQuestion(questionId);
-    this.questionListStore.deleteQuestionFromList(questionId);
+    this.questionListService.deleteQuestion(questionId);
   }
 
   public setSearchText(searchText: string) {
