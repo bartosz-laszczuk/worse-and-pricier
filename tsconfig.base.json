@@ -48,11 +48,17 @@
       "@my-nx-monorepo/question-randomizer-dashboard-question-ui": [
         "libs/question-randomizer/dashboard/question/ui/src/index.ts"
       ],
+      "@my-nx-monorepo/question-randomizer-dashboard-randomization-data-access": [
+        "libs/question-randomizer/dashboard/randomization/data-access/src/index.ts"
+      ],
       "@my-nx-monorepo/question-randomizer-dashboard-randomization-shell": [
         "libs/question-randomizer/dashboard/randomization/shell/src/index.ts"
       ],
       "@my-nx-monorepo/question-randomizer-dashboard-randomization-ui": [
         "libs/question-randomizer/dashboard/randomization/ui/src/index.ts"
+      ],
+      "@my-nx-monorepo/question-randomizer-dashboard-randomization-util": [
+        "libs/question-randomizer/dashboard/randomization/util/src/index.ts"
       ],
       "@my-nx-monorepo/question-randomizer-dashboard-shared-data-access": [
         "libs/question-randomizer/dashboard/shared/data-access/src/index.ts"

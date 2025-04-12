@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RandomizationShellFacade } from './randomization-shell.facade';
 
@@ -10,4 +10,10 @@ import { RandomizationShellFacade } from './randomization-shell.facade';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [RandomizationShellFacade],
 })
-export class RandomizationShellComponent {}
+export class RandomizationShellComponent {
+  private readonly randomizationShellFacade = inject(RandomizationShellFacade);
+
+  constructor() {
+    this.randomizationShellFacade.loadRandomization();
+  }
+}

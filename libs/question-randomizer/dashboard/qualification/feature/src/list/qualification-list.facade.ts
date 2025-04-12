@@ -19,7 +19,8 @@ export class QualificationListFacade {
   );
 
   public async createQualification(createdQualification: Qualification) {
-    const userId = this.userStore.uid()!;
+    const userId = this.userStore.uid();
+    if (!userId) return;
     const qualificationId = await this.qualificationService.createQualification(
       createdQualification,
       userId
