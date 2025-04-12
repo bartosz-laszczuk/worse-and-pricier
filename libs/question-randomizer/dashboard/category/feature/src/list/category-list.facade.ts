@@ -14,7 +14,9 @@ export class CategoryListFacade {
   private readonly categoryService = inject(CategoryService);
   private readonly questionListStore = inject(QuestionListStore);
 
-  public categories = computed(() => this.categoryListStore.entities() ?? []);
+  public categoryList = computed(
+    () => this.categoryListStore.categoryList() ?? []
+  );
 
   public async createCategory(createdCategory: Category) {
     const userId = this.userStore.uid()!;

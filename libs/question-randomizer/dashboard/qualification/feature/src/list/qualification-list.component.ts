@@ -14,7 +14,7 @@ import { EditQualificationComponent } from '@my-nx-monorepo/question-randomizer-
 })
 export class QualificationListComponent {
   private readonly qualificationListFacade = inject(QualificationListFacade);
-  public qualifications = this.qualificationListFacade.qualifications;
+  public qualificationList = this.qualificationListFacade.qualificationList;
   public qualificationToEdit?: Qualification = undefined;
 
   public onAdd() {

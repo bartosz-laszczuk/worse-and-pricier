@@ -1,6 +1,6 @@
 <p>category-list works!</p>
 
-@for (category of categories(); track category) {
+@for (category of categoryList(); track category) {
 {{ category.name }}
 <button (click)="categoryToEdit = category">Edit</button>
 <button (click)="onDelete(category.id)">Delete</button>

@@ -1,6 +1,7 @@
 import { computed, effect, inject } from '@angular/core';
 import {
   Category,
+  EditQuestionFormValue,
   filterByTextUsingORLogic,
   filterSortPageEntities,
   Qualification,
@@ -23,8 +24,9 @@ import {
   SortDefinition,
 } from '@my-nx-monorepo/shared-ui';
 
-type QuestionListState = {
-  entities: Question[] | null;
+type QuestionState = {
+  entities: Record<string, Question> | null;
+  ids: string[] | null;
   sort: SortDefinition<Question>;
   page: PageParameters;
   filters: Filters<Question>;
@@ -33,8 +35,9 @@ type QuestionListState = {
   error: string | null;
 };
 
-const initialState: QuestionListState = {
+const initialState: QuestionState = {
   entities: null,
+  ids: null,
   filters: {},
   sort: { field: 'question', direction: 'asc' },
   page: { index: 0, size: 10 },
@@ -45,22 +48,26 @@ const initialState: QuestionListState = {
 
 export const QuestionListStore = signalStore(
   withState(initialState),
+
   withHooks({
     onInit(store) {
       effect(() => {
-        // 👇 The effect is re-executed on state change.
-        const state = getState(store);
-        console.log('question list state', state);
+        console.log('question list state', getState(store));
       });
     },
   }),
+
   withComputed((store) => ({
     displayQuestions: computed(() => {
       const entities = store.entities();
-      if (!entities) return [];
+      const ids = store.ids();
+
+      if (!entities || !ids) return [];
+
+      const questions = ids.map((id) => entities[id]);
 
       const searched = filterByTextUsingORLogic(
-        entities,
+        questions,
         ['question', 'answer', 'answerPl'],
         store.searchText()
       );
@@ -73,6 +80,7 @@ export const QuestionListStore = signalStore(
       );
     }),
   })),
+
   withMethods(
     (
       store,
@@ -81,40 +89,52 @@ export const QuestionListStore = signalStore(
     ) => ({
       addQuestionToList(question: Question) {
         patchState(store, (state) => ({
-          entities: state.entities ? [...state.entities, question] : [question],
+          entities: {
+            ...(state.entities ?? {}),
+            [question.id]: question,
+          },
+          ids: [...(state.ids ?? []), question.id],
           isLoading: false,
           error: null,
         }));
       },
 
-      updateQuestionInList(questionId: string, data: Partial<Question>) {
-        patchState(store, (state) => ({
-          entities: state.entities
-            ? state.entities.map((question) =>
-                question.id === questionId ? { ...question, ...data } : question
-              )
-            : [],
-          isLoading: false,
-          error: null,
-        }));
+      updateQuestionInList(questionId: string, data: EditQuestionFormValue) {
+        patchState(store, (state) => {
+          if (!state.entities || !state.entities[questionId]) return state;
+
+          return {
+            entities: {
+              ...state.entities,
+              [questionId]: { ...state.entities[questionId], ...data },
+            },
+            isLoading: false,
+            error: null,
+          };
+        });
       },
 
       deleteQuestionFromList(questionId: string) {
-        patchState(store, (state) => ({
-          entities: state.entities
-            ? state.entities.filter((question) => question.id !== questionId)
-            : [],
-          isLoading: false,
-          error: null,
-        }));
+        patchState(store, (state) => {
+          if (!state.entities || !state.ids) return state;
+
+          const { [questionId]: _, ...remainingEntities } = state.entities;
+
+          return {
+            entities: remainingEntities,
+            ids: state.ids.filter((id) => id !== questionId),
+            isLoading: false,
+            error: null,
+          };
+        });
       },
 
       async loadQuestionList(
-        categories: Category[],
-        qualifications: Qualification[],
+        categories: Record<string, Category>,
+        qualifications: Record<string, Qualification>,
         forceLoad = false
       ) {
-        if (!forceLoad && !!store.entities()) return;
+        if (!forceLoad && store.entities() !== null) return;
 
         patchState(store, { isLoading: true, error: null });
 
@@ -123,23 +143,32 @@ export const QuestionListStore = signalStore(
             await questionService.getQuestions(userStore.uid()!)
           ).map((question) => ({
             ...question,
-            category:
-              categories.find((category) => category.id === question.categoryId)
-                ?.name ?? '',
-            qualification: qualifications.find(
-              (qualification) => qualification.id === question.qualificationId
-            )?.name,
+            categoryName: question.categoryId
+              ? categories[question.categoryId]?.name
+              : undefined,
+            qualificationName: question.qualificationId
+              ? qualifications[question.qualificationId]?.name
+              : undefined,
           }));
 
+          const normalized = questions.reduce(
+            (acc, q) => {
+              acc.entities[q.id] = q;
+              acc.ids.push(q.id);
+              return acc;
+            },
+            { entities: {} as Record<string, Question>, ids: [] as string[] }
+          );
+
           patchState(store, {
-            entities: questions,
+            ...normalized,
             isLoading: false,
             error: null,
           });
         } catch (error: any) {
           patchState(store, {
             isLoading: false,
-            error: error.message || 'User initialization failed',
+            error: error.message || 'Failed to load questions',
           });
         }
       },
@@ -179,22 +208,28 @@ export const QuestionListStore = signalStore(
       },
 
       async deleteCategoryIdFromQuestions(categoryId: string) {
-        const entities = store.entities();
+        const state = getState(store);
         const userId = userStore.uid();
-        if (!entities || !userId) return;
+        if (!state.entities || !userId) return;
 
         try {
           await questionService.removeCategoryIdFromQuestions(
             categoryId,
             userId
           );
-          patchState(store, {
-            entities: entities.map((question) =>
-              question.categoryId === categoryId
-                ? { ...question, categoryId: '', category: '' }
-                : question
-            ),
-          });
+
+          const updatedEntities = Object.entries(state.entities).reduce(
+            (acc, [id, question]) => {
+              acc[id] =
+                question.categoryId === categoryId
+                  ? { ...question, categoryId: '' }
+                  : question;
+              return acc;
+            },
+            {} as Record<string, Question>
+          );
+
+          patchState(store, { entities: updatedEntities });
         } catch (error: any) {
           patchState(store, {
             error: error.message || 'Failed to update questions',
@@ -203,26 +238,32 @@ export const QuestionListStore = signalStore(
       },
 
       async deleteQualificationIdFromQuestions(qualificationId: string) {
-        const entities = store.entities();
+        const state = getState(store);
         const userId = userStore.uid();
-        if (!entities || !userId) return;
+        if (!state.entities || !userId) return;
 
         try {
           await questionService.removeQualificationIdFromQuestions(
             qualificationId,
             userId
           );
-          patchState(store, {
-            entities: entities.map((question) =>
-              question.qualificationId === qualificationId
-                ? {
-                    ...question,
-                    qualificationId: undefined,
-                    qualification: undefined,
-                  }
-                : question
-            ),
-          });
+
+          const updatedEntities = Object.entries(state.entities).reduce(
+            (acc, [id, question]) => {
+              acc[id] =
+                question.qualificationId === qualificationId
+                  ? {
+                      ...question,
+                      qualificationId: undefined,
+                      qualificationName: undefined,
+                    }
+                  : question;
+              return acc;
+            },
+            {} as Record<string, Question>
+          );
+
+          patchState(store, { entities: updatedEntities });
         } catch (error: any) {
           patchState(store, {
             error: error.message || 'Failed to update questions',

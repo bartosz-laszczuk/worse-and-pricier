@@ -14,8 +14,8 @@ export class QualificationListFacade {
   private readonly qualificationService = inject(QualificationService);
   private readonly questionListStore = inject(QuestionListStore);
 
-  public qualifications = computed(
-    () => this.qualificationListStore.entities() ?? []
+  public qualificationList = computed(
+    () => this.qualificationListStore.qualificationList() ?? []
   );
 
   public async createQualification(createdQualification: Qualification) {

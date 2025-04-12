@@ -1,41 +1,61 @@
-import { effect, inject } from '@angular/core';
+import { computed, effect, inject } from '@angular/core';
 import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import {
   getState,
   patchState,
   signalStore,
+  withComputed,
   withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
 import { QualificationService } from '../../services/qualification.service';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { OptionItem } from '@my-nx-monorepo/shared-util';
 
-type QualificationListState = {
-  entities: Qualification[] | null;
+type QualificationState = {
+  entities: Record<string, Qualification> | null;
+  ids: string[] | null;
   isLoading: boolean | null;
   error: string | null;
 };
 
-const initialState: QualificationListState = {
+const initialState: QualificationState = {
   entities: null,
+  ids: null,
   isLoading: null,
   error: null,
 };
 
 export const QualificationListStore = signalStore(
   withState(initialState),
+
   withHooks({
     onInit(store) {
       effect(() => {
-        // 👇 The effect is re-executed on state change.
-        const state = getState(store);
-        console.log('qualification list state', state);
+        console.log('qualification list state', getState(store));
       });
-
-      // setInterval(() => store.increment(), 1_000);
     },
   }),
+
+  withComputed((store) => ({
+    qualificationList: computed(() => {
+      const qualificationDictionary = store.entities();
+      return qualificationDictionary
+        ? Object.values(qualificationDictionary)
+        : undefined;
+    }),
+    qualificationOptionItemList: computed(() =>
+      Object.values(store.entities() ?? {}).map(
+        (qualification) =>
+          ({
+            value: qualification.id,
+            label: qualification.name,
+          } as OptionItem)
+      )
+    ),
+  })),
+
   withMethods(
     (
       store,
@@ -44,9 +64,11 @@ export const QualificationListStore = signalStore(
     ) => ({
       addQualificationToList(qualification: Qualification) {
         patchState(store, (state) => ({
-          entities: state.entities
-            ? [...state.entities, qualification]
-            : [qualification],
+          entities: {
+            ...(state.entities ?? {}),
+            [qualification.id]: qualification,
+          },
+          ids: [...(state.ids ?? []), qualification.id],
           isLoading: false,
           error: null,
         }));
@@ -56,33 +78,40 @@ export const QualificationListStore = signalStore(
         qualificationId: string,
         data: Partial<Qualification>
       ) {
-        patchState(store, (state) => ({
-          entities: state.entities
-            ? state.entities.map((qualification) =>
-                qualification.id === qualificationId
-                  ? { ...qualification, ...data }
-                  : qualification
-              )
-            : [],
-          isLoading: false,
-          error: null,
-        }));
+        patchState(store, (state) => {
+          if (!state.entities || !state.entities[qualificationId]) return state;
+
+          return {
+            entities: {
+              ...state.entities,
+              [qualificationId]: {
+                ...state.entities[qualificationId],
+                ...data,
+              },
+            },
+            isLoading: false,
+            error: null,
+          };
+        });
       },
 
       deleteQualificationFromList(qualificationId: string) {
-        patchState(store, (state) => ({
-          entities: state.entities
-            ? state.entities.filter(
-                (qualification) => qualification.id !== qualificationId
-              )
-            : [],
-          isLoading: false,
-          error: null,
-        }));
+        patchState(store, (state) => {
+          if (!state.entities || !state.ids) return state;
+
+          const { [qualificationId]: _, ...remainingEntities } = state.entities;
+
+          return {
+            entities: remainingEntities,
+            ids: state.ids.filter((id) => id !== qualificationId),
+            isLoading: false,
+            error: null,
+          };
+        });
       },
 
       async loadQualificationList(forceLoad = false) {
-        if (!forceLoad && !!store.entities()) return;
+        if (!forceLoad && store.entities() !== null) return;
 
         patchState(store, { isLoading: true, error: null });
 
@@ -90,8 +119,21 @@ export const QualificationListStore = signalStore(
           const qualifications = await qualificationService.getQualifications(
             userStore.uid()!
           );
+
+          const normalized = qualifications.reduce(
+            (acc, q) => {
+              acc.entities[q.id] = q;
+              acc.ids.push(q.id);
+              return acc;
+            },
+            {
+              entities: {} as Record<string, Qualification>,
+              ids: [] as string[],
+            }
+          );
+
           patchState(store, {
-            entities: qualifications,
+            ...normalized,
             isLoading: false,
             error: null,
           });

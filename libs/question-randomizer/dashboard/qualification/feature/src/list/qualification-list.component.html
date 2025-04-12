@@ -1,6 +1,6 @@
 <p>qualification-list works!</p>
 
-@for (qualification of qualifications(); track qualification) {
+@for (qualification of qualificationList(); track qualification) {
 {{ qualification.name }}
 <button (click)="qualificationToEdit = qualification">Edit</button>
 <button (click)="onDelete(qualification.id)">Delete</button>

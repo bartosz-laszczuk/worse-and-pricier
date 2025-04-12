@@ -1,41 +1,56 @@
-import { effect, inject } from '@angular/core';
+import { computed, effect, inject } from '@angular/core';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import {
   getState,
   patchState,
   signalStore,
+  withComputed,
   withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
 import { CategoryService } from '../../services/category.service';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { OptionItem } from '@my-nx-monorepo/shared-util';
 
-type CategoryListState = {
-  entities: Category[] | null;
+type NormalizedCategoryState = {
+  entities: Record<string, Category> | null;
+  ids: string[] | null;
   isLoading: boolean | null;
   error: string | null;
 };
 
-const initialState: CategoryListState = {
+const initialState: NormalizedCategoryState = {
   entities: null,
+  ids: null,
   isLoading: null,
   error: null,
 };
 
 export const CategoryListStore = signalStore(
   withState(initialState),
+
   withHooks({
     onInit(store) {
       effect(() => {
-        // 👇 The effect is re-executed on state change.
-        const state = getState(store);
-        console.log('category list state', state);
+        console.log('category list state', getState(store));
       });
-
-      // setInterval(() => store.increment(), 1_000);
     },
   }),
+
+  withComputed((store) => ({
+    categoryList: computed(() => {
+      const categoryDitionary = store.entities();
+      return categoryDitionary ? Object.values(categoryDitionary) : undefined;
+    }),
+    categoryOptionItemList: computed(() =>
+      Object.values(store.entities() ?? {}).map((category) => ({
+        value: category.id,
+        label: category.name,
+      }))
+    ),
+  })),
+
   withMethods(
     (
       store,
@@ -44,36 +59,51 @@ export const CategoryListStore = signalStore(
     ) => ({
       addCategoryToList(category: Category) {
         patchState(store, (state) => ({
-          entities: state.entities ? [...state.entities, category] : [category],
+          entities: {
+            ...(state.entities ?? {}),
+            [category.id]: category,
+          },
+          ids: [...(state.ids ?? []), category.id],
           isLoading: false,
           error: null,
         }));
       },
 
       updateCategoryInList(categoryId: string, data: Partial<Category>) {
-        patchState(store, (state) => ({
-          entities: state.entities
-            ? state.entities.map((category) =>
-                category.id === categoryId ? { ...category, ...data } : category
-              )
-            : [],
-          isLoading: false,
-          error: null,
-        }));
+        patchState(store, (state) => {
+          if (!state.entities || !state.entities[categoryId]) return state;
+
+          return {
+            entities: {
+              ...state.entities,
+              [categoryId]: {
+                ...state.entities[categoryId],
+                ...data,
+              },
+            },
+            isLoading: false,
+            error: null,
+          };
+        });
       },
 
       deleteCategoryFromList(categoryId: string) {
-        patchState(store, (state) => ({
-          entities: state.entities
-            ? state.entities.filter((category) => category.id !== categoryId)
-            : [],
-          isLoading: false,
-          error: null,
-        }));
+        patchState(store, (state) => {
+          if (!state.entities || !state.ids) return state;
+
+          const { [categoryId]: _, ...remainingEntities } = state.entities;
+
+          return {
+            entities: remainingEntities,
+            ids: state.ids.filter((id) => id !== categoryId),
+            isLoading: false,
+            error: null,
+          };
+        });
       },
 
       async loadCategoryList(forceLoad = false) {
-        if (!forceLoad && !!store.entities()) return;
+        if (!forceLoad && store.entities() !== null) return;
 
         patchState(store, { isLoading: true, error: null });
 
@@ -81,8 +111,18 @@ export const CategoryListStore = signalStore(
           const categories = await categoryService.getCategories(
             userStore.uid()!
           );
+
+          const normalized = categories.reduce(
+            (acc, category) => {
+              acc.entities[category.id] = category;
+              acc.ids.push(category.id);
+              return acc;
+            },
+            { entities: {} as Record<string, Category>, ids: [] as string[] }
+          );
+
           patchState(store, {
-            entities: categories,
+            ...normalized,
             isLoading: false,
             error: null,
           });

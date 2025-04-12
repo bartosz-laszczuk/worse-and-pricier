@@ -13,7 +13,10 @@ import {
   where,
   writeBatch,
 } from '@angular/fire/firestore';
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import {
+  EditQuestionFormValue,
+  Question,
+} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { lastValueFrom, Observable, take } from 'rxjs';
 import { CreateQuestionRequest } from '../models';
 
@@ -47,7 +50,7 @@ export class QuestionService {
   }
 
   public async createQuestion(
-    question: Question,
+    question: EditQuestionFormValue,
     userId: string
   ): Promise<string> {
     const request: CreateQuestionRequest = {
@@ -70,11 +73,15 @@ export class QuestionService {
 
   public updateQuestion(
     questionId: string,
-    data: Partial<Question>
+    data: EditQuestionFormValue
   ): Promise<void> {
-    const { id, category, qualification, ...request } = {
-      ...data,
+    const request /*: UpdateQuestionRequest*/ = {
+      question: data.question,
+      answer: data.answer,
+      answerPl: data.answerPl,
+      categoryId: data.categoryId,
       qualificationId: data.qualificationId ?? null,
+      isActive: data.isActive,
     };
     const questionDoc = doc(this.afDb, `questions/${questionId}`);
     return updateDoc(questionDoc, request);

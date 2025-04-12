@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import {
+  EditQuestionFormValue,
+  Question,
+} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { QuestionListFacade } from './question-list.facade';
 import { EditQuestionComponent } from '@my-nx-monorepo/question-randomizer-dashboard-question-ui';
 import {
@@ -34,9 +37,10 @@ export class QuestionListComponent {
   public questions = this.questionListFacade.questions;
   public sort = this.questionListFacade.sort;
   public questionToEdit?: Question = undefined;
-  public categoryListOptions = this.questionListFacade.categoryListOptions;
-  public qualificationListOptions =
-    this.questionListFacade.qualificationListOptions;
+  public categoryOptionItemList =
+    this.questionListFacade.categoryOptionItemList;
+  public qualificationOptionItemList =
+    this.questionListFacade.qualificationOptionItemList;
   public searchTextControl = new FormControl('', {
     nonNullable: true,
   });
@@ -45,8 +49,8 @@ export class QuestionListComponent {
     { displayName: 'Question', propertyName: 'question', sortable: true },
     { displayName: 'Answer', propertyName: 'answer' },
     { displayName: 'Answer Pl', propertyName: 'answerPl' },
-    { displayName: 'Category', propertyName: 'category' },
-    { displayName: 'Qualification', propertyName: 'qualification' },
+    { displayName: 'Category', propertyName: 'categoryName' },
+    { displayName: 'Qualification', propertyName: 'qualificationName' },
     { displayName: 'Is active', propertyName: 'isActive' },
     { displayName: '', propertyName: 'options' },
   ];
@@ -63,17 +67,18 @@ export class QuestionListComponent {
       question: '',
       answer: '',
       answerPl: '',
-      category: '',
-      categoryId: '',
       isActive: true,
       userId: '',
     };
   }
 
-  public onClose(editedQuestion?: Question) {
+  public onClose(editedQuestion?: EditQuestionFormValue) {
     if (editedQuestion) {
-      if (editedQuestion.id)
-        this.questionListFacade.updateQuestion(editedQuestion);
+      if (this.questionToEdit?.id)
+        this.questionListFacade.updateQuestion(
+          this.questionToEdit.id,
+          editedQuestion
+        );
       else this.questionListFacade.createQuestion(editedQuestion);
     }
     this.questionToEdit = undefined;

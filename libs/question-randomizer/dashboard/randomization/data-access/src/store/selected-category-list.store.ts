@@ -1,9 +1,5 @@
 import { effect, inject } from '@angular/core';
 import {
-  Category,
-  Qualification,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import {
   getState,
   patchState,
   signalStore,
@@ -11,96 +7,165 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { SelectedCategory } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import { serverTimestamp } from '@angular/fire/firestore';
+import { SelectedCategoryListService } from '../services';
 
 type SelectedCategoryListState = {
-  entities: Category[] | null;
+  entities: Record<string, SelectedCategory> | null;
+  ids: string[] | null;
   isLoading: boolean | null;
   error: string | null;
 };
 
 const initialState: SelectedCategoryListState = {
   entities: null,
+  ids: null,
   isLoading: null,
   error: null,
 };
 
 export const SelectedCategoryListStore = signalStore(
   withState(initialState),
+
   withHooks({
     onInit(store) {
       effect(() => {
-        // 👇 The effect is re-executed on state change.
         const state = getState(store);
-        console.log('qualification list state', state);
+        console.log('Normalized SelectedCategoryList state:', state);
       });
-
-      // setInterval(() => store.increment(), 1_000);
     },
   }),
+
   withMethods(
     (
       store,
-      qualificationService = inject(QualificationService),
-      userStore = inject(UserStore)
+      selectedCategoryListService = inject(SelectedCategoryListService)
     ) => ({
-      addQualificationToList(qualification: Qualification) {
-        patchState(store, (state) => ({
-          entities: state.entities
-            ? [...state.entities, qualification]
-            : [qualification],
-          isLoading: false,
-          error: null,
-        }));
-      },
-
-      updateQualificationInList(
-        qualificationId: string,
-        data: Partial<Qualification>
+      async addCategoryToSelectedCategories(
+        categoryId: string,
+        randomizationId: string
       ) {
-        patchState(store, (state) => ({
-          entities: state.entities
-            ? state.entities.map((qualification) =>
-                qualification.id === qualificationId
-                  ? { ...qualification, ...data }
-                  : qualification
-              )
-            : [],
-          isLoading: false,
-          error: null,
-        }));
-      },
-
-      deleteQualificationFromList(qualificationId: string) {
-        patchState(store, (state) => ({
-          entities: state.entities
-            ? state.entities.filter(
-                (qualification) => qualification.id !== qualificationId
-              )
-            : [],
-          isLoading: false,
-          error: null,
-        }));
-      },
-
-      async loadQualificationList(forceLoad = false) {
-        if (!forceLoad && !!store.entities()) return;
-
         patchState(store, { isLoading: true, error: null });
 
         try {
-          const qualifications = await qualificationService.getQualifications(
-            userStore.uid()!
-          );
+          const newSelectedCategory =
+            await selectedCategoryListService.addCategoryToSelectedCategories({
+              categoryId,
+              randomizationId,
+              created: serverTimestamp(),
+            });
+
+          patchState(store, (state) => ({
+            entities: {
+              ...(state.entities ?? {}),
+              [newSelectedCategory.id]: newSelectedCategory,
+            },
+            ids: [...(state.ids ?? []), newSelectedCategory.id],
+            isLoading: false,
+            error: null,
+          }));
+        } catch (error: any) {
           patchState(store, {
-            entities: qualifications,
+            isLoading: false,
+            error: error.message || 'Failed to add selected category.',
+          });
+        }
+      },
+
+      async deleteCategoryFromSelectedCategories(
+        categoryId: string,
+        randomizationId: string
+      ) {
+        patchState(store, { isLoading: true, error: null });
+
+        try {
+          const entities = store.entities();
+          const ids = store.ids();
+          if (!entities || !ids) throw new Error('Entities not loaded.');
+
+          const matchedEntry = Object.values(entities).find(
+            (entry) =>
+              entry.categoryId === categoryId &&
+              entry.randomizationId === randomizationId
+          );
+
+          if (!matchedEntry) throw new Error('Selected category not found.');
+
+          await selectedCategoryListService.deleteCategoryFromSelectedCategories(
+            categoryId,
+            randomizationId
+          );
+
+          const { [matchedEntry.id]: _, ...remainingEntities } = entities;
+
+          patchState(store, {
+            entities: remainingEntities,
+            ids: ids.filter((id) => id !== matchedEntry.id),
             isLoading: false,
             error: null,
           });
         } catch (error: any) {
           patchState(store, {
             isLoading: false,
-            error: error.message || 'User initialization failed',
+            error: error.message || 'Failed to delete selected category.',
+          });
+        }
+      },
+
+      updateSelectedCategoryInList(
+        id: string,
+        data: Partial<SelectedCategory>
+      ) {
+        patchState(store, (state) => {
+          if (!state.entities || !state.entities[id]) return state;
+
+          return {
+            entities: {
+              ...state.entities,
+              [id]: { ...state.entities[id], ...data },
+            },
+            isLoading: false,
+            error: null,
+          };
+        });
+      },
+
+      async loadSelectedCategoryList(
+        randomizationId: string,
+        forceLoad = false
+      ) {
+        if (!forceLoad && store.entities() !== null) return;
+
+        patchState(store, { isLoading: true, error: null });
+
+        try {
+          const list =
+            await selectedCategoryListService.getSelectedCategoryList(
+              randomizationId
+            );
+
+          const normalized = list.reduce(
+            (acc, item) => {
+              acc.entities[item.id] = item;
+              acc.ids.push(item.id);
+              return acc;
+            },
+            {
+              entities: {} as Record<string, SelectedCategory>,
+              ids: [] as string[],
+            }
+          );
+
+          patchState(store, {
+            ...normalized,
+            isLoading: false,
+            error: null,
+          });
+        } catch (error: any) {
+          patchState(store, {
+            isLoading: false,
+            error: error.message || 'Failed to load selected categories.',
           });
         }
       },

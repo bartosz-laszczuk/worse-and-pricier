@@ -26,8 +26,8 @@
 @if (questionToEdit) {
 <lib-edit-question
   [question]="questionToEdit"
-  [categoryList]="categoryListOptions()"
-  [qualificationList]="qualificationListOptions()"
+  [categoryOptionItemList]="categoryOptionItemList()"
+  [qualificationOptionItemList]="qualificationOptionItemList()"
   (closed)="onClose($event)"
 ></lib-edit-question>
 }

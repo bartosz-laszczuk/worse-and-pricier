@@ -14,7 +14,7 @@ import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-u
 })
 export class CategoryListComponent {
   private readonly categoryListFacade = inject(CategoryListFacade);
-  public categories = this.categoryListFacade.categories;
+  public categoryList = this.categoryListFacade.categoryList;
   public categoryToEdit?: Category = undefined;
 
   public onAdd() {

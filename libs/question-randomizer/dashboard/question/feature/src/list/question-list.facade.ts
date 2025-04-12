@@ -6,9 +6,11 @@ import {
   QuestionService,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import {
+  EditQuestionFormValue,
+  Question,
+} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { SortDefinition } from '@my-nx-monorepo/shared-ui';
-import { forkJoin } from 'rxjs';
 
 @Injectable()
 export class QuestionListFacade {
@@ -20,26 +22,15 @@ export class QuestionListFacade {
 
   public questions = this.questionListStore.displayQuestions;
   public sort = this.questionListStore.sort;
-  public categoryListOptions = computed(
-    () =>
-      this.categoryListStore.entities()?.map((category) => ({
-        value: category.id,
-        label: category.name,
-      })) ?? []
-  );
-  public qualificationListOptions = computed(
-    () =>
-      this.qualificationListStore.entities()?.map((category) => ({
-        value: category.id,
-        label: category.name,
-      })) ?? []
-  );
+  public categoryOptionItemList = this.categoryListStore.categoryOptionItemList;
+  public qualificationOptionItemList =
+    this.qualificationListStore.qualificationOptionItemList;
 
   public setSort(sort: SortDefinition<Question>) {
     this.questionListStore.setSort(sort);
   }
 
-  public async createQuestion(createdQuestion: Question) {
+  public async createQuestion(createdQuestion: EditQuestionFormValue) {
     const userId = this.userStore.uid()!;
     const questionId = await this.questionService.createQuestion(
       createdQuestion,
@@ -53,15 +44,12 @@ export class QuestionListFacade {
     this.questionListStore.addQuestionToList(question);
   }
 
-  public async updateQuestion(updatedQuestion: Question) {
-    await this.questionService.updateQuestion(
-      updatedQuestion.id,
-      updatedQuestion
-    );
-    this.questionListStore.updateQuestionInList(
-      updatedQuestion.id,
-      updatedQuestion
-    );
+  public async updateQuestion(
+    questionId: string,
+    updatedQuestion: EditQuestionFormValue
+  ) {
+    await this.questionService.updateQuestion(questionId, updatedQuestion);
+    this.questionListStore.updateQuestionInList(questionId, updatedQuestion);
   }
 
   public async deleteQuestion(questionId: string) {

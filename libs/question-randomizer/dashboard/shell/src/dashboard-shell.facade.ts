@@ -24,8 +24,8 @@ export class DashboardShellFacade {
       this.qualificationListStore.loadQualificationList(),
     ]).subscribe(() =>
       this.questionListStore.loadQuestionList(
-        this.categoryListStore.entities() ?? [],
-        this.qualificationListStore.entities() ?? []
+        this.categoryListStore.entities() ?? {},
+        this.qualificationListStore.entities() ?? {}
       )
     );
   }

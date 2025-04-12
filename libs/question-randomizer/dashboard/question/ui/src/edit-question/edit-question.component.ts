@@ -10,7 +10,10 @@ import {
   InputSelectComponent,
   InputTextComponent,
 } from '@my-nx-monorepo/shared-ui';
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import {
+  EditQuestionFormValue,
+  Question,
+} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { OptionItem } from '@my-nx-monorepo/shared-util';
 
 interface EditQuestionForm {
@@ -35,9 +38,9 @@ interface EditQuestionForm {
 })
 export class EditQuestionComponent {
   public question = input.required<Question>();
-  public categoryList = input.required<OptionItem[]>();
-  public qualificationList = input.required<OptionItem[]>();
-  public closed = output<Question | undefined>();
+  public categoryOptionItemList = input.required<OptionItem[]>();
+  public qualificationOptionItemList = input.required<OptionItem[]>();
+  public closed = output<EditQuestionFormValue | undefined>();
   private readonly fb = inject(FormBuilder);
 
   public form = this.fb.group<EditQuestionForm>({
@@ -71,7 +74,7 @@ export class EditQuestionComponent {
         question: question.question,
         answer: question.answer,
         answerPl: question.answerPl,
-        categoryId: question.categoryId,
+        categoryId: question.categoryId ?? '',
         qualificationId: question.qualificationId ?? null,
         isActive: question.isActive,
       });
@@ -80,21 +83,21 @@ export class EditQuestionComponent {
 
   public onSubmit(): void {
     if (this.form.valid) {
-      const question: Question = {
-        ...this.question(),
+      const categoryId = this.form.controls.categoryId.value;
+      const qualificationId = this.form.controls.qualificationId.value;
+
+      const question: EditQuestionFormValue = {
         question: this.form.controls.question.value,
         answer: this.form.controls.answer.value,
         answerPl: this.form.controls.answerPl.value,
-        category:
-          this.categoryList().find(
-            (category) => category.value === this.form.controls.categoryId.value
-          )?.label ?? '',
-        categoryId: this.form.controls.categoryId.value,
-        qualification: this.qualificationList().find(
-          (qualification) =>
-            qualification.value === this.form.controls.qualificationId.value
+        categoryId,
+        categoryName: this.categoryOptionItemList().find(
+          (category) => category.value === categoryId
+        )!.label,
+        qualificationId: qualificationId ?? undefined,
+        qualificationName: this.qualificationOptionItemList().find(
+          (qualification) => qualification.value === qualificationId
         )?.label,
-        qualificationId: this.form.controls.qualificationId.value ?? undefined,
         isActive: this.form.controls.isActive.value,
       };
       this.closed.emit(question);
