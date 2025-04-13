@@ -1,16 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { LoginService } from '@my-nx-monorepo/question-randomizer-auth-data-access';
 import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { UserService } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 
 @Injectable()
 export class LoginFacade {
   private readonly loginService = inject(LoginService);
-  private readonly userStore = inject(UserStore);
+  private readonly userService = inject(UserService);
 
   public form = this.loginService.form;
 
   public signInEmail(credentials: EmailPasswordCredentials) {
-    this.userStore.signInEmail(credentials);
+    this.userService.signInEmail(credentials);
   }
 }

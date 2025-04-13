@@ -7,3 +7,9 @@ export interface User {
   about?: string;
   roleId?: string;
 }
+
+export interface AuthenticatedUserResponse {
+  uid: string;
+  verified: boolean;
+  entity: User | null;
+}

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { UserService } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import {
   CategoryListService,
   CategoryListStore,
@@ -11,7 +11,7 @@ import { forkJoin } from 'rxjs';
 
 @Injectable()
 export class DashboardShellFacade {
-  private readonly userStore = inject(UserStore);
+  private readonly userService = inject(UserService);
   private readonly questionListService = inject(QuestionListService);
   private readonly categoryListService = inject(CategoryListService);
   private readonly categoryListStore = inject(CategoryListStore);
@@ -19,7 +19,7 @@ export class DashboardShellFacade {
   private readonly qualificationListStore = inject(QualificationListStore);
 
   public signOut() {
-    this.userStore.signOut();
+    this.userService.signOut();
   }
 
   public loadLists() {

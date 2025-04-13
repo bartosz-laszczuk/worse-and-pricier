@@ -19,7 +19,7 @@ import {
 import { firstValueFrom } from 'rxjs';
 import { serverTimestamp } from 'firebase/firestore';
 import { APP_CONFIG } from '@my-nx-monorepo/question-randomizer-shared-util';
-import { User } from '../models';
+import { AuthenticatedUserResponse, User } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -52,11 +52,7 @@ export class AuthService {
     // ) as Promise<User | undefined>;
   }
 
-  public async getAuthenticatedUser(): Promise<{
-    uid: string;
-    verified: boolean;
-    entity: User | null;
-  } | null> {
+  public async getAuthenticatedUser(): Promise<AuthenticatedUserResponse | null> {
     return new Promise((resolve) => {
       onAuthStateChanged(
         this.afAuth,

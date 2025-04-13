@@ -8,33 +8,6 @@ import { AuthShellComponent } from './auth-shell.component';
 
 export const authShellRoutes: Route[] = [
   {
-    path: '',
-    component: AuthShellComponent,
-    children: [
-      {
-        path: 'login',
-        loadComponent: () =>
-          import('@my-nx-monorepo/question-randomizer-auth-feature').then(
-            (x) => x.LoginComponent
-          ),
-        canActivate: [UnauthCanActivate],
-      },
-      {
-        path: 'registration',
-        loadComponent: () =>
-          import('@my-nx-monorepo/question-randomizer-auth-feature').then(
-            (x) => x.RegistrationComponent
-          ),
-        canActivate: [UnauthCanActivate],
-      },
-      {
-        path: '**',
-        pathMatch: 'full',
-        redirectTo: 'login',
-      },
-    ],
-  },
-  {
     path: 'email',
     children: [
       {
@@ -59,6 +32,33 @@ export const authShellRoutes: Route[] = [
             (x) => x.EmailNotVerifiedComponent
           ),
         canActivate: [AuthCanActivate],
+      },
+    ],
+  },
+  {
+    path: '',
+    component: AuthShellComponent,
+    children: [
+      {
+        path: 'login',
+        loadComponent: () =>
+          import('@my-nx-monorepo/question-randomizer-auth-feature').then(
+            (x) => x.LoginComponent
+          ),
+        canActivate: [UnauthCanActivate],
+      },
+      {
+        path: 'registration',
+        loadComponent: () =>
+          import('@my-nx-monorepo/question-randomizer-auth-feature').then(
+            (x) => x.RegistrationComponent
+          ),
+        canActivate: [UnauthCanActivate],
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: 'login',
       },
     ],
   },

@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import {
+  UserService,
+  UserStore,
+} from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class EmailNotVerifiedComponent {
   private readonly userStore = inject(UserStore);
+  private readonly userService = inject(UserService);
   private readonly router = inject(Router);
 
   constructor() {
@@ -23,6 +27,6 @@ export class EmailNotVerifiedComponent {
   }
 
   public onSignOut() {
-    this.userStore.signOut();
+    this.userService.signOut();
   }
 }
