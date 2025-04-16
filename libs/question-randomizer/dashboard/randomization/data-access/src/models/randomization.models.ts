@@ -9,3 +9,11 @@ export interface GetRandomizationResponse {
   userId: string;
   created: FieldValue;
 }
+
+export interface CreateRandomzationRequest {
+  isAnswerHidden: boolean;
+  status: RandomizationStatus;
+  currentQuestionId?: string;
+  created: FieldValue;
+  userId: string;
+}

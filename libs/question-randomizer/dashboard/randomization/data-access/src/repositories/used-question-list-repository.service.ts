@@ -10,12 +10,12 @@ import {
   where,
   CollectionReference,
 } from '@angular/fire/firestore';
-import { UsedQuestion } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import { serverTimestamp } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UsedQuestionListService {
+export class UsedQuestionListRepositoryService {
   private usedQuestionsCollection: CollectionReference;
 
   constructor(private firestore: Firestore) {
@@ -23,13 +23,15 @@ export class UsedQuestionListService {
   }
 
   async addQuestionToUsedQuestions(
-    data: Omit<UsedQuestion, 'id'>
-  ): Promise<UsedQuestion> {
-    const docRef = await addDoc(this.usedQuestionsCollection, data);
-    return {
-      id: docRef.id,
-      ...data,
-    };
+    randomizationId: string,
+    questionId: string
+  ): Promise<string> {
+    const docRef = await addDoc(this.usedQuestionsCollection, {
+      randomizationId,
+      questionId,
+      created: serverTimestamp(),
+    });
+    return docRef.id;
   }
 
   async deleteQuestionFromUsedQuestions(
@@ -50,16 +52,17 @@ export class UsedQuestionListService {
     await Promise.all(deletions);
   }
 
-  async getUsedQuestionList(randomizationId: string): Promise<UsedQuestion[]> {
+  async getUsedQuestionIdListForRandomization(
+    randomizationId: string
+  ): Promise<string[]> {
     const q = query(
       this.usedQuestionsCollection,
       where('randomizationId', '==', randomizationId)
     );
 
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      ...docSnap.data(),
-    })) as UsedQuestion[];
+    return snapshot.docs.map(
+      (docSnap) => docSnap.data()['questionId']
+    ) as string[];
   }
 }

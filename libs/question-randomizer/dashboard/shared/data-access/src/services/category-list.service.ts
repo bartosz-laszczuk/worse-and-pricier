@@ -15,7 +15,8 @@ export class CategoryListService {
   private readonly questionListService = inject(QuestionListService);
 
   public async createCategory(createdCategory: Category) {
-    const userId = this.userStore.uid()!;
+    const userId = this.userStore.uid();
+    if (!userId) return;
 
     try {
       this.categoryListStore.startLoading();

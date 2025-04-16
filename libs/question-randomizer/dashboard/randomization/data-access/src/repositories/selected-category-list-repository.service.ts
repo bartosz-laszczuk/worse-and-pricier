@@ -8,18 +8,42 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { Firestore } from '@angular/fire/firestore';
-import { SelectedCategory } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import { doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
-export class SelectedCategoryListService {
+export class SelectedCategoryListRepositoryService {
   constructor(private firestore: Firestore) {}
 
   async addCategoryToSelectedCategories(
-    data: Omit<SelectedCategory, 'id'>
-  ): Promise<SelectedCategory> {
+    randomizationId: string,
+    categoryId: string
+  ): Promise<string> {
     const ref = collection(this.firestore, 'selectedCategories');
-    const docRef = await addDoc(ref, data);
-    return { id: docRef.id, ...data };
+    const docRef = await addDoc(ref, {
+      randomizationId,
+      categoryId,
+      created: serverTimestamp(),
+    });
+    return docRef.id;
+  }
+
+  async addMultipleCategoriesToSelectedCategories(
+    randomizationId: string,
+    categoryIdList: string[]
+  ): Promise<void> {
+    const batch = writeBatch(this.firestore);
+    const ref = collection(this.firestore, 'selectedCategories');
+
+    categoryIdList.forEach((categoryId) => {
+      const newDocRef = doc(ref); // auto-ID
+      batch.set(newDocRef, {
+        randomizationId,
+        categoryId,
+        created: serverTimestamp(),
+      });
+    });
+
+    await batch.commit();
   }
 
   async deleteCategoryFromSelectedCategories(
@@ -37,15 +61,12 @@ export class SelectedCategoryListService {
     await Promise.all(deletions);
   }
 
-  async getSelectedCategoryList(
+  async getSelectedCategoryIdListForRandomiozation(
     randomizationId: string
-  ): Promise<SelectedCategory[]> {
+  ): Promise<string[]> {
     const ref = collection(this.firestore, 'selectedCategories');
     const q = query(ref, where('randomizationId', '==', randomizationId));
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as SelectedCategory[];
+    return snapshot.docs.map((doc) => doc.data()['categoryId']) as string[];
   }
 }
