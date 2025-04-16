@@ -1,1 +1,24 @@
-<p>randomization works!</p>
+<h4>Randomization</h4>
+
+@if(randomization(); as randomization) {
+<span>Categories:</span><br />
+@for (categoryOptionItem of categoryOptionItemList(); track
+categoryOptionItem.value) {
+<input
+  type="checkbox"
+  [id]="categoryOptionItem.value"
+  [checked]="selectedCategoryIdList().includes(categoryOptionItem.value)"
+  (change)="onCheckboxChange($event, categoryOptionItem.value)"
+/>
+<label [for]="categoryOptionItem.value">
+  {{ categoryOptionItem.label }}
+</label>
+<br />
+} @if(currentQuestion(); as question){
+<p>Question:</p>
+<p>{{ question.question }}</p>
+<p>Answer:</p>
+<p>{{ question.answer }}</p>
+} @else {
+<p>No questions to display</p>
+} }

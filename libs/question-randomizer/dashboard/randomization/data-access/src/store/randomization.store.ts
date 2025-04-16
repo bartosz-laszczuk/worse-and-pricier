@@ -34,12 +34,53 @@ export const RandomizationStore = signalStore(
     },
   }),
   withComputed((store) => ({
+    randomization: computed(() => store.entity()),
     currentQuestion: computed(() => store.entity()?.currentQuestion),
   })),
   withMethods((store) => ({
-    patchRandomization(randomization: Randomization) {
+    setRandomization(randomization: Randomization) {
       patchState(store, {
-        entity: randomization,
+        entity: { ...randomization },
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    addCategoryToRandomization(categoryId: string) {
+      const entity = store.entity();
+
+      if (!entity) return;
+
+      const categoryList = entity.selectedCategoryIdList;
+
+      if (categoryList.includes(categoryId)) return;
+
+      const updatedCategoryList = [...categoryList, categoryId];
+
+      patchState(store, {
+        entity: {
+          ...entity,
+          selectedCategoryIdList: updatedCategoryList,
+        },
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    deleteCategoryFromRandomization(categoryId: string) {
+      const entity = store.entity();
+
+      if (!entity) return;
+
+      const updatedCategoryList = entity.selectedCategoryIdList.filter(
+        (id) => id !== categoryId
+      );
+
+      patchState(store, {
+        entity: {
+          ...entity,
+          selectedCategoryIdList: updatedCategoryList,
+        },
         isLoading: false,
         error: null,
       });

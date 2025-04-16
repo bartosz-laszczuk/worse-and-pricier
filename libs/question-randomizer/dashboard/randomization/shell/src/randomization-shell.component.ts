@@ -20,7 +20,24 @@ import {
 })
 export class RandomizationShellComponent {
   private readonly randomizationShellFacade = inject(RandomizationShellFacade);
+
+  public randomization = this.randomizationShellFacade.randomization;
+  public currentQuestion = this.randomizationShellFacade.currentQuestion;
+  public categoryOptionItemList =
+    this.randomizationShellFacade.categoryOptionItemList;
+  public selectedCategoryIdList =
+    this.randomizationShellFacade.selectedCategoryIdList;
+
   constructor() {
     this.randomizationShellFacade.loadRandomization();
+  }
+
+  public onCheckboxChange(event: Event, value: string) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    if (isChecked) {
+      this.randomizationShellFacade.addCategoryToRandomization(value);
+    } else {
+      this.randomizationShellFacade.deleteCategoryFromRandomization(value);
+    }
   }
 }

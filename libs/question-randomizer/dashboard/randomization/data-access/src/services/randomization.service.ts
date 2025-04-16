@@ -41,7 +41,7 @@ export class RandomizationService {
         await this.randomizationRepositoryService.getRandomization(userId);
 
       if (!response) {
-        this.randomizationStore.patchRandomization(
+        this.randomizationStore.setRandomization(
           await this.getNewRandomization(userId)
         );
       } else {
@@ -70,13 +70,75 @@ export class RandomizationService {
             currentQuestion
           );
 
-        this.randomizationStore.patchRandomization(randomization);
+        this.randomizationStore.setRandomization(randomization);
       }
     } catch (error: any) {
       this.randomizationStore.logError(
-        error.message || 'Failed to load randomization.'
+        error.message || 'Failed to load Randomization.'
       );
     }
+  }
+
+  public async addCategoryToRandomization(
+    randomizationId: string,
+    categoryId: string
+  ) {
+    this.randomizationStore.startLoading();
+
+    try {
+      await this.selectedCategoryListRepositoryService.addCategoryToRandomization(
+        randomizationId,
+        categoryId
+      );
+
+      this.randomizationStore.addCategoryToRandomization(categoryId);
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message || 'Failed to add Category to Randomization.'
+      );
+    }
+  }
+
+  public async deleteCategoryFromRandomization(
+    randomizationId: string,
+    categoryId: string
+  ) {
+    this.randomizationStore.startLoading();
+
+    try {
+      await this.selectedCategoryListRepositoryService.deleteCategoryFromRandomization(
+        randomizationId,
+        categoryId
+      );
+
+      this.randomizationStore.deleteCategoryFromRandomization(categoryId);
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message || 'Failed to delete Category from Randomization.'
+      );
+    }
+  }
+
+  public updateCurrentQuestion(
+    randomization: Randomization,
+    questionDic: Record<string, Question>
+  ): void {
+    const availableQuestions = Object.values(questionDic).filter(
+      (question) =>
+        question.categoryId &&
+        randomization.selectedCategoryIdList.includes(question.categoryId) &&
+        !randomization.usedQuestionIdList.includes(question.id)
+    );
+
+    if (availableQuestions.length === 0) {
+      randomization.currentQuestion = undefined;
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+    randomization.currentQuestion = availableQuestions[randomIndex];
+
+    this.randomizationStore.setRandomization(randomization);
   }
 
   private async getNewRandomization(userId: string): Promise<Randomization> {

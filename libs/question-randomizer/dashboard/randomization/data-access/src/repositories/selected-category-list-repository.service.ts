@@ -14,7 +14,7 @@ import { doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 export class SelectedCategoryListRepositoryService {
   constructor(private firestore: Firestore) {}
 
-  async addCategoryToSelectedCategories(
+  async addCategoryToRandomization(
     randomizationId: string,
     categoryId: string
   ): Promise<string> {
@@ -27,7 +27,7 @@ export class SelectedCategoryListRepositoryService {
     return docRef.id;
   }
 
-  async addMultipleCategoriesToSelectedCategories(
+  async addMultipleCategoriesToRandomization(
     randomizationId: string,
     categoryIdList: string[]
   ): Promise<void> {
@@ -46,9 +46,9 @@ export class SelectedCategoryListRepositoryService {
     await batch.commit();
   }
 
-  async deleteCategoryFromSelectedCategories(
-    categoryId: string,
-    randomizationId: string
+  async deleteCategoryFromRandomization(
+    randomizationId: string,
+    categoryId: string
   ): Promise<void> {
     const ref = collection(this.firestore, 'selectedCategories');
     const q = query(
