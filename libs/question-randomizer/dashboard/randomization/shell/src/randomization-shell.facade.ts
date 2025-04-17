@@ -1,4 +1,5 @@
 import { computed, effect, inject, Injectable } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import {
   RandomizationService,
   RandomizationStore,
@@ -8,6 +9,7 @@ import {
   QuestionListStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { filter, forkJoin, take } from 'rxjs';
 
 Injectable();
 export class RandomizationShellFacade {
@@ -33,36 +35,62 @@ export class RandomizationShellFacade {
       if (questionDic && userId)
         this.randomizationService.loadRandomization(userId, questionDic);
     });
-    effect(() => {
-      const randomization = this.randomization();
-      const questionDic = this.questionListStore.entities();
-      console.log('current question computed', randomization?.currentQuestion);
-      if (randomization && !randomization.currentQuestion && questionDic) {
-        this.randomizationService.updateCurrentQuestion(
+
+    forkJoin([
+      toObservable(this.randomization).pipe(filter(Boolean), take(1)),
+      toObservable(this.questionListStore.entities).pipe(
+        filter(Boolean),
+        take(1)
+      ),
+    ]).subscribe(([randomization, questionDic]) => {
+      if (!randomization.currentQuestion)
+        this.randomizationService.updateCurrentQuestionWithNextQuestion(
           randomization,
           questionDic
         );
-      }
     });
   }
 
-  public addCategoryToRandomization(categoryId: string) {
+  public async addCategoryToRandomization(categoryId: string) {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (!randomizationId) return;
 
-    this.randomizationService.addCategoryToRandomization(
+    await this.randomizationService.addCategoryToRandomization(
       randomizationId,
       categoryId
     );
+
+    const randomization = this.randomizationStore.entity();
+    if (!randomization) return;
+    const questionDic = this.questionListStore.entities();
+    if (!randomization.currentQuestion && questionDic) {
+      this.randomizationService.updateCurrentQuestionWithNextQuestion(
+        randomization,
+        questionDic
+      );
+    }
   }
 
-  public deleteCategoryFromRandomization(categoryId: string) {
-    const randomizationId = this.randomizationStore.entity()?.id;
-    if (!randomizationId) return;
+  public async deleteCategoryFromRandomization(categoryId: string) {
+    const randomizatioId = this.randomizationStore.entity()?.id;
+    if (!randomizatioId) return;
 
-    this.randomizationService.deleteCategoryFromRandomization(
-      randomizationId,
+    await this.randomizationService.deleteCategoryFromRandomization(
+      randomizatioId,
       categoryId
     );
+
+    const randomization = this.randomizationStore.entity();
+    if (!randomization) return;
+    const questionDic = this.questionListStore.entities();
+    if (
+      randomization.currentQuestion?.categoryId === categoryId &&
+      questionDic
+    ) {
+      this.randomizationService.updateCurrentQuestionWithNextQuestion(
+        randomization,
+        questionDic
+      );
+    }
   }
 }

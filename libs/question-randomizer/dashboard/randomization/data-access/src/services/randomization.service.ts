@@ -119,7 +119,7 @@ export class RandomizationService {
     }
   }
 
-  public updateCurrentQuestion(
+  public updateCurrentQuestionWithNextQuestion(
     randomization: Randomization,
     questionDic: Record<string, Question>
   ): void {

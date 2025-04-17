@@ -40,4 +40,8 @@ export class RandomizationShellComponent {
       this.randomizationShellFacade.deleteCategoryFromRandomization(value);
     }
   }
+
+  public onNextQuestion() {
+    // this.randomizationShellFacade.nextQuestion();
+  }
 }
