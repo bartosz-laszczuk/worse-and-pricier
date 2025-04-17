@@ -17,3 +17,9 @@ export interface CreateRandomzationRequest {
   created: FieldValue;
   userId: string;
 }
+
+export interface UpdateRandomzationRequest {
+  isAnswerHidden: boolean;
+  status: RandomizationStatus;
+  currentQuestionId?: string;
+}

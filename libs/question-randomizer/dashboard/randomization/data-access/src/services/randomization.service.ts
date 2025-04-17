@@ -91,7 +91,27 @@ export class RandomizationService {
         categoryId
       );
 
-      this.randomizationStore.addCategoryToRandomization(categoryId);
+      this.randomizationStore.addCategoryIdToRandomization(categoryId);
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message || 'Failed to add Category to Randomization.'
+      );
+    }
+  }
+
+  public async addUsedQuestionToRandomization(
+    randomizationId: string,
+    questionId: string
+  ) {
+    this.randomizationStore.startLoading();
+
+    try {
+      await this.usedQuestionListRepositoryService.addQuestionToUsedQuestions(
+        randomizationId,
+        questionId
+      );
+
+      this.randomizationStore.addUsedQuestionIdToRandomization(questionId);
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message || 'Failed to add Category to Randomization.'
@@ -111,7 +131,7 @@ export class RandomizationService {
         categoryId
       );
 
-      this.randomizationStore.deleteCategoryFromRandomization(categoryId);
+      this.randomizationStore.deleteCategoryIdFromRandomization(categoryId);
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message || 'Failed to delete Category from Randomization.'
@@ -137,6 +157,8 @@ export class RandomizationService {
 
     const randomIndex = Math.floor(Math.random() * availableQuestions.length);
     randomization.currentQuestion = availableQuestions[randomIndex];
+
+    this.randomizationRepositoryService.updateRandomization(randomization);
 
     this.randomizationStore.setRandomization(randomization);
   }

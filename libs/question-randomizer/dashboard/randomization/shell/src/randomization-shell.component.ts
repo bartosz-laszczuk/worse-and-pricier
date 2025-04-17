@@ -42,6 +42,6 @@ export class RandomizationShellComponent {
   }
 
   public onNextQuestion() {
-    // this.randomizationShellFacade.nextQuestion();
+    this.randomizationShellFacade.nextQuestion();
   }
 }

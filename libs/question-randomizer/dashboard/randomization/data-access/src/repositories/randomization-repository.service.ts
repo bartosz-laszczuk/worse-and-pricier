@@ -7,9 +7,16 @@ import {
   where,
   getDocs,
 } from '@angular/fire/firestore';
-import { CreateRandomzationRequest, GetRandomizationResponse } from '../models';
-import { RandomizationStatus } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
-import { serverTimestamp } from 'firebase/firestore';
+import {
+  CreateRandomzationRequest,
+  GetRandomizationResponse,
+  UpdateRandomzationRequest,
+} from '../models';
+import {
+  Randomization,
+  RandomizationStatus,
+} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -39,9 +46,6 @@ export class RandomizationRepositoryService {
     };
   }
 
-  /**
-   * Creates a new randomization and returns its generated ID.
-   */
   async createRandomization(userId: string): Promise<string> {
     const randomizationsRef = collection(this.firestore, this.collectionName);
 
@@ -55,5 +59,20 @@ export class RandomizationRepositoryService {
     const docRef = await addDoc(randomizationsRef, request);
 
     return docRef.id;
+  }
+
+  async updateRandomization(randomization: Randomization) {
+    const request: UpdateRandomzationRequest = {
+      isAnswerHidden: randomization.isAnswerHidden,
+      status: randomization.status,
+      currentQuestionId: randomization.currentQuestion?.id,
+    };
+
+    const randomizationDocRef = doc(
+      this.firestore,
+      this.collectionName,
+      randomization.id
+    );
+    await updateDoc(randomizationDocRef, request as any); // cast if needed based on typing
   }
 }

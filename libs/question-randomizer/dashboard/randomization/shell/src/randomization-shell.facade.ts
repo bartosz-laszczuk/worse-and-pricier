@@ -51,6 +51,28 @@ export class RandomizationShellFacade {
     });
   }
 
+  public async nextQuestion() {
+    const randomizationId = this.randomizationStore.entity()?.id;
+    const currentQuestionId = this.randomizationStore.currentQuestion()?.id;
+
+    if (randomizationId && currentQuestionId) {
+      await this.randomizationService.addUsedQuestionToRandomization(
+        randomizationId,
+        currentQuestionId
+      );
+    }
+
+    const randomization = this.randomizationStore.entity();
+    const questionDic = this.questionListStore.entities();
+
+    if (randomization && questionDic) {
+      this.randomizationService.updateCurrentQuestionWithNextQuestion(
+        randomization,
+        questionDic
+      );
+    }
+  }
+
   public async addCategoryToRandomization(categoryId: string) {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (!randomizationId) return;

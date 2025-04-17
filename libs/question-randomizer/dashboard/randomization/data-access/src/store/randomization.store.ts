@@ -46,7 +46,7 @@ export const RandomizationStore = signalStore(
       });
     },
 
-    addCategoryToRandomization(categoryId: string) {
+    addCategoryIdToRandomization(categoryId: string) {
       const entity = store.entity();
 
       if (!entity) return;
@@ -67,7 +67,28 @@ export const RandomizationStore = signalStore(
       });
     },
 
-    deleteCategoryFromRandomization(categoryId: string) {
+    addUsedQuestionIdToRandomization(questionId: string) {
+      const entity = store.entity();
+
+      if (!entity) return;
+
+      const usedQuestionList = entity.usedQuestionIdList;
+
+      if (usedQuestionList.includes(questionId)) return;
+
+      const updatedUsedQuestionList = [...usedQuestionList, questionId];
+
+      patchState(store, {
+        entity: {
+          ...entity,
+          usedQuestionIdList: updatedUsedQuestionList,
+        },
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    deleteCategoryIdFromRandomization(categoryId: string) {
       const entity = store.entity();
 
       if (!entity) return;
@@ -80,6 +101,25 @@ export const RandomizationStore = signalStore(
         entity: {
           ...entity,
           selectedCategoryIdList: updatedCategoryList,
+        },
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    deleteQuestionIdFromRandomization(questionId: string) {
+      const entity = store.entity();
+
+      if (!entity) return;
+
+      const updatedUsedQuestionList = entity.usedQuestionIdList.filter(
+        (id) => id !== questionId
+      );
+
+      patchState(store, {
+        entity: {
+          ...entity,
+          usedQuestionIdList: updatedUsedQuestionList,
         },
         isLoading: false,
         error: null,
