@@ -51,11 +51,10 @@ export class RandomizationShellFacade {
     });
   }
 
-  public async nextQuestion() {
-    const randomizationId = this.randomizationStore.entity()?.id;
+  public async nextQuestion(randomizationId: string) {
     const currentQuestionId = this.randomizationStore.currentQuestion()?.id;
 
-    if (randomizationId && currentQuestionId) {
+    if (currentQuestionId) {
       await this.randomizationService.addUsedQuestionToRandomization(
         randomizationId,
         currentQuestionId
@@ -73,10 +72,10 @@ export class RandomizationShellFacade {
     }
   }
 
-  public async addCategoryToRandomization(categoryId: string) {
-    const randomizationId = this.randomizationStore.entity()?.id;
-    if (!randomizationId) return;
-
+  public async addCategoryToRandomization(
+    categoryId: string,
+    randomizationId: string
+  ) {
     await this.randomizationService.addCategoryToRandomization(
       randomizationId,
       categoryId
@@ -93,12 +92,12 @@ export class RandomizationShellFacade {
     }
   }
 
-  public async deleteCategoryFromRandomization(categoryId: string) {
-    const randomizatioId = this.randomizationStore.entity()?.id;
-    if (!randomizatioId) return;
-
+  public async deleteCategoryFromRandomization(
+    categoryId: string,
+    randomizationId: string
+  ) {
     await this.randomizationService.deleteCategoryFromRandomization(
-      randomizatioId,
+      randomizationId,
       categoryId
     );
 
@@ -109,6 +108,21 @@ export class RandomizationShellFacade {
       randomization.currentQuestion?.categoryId === categoryId &&
       questionDic
     ) {
+      this.randomizationService.updateCurrentQuestionWithNextQuestion(
+        randomization,
+        questionDic
+      );
+    }
+  }
+
+  public async resetRandomization(randomizationId: string) {
+    this.randomizationService.deleteAllUsedQuestionsFromRandomization(
+      randomizationId
+    );
+
+    const randomization = this.randomizationStore.entity();
+    const questionDic = this.questionListStore.entities();
+    if (randomization && questionDic) {
       this.randomizationService.updateCurrentQuestionWithNextQuestion(
         randomization,
         questionDic

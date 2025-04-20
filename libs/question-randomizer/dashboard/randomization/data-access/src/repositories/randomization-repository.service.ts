@@ -65,7 +65,7 @@ export class RandomizationRepositoryService {
     const request: UpdateRandomzationRequest = {
       isAnswerHidden: randomization.isAnswerHidden,
       status: randomization.status,
-      currentQuestionId: randomization.currentQuestion?.id,
+      currentQuestionId: randomization.currentQuestion?.id ?? null,
     };
 
     const randomizationDocRef = doc(

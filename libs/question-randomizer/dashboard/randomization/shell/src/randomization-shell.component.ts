@@ -32,16 +32,32 @@ export class RandomizationShellComponent {
     this.randomizationShellFacade.loadRandomization();
   }
 
-  public onCheckboxChange(event: Event, value: string) {
+  public onCheckboxChange(
+    event: Event,
+    value: string,
+    randomizationId: string
+  ) {
     const isChecked = (event.target as HTMLInputElement).checked;
     if (isChecked) {
-      this.randomizationShellFacade.addCategoryToRandomization(value);
+      this.randomizationShellFacade.addCategoryToRandomization(
+        value,
+        randomizationId
+      );
     } else {
-      this.randomizationShellFacade.deleteCategoryFromRandomization(value);
+      this.randomizationShellFacade.deleteCategoryFromRandomization(
+        value,
+        randomizationId
+      );
     }
   }
 
-  public onNextQuestion() {
-    this.randomizationShellFacade.nextQuestion();
+  public onNextQuestion(randomizationId: string) {
+    this.randomizationShellFacade.nextQuestion(randomizationId);
   }
+
+  public onReset(randomizationId: string) {
+    this.randomizationShellFacade.resetRandomization(randomizationId);
+  }
+
+  public onPreviousQuestion(randomizationId: string) {}
 }

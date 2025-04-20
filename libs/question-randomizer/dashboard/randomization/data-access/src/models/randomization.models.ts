@@ -21,5 +21,5 @@ export interface CreateRandomzationRequest {
 export interface UpdateRandomzationRequest {
   isAnswerHidden: boolean;
   status: RandomizationStatus;
-  currentQuestionId?: string;
+  currentQuestionId: string | null;
 }

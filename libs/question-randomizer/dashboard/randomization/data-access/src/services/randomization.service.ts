@@ -143,24 +143,50 @@ export class RandomizationService {
     randomization: Randomization,
     questionDic: Record<string, Question>
   ): void {
-    const availableQuestions = Object.values(questionDic).filter(
-      (question) =>
-        question.categoryId &&
-        randomization.selectedCategoryIdList.includes(question.categoryId) &&
-        !randomization.usedQuestionIdList.includes(question.id)
-    );
+    this.randomizationStore.startLoading();
 
-    if (availableQuestions.length === 0) {
-      randomization.currentQuestion = undefined;
-      return;
+    try {
+      const availableQuestions = Object.values(questionDic).filter(
+        (question) =>
+          question.categoryId &&
+          randomization.selectedCategoryIdList.includes(question.categoryId) &&
+          !randomization.usedQuestionIdList.includes(question.id)
+      );
+
+      if (availableQuestions.length === 0) {
+        randomization.currentQuestion = undefined;
+      } else {
+        const randomIndex = Math.floor(
+          Math.random() * availableQuestions.length
+        );
+        randomization.currentQuestion = availableQuestions[randomIndex];
+      }
+
+      this.randomizationRepositoryService.updateRandomization(randomization);
+
+      this.randomizationStore.setRandomization(randomization);
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message || 'Failed to update current question with next question.'
+      );
     }
+  }
 
-    const randomIndex = Math.floor(Math.random() * availableQuestions.length);
-    randomization.currentQuestion = availableQuestions[randomIndex];
-
-    this.randomizationRepositoryService.updateRandomization(randomization);
-
-    this.randomizationStore.setRandomization(randomization);
+  public async deleteAllUsedQuestionsFromRandomization(
+    randomizationId: string
+  ) {
+    this.randomizationStore.startLoading();
+    try {
+      await this.usedQuestionListRepositoryService.deleteAllUsedQuestionsFromRandomization(
+        randomizationId
+      );
+      this.randomizationStore.clearUsedQuestions();
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message ||
+          'Failed to delete all used questions from Randomization.'
+      );
+    }
   }
 
   private async getNewRandomization(userId: string): Promise<Randomization> {

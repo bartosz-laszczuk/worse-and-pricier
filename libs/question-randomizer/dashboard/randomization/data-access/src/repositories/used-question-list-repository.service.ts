@@ -10,7 +10,7 @@ import {
   where,
   CollectionReference,
 } from '@angular/fire/firestore';
-import { serverTimestamp } from 'firebase/firestore';
+import { serverTimestamp, writeBatch } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -64,5 +64,23 @@ export class UsedQuestionListRepositoryService {
     return snapshot.docs.map(
       (docSnap) => docSnap.data()['questionId']
     ) as string[];
+  }
+
+  async deleteAllUsedQuestionsFromRandomization(
+    randomizationId: string
+  ): Promise<void> {
+    const q = query(
+      this.usedQuestionsCollection,
+      where('randomizationId', '==', randomizationId)
+    );
+
+    const snapshot = await getDocs(q);
+
+    const batch = writeBatch(this.firestore);
+    snapshot.docs.forEach((docSnap) => {
+      batch.delete(doc(this.usedQuestionsCollection, docSnap.id));
+    });
+
+    await batch.commit();
   }
 }

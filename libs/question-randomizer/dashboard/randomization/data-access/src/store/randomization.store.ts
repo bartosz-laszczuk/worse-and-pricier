@@ -126,6 +126,21 @@ export const RandomizationStore = signalStore(
       });
     },
 
+    clearUsedQuestions() {
+      const entity = store.entity();
+
+      if (!entity) return;
+
+      patchState(store, {
+        entity: {
+          ...entity,
+          usedQuestionIdList: [],
+        },
+        isLoading: false,
+        error: null,
+      });
+    },
+
     startLoading() {
       patchState(store, { isLoading: true, error: null });
     },
