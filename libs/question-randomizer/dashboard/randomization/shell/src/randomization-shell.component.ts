@@ -55,9 +55,11 @@ export class RandomizationShellComponent {
     this.randomizationShellFacade.nextQuestion(randomizationId);
   }
 
+  public onPreviousQuestion(randomizationId: string) {
+    this.randomizationShellFacade.previousQuestion(randomizationId);
+  }
+
   public onReset(randomizationId: string) {
     this.randomizationShellFacade.resetRandomization(randomizationId);
   }
-
-  public onPreviousQuestion(randomizationId: string) {}
 }

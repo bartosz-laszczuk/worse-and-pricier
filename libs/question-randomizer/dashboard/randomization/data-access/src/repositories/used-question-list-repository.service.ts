@@ -10,7 +10,7 @@ import {
   where,
   CollectionReference,
 } from '@angular/fire/firestore';
-import { serverTimestamp, writeBatch } from 'firebase/firestore';
+import { orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -35,8 +35,8 @@ export class UsedQuestionListRepositoryService {
   }
 
   async deleteQuestionFromUsedQuestions(
-    questionId: string,
-    randomizationId: string
+    randomizationId: string,
+    questionId: string
   ): Promise<void> {
     const q = query(
       this.usedQuestionsCollection,
@@ -57,7 +57,8 @@ export class UsedQuestionListRepositoryService {
   ): Promise<string[]> {
     const q = query(
       this.usedQuestionsCollection,
-      where('randomizationId', '==', randomizationId)
+      where('randomizationId', '==', randomizationId),
+      orderBy('created', 'asc') // sort from earliest to latest
     );
 
     const snapshot = await getDocs(q);

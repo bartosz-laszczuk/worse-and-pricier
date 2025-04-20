@@ -140,4 +140,27 @@ export class QuestionListService {
       );
     }
   }
+
+  public findLastQuestionForCategoryIdList(
+    usedQuestionIdList: string[],
+    selectedCategoryIdList: string[]
+  ): Question | undefined {
+    const questionDic = this.questionListStore.entities();
+
+    if (!questionDic) return undefined;
+
+    for (let i = usedQuestionIdList.length - 1; i >= 0; i--) {
+      const questionId = usedQuestionIdList[i];
+      const question = questionDic[questionId];
+
+      if (
+        question &&
+        selectedCategoryIdList.includes(question.categoryId ?? '')
+      ) {
+        return question;
+      }
+    }
+
+    return undefined;
+  }
 }

@@ -86,12 +86,12 @@ export class RandomizationService {
     this.randomizationStore.startLoading();
 
     try {
+      this.randomizationStore.addCategoryIdToRandomization(categoryId);
+
       await this.selectedCategoryListRepositoryService.addCategoryToRandomization(
         randomizationId,
         categoryId
       );
-
-      this.randomizationStore.addCategoryIdToRandomization(categoryId);
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message || 'Failed to add Category to Randomization.'
@@ -106,12 +106,12 @@ export class RandomizationService {
     this.randomizationStore.startLoading();
 
     try {
+      this.randomizationStore.addUsedQuestionIdToRandomization(questionId);
+
       await this.usedQuestionListRepositoryService.addQuestionToUsedQuestions(
         randomizationId,
         questionId
       );
-
-      this.randomizationStore.addUsedQuestionIdToRandomization(questionId);
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message || 'Failed to add Category to Randomization.'
@@ -126,12 +126,12 @@ export class RandomizationService {
     this.randomizationStore.startLoading();
 
     try {
+      this.randomizationStore.deleteCategoryIdFromRandomization(categoryId);
+
       await this.selectedCategoryListRepositoryService.deleteCategoryFromRandomization(
         randomizationId,
         categoryId
       );
-
-      this.randomizationStore.deleteCategoryIdFromRandomization(categoryId);
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message || 'Failed to delete Category from Randomization.'
@@ -139,10 +139,10 @@ export class RandomizationService {
     }
   }
 
-  public updateCurrentQuestionWithNextQuestion(
+  public async updateCurrentQuestionWithNextQuestion(
     randomization: Randomization,
     questionDic: Record<string, Question>
-  ): void {
+  ): Promise<void> {
     this.randomizationStore.startLoading();
 
     try {
@@ -162,7 +162,9 @@ export class RandomizationService {
         randomization.currentQuestion = availableQuestions[randomIndex];
       }
 
-      this.randomizationRepositoryService.updateRandomization(randomization);
+      await this.randomizationRepositoryService.updateRandomization(
+        randomization
+      );
 
       this.randomizationStore.setRandomization(randomization);
     } catch (error: any) {
@@ -172,15 +174,54 @@ export class RandomizationService {
     }
   }
 
+  public async deleteUsedQuestionFromRandomization(
+    randomizationId: string,
+    questionId: string
+  ) {
+    this.randomizationStore.startLoading();
+
+    try {
+      this.randomizationStore.deleteQuestionIdFromRandomization(questionId);
+
+      await this.usedQuestionListRepositoryService.deleteQuestionFromUsedQuestions(
+        randomizationId,
+        questionId
+      );
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message || 'Failed to delete used question from Randomization.'
+      );
+    }
+  }
+
+  public async setQuestionAsCurrentQuetsion(question: Question) {
+    this.randomizationStore.startLoading();
+
+    try {
+      const randomization = this.randomizationStore.entity();
+      if (!randomization) return;
+
+      randomization.currentQuestion = question;
+      this.randomizationStore.setRandomization(randomization);
+      await this.randomizationRepositoryService.updateRandomization(
+        randomization
+      );
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message || 'Failed to set question as current question.'
+      );
+    }
+  }
+
   public async deleteAllUsedQuestionsFromRandomization(
     randomizationId: string
   ) {
     this.randomizationStore.startLoading();
     try {
+      this.randomizationStore.clearUsedQuestions();
       await this.usedQuestionListRepositoryService.deleteAllUsedQuestionsFromRandomization(
         randomizationId
       );
-      this.randomizationStore.clearUsedQuestions();
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message ||

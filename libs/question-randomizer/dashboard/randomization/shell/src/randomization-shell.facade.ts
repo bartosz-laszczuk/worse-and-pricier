@@ -6,6 +6,7 @@ import {
 } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-data-access';
 import {
   CategoryListStore,
+  QuestionListService,
   QuestionListStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
@@ -16,6 +17,7 @@ export class RandomizationShellFacade {
   private readonly randomizationService = inject(RandomizationService);
   private readonly randomizationStore = inject(RandomizationStore);
   private readonly questionListStore = inject(QuestionListStore);
+  private readonly questionListService = inject(QuestionListService);
   private readonly userStore = inject(UserStore);
   private readonly categoryListStore = inject(CategoryListStore);
 
@@ -55,7 +57,7 @@ export class RandomizationShellFacade {
     const currentQuestionId = this.randomizationStore.currentQuestion()?.id;
 
     if (currentQuestionId) {
-      await this.randomizationService.addUsedQuestionToRandomization(
+      this.randomizationService.addUsedQuestionToRandomization(
         randomizationId,
         currentQuestionId
       );
@@ -72,11 +74,36 @@ export class RandomizationShellFacade {
     }
   }
 
+  public async previousQuestion(randomizationId: string) {
+    const randomization = this.randomizationStore.entity();
+    if (
+      !randomization ||
+      !randomization.usedQuestionIdList ||
+      randomization.usedQuestionIdList.length === 0
+    )
+      return;
+
+    const lastQuestion =
+      this.questionListService.findLastQuestionForCategoryIdList(
+        randomization.usedQuestionIdList,
+        randomization.selectedCategoryIdList
+      );
+
+    if (!lastQuestion) return;
+
+    this.randomizationService.deleteUsedQuestionFromRandomization(
+      randomizationId,
+      lastQuestion.id
+    );
+
+    this.randomizationService.setQuestionAsCurrentQuetsion(lastQuestion);
+  }
+
   public async addCategoryToRandomization(
     categoryId: string,
     randomizationId: string
   ) {
-    await this.randomizationService.addCategoryToRandomization(
+    this.randomizationService.addCategoryToRandomization(
       randomizationId,
       categoryId
     );
@@ -96,7 +123,7 @@ export class RandomizationShellFacade {
     categoryId: string,
     randomizationId: string
   ) {
-    await this.randomizationService.deleteCategoryFromRandomization(
+    this.randomizationService.deleteCategoryFromRandomization(
       randomizationId,
       categoryId
     );
@@ -119,6 +146,7 @@ export class RandomizationShellFacade {
     this.randomizationService.deleteAllUsedQuestionsFromRandomization(
       randomizationId
     );
+    this.randomizationStore.clearCurrentQuestion();
 
     const randomization = this.randomizationStore.entity();
     const questionDic = this.questionListStore.entities();
