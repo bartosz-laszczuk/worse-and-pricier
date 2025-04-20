@@ -4,13 +4,13 @@ import {
   SelectedCategoryListRepositoryService,
   UsedQuestionListRepositoryService,
 } from '../repositories';
-import { RandomizationStore } from '../store';
 import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { RandomizationMapperService } from './randomization-mapper.service';
 import {
   Randomization,
   RandomizationStatus,
 } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import { RandomizationStore } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 
 @Injectable()
 export class RandomizationService {

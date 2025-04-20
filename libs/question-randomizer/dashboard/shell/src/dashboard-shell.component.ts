@@ -9,6 +9,7 @@ import {
   QualificationListStore,
   QuestionListService,
   QuestionListStore,
+  RandomizationStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 
 @Component({
@@ -21,6 +22,7 @@ import {
     CategoryListStore,
     QualificationListStore,
     QuestionListStore,
+    RandomizationStore,
     CategoryListService,
     QualificationListService,
     QuestionListService,
