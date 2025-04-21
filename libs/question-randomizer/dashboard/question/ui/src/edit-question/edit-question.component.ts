@@ -15,6 +15,7 @@ import {
   Question,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { OptionItem } from '@my-nx-monorepo/shared-util';
+import { QuillModule } from 'ngx-quill';
 
 interface EditQuestionForm {
   question: FormControl<string>;
@@ -32,6 +33,7 @@ interface EditQuestionForm {
     InputTextComponent,
     ReactiveFormsModule,
     InputSelectComponent,
+    QuillModule,
   ],
   templateUrl: './edit-question.component.html',
   styleUrl: './edit-question.component.scss',
@@ -104,5 +106,10 @@ export class EditQuestionComponent {
     } else {
       this.form.markAllAsTouched();
     }
+  }
+  content = 'some content';
+  placeholder = 'Write something...';
+  onContentChanged(value: any) {
+    console.log(value.html);
   }
 }

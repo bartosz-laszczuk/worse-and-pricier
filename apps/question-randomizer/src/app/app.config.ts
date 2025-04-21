@@ -6,6 +6,7 @@ import { provideAppConfig } from '@my-nx-monorepo/question-randomizer-shared-uti
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideQuillConfig } from 'ngx-quill/config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,5 +16,17 @@ export const appConfig: ApplicationConfig = {
     provideFirebaseApp(() => initializeApp(environment.firebase.config)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
+    provideQuillConfig({
+      modules: {
+        syntax: false,
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          [{ header: 1 }, { header: 2 }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['link', 'image'],
+          ['clean'],
+        ],
+      },
+    }),
   ],
 };

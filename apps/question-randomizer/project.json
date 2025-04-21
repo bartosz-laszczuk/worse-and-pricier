@@ -23,8 +23,9 @@
           }
         ],
         "styles": [
+          "node_modules/quill/dist/quill.snow.css",
           "libs/shared/styles/src/styles/main.scss",
-          "apps/queston-randomizer/src/styles.scss"
+          "apps/question-randomizer/src/styles.scss"
         ],
         "scripts": [],
         "stylePreprocessorOptions": {

@@ -148,6 +148,7 @@ export class RandomizationService {
     try {
       const availableQuestions = Object.values(questionDic).filter(
         (question) =>
+          question.isActive &&
           question.categoryId &&
           randomization.selectedCategoryIdList.includes(question.categoryId) &&
           !randomization.usedQuestionIdList.includes(question.id)
