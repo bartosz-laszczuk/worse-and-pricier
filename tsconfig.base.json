@@ -81,6 +81,7 @@
       "@my-nx-monorepo/question-randomizer-shared-util": [
         "libs/question-randomizer/shared/util/src/index.ts"
       ],
+      "@my-nx-monorepo/shared-styles": ["libs/shared/styles/src/index.ts"],
       "@my-nx-monorepo/shared-ui": ["libs/shared/ui/src/index.ts"],
       "@my-nx-monorepo/shared-util": ["libs/shared/util/src/index.ts"]
     }

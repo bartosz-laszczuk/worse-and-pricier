@@ -22,8 +22,14 @@
             "input": "apps/question-randomizer/public"
           }
         ],
-        "styles": ["apps/question-randomizer/src/styles.scss"],
-        "scripts": []
+        "styles": [
+          "libs/shared/styles/src/styles/main.scss",
+          "apps/queston-randomizer/src/styles.scss"
+        ],
+        "scripts": [],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/shared/styles/src/styles"]
+        }
       },
       "configurations": {
         "production": {
