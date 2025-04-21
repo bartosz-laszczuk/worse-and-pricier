@@ -1,7 +1,8 @@
 <div class="form-group">
-  <label *ngIf="label" for="inputField">{{ label }}</label>
+  <label *ngIf="label" [for]="inputId">{{ label }}</label>
 
   <input
+    [id]="inputId"
     [type]="type"
     [placeholder]="placeholder"
     [value]="value"
@@ -12,9 +13,13 @@
     [ngClass]="{
       'is-invalid': control.invalid && (control.touched || control.dirty)
     }"
+    [attr.aria-invalid]="control.invalid"
+    [attr.aria-describedby]="hint ? inputId + '-hint' : null"
   />
 
-  <small class="text-muted" *ngIf="hint">{{ hint }}</small>
+  <small *ngIf="hint" [id]="inputId + '-hint'" class="text-muted">{{
+    hint
+  }}</small>
 
   <div
     *ngIf="control.invalid && (control.touched || control.dirty)"

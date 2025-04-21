@@ -5,12 +5,12 @@
     placeholder="Enter question"
     formControlName="question"
   ></lib-input-text>
-  <lib-input-text
+  <lib-input-rich-text-editor
     label="Answer"
     type="text"
     placeholder="Enter answer"
     formControlName="answer"
-  ></lib-input-text>
+  ></lib-input-rich-text-editor>
   <lib-input-text
     label="Answer Pl"
     type="text"
@@ -35,7 +35,3 @@
   </button>
   <button type="button" (click)="this.closed.emit(undefined)">Close</button>
 </form>
-<quill-editor
-  [placeholder]="placeholder"
-  (onContentChanged)="onContentChanged($event)"
-></quill-editor>

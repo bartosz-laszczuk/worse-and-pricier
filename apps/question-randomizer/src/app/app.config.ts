@@ -24,7 +24,6 @@ export const appConfig: ApplicationConfig = {
           [{ header: 1 }, { header: 2 }],
           [{ list: 'ordered' }, { list: 'bullet' }],
           ['link', 'image'],
-          ['clean'],
         ],
       },
     }),

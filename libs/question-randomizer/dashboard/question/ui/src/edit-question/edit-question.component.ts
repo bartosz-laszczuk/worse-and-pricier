@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {
+  InputRichTextEditorComponent,
   InputSelectComponent,
   InputTextComponent,
 } from '@my-nx-monorepo/shared-ui';
@@ -34,6 +35,7 @@ interface EditQuestionForm {
     ReactiveFormsModule,
     InputSelectComponent,
     QuillModule,
+    InputRichTextEditorComponent,
   ],
   templateUrl: './edit-question.component.html',
   styleUrl: './edit-question.component.scss',
@@ -93,9 +95,10 @@ export class EditQuestionComponent {
         answer: this.form.controls.answer.value,
         answerPl: this.form.controls.answerPl.value,
         categoryId,
-        categoryName: this.categoryOptionItemList().find(
-          (category) => category.value === categoryId
-        )!.label,
+        categoryName:
+          this.categoryOptionItemList().find(
+            (category) => category.value === categoryId
+          )?.label ?? '',
         qualificationId: qualificationId ?? undefined,
         qualificationName: this.qualificationOptionItemList().find(
           (qualification) => qualification.value === qualificationId
@@ -107,6 +110,7 @@ export class EditQuestionComponent {
       this.form.markAllAsTouched();
     }
   }
+
   content = 'some content';
   placeholder = 'Write something...';
   onContentChanged(value: any) {
