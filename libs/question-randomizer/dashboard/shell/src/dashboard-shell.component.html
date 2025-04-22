@@ -12,6 +12,13 @@
         <li><a [routerLink]="['qualifications']">Qualifications</a></li>
         <li><a [routerLink]="['interview']">Interview</a></li>
         <li><button (click)="onSignOut()">Sign out</button></li>
+        <li><button (click)="onChangeTheme('')">Default theme</button></li>
+        <li>
+          <button (click)="onChangeTheme('light-theme')">Light theme</button>
+        </li>
+        <li>
+          <button (click)="onChangeTheme('dark-theme')">Dark theme</button>
+        </li>
       </ul>
     </nav>
   </aside>

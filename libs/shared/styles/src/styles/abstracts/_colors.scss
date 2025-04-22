@@ -1,0 +1,26 @@
+@use 'variables' as *;
+
+:root {
+  /* Base Palette */
+  --primary-color: #f5d938;
+  --secondary-color: #121212;
+
+  --success-color: #b6e270;
+  --warning-color: #fbe86b;
+  --danger-color: #cc582c;
+
+  /* UI Colors */
+  --background-color: #f5f5f5;
+  --card-bg-color: #ffffff;
+  --border-color: #e0e0e0;
+  --text-color: #121212;
+
+  --bar-color: #222;
+  --muted-text: #777;
+
+  /* Grayscale */
+  --white: #ffffff;
+  --black: #000000;
+  --gray-100: #f8f9fa;
+  --gray-900: #212529;
+}

@@ -2,11 +2,12 @@
 @use 'abstracts/variables';
 @use 'abstracts/functions';
 @use 'abstracts/mixins';
+@use 'abstracts/colors';
 
 // Base styles
 @use 'base/reset';
-@use 'base/typography';
 @use 'base/base';
+@use 'base/typography';
 
 // Layout & Components
 @use 'layout/header';
@@ -19,8 +20,8 @@
 @use 'pages/home';
 
 // Themes
-@use 'themes/default';
 @use 'themes/dark';
+@use 'themes/light';
 
 // Vendors
 @use 'vendors/material';

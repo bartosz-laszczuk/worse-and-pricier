@@ -1,4 +1,9 @@
-html,
+html {
+  height: 100%;
+  font-size: 62.5%;
+}
 body {
   height: 100%;
+  background: var(--background-color);
+  color: var(--text-color);
 }

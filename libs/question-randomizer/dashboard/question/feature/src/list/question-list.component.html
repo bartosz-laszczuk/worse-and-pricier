@@ -13,6 +13,12 @@
   (sort)="onSort($event)"
 >
   <ng-template
+    [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"
+    let-item="item"
+  >
+    <div [innerHTML]="item.answer"></div>
+  </ng-template>
+  <ng-template
     [libColumn]="{ propertyName: 'options', type: 'COLUMN' }"
     let-item="item"
   >

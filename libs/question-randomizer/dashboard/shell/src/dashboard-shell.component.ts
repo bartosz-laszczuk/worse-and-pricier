@@ -11,6 +11,7 @@ import {
   QuestionListStore,
   RandomizationStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
+import { Theme } from '@my-nx-monorepo/shared-styles';
 
 @Component({
   selector: 'lib-dashboard-shell',
@@ -34,6 +35,10 @@ export class DashboardShellComponent {
 
   constructor() {
     this.dashboardShellFacade.loadLists();
+  }
+
+  public onChangeTheme(theme: Theme) {
+    this.dashboardShellFacade.changeTheme(theme);
   }
 
   public onSignOut() {

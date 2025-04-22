@@ -20,7 +20,7 @@ categoryOptionItem.value) {
 <p>Question:</p>
 <p>{{ question.question }}</p>
 <p>Answer:</p>
-<p>{{ question.answer }}</p>
+<div [innerHTML]="question.answer"></div>
 } @else {
 <p>No questions to display</p>
 }
