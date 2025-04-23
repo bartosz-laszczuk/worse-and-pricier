@@ -7,6 +7,13 @@ import {
 } from '@my-nx-monorepo/shared-ui';
 import { Theme } from '@my-nx-monorepo/shared-styles';
 
+export interface NavigationItem {
+  label: string;
+  icon: string;
+  route: string;
+  exact?: boolean;
+}
+
 @Component({
   selector: 'lib-dashboard-sidebar',
   imports: [
@@ -21,4 +28,16 @@ import { Theme } from '@my-nx-monorepo/shared-styles';
 export class DashboardSidebarComponent {
   public currentTheme = input.required<Theme>();
   public changeTheme = output<Theme>();
+
+  navItems: NavigationItem[] = [
+    {
+      label: 'Randomization',
+      icon: 'grid',
+      route: 'randomization',
+    },
+    { label: 'Questions', icon: 'tag', route: 'questions' },
+    { label: 'Categories', icon: 'mail', route: 'categories' },
+    { label: 'Qualifications', icon: 'calendar', route: 'qualifications' },
+    { label: 'Interview', icon: 'file-text', route: 'interview' },
+  ];
 }

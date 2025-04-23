@@ -3,8 +3,15 @@
   height: 100vh;
 }
 
+lib-dashboard-navigation-bar {
+  min-width: 4rem;
+  max-width: 4rem;
+  background-color: var(--gray-400);
+}
+
 lib-dashboard-sidebar {
-  width: 220px;
+  min-width: 16rem;
+  max-width: 16rem;
   background-color: var(--gray-300); /* Match light grey from image */
 }
 
@@ -16,7 +23,7 @@ lib-dashboard-sidebar {
 }
 
 lib-dashboard-header {
-  height: 60px;
+  // height: 4rem;
   border-bottom: 2px solid var(--secondary-color);
 }
 

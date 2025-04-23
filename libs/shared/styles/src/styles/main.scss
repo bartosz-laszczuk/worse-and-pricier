@@ -9,19 +9,12 @@
 @use 'base/base';
 @use 'base/typography';
 
-// Layout & Components
-@use 'layout/header';
-@use 'layout/footer';
-@use 'layout/grid';
-@use 'components/button';
-@use 'components/card';
-
-// Pages
-@use 'pages/home';
-
 // Themes
 @use 'themes/dark';
 @use 'themes/light';
+
+// Utilities
+@use 'utilities/spacing';
 
 // Vendors
 @use 'vendors/material';

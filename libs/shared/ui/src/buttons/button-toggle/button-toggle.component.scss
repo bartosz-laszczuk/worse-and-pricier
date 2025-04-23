@@ -8,11 +8,13 @@
 }
 
 button {
+  padding: 0.25rem 1rem;
   border: none;
   background: transparent;
   cursor: pointer;
   font-weight: 500;
   width: 100%;
+  transition: all 0.2s;
 
   &.selected {
     background-color: var(--secondary-color);

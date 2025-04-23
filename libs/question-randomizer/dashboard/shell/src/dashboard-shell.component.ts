@@ -14,6 +14,7 @@ import {
 import { Theme } from '@my-nx-monorepo/shared-styles';
 import { DashboardSidebarComponent } from './ui/sidebar/dashboard-sidebar.component';
 import { DashboardHeaderComponent } from './ui/header/dashboard-header.component';
+import { DashboardNavigationBarComponent } from './ui/navigation-bar/dashboard-navigation-bar.component';
 
 @Component({
   selector: 'lib-dashboard-shell',
@@ -22,6 +23,7 @@ import { DashboardHeaderComponent } from './ui/header/dashboard-header.component
     RouterModule,
     DashboardSidebarComponent,
     DashboardHeaderComponent,
+    DashboardNavigationBarComponent,
   ],
   templateUrl: './dashboard-shell.component.html',
   styleUrl: './dashboard-shell.component.scss',

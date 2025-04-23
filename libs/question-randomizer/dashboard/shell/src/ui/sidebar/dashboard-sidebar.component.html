@@ -1,29 +1,32 @@
-<h1>Hudson 8</h1>
+<h2 class="margin-bottom-16">Hudson 8</h2>
 <lib-button-toggle-group
+  class="d-block margin-bottom-24"
   [value]="currentTheme()"
   (toggled)="changeTheme.emit($event ?? '')"
 >
-  <!-- <lib-button-toggle value="dark">Dark</lib-button-toggle>
-  <lib-button-toggle value="light">Light</lib-button-toggle> -->
-  <lib-button-toggle value="dark-theme">Dark</lib-button-toggle>
-  <lib-button-toggle value="light-theme">Light</lib-button-toggle>
+  <lib-button-toggle value="dark-theme">General</lib-button-toggle>
+  <lib-button-toggle value="light-theme">Project</lib-button-toggle>
 </lib-button-toggle-group>
-<!-- <button class="general-btn">General</button>
-<button class="project-btn">Project</button> -->
-<nav class="nav">
+
+<nav class="sidebar-nav">
+  <a
+    *ngFor="let item of navItems"
+    [routerLink]="item.route"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: item.exact || false }"
+    class="nav-item"
+  >
+    <i class="icon" [ngClass]="item.icon"></i>
+    <span>{{ item.label }}</span>
+  </a>
+</nav>
+
+<!-- <nav class="nav">
   <ul>
     <li><a [routerLink]="['randomization']">Randomization</a></li>
     <li><a [routerLink]="['questions']">Questions</a></li>
     <li><a [routerLink]="['categories']">Categories</a></li>
     <li><a [routerLink]="['qualifications']">Qualifications</a></li>
     <li><a [routerLink]="['interview']">Interview</a></li>
-    <!-- <li><button (click)="onSignOut()">Sign out</button></li>
-    <li><button (click)="onChangeTheme('')">Default theme</button></li>
-    <li>
-      <button (click)="onChangeTheme('light-theme')">Light theme</button>
-    </li>
-    <li>
-      <button (click)="onChangeTheme('dark-theme')">Dark theme</button>
-    </li> -->
   </ul>
-</nav>
+</nav> -->
