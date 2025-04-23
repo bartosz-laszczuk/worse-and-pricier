@@ -1,42 +1,35 @@
-import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { inject, Injectable, signal } from '@angular/core';
 
-export type Theme = 'light-theme' | 'dark-theme' | '';
+export type Theme = 'light' | 'dark' | '';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
-  private renderer: Renderer2;
-  private currentTheme: Theme;
+  private readonly document = inject(DOCUMENT);
+  private readonly storageKey = 'selected-theme';
+  public currentTheme = signal<Theme>('');
 
-  constructor(rendererFactory: RendererFactory2) {
-    this.renderer = rendererFactory.createRenderer(null, null);
-    this.currentTheme = ''; // default theme (no class)
-  }
-
-  setTheme(theme: Theme): void {
-    const body = document.body;
-
-    if (this.currentTheme) {
-      this.renderer.removeClass(body, this.currentTheme);
-    }
-
-    if (theme) {
-      this.renderer.addClass(body, theme);
-    }
-
-    this.currentTheme = theme;
-  }
-
-  toggleTheme(): void {
-    if (this.currentTheme === 'dark-theme') {
-      this.setTheme('light-theme');
-    } else {
-      this.setTheme('dark-theme');
+  constructor() {
+    const savedTheme = localStorage.getItem(this.storageKey) as Theme;
+    if (savedTheme) {
+      this.setTheme(savedTheme);
     }
   }
 
-  getCurrentTheme(): string {
-    return this.currentTheme;
+  setTheme(theme: Theme) {
+    const body = this.document.body;
+
+    if (this.currentTheme()) {
+      body.classList.remove(this.currentTheme());
+    }
+
+    if (theme !== '') {
+      body.classList.add(theme);
+    }
+
+    this.currentTheme.set(theme);
+    localStorage.setItem(this.storageKey, theme);
   }
 }

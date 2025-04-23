@@ -1,32 +1,13 @@
-<div class="container">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <h1>Hudson 8</h1>
-    <button class="general-btn">General</button>
-    <button class="project-btn">Project</button>
-    <nav class="nav">
-      <ul>
-        <li><a [routerLink]="['randomization']">Randomization</a></li>
-        <li><a [routerLink]="['questions']">Questions</a></li>
-        <li><a [routerLink]="['categories']">Categories</a></li>
-        <li><a [routerLink]="['qualifications']">Qualifications</a></li>
-        <li><a [routerLink]="['interview']">Interview</a></li>
-        <li><button (click)="onSignOut()">Sign out</button></li>
-        <li><button (click)="onChangeTheme('')">Default theme</button></li>
-        <li>
-          <button (click)="onChangeTheme('light-theme')">Light theme</button>
-        </li>
-        <li>
-          <button (click)="onChangeTheme('dark-theme')">Dark theme</button>
-        </li>
-      </ul>
-    </nav>
-  </aside>
+<div class="layout">
+  <lib-dashboard-sidebar
+    [currentTheme]="currentTheme()"
+    (changeTheme)="onChangeTheme($event)"
+  ></lib-dashboard-sidebar>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <h1>Dashboard</h1>
-    <div class="divider"></div>
-    <router-outlet></router-outlet>
-  </main>
+  <div class="main">
+    <lib-dashboard-header></lib-dashboard-header>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+</div>
 </div>

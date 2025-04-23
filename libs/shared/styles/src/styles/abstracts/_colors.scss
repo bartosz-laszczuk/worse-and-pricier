@@ -2,25 +2,29 @@
 
 :root {
   /* Base Palette */
-  --primary-color: #f5d938;
-  --secondary-color: #121212;
+  --primary-color: #eddf64;
+  --secondary-color: #2d2b2e;
 
-  --success-color: #b6e270;
-  --warning-color: #fbe86b;
-  --danger-color: #cc582c;
+  --success-color: #b9e14c;
+  --warning-color: #eddf64;
+  --danger-color: #be5715;
 
   /* UI Colors */
-  --background-color: #f5f5f5;
-  --card-bg-color: #ffffff;
-  --border-color: #e0e0e0;
-  --text-color: #121212;
+  --background-color: #f5f5f5; // to verify
+  --border-color: #c2c2c0;
+  --text-color: #2d2b2e;
 
-  --bar-color: #222;
-  --muted-text: #777;
+  --bar-color: #222; // to verify
+  --muted-text: #777; // to verify
 
   /* Grayscale */
   --white: #ffffff;
   --black: #000000;
-  --gray-100: #f8f9fa;
-  --gray-900: #212529;
+
+  --gray-100: #fcfdf8; // card-bg-color
+  --gray-200: #f2f2f2; // dashboard-background-color and table headers
+  --gray-300: #e3e3e1; // sidebar-background-color
+  --gray-400: #cececc; // vertical bar on the left and I think not selected icons on sidebar
+  --gray-500: #bebebe;
+  --gray-600: #6c6a6b;
 }

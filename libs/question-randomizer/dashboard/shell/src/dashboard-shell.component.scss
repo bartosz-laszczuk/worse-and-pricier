@@ -1,3 +1,30 @@
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+lib-dashboard-sidebar {
+  width: 220px;
+  background-color: var(--gray-300); /* Match light grey from image */
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--gray-200);
+}
+
+lib-dashboard-header {
+  height: 60px;
+  border-bottom: 2px solid var(--secondary-color);
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
 // :host {
 //   margin: 0;
 //   font-family: Arial, sans-serif;

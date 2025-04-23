@@ -12,10 +12,17 @@ import {
   RandomizationStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { Theme } from '@my-nx-monorepo/shared-styles';
+import { DashboardSidebarComponent } from './ui/sidebar/dashboard-sidebar.component';
+import { DashboardHeaderComponent } from './ui/header/dashboard-header.component';
 
 @Component({
   selector: 'lib-dashboard-shell',
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    DashboardSidebarComponent,
+    DashboardHeaderComponent,
+  ],
   templateUrl: './dashboard-shell.component.html',
   styleUrl: './dashboard-shell.component.scss',
   providers: [
@@ -32,6 +39,7 @@ import { Theme } from '@my-nx-monorepo/shared-styles';
 })
 export class DashboardShellComponent {
   private readonly dashboardShellFacade = inject(DashboardShellFacade);
+  public currentTheme = this.dashboardShellFacade.currentTheme;
 
   constructor() {
     this.dashboardShellFacade.loadLists();

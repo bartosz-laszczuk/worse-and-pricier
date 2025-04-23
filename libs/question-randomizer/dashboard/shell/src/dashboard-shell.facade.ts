@@ -20,6 +20,8 @@ export class DashboardShellFacade {
   private readonly qualificationListStore = inject(QualificationListStore);
   private readonly themeService = inject(ThemeService);
 
+  public currentTheme = this.themeService.currentTheme;
+
   public signOut() {
     this.userService.signOut();
   }

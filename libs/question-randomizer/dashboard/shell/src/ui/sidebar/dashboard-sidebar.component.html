@@ -1,0 +1,29 @@
+<h1>Hudson 8</h1>
+<lib-button-toggle-group
+  [value]="currentTheme()"
+  (toggled)="changeTheme.emit($event ?? '')"
+>
+  <!-- <lib-button-toggle value="dark">Dark</lib-button-toggle>
+  <lib-button-toggle value="light">Light</lib-button-toggle> -->
+  <lib-button-toggle value="dark">Dark</lib-button-toggle>
+  <lib-button-toggle value="light">Light</lib-button-toggle>
+</lib-button-toggle-group>
+<!-- <button class="general-btn">General</button>
+<button class="project-btn">Project</button> -->
+<nav class="nav">
+  <ul>
+    <li><a [routerLink]="['randomization']">Randomization</a></li>
+    <li><a [routerLink]="['questions']">Questions</a></li>
+    <li><a [routerLink]="['categories']">Categories</a></li>
+    <li><a [routerLink]="['qualifications']">Qualifications</a></li>
+    <li><a [routerLink]="['interview']">Interview</a></li>
+    <!-- <li><button (click)="onSignOut()">Sign out</button></li>
+    <li><button (click)="onChangeTheme('')">Default theme</button></li>
+    <li>
+      <button (click)="onChangeTheme('light-theme')">Light theme</button>
+    </li>
+    <li>
+      <button (click)="onChangeTheme('dark-theme')">Dark theme</button>
+    </li> -->
+  </ul>
+</nav>
