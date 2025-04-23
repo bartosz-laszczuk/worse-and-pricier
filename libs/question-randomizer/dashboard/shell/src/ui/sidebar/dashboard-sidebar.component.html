@@ -7,16 +7,17 @@
   <lib-button-toggle value="dark-theme">General</lib-button-toggle>
   <lib-button-toggle value="light-theme">Project</lib-button-toggle>
 </lib-button-toggle-group>
-
 <nav class="sidebar-nav">
   <a
     *ngFor="let item of navItems"
     [routerLink]="item.route"
     routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: item.exact || false }"
     class="nav-item"
   >
-    <i class="icon" [ngClass]="item.icon"></i>
+    <svg-icon
+      src="icons/{{ item.icon }}.svg"
+      [svgStyle]="{ width: '16px', height: '16px' }"
+    ></svg-icon>
     <span>{{ item.label }}</span>
   </a>
 </nav>

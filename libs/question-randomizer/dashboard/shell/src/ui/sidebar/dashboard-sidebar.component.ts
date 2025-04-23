@@ -6,12 +6,12 @@ import {
   ButtonToggleGroupComponent,
 } from '@my-nx-monorepo/shared-ui';
 import { Theme } from '@my-nx-monorepo/shared-styles';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 export interface NavigationItem {
   label: string;
   icon: string;
   route: string;
-  exact?: boolean;
 }
 
 @Component({
@@ -21,6 +21,7 @@ export interface NavigationItem {
     RouterModule,
     ButtonToggleComponent,
     ButtonToggleGroupComponent,
+    SvgIconComponent,
   ],
   templateUrl: './dashboard-sidebar.component.html',
   styleUrl: './dashboard-sidebar.component.scss',
@@ -32,12 +33,12 @@ export class DashboardSidebarComponent {
   navItems: NavigationItem[] = [
     {
       label: 'Randomization',
-      icon: 'grid',
+      icon: 'repeat',
       route: 'randomization',
     },
-    { label: 'Questions', icon: 'tag', route: 'questions' },
-    { label: 'Categories', icon: 'mail', route: 'categories' },
-    { label: 'Qualifications', icon: 'calendar', route: 'qualifications' },
-    { label: 'Interview', icon: 'file-text', route: 'interview' },
+    { label: 'Questions', icon: 'help-circle', route: 'questions' },
+    { label: 'Categories', icon: 'tag', route: 'categories' },
+    { label: 'Qualifications', icon: 'award', route: 'qualifications' },
+    { label: 'Interview', icon: 'mic', route: 'interview' },
   ];
 }

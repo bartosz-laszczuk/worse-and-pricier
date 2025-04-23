@@ -7,6 +7,8 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideQuillConfig } from 'ngx-quill/config';
+import { provideAngularSvgIcon } from 'angular-svg-icon';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +18,8 @@ export const appConfig: ApplicationConfig = {
     provideFirebaseApp(() => initializeApp(environment.firebase.config)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
+    provideHttpClient(),
+    provideAngularSvgIcon(),
     provideQuillConfig({
       modules: {
         syntax: false,
