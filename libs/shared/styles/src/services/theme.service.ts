@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { inject, Injectable, signal } from '@angular/core';
 
-export type Theme = 'light' | 'dark' | '';
+export type Theme = 'light-theme' | 'dark-theme' | '';
 
 @Injectable({
   providedIn: 'root',

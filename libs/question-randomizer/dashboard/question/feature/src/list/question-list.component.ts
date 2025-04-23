@@ -57,7 +57,7 @@ export class QuestionListComponent {
 
   public constructor() {
     this.searchTextControl.valueChanges
-      .pipe(debounceTime(200), takeUntilDestroyed())
+      .pipe(debounceTime(100), takeUntilDestroyed())
       .subscribe((value) => this.questionListFacade.setSearchText(value));
   }
 

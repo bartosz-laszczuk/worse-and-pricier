@@ -10,16 +10,13 @@
 button {
   border: none;
   background: transparent;
-  // padding: 8px 16px;
   cursor: pointer;
   font-weight: 500;
-  color: #333;
   width: 100%;
 
   &.selected {
     background-color: var(--secondary-color);
     color: var(--gray-300);
-    font-weight: 400;
   }
 
   &:hover {

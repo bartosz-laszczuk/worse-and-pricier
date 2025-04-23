@@ -1,24 +1,25 @@
-@use '../abstracts/variables' as *;
-
 body.light-theme {
-  --primary-color: #f5d938;
-  --secondary-color: #121212;
+  --primary-color: #fdf587;
+  --secondary-color: #3a3a3a;
+
+  --success-color: #d6f07a;
+  --warning-color: #fff39c;
+  --danger-color: #ff7f4b;
 
   --background-color: #ffffff;
-  --card-bg-color: #f9f9f9;
-  --border-color: #e0e0e0;
+  --border-color: #eaeaea;
+  --text-color: #3a3a3a;
 
-  --text-color: #121212;
-  --muted-text: #777777;
-
-  --success-color: #b6e270;
-  --warning-color: #fbe86b;
-  --danger-color: #cc582c;
-
-  --bar-color: #222222;
+  --bar-color: #444;
+  --muted-text: #999;
 
   --white: #ffffff;
   --black: #000000;
-  --gray-100: #f8f9fa;
-  --gray-900: #212529;
+
+  --gray-100: #ffffff;
+  --gray-200: #fafafa;
+  --gray-300: #f0f0f0;
+  --gray-400: #dddddd;
+  --gray-500: #cccccc;
+  --gray-600: #999999;
 }
