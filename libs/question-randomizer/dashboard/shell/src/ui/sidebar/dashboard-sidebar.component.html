@@ -1,6 +1,6 @@
-<h2 class="margin-bottom-16">Hudson 8</h2>
+<h2 class="margin-bottom-16">QuestionRandomizer</h2>
 <lib-button-toggle-group
-  class="d-block margin-bottom-24"
+  class="d-block margin-bottom-16"
   [value]="currentTheme()"
   (toggled)="changeTheme.emit($event ?? '')"
 >
@@ -21,13 +21,3 @@
     <span>{{ item.label }}</span>
   </a>
 </nav>
-
-<!-- <nav class="nav">
-  <ul>
-    <li><a [routerLink]="['randomization']">Randomization</a></li>
-    <li><a [routerLink]="['questions']">Questions</a></li>
-    <li><a [routerLink]="['categories']">Categories</a></li>
-    <li><a [routerLink]="['qualifications']">Qualifications</a></li>
-    <li><a [routerLink]="['interview']">Interview</a></li>
-  </ul>
-</nav> -->
