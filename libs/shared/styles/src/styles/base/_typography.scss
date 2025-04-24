@@ -3,21 +3,31 @@
 body {
   font-family: $font-family;
   font-size: $font-size;
+  font-weight: $font-weight;
   // line-height: $line-height;
 }
 
 h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3 {
+  font-family: $headers-font-family;
+}
+
+h1,
 .h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  line-height: 2rem;
+  line-height: 2.5rem;
 }
 
 h2,
 .h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 1.5rem;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.7rem;
 }
 
 h3,
@@ -31,6 +41,11 @@ p,
 .text {
   font-size: 1rem;
   color: var(--text-color);
+}
+
+span {
+  font-size: 1rem;
+  line-height: 1rem;
 }
 
 .text-muted {

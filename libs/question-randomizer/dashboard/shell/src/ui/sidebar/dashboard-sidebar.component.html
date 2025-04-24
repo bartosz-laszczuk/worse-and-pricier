@@ -1,12 +1,13 @@
-<h2 class="margin-bottom-16">QuestionRandomizer</h2>
-<lib-button-toggle-group
-  class="d-block margin-bottom-16"
-  [value]="currentTheme()"
-  (toggled)="changeTheme.emit($event ?? '')"
->
-  <lib-button-toggle value="dark-theme">General</lib-button-toggle>
-  <lib-button-toggle value="light-theme">Project</lib-button-toggle>
-</lib-button-toggle-group>
+<header>
+  <h2 class="header">Hudson 8</h2>
+  <lib-button-toggle-group
+    [value]="currentTheme()"
+    (toggled)="changeTheme.emit($event ?? '')"
+  >
+    <lib-button-toggle value="dark-theme">General</lib-button-toggle>
+    <lib-button-toggle value="light-theme">Project</lib-button-toggle>
+  </lib-button-toggle-group>
+</header>
 <nav class="sidebar-nav">
   <a
     *ngFor="let item of navItems"
@@ -14,10 +15,7 @@
     routerLinkActive="active"
     class="nav-item"
   >
-    <svg-icon
-      src="icons/{{ item.icon }}.svg"
-      [svgStyle]="{ width: '16px', height: '16px' }"
-    ></svg-icon>
+    <svg-icon src="icons/{{ item.icon }}.svg" [svgStyle]="{ width: '16px', height: '16px', strokeWidth: 2 }"></svg-icon>
     <span>{{ item.label }}</span>
   </a>
 </nav>

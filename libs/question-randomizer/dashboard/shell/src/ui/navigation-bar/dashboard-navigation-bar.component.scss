@@ -1,0 +1,33 @@
+:host {
+  padding: 1rem;
+  position: relative;
+}
+
+svg-icon {
+  display: flex;
+  justify-content: center;
+}
+
+.app-card {
+  padding: 0.6rem;
+  cursor: pointer;
+  width: 3.4rem;
+  height: 3.4rem;
+  line-height: 0.8;
+  font-size: 1.2rem;
+  letter-spacing: 5px;
+  background-color: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  border-radius: 3px;
+  font-weight: 1000;
+}
+
+.divider {
+  margin: 1.2rem 0;
+}
+
+footer {
+  width: 40px;
+  position: absolute;
+  bottom: 1.5rem;
+}

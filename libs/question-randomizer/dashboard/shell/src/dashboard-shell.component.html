@@ -1,5 +1,7 @@
 <div class="layout">
-  <lib-dashboard-navigation-bar></lib-dashboard-navigation-bar>
+  <lib-dashboard-navigation-bar
+    (logout)="onSignOut()"
+  ></lib-dashboard-navigation-bar>
   <lib-dashboard-sidebar
     [currentTheme]="currentTheme()"
     (changeTheme)="onChangeTheme($event)"

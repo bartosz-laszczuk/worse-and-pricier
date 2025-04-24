@@ -1,1 +1,21 @@
-<p>dashboard-navigation-bar works!</p>
+<svg-icon
+  src="icons/globe2.svg"
+  [svgStyle]="{ width: '52px', height: '52px' }"
+></svg-icon>
+<hr class="divider" />
+<div class="app-card margin-bottom-16">QR</div>
+<svg-icon
+  class="c-pointer"
+  src="icons/plus.svg"
+  [svgStyle]="{ width: '32px', height: '32px', strokeWidth: 2 }"
+></svg-icon>
+
+<footer>
+  <hr class="divider" />
+  <svg-icon
+    (click)="logout.emit()"
+    class="c-pointer"
+    src="icons/log-out.svg"
+    [svgStyle]="{ width: '24px', height: '24px' }"
+  ></svg-icon>
+</footer>
