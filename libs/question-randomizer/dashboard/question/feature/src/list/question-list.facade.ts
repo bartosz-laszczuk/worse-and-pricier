@@ -23,6 +23,7 @@ export class QuestionListFacade {
   public categoryOptionItemList = this.categoryListStore.categoryOptionItemList;
   public qualificationOptionItemList =
     this.qualificationListStore.qualificationOptionItemList;
+  public searchText = this.questionListStore.searchText;
 
   public setSort(sort: SortDefinition<Question>) {
     this.questionListStore.setSort(sort);

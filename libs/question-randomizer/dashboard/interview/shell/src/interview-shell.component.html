@@ -1,1 +1,21 @@
-<p>interview-shell works!</p>
+@if(questions()) {
+<lib-input-text
+  label="Search"
+  type="text"
+  placeholder="Enter search text"
+  [formControl]="searchTextControl"
+></lib-input-text>
+<lib-table
+  [data]="questions()"
+  [columns]="columns"
+  [sortDefinition]="sort()"
+  (sort)="onSort($event)"
+>
+  <ng-template
+    [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"
+    let-item="item"
+  >
+    <div [innerHTML]="item.answer"></div>
+  </ng-template>
+</lib-table>
+}

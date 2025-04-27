@@ -33,6 +33,9 @@
       "@my-nx-monorepo/question-randomizer-dashboard-category-ui": [
         "libs/question-randomizer/dashboard/category/ui/src/index.ts"
       ],
+      "@my-nx-monorepo/question-randomizer-dashboard-interview-data-access": [
+        "libs/question-randomizer/dashboard/interview/data-access/src/index.ts"
+      ],
       "@my-nx-monorepo/question-randomizer-dashboard-interview-shell": [
         "libs/question-randomizer/dashboard/interview/shell/src/index.ts"
       ],

@@ -8,7 +8,7 @@
   --danger-color: #be5715;
 
   /* UI Colors */
-  --background-color: #f5f5f5; // to verify
+  --background-color: #e8e8e8; // to verify
   --border-color: #c2c2c0;
   --text-color: #2d2b2e;
 
@@ -23,6 +23,9 @@
   --gray-200: #f2f2f2; // dashboard-background-color and table headers
   --gray-300: #e3e3e1; // sidebar-background-color
   --gray-400: #cececc; // vertical bar on the left and I think not selected icons on sidebar
-  --gray-500: #bebebe;
-  --gray-600: #6c6a6b;
+  --gray-500: #b1b1af; // divider-color
+  --gray-600: #bebebe;
+  --gray-700: #acadaa; // sidebar-icon-color
+  --gray-800: #5b5b59; // sidebar-text-color
+  --gray-900: #6c6a6b;
 }

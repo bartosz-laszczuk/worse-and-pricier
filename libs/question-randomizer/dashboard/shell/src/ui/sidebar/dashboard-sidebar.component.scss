@@ -17,13 +17,15 @@ header {
     align-items: center;
     padding: 1rem;
     border-radius: 3px;
-    color: var(--gray-600);
+    color: var(--gray-800);
     text-decoration: none;
     transition: all 0.2s;
 
     svg-icon {
       margin-right: 0.75rem;
       display: flex;
+      color: var(--gray-700);
+      transition: all 0.2s;
     }
 
     &:hover {
@@ -34,6 +36,9 @@ header {
       background-color: var(--gray-200);
       color: var(--text-color);
       font-weight: 600;
+      svg-icon {
+        color: var(--text-color);
+      }
     }
   }
 }
