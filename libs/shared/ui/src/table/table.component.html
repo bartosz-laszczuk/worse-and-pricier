@@ -30,12 +30,14 @@
         (click)="onRowClick(element)"
       >
         <td *ngFor="let col of columns" [class.text-wrap]="cellTextWrap">
-          <ng-container
-            *ngTemplateOutlet="
-              columnTemplates[col.propertyName]?.templateRef || defaultCell;
-              context: { item: element, col: col.propertyName, i: i }
-            "
-          ></ng-container>
+          <div class="tbody-cell">
+            <ng-container
+              *ngTemplateOutlet="
+                columnTemplates[col.propertyName]?.templateRef || defaultCell;
+                context: { item: element, col: col.propertyName, i: i }
+              "
+            ></ng-container>
+          </div>
         </td>
       </tr>
     </tbody>

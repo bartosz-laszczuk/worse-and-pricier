@@ -16,10 +16,11 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'lib-input-text',
-  imports: [CommonModule],
+  imports: [CommonModule, SvgIconComponent],
   templateUrl: './input-text.component.html',
   styleUrl: './input-text.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,10 +38,12 @@ import {
   ],
 })
 export class InputTextComponent implements ControlValueAccessor, Validator {
-  @Input() label!: string;
+  @Input() label = '';
   @Input() placeholder = '';
   @Input() type = 'text';
   @Input() hint?: string;
+  @Input() classes = '';
+  @Input() icon = '';
   @Input() errorMessages: { [key: string]: string } = {};
 
   @HostBinding('class.invalid') get isInvalid() {

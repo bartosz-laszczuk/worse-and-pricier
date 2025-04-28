@@ -1,6 +1,4 @@
-<div class="form-group">
-  <label *ngIf="label" [for]="inputId">{{ label }}</label>
-
+<div class="input-container">
   <input
     [id]="inputId"
     [type]="type"
@@ -9,22 +7,61 @@
     [disabled]="disabled"
     (input)="onInputChange($event)"
     (blur)="markAsTouched()"
-    class="form-control"
+    class="form-control input-field {{ classes }}"
     [ngClass]="{
-      'is-invalid': control.invalid && (control.touched || control.dirty)
+      'is-invalid': control.invalid && (control.touched || control.dirty),
+      'input-field--icon': icon
     }"
     [attr.aria-invalid]="control.invalid"
     [attr.aria-describedby]="hint ? inputId + '-hint' : null"
   />
-
-  <small *ngIf="hint" [id]="inputId + '-hint'" class="text-muted">{{
-    hint
-  }}</small>
-
-  <div
-    *ngIf="control.invalid && (control.touched || control.dirty)"
-    class="invalid-feedback"
-  >
-    {{ getErrorMessage() }}
-  </div>
+  <label for="input-field" class="input-label">{{ label }}</label>
+  <span class="input-highlight"></span>
+  @if(icon) {
+  <svg-icon
+    class="c-pointer input-icon"
+    src="icons/{{ icon }}.svg"
+    [svgStyle]="{ width: '24px', height: '20px' }"
+  ></svg-icon>
+  }
 </div>
+
+<small *ngIf="hint" [id]="inputId + '-hint'" class="text-muted">{{
+  hint
+}}</small>
+
+<div
+  *ngIf="control.invalid && (control.touched || control.dirty)"
+  class="invalid-feedback"
+>
+  {{ getErrorMessage() }}
+</div>
+
+<!-- <label *ngIf="label" [for]="inputId">{{ label }}</label>
+
+<input
+  [id]="inputId"
+  [type]="type"
+  [placeholder]="placeholder"
+  [value]="value"
+  [disabled]="disabled"
+  (input)="onInputChange($event)"
+  (blur)="markAsTouched()"
+  class="form-control"
+  [ngClass]="{
+    'is-invalid': control.invalid && (control.touched || control.dirty)
+  }"
+  [attr.aria-invalid]="control.invalid"
+  [attr.aria-describedby]="hint ? inputId + '-hint' : null"
+/>
+
+<small *ngIf="hint" [id]="inputId + '-hint'" class="text-muted">{{
+  hint
+}}</small>
+
+<div
+  *ngIf="control.invalid && (control.touched || control.dirty)"
+  class="invalid-feedback"
+>
+  {{ getErrorMessage() }}
+</div> -->

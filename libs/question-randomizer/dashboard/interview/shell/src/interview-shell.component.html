@@ -1,11 +1,13 @@
 @if(questions()) {
 <lib-input-text
-  label="Search"
+  class="search-input"
   type="text"
   placeholder="Enter search text"
+  [icon]="'search'"
   [formControl]="searchTextControl"
 ></lib-input-text>
 <lib-table
+  class="d-block margin-top-16"
   [data]="questions()"
   [columns]="columns"
   [sortDefinition]="sort()"

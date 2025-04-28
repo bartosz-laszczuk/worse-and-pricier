@@ -13,6 +13,9 @@
 @use 'themes/dark';
 @use 'themes/light';
 
+// Components
+@use 'components/table';
+
 // Utilities
 @use 'utilities/spacing';
 @use 'utilities/utilities';

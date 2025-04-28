@@ -36,8 +36,8 @@ export class InterviewShellComponent {
     nonNullable: true,
   });
   public columns: IColumn[] = [
-    { displayName: 'Question', propertyName: 'question', width: '200px' },
-    { displayName: 'Answer', propertyName: 'answer' },
+    { displayName: 'QUESTION', propertyName: 'question', width: '200px' },
+    { displayName: 'ANSWER', propertyName: 'answer' },
   ];
 
   public constructor() {

@@ -1,10 +1,13 @@
 @if(questions()) {
-<lib-input-text
-  label="Search"
-  type="text"
-  placeholder="Enter search text"
-  [formControl]="searchTextControl"
-></lib-input-text>
+<div class="search">
+  <lib-input-text
+    type="text"
+    placeholder="Enter search text"
+    [icon]="'search'"
+    [formControl]="searchTextControl"
+  ></lib-input-text>
+  <button (click)="onAdd()">Add Question</button>
+</div>
 <lib-table
   [data]="questions()"
   [columns]="columns"
@@ -25,10 +28,7 @@
     <button (click)="onDelete(item.id)">Delete</button>
   </ng-template>
 </lib-table>
-}
-
-<button (click)="onAdd()">Add Question</button>
-@if (questionToEdit) {
+} @if (questionToEdit) {
 <lib-edit-question
   [question]="questionToEdit"
   [categoryOptionItemList]="categoryOptionItemList()"

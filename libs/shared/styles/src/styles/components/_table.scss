@@ -1,0 +1,37 @@
+$border: 1px solid var(--gray-500);
+
+table {
+  border-spacing: 0;
+  border-radius: 4px;
+  color: var(--text-color);
+  border: $border;
+  background-color: var(--gray-300);
+  th,
+  td {
+    height: 3rem;
+  }
+  thead {
+    th {
+      border-bottom: $border;
+      &:not(:last-child) {
+        border-right: $border;
+      }
+    }
+  }
+  tbody {
+    td {
+      padding: 0.5rem;
+      &:not(:last-child) {
+        border-right: $border;
+      }
+    }
+    tr:not(:last-child) td {
+      border-bottom: $border;
+    }
+  }
+  tfoot {
+    tr td {
+      border-top: $border;
+    }
+  }
+}

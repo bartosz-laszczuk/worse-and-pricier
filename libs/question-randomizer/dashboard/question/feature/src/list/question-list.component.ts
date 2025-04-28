@@ -15,7 +15,7 @@ import {
 } from '@my-nx-monorepo/shared-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { debounceTime, take } from 'rxjs';
+import { debounceTime, filter, take } from 'rxjs';
 
 @Component({
   selector: 'lib-question-list',
@@ -52,13 +52,15 @@ export class QuestionListComponent {
     { displayName: 'Category', propertyName: 'categoryName' },
     { displayName: 'Qualification', propertyName: 'qualificationName' },
     { displayName: 'Is active', propertyName: 'isActive' },
-    { displayName: '', propertyName: 'options' },
+    { displayName: '', propertyName: 'options', width: '0' },
   ];
 
   public constructor() {
     toObservable(this.questionListFacade.searchText)
       .pipe(take(1))
-      .subscribe((value) => this.searchTextControl.setValue(value));
+      .subscribe((value) =>
+        this.searchTextControl.setValue(value, { emitEvent: false })
+      );
     this.searchTextControl.valueChanges
       .pipe(debounceTime(100), takeUntilDestroyed())
       .subscribe((value) => this.questionListFacade.setSearchText(value));
