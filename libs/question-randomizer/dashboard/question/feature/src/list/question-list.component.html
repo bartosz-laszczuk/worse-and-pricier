@@ -6,7 +6,11 @@
     [icon]="'search'"
     [formControl]="searchTextControl"
   ></lib-input-text>
-  <button (click)="onAdd()">Add Question</button>
+  <div class="buttons">
+    <button (click)="onImport()">Import</button>
+    <button (click)="onExport()">Export</button>
+    <button (click)="onAdd()">Add Question</button>
+  </div>
 </div>
 <lib-table
   [data]="questions()"
@@ -18,7 +22,7 @@
     [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"
     let-item="item"
   >
-    <div [innerHTML]="item.answer"></div>
+    <div class="answer" [innerHTML]="item.answer"></div>
   </ng-template>
   <ng-template
     [libColumn]="{ propertyName: 'options', type: 'COLUMN' }"
@@ -36,3 +40,12 @@
   (closed)="onClose($event)"
 ></lib-edit-question>
 }
+<input
+  type="file"
+  #csvReader
+  name="Upload CSV"
+  id="txtFileUpload"
+  (change)="onFileSelected($event)"
+  accept=".csv"
+  hidden
+/>

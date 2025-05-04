@@ -9,13 +9,27 @@
   </lib-button-toggle-group>
 </header>
 <nav class="sidebar-nav">
+  <!-- <button
+    *ngFor="let item of navItems"
+    [routerLink]="item.route"
+    routerLinkActive="active"
+  >
+    <svg-icon
+      src="icons/{{ item.icon }}.svg"
+      [svgStyle]="{ width: '16px', height: '16px', strokeWidth: 2 }"
+    ></svg-icon
+    ><span>{{ item.label }}</span>
+  </button> -->
   <a
     *ngFor="let item of navItems"
     [routerLink]="item.route"
     routerLinkActive="active"
     class="nav-item"
   >
-    <svg-icon src="icons/{{ item.icon }}.svg" [svgStyle]="{ width: '16px', height: '16px', strokeWidth: 2 }"></svg-icon>
+    <svg-icon
+      src="icons/{{ item.icon }}.svg"
+      [svgStyle]="{ width: '16px', height: '16px', strokeWidth: 2 }"
+    ></svg-icon>
     <span>{{ item.label }}</span>
   </a>
 </nav>

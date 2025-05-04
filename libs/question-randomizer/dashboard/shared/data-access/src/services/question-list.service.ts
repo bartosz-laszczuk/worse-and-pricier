@@ -8,6 +8,7 @@ import {
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import { QuestionRepositoryService } from '../repositories';
 import { QuestionListStore } from '../store';
+import { QuestionListMapperService } from './question-list-mapper.service';
 
 @Injectable()
 export class QuestionListService {
@@ -15,15 +16,49 @@ export class QuestionListService {
   private readonly questionRepositoryService = inject(
     QuestionRepositoryService
   );
+  private readonly questionListMapperService = inject(
+    QuestionListMapperService
+  );
   private readonly questionListStore = inject(QuestionListStore);
 
-  public async createQuestion(createdQuestion: EditQuestionFormValue) {
+  public async createQuestionByForm(createdQuestion: EditQuestionFormValue) {
     const userId = this.userStore.uid()!;
     this.questionListStore.startLoading();
     try {
+      const createQuestionRequest =
+        this.questionListMapperService.mapEditQuestionFormValueToCreateQuestionRequest(
+          createdQuestion,
+          userId
+        );
       const questionId = await this.questionRepositoryService.createQuestion(
-        createdQuestion,
-        userId
+        createQuestionRequest
+      );
+
+      const question: Question = {
+        ...createdQuestion,
+        id: questionId,
+        userId,
+      };
+
+      this.questionListStore.addQuestionToList(question);
+    } catch (error: any) {
+      this.questionListStore.logError(
+        error.message || 'Question creation failed'
+      );
+    }
+  }
+
+  public async createQuestionByImport(createdQuestion: EditQuestionFormValue) {
+    const userId = this.userStore.uid()!;
+    this.questionListStore.startLoading();
+    try {
+      const createQuestionRequest =
+        this.questionListMapperService.mapEditQuestionFormValueToCreateQuestionRequest(
+          createdQuestion,
+          userId
+        );
+      const questionId = await this.questionRepositoryService.createQuestion(
+        createQuestionRequest
       );
 
       const question: Question = {

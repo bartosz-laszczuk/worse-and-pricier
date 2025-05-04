@@ -49,19 +49,7 @@ export class QuestionRepositoryService {
     );
   }
 
-  public async createQuestion(
-    question: EditQuestionFormValue,
-    userId: string
-  ): Promise<string> {
-    const request: CreateQuestionRequest = {
-      question: question.question,
-      answer: question.answer,
-      answerPl: question.answerPl,
-      categoryId: question.categoryId,
-      qualificationId: question.qualificationId ?? null,
-      isActive: question.isActive,
-      userId,
-    };
+  public async createQuestion(request: CreateQuestionRequest): Promise<string> {
     const docRef = await addDoc(this.questionsCollection, request);
     return docRef.id;
   }

@@ -15,7 +15,11 @@ import {
 } from '@my-nx-monorepo/shared-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { debounceTime, filter, take } from 'rxjs';
+import { debounceTime, take } from 'rxjs';
+import {
+  QuestionListExportService,
+  QuestionListImportService,
+} from '@my-nx-monorepo/question-randomizer-dashboard-question-data-access';
 
 @Component({
   selector: 'lib-question-list',
@@ -30,7 +34,11 @@ import { debounceTime, filter, take } from 'rxjs';
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [QuestionListFacade],
+  providers: [
+    QuestionListFacade,
+    QuestionListImportService,
+    QuestionListExportService,
+  ],
 })
 export class QuestionListComponent {
   private readonly questionListFacade = inject(QuestionListFacade);
@@ -95,5 +103,31 @@ export class QuestionListComponent {
 
   public onSort(sort: SortDefinition<Question>): void {
     this.questionListFacade.setSort(sort);
+  }
+
+  onImport() {
+    const element = document.getElementById('txtFileUpload');
+    if (element) element.click();
+  }
+
+  public onExport(): void {
+    this.questionListFacade.exportQuestions();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+
+    const file = input.files[0];
+
+    if (!file.name.endsWith('.csv')) {
+      alert('Please import a valid .csv file.');
+      input.value = '';
+      return;
+    }
+
+    this.questionListFacade.importQuestionListFile(file);
+
+    input.value = '';
   }
 }
