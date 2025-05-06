@@ -9,6 +9,7 @@ import {
   QualificationListStore,
   QuestionListService,
   QuestionListStore,
+  RandomizationService,
   RandomizationStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { Theme } from '@my-nx-monorepo/shared-styles';
@@ -36,6 +37,7 @@ import { DashboardNavigationBarComponent } from './ui/navigation-bar/dashboard-n
     CategoryListService,
     QualificationListService,
     QuestionListService,
+    RandomizationService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

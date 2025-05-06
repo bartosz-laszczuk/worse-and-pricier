@@ -66,12 +66,14 @@ export class QuestionListFacade {
   }
 
   public exportQuestions() {
+    const questionDic = this.questionListStore.entities();
     const categoryDic = this.categoryListStore.entities();
     const qualificationDic = this.qualificationListStore.entities();
 
-    if (!categoryDic || !qualificationDic) return;
+    if (!questionDic || !categoryDic || !qualificationDic) return;
 
     this.questionListExportService.exportQuestionList(
+      questionDic,
       categoryDic,
       qualificationDic
     );

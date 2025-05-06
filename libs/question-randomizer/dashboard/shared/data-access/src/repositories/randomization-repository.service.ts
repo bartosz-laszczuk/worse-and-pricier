@@ -73,6 +73,18 @@ export class RandomizationRepositoryService {
       this.collectionName,
       randomization.id
     );
-    await updateDoc(randomizationDocRef, request as any); // cast if needed based on typing
+    await updateDoc(randomizationDocRef, { ...request });
+  }
+
+  async clearCurrentQuestion(randomizationId: string) {
+    const randomizationDocRef = doc(
+      this.firestore,
+      this.collectionName,
+      randomizationId
+    );
+
+    await updateDoc(randomizationDocRef, {
+      currentQuestionId: null,
+    });
   }
 }

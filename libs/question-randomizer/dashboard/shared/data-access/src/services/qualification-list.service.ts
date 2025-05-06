@@ -15,7 +15,8 @@ export class QualificationListService {
   private readonly questionListService = inject(QuestionListService);
 
   public async createQualification(createdQualification: Qualification) {
-    const userId = this.userStore.uid()!;
+    const userId = this.userStore.uid();
+    if (!userId) return;
 
     try {
       this.qualificationListStore.startLoading();

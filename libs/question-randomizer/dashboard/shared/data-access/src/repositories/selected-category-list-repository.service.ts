@@ -46,7 +46,7 @@ export class SelectedCategoryListRepositoryService {
     await batch.commit();
   }
 
-  async deleteCategoryFromRandomization(
+  async deleteSelectedCategoryFromRandomization(
     randomizationId: string,
     categoryId: string
   ): Promise<void> {

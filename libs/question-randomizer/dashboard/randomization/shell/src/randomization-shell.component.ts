@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RandomizationShellFacade } from './randomization-shell.facade';
-import { RandomizationService } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-data-access';
 
 @Component({
   selector: 'lib-randomization-shell',
@@ -9,7 +8,7 @@ import { RandomizationService } from '@my-nx-monorepo/question-randomizer-dashbo
   templateUrl: './randomization-shell.component.html',
   styleUrl: './randomization-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [RandomizationShellFacade, RandomizationService],
+  providers: [RandomizationShellFacade],
 })
 export class RandomizationShellComponent {
   private readonly randomizationShellFacade = inject(RandomizationShellFacade);
@@ -32,12 +31,12 @@ export class RandomizationShellComponent {
   ) {
     const isChecked = (event.target as HTMLInputElement).checked;
     if (isChecked) {
-      this.randomizationShellFacade.addCategoryToRandomization(
+      this.randomizationShellFacade.selectCategoryForRandomization(
         value,
         randomizationId
       );
     } else {
-      this.randomizationShellFacade.deleteCategoryFromRandomization(
+      this.randomizationShellFacade.deselectCategoryFromRandomization(
         value,
         randomizationId
       );

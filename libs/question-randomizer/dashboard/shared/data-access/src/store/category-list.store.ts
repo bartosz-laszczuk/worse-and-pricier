@@ -61,6 +61,30 @@ export const CategoryListStore = signalStore(
       }));
     },
 
+    addCategoryListToStoreList(categoryList: Category[]) {
+      patchState(store, (state) => {
+        const newEntities = categoryList.reduce(
+          (acc, category) => {
+            acc[category.id] = category;
+            return acc;
+          },
+          { ...(state.entities ?? {}) } as Record<string, Category>
+        );
+
+        const newIds = [
+          ...(state.ids ?? []),
+          ...categoryList.map((category) => category.id),
+        ];
+
+        return {
+          entities: newEntities,
+          ids: newIds,
+          isLoading: false,
+          error: null,
+        };
+      });
+    },
+
     updateCategoryInList(categoryId: string, data: Partial<Category>) {
       patchState(store, (state) => {
         if (!state.entities || !state.entities[categoryId]) return state;

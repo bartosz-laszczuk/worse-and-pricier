@@ -10,7 +10,7 @@ import {
   Randomization,
   RandomizationStatus,
 } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
-import { RandomizationStore } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
+import { RandomizationStore } from '../store';
 
 @Injectable()
 export class RandomizationService {
@@ -34,8 +34,8 @@ export class RandomizationService {
     forceLoad = false
   ) {
     if (!forceLoad && this.randomizationStore.entity() !== null) return;
-    this.randomizationStore.startLoading();
 
+    this.randomizationStore.startLoading();
     try {
       const response =
         await this.randomizationRepositoryService.getRandomization(userId);
@@ -119,16 +119,18 @@ export class RandomizationService {
     }
   }
 
-  public async deleteCategoryFromRandomization(
+  public async deselectCategoryFromRandomization(
     randomizationId: string,
     categoryId: string
   ) {
     this.randomizationStore.startLoading();
 
     try {
-      this.randomizationStore.deleteCategoryIdFromRandomization(categoryId);
+      this.randomizationStore.deleteSelectedCategoryIdFromRandomization(
+        categoryId
+      );
 
-      await this.selectedCategoryListRepositoryService.deleteCategoryFromRandomization(
+      await this.selectedCategoryListRepositoryService.deleteSelectedCategoryFromRandomization(
         randomizationId,
         categoryId
       );
@@ -143,8 +145,6 @@ export class RandomizationService {
     randomization: Randomization,
     questionDic: Record<string, Question>
   ): Promise<void> {
-    this.randomizationStore.startLoading();
-
     try {
       const availableQuestions = Object.values(questionDic).filter(
         (question) =>
@@ -154,14 +154,19 @@ export class RandomizationService {
           !randomization.usedQuestionIdList.includes(question.id)
       );
 
-      if (availableQuestions.length === 0) {
+      if (availableQuestions.length > 0) {
+        const nextQuestion =
+          availableQuestions[
+            Math.floor(Math.random() * availableQuestions.length)
+          ];
+        randomization.currentQuestion = nextQuestion;
+      } else if (randomization.currentQuestion) {
         randomization.currentQuestion = undefined;
       } else {
-        const randomIndex = Math.floor(
-          Math.random() * availableQuestions.length
-        );
-        randomization.currentQuestion = availableQuestions[randomIndex];
+        return;
       }
+
+      this.randomizationStore.startLoading();
 
       await this.randomizationRepositoryService.updateRandomization(
         randomization
@@ -195,7 +200,7 @@ export class RandomizationService {
     }
   }
 
-  public async setQuestionAsCurrentQuetsion(question: Question) {
+  public async setQuestionAsCurrentQuestion(question: Question) {
     this.randomizationStore.startLoading();
 
     try {
@@ -210,6 +215,21 @@ export class RandomizationService {
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message || 'Failed to set question as current question.'
+      );
+    }
+  }
+
+  public async clearCurrentQuestion(randomizationId: string) {
+    this.randomizationStore.startLoading();
+
+    try {
+      this.randomizationStore.clearCurrentQuestion();
+      await this.randomizationRepositoryService.clearCurrentQuestion(
+        randomizationId
+      );
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message || 'Failed to clear current question.'
       );
     }
   }

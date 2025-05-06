@@ -18,7 +18,7 @@ import {
   Question,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { lastValueFrom, Observable, take } from 'rxjs';
-import { CreateQuestionRequest } from '../models';
+import { CreateQuestionRequest, UpdateQuestionRequest } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionRepositoryService {
@@ -54,6 +54,22 @@ export class QuestionRepositoryService {
     return docRef.id;
   }
 
+  public async createQuestions(
+    requests: CreateQuestionRequest[]
+  ): Promise<string[]> {
+    const batch = writeBatch(this.afDb);
+    const createdIds: string[] = [];
+
+    requests.forEach((request) => {
+      const newDocRef = doc(this.questionsCollection);
+      batch.set(newDocRef, request);
+      createdIds.push(newDocRef.id);
+    });
+
+    await batch.commit();
+    return createdIds;
+  }
+
   public async deleteQuestion(questionId: string): Promise<void> {
     const questionDoc = doc(this.afDb, `questions/${questionId}`);
     return await deleteDoc(questionDoc);
@@ -63,7 +79,8 @@ export class QuestionRepositoryService {
     questionId: string,
     data: EditQuestionFormValue
   ): Promise<void> {
-    const request /*: UpdateQuestionRequest*/ = {
+    const request: UpdateQuestionRequest = {
+      id: questionId,
       question: data.question,
       answer: data.answer,
       answerPl: data.answerPl,
@@ -72,7 +89,21 @@ export class QuestionRepositoryService {
       isActive: data.isActive,
     };
     const questionDoc = doc(this.afDb, `questions/${questionId}`);
-    return updateDoc(questionDoc, request);
+    return updateDoc(questionDoc, { ...request });
+  }
+
+  public async updateQuestions(
+    requests: UpdateQuestionRequest[]
+  ): Promise<void> {
+    const batch = writeBatch(this.afDb);
+
+    requests.forEach((request) => {
+      const questionDoc = doc(this.afDb, `questions/${request.id}`);
+      const { id, ...data } = request;
+      batch.update(questionDoc, data);
+    });
+
+    await batch.commit();
   }
 
   public async removeCategoryIdFromQuestions(

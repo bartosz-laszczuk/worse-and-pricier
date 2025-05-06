@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
-import { CategoryListStore } from '../store';
+import { CategoryListStore, RandomizationStore } from '../store';
 import { CategoryRepositoryService } from '../repositories';
 import { QuestionListService } from './question-list.service';
+import { RandomizationService } from './randomization.service';
 
 @Injectable()
 export class CategoryListService {
@@ -13,6 +14,8 @@ export class CategoryListService {
     CategoryRepositoryService
   );
   private readonly questionListService = inject(QuestionListService);
+  private readonly randomizationService = inject(RandomizationService);
+  private readonly randomizationStore = inject(RandomizationStore);
 
   public async createCategory(createdCategory: Category) {
     const userId = this.userStore.uid();
@@ -61,9 +64,13 @@ export class CategoryListService {
     this.categoryListStore.startLoading();
 
     try {
-      await this.categoryRepositoryService.deleteCategory(categoryId);
-      await this.questionListService.deleteCategoryIdFromQuestions(categoryId);
       this.categoryListStore.deleteCategoryFromList(categoryId);
+      await Promise.all([
+        this.categoryRepositoryService.deleteCategory(categoryId),
+        this.questionListService.deleteCategoryIdFromQuestions(categoryId),
+        this.deleteSelectedCategoryFromRandomization(categoryId),
+        this.updateCurrentQuestionAfterCategoryDeletion(categoryId),
+      ]);
     } catch (error: any) {
       this.categoryListStore.logError(
         error.message || 'Category deletion failed'
@@ -73,12 +80,14 @@ export class CategoryListService {
 
   public async loadCategoryList(forceLoad = false) {
     if (!forceLoad && this.categoryListStore.entities() !== null) return;
+    const userId = this.userStore.uid();
+    if (!userId) return;
 
     this.categoryListStore.startLoading();
 
     try {
       const categories = await this.categoryRepositoryService.getCategories(
-        this.userStore.uid()!
+        userId
       );
 
       this.categoryListStore.loadCategoryList(categories);
@@ -87,5 +96,25 @@ export class CategoryListService {
         error.message || 'Load category list failed'
       );
     }
+  }
+
+  private async updateCurrentQuestionAfterCategoryDeletion(
+    deletedCategoryId: string
+  ) {
+    const randomization = this.randomizationStore.entity();
+    if (!randomization) return;
+
+    if (randomization.currentQuestion?.categoryId === deletedCategoryId) {
+      this.randomizationService.clearCurrentQuestion(randomization.id);
+    }
+  }
+
+  private async deleteSelectedCategoryFromRandomization(categoryId: string) {
+    const randomizationId = this.randomizationStore.entity()?.id;
+    if (randomizationId)
+      await this.randomizationService.deselectCategoryFromRandomization(
+        randomizationId,
+        categoryId
+      );
   }
 }

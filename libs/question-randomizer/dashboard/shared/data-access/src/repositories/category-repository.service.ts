@@ -10,6 +10,7 @@ import {
   query,
   updateDoc,
   where,
+  writeBatch,
 } from '@angular/fire/firestore';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { lastValueFrom, Observable, take } from 'rxjs';
@@ -51,6 +52,25 @@ export class CategoryRepositoryService {
     const request: CreateCategoryRequest = { name: category.name, userId };
     const docRef = await addDoc(this.categoriesCollection, request);
     return docRef.id;
+  }
+
+  public async createCategoriesByNameList(
+    categoryNames: string[],
+    userId: string
+  ): Promise<Category[]> {
+    const batch = writeBatch(this.afDb); // this.afDb is your Firestore instance
+    const results: Category[] = [];
+
+    for (const name of categoryNames) {
+      const docRef = doc(this.categoriesCollection); // generates a unique ID
+      const category = { name, userId };
+      batch.set(docRef, category);
+      results.push({ id: docRef.id, name, userId });
+    }
+
+    await batch.commit();
+
+    return results;
   }
 
   public async deleteCategory(categoryId: string): Promise<void> {

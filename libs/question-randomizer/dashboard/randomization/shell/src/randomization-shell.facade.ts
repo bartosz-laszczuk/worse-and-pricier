@@ -1,10 +1,10 @@
 import { computed, effect, inject, Injectable } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { RandomizationService } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-data-access';
 import {
   CategoryListStore,
   QuestionListService,
   QuestionListStore,
+  RandomizationService,
   RandomizationStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
@@ -94,10 +94,10 @@ export class RandomizationShellFacade {
       lastQuestion.id
     );
 
-    this.randomizationService.setQuestionAsCurrentQuetsion(lastQuestion);
+    this.randomizationService.setQuestionAsCurrentQuestion(lastQuestion);
   }
 
-  public async addCategoryToRandomization(
+  public async selectCategoryForRandomization(
     categoryId: string,
     randomizationId: string
   ) {
@@ -117,11 +117,11 @@ export class RandomizationShellFacade {
     }
   }
 
-  public async deleteCategoryFromRandomization(
+  public async deselectCategoryFromRandomization(
     categoryId: string,
     randomizationId: string
   ) {
-    this.randomizationService.deleteCategoryFromRandomization(
+    this.randomizationService.deselectCategoryFromRandomization(
       randomizationId,
       categoryId
     );
@@ -144,7 +144,6 @@ export class RandomizationShellFacade {
     this.randomizationService.deleteAllUsedQuestionsFromRandomization(
       randomizationId
     );
-    this.randomizationStore.clearCurrentQuestion();
 
     const randomization = this.randomizationStore.entity();
     const questionDic = this.questionListStore.entities();

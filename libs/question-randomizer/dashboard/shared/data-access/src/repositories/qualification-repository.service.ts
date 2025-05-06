@@ -10,6 +10,7 @@ import {
   query,
   updateDoc,
   where,
+  writeBatch,
 } from '@angular/fire/firestore';
 import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { lastValueFrom, Observable, take } from 'rxjs';
@@ -59,6 +60,25 @@ export class QualificationRepositoryService {
     };
     const docRef = await addDoc(this.qualificationsCollection, request);
     return docRef.id;
+  }
+
+  public async createQualificationByNameList(
+    qualificationNames: string[],
+    userId: string
+  ): Promise<Qualification[]> {
+    const batch = writeBatch(this.afDb);
+    const results: Qualification[] = [];
+
+    for (const name of qualificationNames) {
+      const docRef = doc(this.qualificationsCollection); // Auto-generates a unique ID
+      const qualificationData = { name, userId };
+      batch.set(docRef, qualificationData);
+      results.push({ id: docRef.id, name, userId });
+    }
+
+    await batch.commit();
+
+    return results;
   }
 
   public async deleteQualification(qualificationId: string): Promise<void> {

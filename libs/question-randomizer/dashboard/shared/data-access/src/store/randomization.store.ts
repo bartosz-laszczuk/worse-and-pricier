@@ -88,7 +88,7 @@ export const RandomizationStore = signalStore(
       });
     },
 
-    deleteCategoryIdFromRandomization(categoryId: string) {
+    deleteSelectedCategoryIdFromRandomization(categoryId: string) {
       const entity = store.entity();
 
       if (!entity) return;

@@ -7,8 +7,9 @@ import {
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import { QuestionRepositoryService } from '../repositories';
-import { QuestionListStore } from '../store';
-import { QuestionListMapperService } from './question-list-mapper.service';
+import { QuestionListStore, RandomizationStore } from '../store';
+import { QuestionMapperService } from './question-mapper.service';
+import { RandomizationService } from './randomization.service';
 
 @Injectable()
 export class QuestionListService {
@@ -16,17 +17,18 @@ export class QuestionListService {
   private readonly questionRepositoryService = inject(
     QuestionRepositoryService
   );
-  private readonly questionListMapperService = inject(
-    QuestionListMapperService
-  );
+  private readonly questionMapperService = inject(QuestionMapperService);
   private readonly questionListStore = inject(QuestionListStore);
+  private readonly randomizationService = inject(RandomizationService);
+  private readonly randomizationStore = inject(RandomizationStore);
 
   public async createQuestionByForm(createdQuestion: EditQuestionFormValue) {
-    const userId = this.userStore.uid()!;
+    const userId = this.userStore.uid();
+    if (!userId) return;
     this.questionListStore.startLoading();
     try {
       const createQuestionRequest =
-        this.questionListMapperService.mapEditQuestionFormValueToCreateQuestionRequest(
+        this.questionMapperService.mapEditQuestionFormValueToCreateQuestionRequest(
           createdQuestion,
           userId
         );
@@ -49,11 +51,12 @@ export class QuestionListService {
   }
 
   public async createQuestionByImport(createdQuestion: EditQuestionFormValue) {
-    const userId = this.userStore.uid()!;
+    const userId = this.userStore.uid();
+    if (!userId) return;
     this.questionListStore.startLoading();
     try {
       const createQuestionRequest =
-        this.questionListMapperService.mapEditQuestionFormValueToCreateQuestionRequest(
+        this.questionMapperService.mapEditQuestionFormValueToCreateQuestionRequest(
           createdQuestion,
           userId
         );
@@ -79,6 +82,7 @@ export class QuestionListService {
     questionId: string,
     updatedQuestion: EditQuestionFormValue
   ) {
+    console.log('updatedQuestion', updatedQuestion);
     this.questionListStore.startLoading();
     try {
       await this.questionRepositoryService.updateQuestion(
@@ -97,7 +101,11 @@ export class QuestionListService {
   public async deleteQuestion(questionId: string) {
     this.questionListStore.startLoading();
     try {
-      await this.questionRepositoryService.deleteQuestion(questionId);
+      await Promise.all([
+        this.questionRepositoryService.deleteQuestion(questionId),
+        this.deleteUsedQuestionFromRandomization(questionId),
+        this.updateCurrentQuestionAfterQuestionDeletion(questionId),
+      ]);
       this.questionListStore.deleteQuestionFromList(questionId);
     } catch (error: any) {
       this.questionListStore.logError(
@@ -107,8 +115,8 @@ export class QuestionListService {
   }
 
   public async loadQuestionList(
-    categories: Record<string, Category>,
-    qualifications: Record<string, Qualification>,
+    categoryDic: Record<string, Category>,
+    qualificationDic: Record<string, Qualification>,
     forceLoad = false
   ) {
     if (!forceLoad && this.questionListStore.entities() !== null) return;
@@ -121,10 +129,10 @@ export class QuestionListService {
       ).map((question) => ({
         ...question,
         categoryName: question.categoryId
-          ? categories[question.categoryId]?.name
+          ? categoryDic[question.categoryId]?.name
           : undefined,
         qualificationName: question.qualificationId
-          ? qualifications[question.qualificationId]?.name
+          ? qualificationDic[question.qualificationId]?.name
           : undefined,
       }));
 
@@ -197,5 +205,25 @@ export class QuestionListService {
     }
 
     return undefined;
+  }
+
+  private async deleteUsedQuestionFromRandomization(questionId: string) {
+    const randomizationId = this.randomizationStore.entity()?.id;
+    if (randomizationId)
+      await this.randomizationService.deleteUsedQuestionFromRandomization(
+        randomizationId,
+        questionId
+      );
+  }
+
+  private async updateCurrentQuestionAfterQuestionDeletion(
+    deletedQuestionId: string
+  ) {
+    const randomization = this.randomizationStore.entity();
+    if (!randomization) return;
+
+    if (randomization.currentQuestion?.id === deletedQuestionId) {
+      this.randomizationService.clearCurrentQuestion(randomization.id);
+    }
   }
 }

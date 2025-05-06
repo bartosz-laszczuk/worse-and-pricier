@@ -18,6 +18,7 @@ export interface CreateQuestionRequest {
 }
 
 export interface UpdateQuestionRequest {
+  id: string;
   question: string;
   answer: string;
   answerPl: string;
