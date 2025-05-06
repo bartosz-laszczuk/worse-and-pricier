@@ -103,6 +103,30 @@ export const QualificationListStore = signalStore(
       });
     },
 
+    addQualificationListToStoreList(qualificationList: Qualification[]) {
+      patchState(store, (state) => {
+        const newEntities = qualificationList.reduce(
+          (acc, qualification) => {
+            acc[qualification.id] = qualification;
+            return acc;
+          },
+          { ...(state.entities ?? {}) } as Record<string, Qualification>
+        );
+
+        const newIds = [
+          ...(state.ids ?? []),
+          ...qualificationList.map((qualification) => qualification.id),
+        ];
+
+        return {
+          entities: newEntities,
+          ids: newIds,
+          isLoading: false,
+          error: null,
+        };
+      });
+    },
+
     loadQualificationList(qualifications: Qualification[]) {
       const normalized = qualifications.reduce(
         (acc, q) => {

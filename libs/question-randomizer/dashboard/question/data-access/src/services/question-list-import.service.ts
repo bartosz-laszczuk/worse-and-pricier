@@ -3,6 +3,7 @@ import {
   CategoryListStore,
   CategoryRepositoryService,
   CreateQuestionRequest,
+  QualificationListStore,
   QualificationRepositoryService,
   QuestionCsvListItem,
   QuestionListService,
@@ -24,7 +25,7 @@ export class QuestionListImportService {
   private readonly questionListStore = inject(QuestionListStore);
   private readonly questionListService = inject(QuestionListService);
   private readonly categoryListStore = inject(CategoryListStore);
-  private readonly qualificationListStore = inject(CategoryListStore);
+  private readonly qualificationListStore = inject(QualificationListStore);
   private readonly questionMapperService = inject(QuestionMapperService);
   private readonly questionRepositoryService = inject(
     QuestionRepositoryService
@@ -224,7 +225,7 @@ export class QuestionListImportService {
           userId
         );
       if (newQualificationList.length > 0) {
-        this.qualificationListStore.addCategoryListToStoreList(
+        this.qualificationListStore.addQualificationListToStoreList(
           newQualificationList
         );
         newQualificationList.forEach(
@@ -239,7 +240,7 @@ export class QuestionListImportService {
     importItemList: QuestionCsvListItem[],
     categoryDic: Record<string, Category>
   ) {
-    return importItemList
+    const missingCategories = importItemList
       .filter(
         (item) =>
           !Object.values(categoryDic).some(
@@ -247,13 +248,15 @@ export class QuestionListImportService {
           ) && !!item.categoryName
       )
       .map((item) => item.categoryName);
+
+    return Array.from(new Set(missingCategories));
   }
 
   private getMissingQualifications(
     importItemList: QuestionCsvListItem[],
     qualificationDic: Record<string, Qualification>
   ) {
-    return importItemList
+    const missingQualifications = importItemList
       .filter(
         (item) =>
           !Object.values(qualificationDic).some(
@@ -261,5 +264,7 @@ export class QuestionListImportService {
           ) && !!item.qualificationName
       )
       .map((item) => item.qualificationName);
+
+    return Array.from(new Set(missingQualifications));
   }
 }
