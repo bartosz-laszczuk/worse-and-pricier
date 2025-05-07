@@ -167,12 +167,10 @@ export class RandomizationService {
       }
 
       this.randomizationStore.startLoading();
-
+      this.randomizationStore.setRandomization(randomization);
       await this.randomizationRepositoryService.updateRandomization(
         randomization
       );
-
-      this.randomizationStore.setRandomization(randomization);
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message || 'Failed to update current question with next question.'
@@ -185,10 +183,8 @@ export class RandomizationService {
     questionId: string
   ) {
     this.randomizationStore.startLoading();
-
     try {
       this.randomizationStore.deleteQuestionIdFromRandomization(questionId);
-
       await this.usedQuestionListRepositoryService.deleteQuestionFromUsedQuestions(
         randomizationId,
         questionId
@@ -221,7 +217,6 @@ export class RandomizationService {
 
   public async clearCurrentQuestion(randomizationId: string) {
     this.randomizationStore.startLoading();
-
     try {
       this.randomizationStore.clearCurrentQuestion();
       await this.randomizationRepositoryService.clearCurrentQuestion(

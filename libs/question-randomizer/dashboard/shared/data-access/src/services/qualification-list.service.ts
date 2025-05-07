@@ -45,13 +45,13 @@ export class QualificationListService {
     this.qualificationListStore.startLoading();
 
     try {
-      await this.qualificationRepositoryService.updateQualification(
+      this.qualificationListStore.updateQualificationInList(
         updatedQualification.id,
         {
           name: updatedQualification.name,
         }
       );
-      this.qualificationListStore.updateQualificationInList(
+      await this.qualificationRepositoryService.updateQualification(
         updatedQualification.id,
         {
           name: updatedQualification.name,
@@ -68,13 +68,15 @@ export class QualificationListService {
     this.qualificationListStore.startLoading();
 
     try {
-      await this.qualificationRepositoryService.deleteQualification(
-        qualificationId
-      );
-      await this.questionListService.deleteQualificationIdFromQuestions(
-        qualificationId
-      );
       this.qualificationListStore.deleteQualificationFromList(qualificationId);
+      await Promise.all([
+        this.qualificationRepositoryService.deleteQualification(
+          qualificationId
+        ),
+        this.questionListService.deleteQualificationIdFromQuestions(
+          qualificationId
+        ),
+      ]);
     } catch (error: any) {
       this.qualificationListStore.logError(
         error.message || 'Qualification deletion failed'
@@ -84,15 +86,13 @@ export class QualificationListService {
 
   public async loadQualificationList(forceLoad = false) {
     if (!forceLoad && this.qualificationListStore.entities() !== null) return;
+    const userId = this.userStore.uid();
+    if (!userId) return;
 
     this.qualificationListStore.startLoading();
-
     try {
       const qualifications =
-        await this.qualificationRepositoryService.getQualifications(
-          this.userStore.uid()!
-        );
-
+        await this.qualificationRepositoryService.getQualifications(userId);
       this.qualificationListStore.loadQualificationList(qualifications);
     } catch (error: any) {
       this.qualificationListStore.logError(

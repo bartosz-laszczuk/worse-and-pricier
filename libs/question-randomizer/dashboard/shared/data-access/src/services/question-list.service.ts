@@ -82,15 +82,13 @@ export class QuestionListService {
     questionId: string,
     updatedQuestion: EditQuestionFormValue
   ) {
-    console.log('updatedQuestion', updatedQuestion);
     this.questionListStore.startLoading();
     try {
+      this.questionListStore.updateQuestionInList(questionId, updatedQuestion);
       await this.questionRepositoryService.updateQuestion(
         questionId,
         updatedQuestion
       );
-
-      this.questionListStore.updateQuestionInList(questionId, updatedQuestion);
     } catch (error: any) {
       this.questionListStore.logError(
         error.message || 'Question update failed'
@@ -101,12 +99,12 @@ export class QuestionListService {
   public async deleteQuestion(questionId: string) {
     this.questionListStore.startLoading();
     try {
+      this.questionListStore.deleteQuestionFromList(questionId);
       await Promise.all([
         this.questionRepositoryService.deleteQuestion(questionId),
         this.deleteUsedQuestionFromRandomization(questionId),
         this.updateCurrentQuestionAfterQuestionDeletion(questionId),
       ]);
-      this.questionListStore.deleteQuestionFromList(questionId);
     } catch (error: any) {
       this.questionListStore.logError(
         error.message || 'Question deletion failed'
@@ -120,12 +118,14 @@ export class QuestionListService {
     forceLoad = false
   ) {
     if (!forceLoad && this.questionListStore.entities() !== null) return;
+    const userId = this.userStore.uid();
+    if (!userId) return;
 
     this.questionListStore.startLoading();
 
     try {
       const questions = (
-        await this.questionRepositoryService.getQuestions(this.userStore.uid()!)
+        await this.questionRepositoryService.getQuestions(userId)
       ).map((question) => ({
         ...question,
         categoryName: question.categoryId
@@ -150,12 +150,11 @@ export class QuestionListService {
     if (!this.questionListStore.entities() || !userId) return;
 
     try {
+      this.questionListStore.deleteCategoryIdFromQuestions(categoryId);
       await this.questionRepositoryService.removeCategoryIdFromQuestions(
         categoryId,
         userId
       );
-
-      this.questionListStore.deleteCategoryIdFromQuestions(categoryId);
     } catch (error: any) {
       this.questionListStore.logError(
         error.message || 'Failed to delete categoryId from questions'
@@ -169,13 +168,12 @@ export class QuestionListService {
     if (!this.questionListStore.entities() || !userId) return;
 
     try {
+      this.questionListStore.deleteQualificationIdFromQuestions(
+        qualificationId
+      );
       await this.questionRepositoryService.removeQualificationIdFromQuestions(
         qualificationId,
         userId
-      );
-
-      this.questionListStore.deleteQualificationIdFromQuestions(
-        qualificationId
       );
     } catch (error: any) {
       this.questionListStore.logError(
