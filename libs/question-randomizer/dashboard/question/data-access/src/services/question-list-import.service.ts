@@ -80,21 +80,24 @@ export class QuestionListImportService {
           const csvText = reader.result as string;
 
           const parsedCsv = Papa.parse<string[]>(csvText, {
-            delimiter: ';',
+            delimiter: '-;-',
             skipEmptyLines: true,
+            quoteChar: '"',
+            escapeChar: '"',
           });
 
           const allRows = parsedCsv.data;
 
           // Skip sep=; and header row (assumed to be first 2 lines)
           const contentRows = allRows.slice(2);
-
+          console.log('contentRows', contentRows);
           const result: QuestionCsvListItem[] = contentRows
             .map((row: any, index: number) => {
               if (row.length < 6) {
                 console.error(
                   'Import error: field number in a row is lower than 6. Row index:',
-                  index + 2
+                  index + 2,
+                  row
                 );
                 return null;
               }

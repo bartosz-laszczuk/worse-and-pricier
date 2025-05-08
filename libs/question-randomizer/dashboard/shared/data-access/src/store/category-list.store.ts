@@ -27,13 +27,13 @@ const initialState: NormalizedCategoryState = {
 export const CategoryListStore = signalStore(
   withState(initialState),
 
-  withHooks({
-    onInit(store) {
-      effect(() => {
-        console.log('category list state', getState(store));
-      });
-    },
-  }),
+  // withHooks({
+  //   onInit(store) {
+  //     effect(() => {
+  //       console.log('category list state', getState(store));
+  //     });
+  //   },
+  // }),
 
   withComputed((store) => ({
     categoryList: computed(() => {

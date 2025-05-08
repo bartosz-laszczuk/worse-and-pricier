@@ -28,13 +28,13 @@ const initialState: QualificationState = {
 export const QualificationListStore = signalStore(
   withState(initialState),
 
-  withHooks({
-    onInit(store) {
-      effect(() => {
-        console.log('qualification list state', getState(store));
-      });
-    },
-  }),
+  // withHooks({
+  //   onInit(store) {
+  //     effect(() => {
+  //       console.log('qualification list state', getState(store));
+  //     });
+  //   },
+  // }),
 
   withComputed((store) => ({
     qualificationList: computed(() => {

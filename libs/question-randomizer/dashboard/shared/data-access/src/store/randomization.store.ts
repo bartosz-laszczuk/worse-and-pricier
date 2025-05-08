@@ -24,15 +24,15 @@ const initialState: RandomizationState = {
 
 export const RandomizationStore = signalStore(
   withState(initialState),
-  withHooks({
-    onInit(store) {
-      effect(() => {
-        // 👇 The effect is re-executed on state change.
-        const state = getState(store);
-        console.log('randomization state', state);
-      });
-    },
-  }),
+  // withHooks({
+  //   onInit(store) {
+  //     effect(() => {
+  //       // 👇 The effect is re-executed on state change.
+  //       const state = getState(store);
+  //       console.log('randomization state', state);
+  //     });
+  //   },
+  // }),
   withComputed((store) => ({
     randomization: computed(() => store.entity()),
     currentQuestion: computed(() => store.entity()?.currentQuestion),

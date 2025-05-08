@@ -45,13 +45,13 @@ const initialState: QuestionState = {
 export const QuestionListStore = signalStore(
   withState(initialState),
 
-  withHooks({
-    onInit(store) {
-      effect(() => {
-        console.log('question list state', getState(store));
-      });
-    },
-  }),
+  // withHooks({
+  //   onInit(store) {
+  //     effect(() => {
+  //       console.log('question list state', getState(store));
+  //     });
+  //   },
+  // }),
 
   withComputed((store) => ({
     displayQuestions: computed(() => {
