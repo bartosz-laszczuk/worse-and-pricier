@@ -25,6 +25,12 @@
     <div class="answer" [innerHTML]="item.answer"></div>
   </ng-template>
   <ng-template
+    [libColumn]="{ propertyName: 'answerPl', type: 'COLUMN' }"
+    let-item="item"
+  >
+    <div class="answer" [innerHTML]="item.answerPl"></div>
+  </ng-template>
+  <ng-template
     [libColumn]="{ propertyName: 'options', type: 'COLUMN' }"
     let-item="item"
   >
