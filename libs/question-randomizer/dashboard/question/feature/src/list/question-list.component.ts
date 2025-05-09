@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   EditQuestionFormValue,
+  NormalizeSpacePipe,
   Question,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { QuestionListFacade } from './question-list.facade';
@@ -30,6 +31,7 @@ import {
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
+    NormalizeSpacePipe,
   ],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
