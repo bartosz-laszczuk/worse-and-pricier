@@ -1,11 +1,11 @@
 <header>
-  <h2 class="header">Hudson 8</h2>
+  <h2 class="header">Randomizer</h2>
   <lib-button-toggle-group
     [value]="currentTheme()"
     (toggled)="changeTheme.emit($event ?? '')"
   >
-    <lib-button-toggle value="dark-theme">General</lib-button-toggle>
-    <lib-button-toggle value="light-theme">Project</lib-button-toggle>
+    <lib-button-toggle value="dark-theme">EN</lib-button-toggle>
+    <lib-button-toggle value="light-theme">PL</lib-button-toggle>
   </lib-button-toggle-group>
 </header>
 <nav class="sidebar-nav">
@@ -20,16 +20,15 @@
     ></svg-icon
     ><span>{{ item.label }}</span>
   </button> -->
-  <a
-    *ngFor="let item of navItems"
-    [routerLink]="item.route"
-    routerLinkActive="active"
-    class="nav-item"
-  >
+  @for (item of navItems; track item) {
+  <a [routerLink]="item.route" routerLinkActive="active" class="nav-item">
     <svg-icon
       src="icons/{{ item.icon }}.svg"
       [svgStyle]="{ width: '16px', height: '16px', strokeWidth: 2 }"
     ></svg-icon>
     <span>{{ item.label }}</span>
   </a>
+  @if (item.divider) {
+  <hr class="divider" />
+  } }
 </nav>

@@ -29,6 +29,7 @@ export class TableComponent<T> implements AfterViewInit {
   @Input() title = '';
   @Input() sortDefinition?: SortDefinition<T>;
   @Input() trackBy = (index: number, item: T) => item;
+  @Input() truncateHeaders = false;
 
   @Input() cellTextWrap = false;
 

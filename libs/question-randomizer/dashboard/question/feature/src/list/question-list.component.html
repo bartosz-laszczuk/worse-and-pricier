@@ -16,6 +16,7 @@
   [data]="questions()"
   [columns]="columns"
   [sortDefinition]="sort()"
+  [truncateHeaders]="true"
   (sort)="onSort($event)"
 >
   <ng-template
@@ -31,11 +32,27 @@
     <div class="answer" [innerHTML]="item.answerPl | normalizeSpace"></div>
   </ng-template>
   <ng-template
+    [libColumn]="{ propertyName: 'isActive', type: 'COLUMN' }"
+    let-item="item"
+  >
+    <input class="p-events-none" type="checkbox" [checked]="item.isActive" />
+  </ng-template>
+  <ng-template
     [libColumn]="{ propertyName: 'options', type: 'COLUMN' }"
     let-item="item"
   >
-    <button (click)="questionToEdit = item">Edit</button>
-    <button (click)="onDelete(item.id)">Delete</button>
+    <svg-icon
+      (click)="questionToEdit = item"
+      class="c-pointer"
+      src="icons/edit.svg"
+      [svgStyle]="{ width: '18px', height: '18px' }"
+    ></svg-icon>
+    <svg-icon
+      (click)="onDelete(item.id)"
+      class="c-pointer margin-left-8"
+      src="icons/trash-2.svg"
+      [svgStyle]="{ width: '18px', height: '18px' }"
+    ></svg-icon>
   </ng-template>
 </lib-table>
 } @if (questionToEdit) {

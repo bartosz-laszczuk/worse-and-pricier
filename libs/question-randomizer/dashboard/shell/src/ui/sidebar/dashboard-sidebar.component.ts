@@ -12,6 +12,7 @@ export interface NavigationItem {
   label: string;
   icon: string;
   route: string;
+  divider?: boolean;
 }
 
 @Component({
@@ -39,6 +40,7 @@ export class DashboardSidebarComponent {
     { label: 'Questions', icon: 'help-circle', route: 'questions' },
     { label: 'Categories', icon: 'tag', route: 'categories' },
     { label: 'Qualifications', icon: 'award', route: 'qualifications' },
-    { label: 'Interview', icon: 'mic', route: 'interview' },
+    { label: 'Interview', icon: 'mic', route: 'interview', divider: true },
+    { label: 'Settings', icon: 'settings', route: 'settings' },
   ];
 }

@@ -1,11 +1,12 @@
 <div class="table-wrapper">
   <table>
-    <!-- <colgroup>
-      <col *ngFor="let col of columns" [ngStyle]="{ width: col.width }" />
-    </colgroup> -->
     <thead>
       <tr>
-        <th *ngFor="let col of columns" [ngStyle]="{ width: col.width }">
+        <th
+          *ngFor="let col of columns"
+          [class.truncate]="truncateHeaders"
+          [ngStyle]="{ width: col.width }"
+        >
           <ng-container
             *ngIf="
               !filterTemplates[col.propertyName]?.templateRef && !col.sortable
@@ -33,7 +34,7 @@
         (click)="onRowClick(element)"
       >
         <td *ngFor="let col of columns">
-          <div class="tbody-cell">
+          <div class="tbody-cell" [class.d-center]="col.center">
             <ng-container
               *ngTemplateOutlet="
                 columnTemplates[col.propertyName]?.templateRef || defaultCell;
@@ -53,7 +54,7 @@
 </div>
 
 <ng-template #defaultCell let-item="item" let-col="col">
-  <span>{{ item[col] }}</span>
+  <span>{{ item[col] ?? '-' }}</span>
 </ng-template>
 
 <ng-template #sortHeader let-column="column">

@@ -21,6 +21,7 @@ import {
   QuestionListExportService,
   QuestionListImportService,
 } from '@my-nx-monorepo/question-randomizer-dashboard-question-data-access';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'lib-question-list',
@@ -32,6 +33,7 @@ import {
     ReactiveFormsModule,
     ColumnDirective,
     NormalizeSpacePipe,
+    SvgIconComponent,
   ],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
@@ -56,13 +58,22 @@ export class QuestionListComponent {
   });
 
   public columns: IColumn[] = [
-    { displayName: 'Question', propertyName: 'question', sortable: true },
-    { displayName: 'Answer', propertyName: 'answer' },
-    { displayName: 'Answer Pl', propertyName: 'answerPl' },
+    {
+      displayName: 'Question',
+      propertyName: 'question',
+      sortable: true,
+      width: '30%',
+    },
+    { displayName: 'Answer', propertyName: 'answer', width: '25%' },
     { displayName: 'Category', propertyName: 'categoryName' },
     { displayName: 'Qualification', propertyName: 'qualificationName' },
-    { displayName: 'Is active', propertyName: 'isActive' },
-    { displayName: '', propertyName: 'options' },
+    {
+      displayName: 'Active',
+      propertyName: 'isActive',
+      width: '4.5rem',
+      center: true,
+    },
+    { displayName: '', propertyName: 'options', width: '4.8rem', center: true },
   ];
 
   public constructor() {

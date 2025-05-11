@@ -7,6 +7,7 @@ export interface IColumn {
   stickyStart?: boolean;
   stickyEnd?: boolean;
   width?: string;
+  center?: boolean;
 }
 
 export interface IComlumInputDirective {
