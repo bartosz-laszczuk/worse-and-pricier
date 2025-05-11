@@ -22,13 +22,13 @@
     [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"
     let-item="item"
   >
-    <div [innerHTML]="item.answer | normalizeSpace"></div>
+    <div class="answer" [innerHTML]="item.answer | normalizeSpace"></div>
   </ng-template>
   <ng-template
     [libColumn]="{ propertyName: 'answerPl', type: 'COLUMN' }"
     let-item="item"
   >
-    <div [innerHTML]="item.answerPl | normalizeSpace"></div>
+    <div class="answer" [innerHTML]="item.answerPl | normalizeSpace"></div>
   </ng-template>
   <ng-template
     [libColumn]="{ propertyName: 'options', type: 'COLUMN' }"

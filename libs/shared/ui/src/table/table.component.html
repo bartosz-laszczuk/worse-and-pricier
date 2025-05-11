@@ -1,5 +1,8 @@
 <div class="table-wrapper">
   <table>
+    <!-- <colgroup>
+      <col *ngFor="let col of columns" [ngStyle]="{ width: col.width }" />
+    </colgroup> -->
     <thead>
       <tr>
         <th *ngFor="let col of columns" [ngStyle]="{ width: col.width }">
@@ -29,7 +32,7 @@
         *ngFor="let element of dataSource; let i = index"
         (click)="onRowClick(element)"
       >
-        <td *ngFor="let col of columns" [class.text-wrap]="cellTextWrap">
+        <td *ngFor="let col of columns">
           <div class="tbody-cell">
             <ng-container
               *ngTemplateOutlet="

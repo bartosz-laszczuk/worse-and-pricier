@@ -62,7 +62,7 @@ export class QuestionListComponent {
     { displayName: 'Category', propertyName: 'categoryName' },
     { displayName: 'Qualification', propertyName: 'qualificationName' },
     { displayName: 'Is active', propertyName: 'isActive' },
-    { displayName: '', propertyName: 'options', width: '0' },
+    { displayName: '', propertyName: 'options' },
   ];
 
   public constructor() {

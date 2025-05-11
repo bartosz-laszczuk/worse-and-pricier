@@ -11,7 +11,10 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InterviewShellFacade } from './interview-shell.facade';
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import {
+  NormalizeSpacePipe,
+  Question,
+} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { InterviewStore } from '@my-nx-monorepo/question-randomizer-dashboard-interview-data-access';
 
 @Component({
@@ -22,6 +25,7 @@ import { InterviewStore } from '@my-nx-monorepo/question-randomizer-dashboard-in
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
+    NormalizeSpacePipe,
   ],
   templateUrl: './interview-shell.component.html',
   styleUrl: './interview-shell.component.scss',
@@ -36,8 +40,8 @@ export class InterviewShellComponent {
     nonNullable: true,
   });
   public columns: IColumn[] = [
-    { displayName: 'QUESTION', propertyName: 'question', width: '200px' },
-    { displayName: 'ANSWER', propertyName: 'answer' },
+    { displayName: 'Question', propertyName: 'question', width: '200px' },
+    { displayName: 'Answer', propertyName: 'answer' },
   ];
 
   public constructor() {
