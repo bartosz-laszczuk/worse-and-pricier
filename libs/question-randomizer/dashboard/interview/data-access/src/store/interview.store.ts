@@ -1,8 +1,10 @@
 import { computed } from '@angular/core';
 import {
   filterByTextUsingORLogic,
-  filterSortPageEntities,
+  filterEntities,
+  paginateEntities,
   Question,
+  sortEntities,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import {
   patchState,
@@ -41,8 +43,8 @@ const initialState: InterviewState = {
 
 export const InterviewStore = signalStore(
   withState(initialState),
-  withComputed((store) => ({
-    displayQuestions: computed(() => {
+  withComputed((store) => {
+    const filteredQuestions = computed(() => {
       const entities = store.entities();
       const ids = store.ids();
 
@@ -56,14 +58,22 @@ export const InterviewStore = signalStore(
         store.searchText()
       );
 
-      return filterSortPageEntities<Question>(
-        searched,
-        store.filters(),
-        store.sort(),
-        store.page()
-      );
-    }),
-  })),
+      return filterEntities(searched, store.filters());
+    });
+
+    const sortedQuestions = computed(() =>
+      sortEntities(filteredQuestions(), store.sort())
+    );
+
+    const pagedQuestions = computed(() =>
+      paginateEntities(sortedQuestions(), store.page())
+    );
+
+    return {
+      displayQuestions: pagedQuestions,
+      filteredCount: computed(() => filteredQuestions().length),
+    };
+  }),
 
   withMethods((store) => ({
     loadQuestionDic(questionDic: Record<string, Question>) {
@@ -106,6 +116,10 @@ export const InterviewStore = signalStore(
       patchState(store, (state) => ({
         ...state,
         searchText,
+        page: {
+          ...state.page,
+          index: 0,
+        },
       }));
     },
 

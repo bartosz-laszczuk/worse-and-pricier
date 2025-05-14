@@ -7,11 +7,14 @@
   [formControl]="searchTextControl"
 ></lib-input-text>
 <lib-table
-  class="d-block margin-top-16"
   [data]="questions()"
   [columns]="columns"
   [sortDefinition]="sort()"
+  [truncateHeaders]="true"
+  [totalCount]="filteredCount()"
+  [pageParameters]="page()"
   (sort)="onSort($event)"
+  (page)="onPage($event)"
 >
   <ng-template
     [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"

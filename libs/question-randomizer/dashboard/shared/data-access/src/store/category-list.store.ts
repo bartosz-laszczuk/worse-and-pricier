@@ -1,11 +1,20 @@
-import { computed, effect } from '@angular/core';
-import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { computed } from '@angular/core';
 import {
-  getState,
+  Category,
+  filterByTextUsingORLogic,
+  filterEntities,
+  paginateEntities,
+  sortEntities,
+} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import {
+  Filters,
+  PageParameters,
+  SortDefinition,
+} from '@my-nx-monorepo/shared-ui';
+import {
   patchState,
   signalStore,
   withComputed,
-  withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
@@ -13,6 +22,10 @@ import {
 type NormalizedCategoryState = {
   entities: Record<string, Category> | null;
   ids: string[] | null;
+  sort: SortDefinition<Category>;
+  page: PageParameters;
+  filters: Filters<Category>;
+  searchText: string;
   isLoading: boolean | null;
   error: string | null;
 };
@@ -20,6 +33,10 @@ type NormalizedCategoryState = {
 const initialState: NormalizedCategoryState = {
   entities: null,
   ids: null,
+  filters: {},
+  sort: { field: 'name', direction: 'asc' },
+  page: { index: 0, size: 10 },
+  searchText: '',
   isLoading: null,
   error: null,
 };
@@ -34,19 +51,45 @@ export const CategoryListStore = signalStore(
   //     });
   //   },
   // }),
+  withComputed((store) => {
+    const filteredCategories = computed(() => {
+      const entities = store.entities();
+      const ids = store.ids();
 
-  withComputed((store) => ({
-    categoryList: computed(() => {
-      const categoryDitionary = store.entities();
-      return categoryDitionary ? Object.values(categoryDitionary) : undefined;
-    }),
-    categoryOptionItemList: computed(() =>
+      if (!entities || !ids) return [];
+
+      const categories = ids.map((id) => entities[id]);
+
+      const searched = filterByTextUsingORLogic(
+        categories,
+        ['name'],
+        store.searchText()
+      );
+
+      return filterEntities(searched, store.filters());
+    });
+
+    const sortedCategories = computed(() =>
+      sortEntities(filteredCategories(), store.sort())
+    );
+
+    const pagedCategories = computed(() =>
+      paginateEntities(sortedCategories(), store.page())
+    );
+
+    const categoryOptionItemList = computed(() =>
       Object.values(store.entities() ?? {}).map((category) => ({
         value: category.id,
         label: category.name,
       }))
-    ),
-  })),
+    );
+
+    return {
+      displayCategories: pagedCategories,
+      filteredCount: computed(() => filteredCategories().length),
+      categoryOptionItemList,
+    };
+  }),
 
   withMethods((store) => ({
     addCategoryToList(category: Category) {
@@ -133,6 +176,44 @@ export const CategoryListStore = signalStore(
         isLoading: false,
         error: null,
       });
+    },
+
+    setFilter(parameter: keyof Category, value: string) {
+      patchState(store, (state) => ({
+        filters: {
+          ...state.filters,
+          [parameter]: value,
+        },
+        page: {
+          ...state.page,
+          index: 0,
+        },
+      }));
+    },
+
+    setSort(sort: SortDefinition<Category>) {
+      patchState(store, (state) => ({
+        ...state,
+        sort,
+      }));
+    },
+
+    setPage(page: PageParameters) {
+      patchState(store, (state) => ({
+        ...state,
+        page,
+      }));
+    },
+
+    setSearchText(searchText: string) {
+      patchState(store, (state) => ({
+        ...state,
+        searchText,
+        page: {
+          ...state.page,
+          index: 0,
+        },
+      }));
     },
 
     startLoading() {

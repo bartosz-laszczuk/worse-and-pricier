@@ -17,28 +17,35 @@
   [columns]="columns"
   [sortDefinition]="sort()"
   [truncateHeaders]="true"
+  [totalCount]="filteredCount()"
+  [pageParameters]="page()"
   (sort)="onSort($event)"
+  (page)="onPage($event)"
 >
+  <ng-template
+    [libColumn]="{ propertyName: 'question', type: 'COLUMN' }"
+    let-item="item"
+    ><div class="truncate">{{ item.question }}</div></ng-template
+  >
   <ng-template
     [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"
     let-item="item"
   >
-    <div class="answer" [innerHTML]="item.answer | normalizeSpace"></div>
-  </ng-template>
-  <ng-template
-    [libColumn]="{ propertyName: 'answerPl', type: 'COLUMN' }"
-    let-item="item"
-  >
-    <div class="answer" [innerHTML]="item.answerPl | normalizeSpace"></div>
+    <div class="truncate">{{ item.answer | stripHtml }}</div>
   </ng-template>
   <ng-template
     [libColumn]="{ propertyName: 'isActive', type: 'COLUMN' }"
     let-item="item"
   >
-    <input class="p-events-none" type="checkbox" [checked]="item.isActive" />
+    <svg-icon
+      (click)="questionToEdit = item"
+      class="c-pointer"
+      [src]="'icons/' + (item.isActive ? 'check' : 'x') + '.svg'"
+      [svgStyle]="{ width: '18px', height: '18px' }"
+    ></svg-icon>
   </ng-template>
   <ng-template
-    [libColumn]="{ propertyName: 'options', type: 'COLUMN' }"
+    [libColumn]="{ propertyName: 'edit', type: 'COLUMN' }"
     let-item="item"
   >
     <svg-icon
@@ -47,9 +54,14 @@
       src="icons/edit.svg"
       [svgStyle]="{ width: '18px', height: '18px' }"
     ></svg-icon>
+  </ng-template>
+  <ng-template
+    [libColumn]="{ propertyName: 'delete', type: 'COLUMN' }"
+    let-item="item"
+  >
     <svg-icon
       (click)="onDelete(item.id)"
-      class="c-pointer margin-left-8"
+      class="c-pointer"
       src="icons/trash-2.svg"
       [svgStyle]="{ width: '18px', height: '18px' }"
     ></svg-icon>

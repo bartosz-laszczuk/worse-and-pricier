@@ -1,0 +1,13 @@
+:host {
+  display: flex;
+  gap: 1rem;
+}
+
+span {
+  cursor: pointer;
+}
+
+span[disabled="true"] {
+  color: rgba(0, 0, 0, 0.38);
+  cursor: default;
+}

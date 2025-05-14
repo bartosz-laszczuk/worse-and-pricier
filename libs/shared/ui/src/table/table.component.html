@@ -47,7 +47,28 @@
     </tbody>
     <tfoot>
       <tr>
-        <td *ngFor="let col of columns"></td>
+        <td [attr.colspan]="columns.length">
+          <div class="footer">
+            <span
+              >{{
+                pageParameters.index * pageParameters.size +
+                  1 +
+                  ' - ' +
+                  ((pageParameters.index + 1) * pageParameters.size > totalCount
+                    ? totalCount
+                    : (pageParameters.index + 1) * pageParameters.size)
+              }}
+              of {{ totalCount }}</span
+            >
+            <lib-shared-ui-paginator
+              [totalCount]="totalCount"
+              [pageIndex]="pageParameters.index"
+              [pageSize]="pageParameters.size"
+              [pageSizeOptions]="[5, 10, 15]"
+              (page)="page.emit($event)"
+            ></lib-shared-ui-paginator>
+          </div>
+        </td>
       </tr>
     </tfoot>
   </table>

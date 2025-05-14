@@ -9,14 +9,15 @@ import {
   QueryList,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IColumn, SortDefinition } from './table.models';
+import { IColumn, PageParameters, SortDefinition } from './table.models';
 import { ColumnDirective } from './column-directive/column.directive';
 import { TableService } from './table.service';
 import { SortableHeaderComponent } from './sortable-header/sortable-header.component';
+import { PageEvent, PaginatorComponent } from '../paginator';
 
 @Component({
   selector: 'lib-table',
-  imports: [CommonModule, SortableHeaderComponent],
+  imports: [CommonModule, SortableHeaderComponent, PaginatorComponent],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
   providers: [TableService],
@@ -30,12 +31,14 @@ export class TableComponent<T> implements AfterViewInit {
   @Input() sortDefinition?: SortDefinition<T>;
   @Input() trackBy = (index: number, item: T) => item;
   @Input() truncateHeaders = false;
-
+  @Input() pageParameters: PageParameters = { index: 0, size: 10 };
   @Input() cellTextWrap = false;
+  @Input() totalCount = 0;
 
   @Output() sort = new EventEmitter<SortDefinition<T>>();
   @Output() menuCloseEv: EventEmitter<string> = new EventEmitter<string>();
   @Output() rowClick = new EventEmitter<T>();
+  @Output() page = new EventEmitter<PageEvent>();
 
   @ContentChildren(ColumnDirective) columnTemps: QueryList<ColumnDirective> =
     new QueryList<ColumnDirective>();

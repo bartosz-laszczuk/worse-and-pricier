@@ -3,10 +3,30 @@ import { CommonModule } from '@angular/common';
 import { EditCategoryComponent } from '@my-nx-monorepo/question-randomizer-dashboard-category-ui';
 import { CategoryListFacade } from './category-list.facade';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import {
+  ColumnDirective,
+  IColumn,
+  InputTextComponent,
+  PageEvent,
+  SortDefinition,
+  TableComponent,
+} from '@my-nx-monorepo/shared-ui';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { debounceTime, take } from 'rxjs';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'lib-category-list',
-  imports: [CommonModule, EditCategoryComponent],
+  imports: [
+    CommonModule,
+    EditCategoryComponent,
+    TableComponent,
+    SvgIconComponent,
+    InputTextComponent,
+    ReactiveFormsModule,
+    ColumnDirective,
+  ],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -14,8 +34,35 @@ import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-u
 })
 export class CategoryListComponent {
   private readonly categoryListFacade = inject(CategoryListFacade);
-  public categoryList = this.categoryListFacade.categoryList;
+  public categories = this.categoryListFacade.categories;
+  public sort = this.categoryListFacade.sort;
+  public page = this.categoryListFacade.page;
+  public filteredCount = this.categoryListFacade.filteredCount;
   public categoryToEdit?: Category = undefined;
+  public searchTextControl = new FormControl('', {
+    nonNullable: true,
+  });
+
+  public columns: IColumn[] = [
+    {
+      displayName: 'Name',
+      propertyName: 'name',
+      sortable: true,
+    },
+    { displayName: '', propertyName: 'edit', width: '3.5rem', center: true },
+    { displayName: '', propertyName: 'delete', width: '3.5rem', center: true },
+  ];
+
+  public constructor() {
+    toObservable(this.categoryListFacade.searchText)
+      .pipe(take(1))
+      .subscribe((value) =>
+        this.searchTextControl.setValue(value, { emitEvent: false })
+      );
+    this.searchTextControl.valueChanges
+      .pipe(debounceTime(100), takeUntilDestroyed())
+      .subscribe((value) => this.categoryListFacade.setSearchText(value));
+  }
 
   public onAdd() {
     this.categoryToEdit = { id: '', name: '', userId: '' };
@@ -32,5 +79,13 @@ export class CategoryListComponent {
 
   public onDelete(categoryId: string) {
     this.categoryListFacade.deleteCategory(categoryId);
+  }
+
+  public onSort(sort: SortDefinition<Category>): void {
+    this.categoryListFacade.setSort(sort);
+  }
+
+  public onPage(page: PageEvent) {
+    this.categoryListFacade.setPage(page);
   }
 }

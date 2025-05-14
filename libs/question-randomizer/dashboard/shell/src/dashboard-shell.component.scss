@@ -22,8 +22,8 @@ lib-dashboard-navigation-bar {
 }
 
 lib-dashboard-sidebar {
-  min-width: 15rem;
-  max-width: 15rem;
+  min-width: 16rem;
+  max-width: 16rem;
   background-color: var(--gray-300);
 }
 
@@ -33,6 +33,7 @@ lib-dashboard-sidebar {
   display: flex;
   flex-direction: column;
   background-color: var(--gray-200);
+  overflow: auto;
 }
 
 lib-dashboard-header {

@@ -1,16 +1,16 @@
-import { computed, effect } from '@angular/core';
+import { computed } from '@angular/core';
 import {
   EditQuestionFormValue,
   filterByTextUsingORLogic,
-  filterSortPageEntities,
+  filterEntities,
+  paginateEntities,
   Question,
+  sortEntities,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import {
-  getState,
   patchState,
   signalStore,
   withComputed,
-  withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
@@ -53,8 +53,8 @@ export const QuestionListStore = signalStore(
   //   },
   // }),
 
-  withComputed((store) => ({
-    displayQuestions: computed(() => {
+  withComputed((store) => {
+    const filteredQuestions = computed(() => {
       const entities = store.entities();
       const ids = store.ids();
 
@@ -68,14 +68,22 @@ export const QuestionListStore = signalStore(
         store.searchText()
       );
 
-      return filterSortPageEntities<Question>(
-        searched,
-        store.filters(),
-        store.sort(),
-        store.page()
-      );
-    }),
-  })),
+      return filterEntities(searched, store.filters());
+    });
+
+    const sortedQuestions = computed(() =>
+      sortEntities(filteredQuestions(), store.sort())
+    );
+
+    const pagedQuestions = computed(() =>
+      paginateEntities(sortedQuestions(), store.page())
+    );
+
+    return {
+      displayQuestions: pagedQuestions,
+      filteredCount: computed(() => filteredQuestions().length),
+    };
+  }),
 
   withMethods((store) => ({
     addQuestionToList(question: Question) {
@@ -202,6 +210,10 @@ export const QuestionListStore = signalStore(
       patchState(store, (state) => ({
         ...state,
         searchText,
+        page: {
+          ...state.page,
+          index: 0,
+        },
       }));
     },
 

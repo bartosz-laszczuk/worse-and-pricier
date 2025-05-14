@@ -13,7 +13,7 @@ import {
   EditQuestionFormValue,
   Question,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { SortDefinition } from '@my-nx-monorepo/shared-ui';
+import { PageEvent, SortDefinition } from '@my-nx-monorepo/shared-ui';
 
 @Injectable()
 export class QuestionListFacade {
@@ -30,13 +30,22 @@ export class QuestionListFacade {
 
   public questions = this.questionListStore.displayQuestions;
   public sort = this.questionListStore.sort;
+  public page = this.questionListStore.page;
   public categoryOptionItemList = this.categoryListStore.categoryOptionItemList;
   public qualificationOptionItemList =
     this.qualificationListStore.qualificationOptionItemList;
   public searchText = this.questionListStore.searchText;
+  public filteredCount = this.questionListStore.filteredCount;
 
   public setSort(sort: SortDefinition<Question>) {
     this.questionListStore.setSort(sort);
+  }
+
+  public setPage(page: PageEvent) {
+    this.questionListStore.setPage({
+      index: page.pageIndex,
+      size: page.pageSize,
+    });
   }
 
   public async createQuestion(createdQuestion: EditQuestionFormValue) {

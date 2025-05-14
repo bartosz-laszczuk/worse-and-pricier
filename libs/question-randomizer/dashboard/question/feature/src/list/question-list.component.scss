@@ -1,7 +1,6 @@
 @use 'abstracts/mixins' as *;
 
 :host {
-  .answer,
   &::ng-deep p {
     @include truncate;
   }

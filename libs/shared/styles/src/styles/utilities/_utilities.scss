@@ -32,3 +32,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.c-default {
+  cursor: default !important;
+}

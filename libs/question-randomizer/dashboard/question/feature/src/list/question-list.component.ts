@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   EditQuestionFormValue,
-  NormalizeSpacePipe,
   Question,
+  StripHtmlPipe,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { QuestionListFacade } from './question-list.facade';
 import { EditQuestionComponent } from '@my-nx-monorepo/question-randomizer-dashboard-question-ui';
@@ -11,6 +11,7 @@ import {
   ColumnDirective,
   IColumn,
   InputTextComponent,
+  PageEvent,
   SortDefinition,
   TableComponent,
 } from '@my-nx-monorepo/shared-ui';
@@ -32,8 +33,8 @@ import { SvgIconComponent } from 'angular-svg-icon';
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
-    NormalizeSpacePipe,
     SvgIconComponent,
+    StripHtmlPipe,
   ],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
@@ -48,6 +49,7 @@ export class QuestionListComponent {
   private readonly questionListFacade = inject(QuestionListFacade);
   public questions = this.questionListFacade.questions;
   public sort = this.questionListFacade.sort;
+  public page = this.questionListFacade.page;
   public questionToEdit?: Question = undefined;
   public categoryOptionItemList =
     this.questionListFacade.categoryOptionItemList;
@@ -56,6 +58,7 @@ export class QuestionListComponent {
   public searchTextControl = new FormControl('', {
     nonNullable: true,
   });
+  public filteredCount = this.questionListFacade.filteredCount;
 
   public columns: IColumn[] = [
     {
@@ -70,10 +73,11 @@ export class QuestionListComponent {
     {
       displayName: 'Active',
       propertyName: 'isActive',
-      width: '4.5rem',
+      width: '5.5rem',
       center: true,
     },
-    { displayName: '', propertyName: 'options', width: '4.8rem', center: true },
+    { displayName: '', propertyName: 'edit', width: '3.5rem', center: true },
+    { displayName: '', propertyName: 'delete', width: '3.5rem', center: true },
   ];
 
   public constructor() {
@@ -116,6 +120,10 @@ export class QuestionListComponent {
 
   public onSort(sort: SortDefinition<Question>): void {
     this.questionListFacade.setSort(sort);
+  }
+
+  public onPage(page: PageEvent) {
+    this.questionListFacade.setPage(page);
   }
 
   onImport() {

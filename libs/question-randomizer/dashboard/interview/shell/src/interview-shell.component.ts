@@ -4,6 +4,7 @@ import {
   ColumnDirective,
   IColumn,
   InputTextComponent,
+  PageEvent,
   SortDefinition,
   TableComponent,
 } from '@my-nx-monorepo/shared-ui';
@@ -34,7 +35,9 @@ import { InterviewStore } from '@my-nx-monorepo/question-randomizer-dashboard-in
 export class InterviewShellComponent {
   private readonly interviewShellFacade = inject(InterviewShellFacade);
   public questions = this.interviewShellFacade.questions;
+  public filteredCount = this.interviewShellFacade.filteredCount;
   public sort = this.interviewShellFacade.sort;
+  public page = this.interviewShellFacade.page;
 
   public searchTextControl = new FormControl('', {
     nonNullable: true,
@@ -53,5 +56,9 @@ export class InterviewShellComponent {
 
   public onSort(sort: SortDefinition<Question>): void {
     this.interviewShellFacade.setSort(sort);
+  }
+
+  public onPage(page: PageEvent): void {
+    this.interviewShellFacade.setPage(page);
   }
 }

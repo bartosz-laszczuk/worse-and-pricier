@@ -1,14 +1,49 @@
-<p>category-list works!</p>
-
-@for (category of categoryList(); track category) {
-{{ category.name }}
-<button (click)="categoryToEdit = category">Edit</button>
-<button (click)="onDelete(category.id)">Delete</button>
-<br />
-}
-
-<button (click)="onAdd()">Add Category</button>
-@if (categoryToEdit) {
+@if(categories(); as categories) {
+<div class="search">
+  <lib-input-text
+    type="text"
+    placeholder="Enter search text"
+    [icon]="'search'"
+    [formControl]="searchTextControl"
+  ></lib-input-text>
+  <div class="buttons">
+    <button (click)="onAdd()">Add Category</button>
+  </div>
+</div>
+<lib-table
+  [data]="categories"
+  [columns]="columns"
+  [sortDefinition]="sort()"
+  [truncateHeaders]="true"
+  [totalCount]="filteredCount()"
+  [pageParameters]="page()"
+  (sort)="onSort($event)"
+  (page)="onPage($event)"
+>
+  <ng-template
+    [libColumn]="{ propertyName: 'edit', type: 'COLUMN' }"
+    let-item="item"
+  >
+    <svg-icon
+      (click)="categoryToEdit = item"
+      class="c-pointer"
+      src="icons/edit.svg"
+      [svgStyle]="{ width: '18px', height: '18px' }"
+    ></svg-icon>
+  </ng-template>
+  <ng-template
+    [libColumn]="{ propertyName: 'delete', type: 'COLUMN' }"
+    let-item="item"
+  >
+    <svg-icon
+      (click)="onDelete(item.id)"
+      class="c-pointer"
+      src="icons/trash-2.svg"
+      [svgStyle]="{ width: '18px', height: '18px' }"
+    ></svg-icon>
+  </ng-template>
+</lib-table>
+} @if (categoryToEdit) {
 <lib-edit-category
   [category]="categoryToEdit"
   (closed)="onClose($event)"
