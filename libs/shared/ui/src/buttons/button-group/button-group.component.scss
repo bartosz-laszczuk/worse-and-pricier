@@ -1,0 +1,14 @@
+:host {
+  ::ng-deep button {
+    border: none !important;
+    border-radius: 0 !important;
+  }
+}
+
+.group-container {
+  width: 100%;
+  display: inline-flex;
+  border: 1px solid var(--secondary-color);
+  border-radius: 3px;
+  overflow: hidden;
+}

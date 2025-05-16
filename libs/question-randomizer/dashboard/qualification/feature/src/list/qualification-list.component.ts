@@ -4,6 +4,7 @@ import { QualificationListFacade } from './qualification-list.facade';
 import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { EditQualificationComponent } from '@my-nx-monorepo/question-randomizer-dashboard-qualification-ui';
 import {
+  ButtonComponent,
   ColumnDirective,
   IColumn,
   InputTextComponent,
@@ -26,6 +27,7 @@ import { debounceTime, take } from 'rxjs';
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
+    ButtonComponent,
   ],
   templateUrl: './qualification-list.component.html',
   styleUrl: './qualification-list.component.scss',

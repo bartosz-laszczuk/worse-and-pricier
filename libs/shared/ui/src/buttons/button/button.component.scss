@@ -5,9 +5,9 @@ button {
   border: 1px solid var(--secondary-color);
   color: var(--text-color);
   text-align: center;
-  font-weight: 500;
-  padding: 0.6rem 1rem;
-  width: 130px;
+  font-weight: 600;
+  padding: 0.4rem 0;
+  width: 6rem;
   transition: all 0.5s;
   cursor: pointer;
 
@@ -38,11 +38,13 @@ button span:after {
   transition: 0.5s;
 }
 
-button:hover span {
+button:hover span,
+button:focus span {
   padding-right: 15px;
 }
 
-button:hover span:after {
+button:hover span:after,
+button:focus span:after {
   opacity: 1;
   right: 0;
 }

@@ -6,11 +6,16 @@
     [icon]="'search'"
     [formControl]="searchTextControl"
   ></lib-input-text>
-  <div class="buttons">
+  <!-- <div class="buttons">
     <lib-button (click)="onImport()" [type]="'light'">Import</lib-button>
     <lib-button (click)="onExport()" [type]="'dark'">Export</lib-button>
     <lib-button (click)="onAdd()">Add</lib-button>
-  </div>
+  </div> -->
+  <lib-button-group class="buttons">
+    <lib-button (click)="onImport()" [type]="'light'">Import</lib-button>
+    <lib-button (click)="onExport()" [type]="'dark'">Export</lib-button>
+    <lib-button (click)="onAdd()">Add</lib-button>
+  </lib-button-group>
 </div>
 <lib-table
   [data]="questions()"
