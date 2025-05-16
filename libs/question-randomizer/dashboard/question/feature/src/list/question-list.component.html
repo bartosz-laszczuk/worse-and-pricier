@@ -43,8 +43,6 @@
     let-item="item"
   >
     <svg-icon
-      (click)="questionToEdit = item"
-      class="c-pointer"
       [src]="'icons/' + (item.isActive ? 'check' : 'x') + '.svg'"
       [svgStyle]="{ width: '18px', height: '18px' }"
     ></svg-icon>

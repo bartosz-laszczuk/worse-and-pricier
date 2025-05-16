@@ -10,7 +10,6 @@ import { EditQuestionComponent } from '@my-nx-monorepo/question-randomizer-dashb
 import {
   ButtonComponent,
   ButtonGroupComponent,
-  ButtonToggleComponent,
   ColumnDirective,
   IColumn,
   InputTextComponent,
@@ -40,7 +39,6 @@ import { SvgIconComponent } from 'angular-svg-icon';
     StripHtmlPipe,
     ButtonComponent,
     ButtonGroupComponent,
-    ButtonToggleComponent,
   ],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
