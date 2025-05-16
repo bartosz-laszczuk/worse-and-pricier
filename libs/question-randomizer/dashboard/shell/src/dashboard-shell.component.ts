@@ -43,14 +43,14 @@ import { DashboardNavigationBarComponent } from './ui/navigation-bar/dashboard-n
 })
 export class DashboardShellComponent {
   private readonly dashboardShellFacade = inject(DashboardShellFacade);
-  public currentTheme = this.dashboardShellFacade.currentTheme;
+  public currentLanguage = this.dashboardShellFacade.currentLanguage;
 
   constructor() {
     this.dashboardShellFacade.loadLists();
   }
 
-  public onChangeTheme(theme: Theme) {
-    this.dashboardShellFacade.changeTheme(theme);
+  public onChangeLanguage(language: string /* TODO Language */) {
+    this.dashboardShellFacade.changeLanguage(language);
   }
 
   public onSignOut() {

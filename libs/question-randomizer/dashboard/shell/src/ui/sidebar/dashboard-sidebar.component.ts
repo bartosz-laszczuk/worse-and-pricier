@@ -28,8 +28,8 @@ export interface NavigationItem {
   styleUrl: './dashboard-sidebar.component.scss',
 })
 export class DashboardSidebarComponent {
-  public currentTheme = input.required<Theme>();
-  public changeTheme = output<Theme>();
+  public currentLanguage = input.required<string /* TODO Language */>();
+  public changeLanguage = output<string /* TODO Language */>();
 
   navItems: NavigationItem[] = [
     {

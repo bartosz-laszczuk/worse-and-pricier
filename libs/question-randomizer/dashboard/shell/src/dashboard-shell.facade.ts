@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { UserService } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import {
   CategoryListService,
@@ -7,7 +7,6 @@ import {
   QualificationListStore,
   QuestionListService,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
-import { Theme, ThemeService } from '@my-nx-monorepo/shared-styles';
 import { forkJoin } from 'rxjs';
 
 @Injectable()
@@ -18,16 +17,15 @@ export class DashboardShellFacade {
   private readonly categoryListStore = inject(CategoryListStore);
   private readonly qualificationListService = inject(QualificationListService);
   private readonly qualificationListStore = inject(QualificationListStore);
-  private readonly themeService = inject(ThemeService);
 
-  public currentTheme = this.themeService.currentTheme;
+  public currentLanguage = signal('english'); // TODO this.languageService.currentLanguage;
 
   public signOut() {
     this.userService.signOut();
   }
 
-  public changeTheme(theme: Theme) {
-    this.themeService.setTheme(theme);
+  public changeLanguage(language: string /* TODO Language */) {
+    // this.languageService.setLanguage(language);
   }
 
   public loadLists() {

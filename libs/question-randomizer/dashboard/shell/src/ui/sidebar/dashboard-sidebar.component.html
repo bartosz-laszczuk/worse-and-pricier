@@ -1,11 +1,11 @@
 <header>
   <h2 class="header">Randomizer</h2>
   <lib-button-toggle-group
-    [value]="currentTheme()"
-    (toggled)="changeTheme.emit($event ?? '')"
+    [value]="currentLanguage()"
+    (toggled)="changeLanguage.emit($event ?? '')"
   >
-    <lib-button-toggle value="dark-theme">English</lib-button-toggle>
-    <lib-button-toggle value="light-theme">Polish</lib-button-toggle>
+    <lib-button-toggle value="english">English</lib-button-toggle>
+    <lib-button-toggle value="polish">Polish</lib-button-toggle>
   </lib-button-toggle-group>
 </header>
 <nav class="sidebar-nav">
