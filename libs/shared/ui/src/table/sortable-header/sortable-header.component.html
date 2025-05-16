@@ -6,14 +6,14 @@
         column().propertyName === sortDefinition()?.field &&
         sortDefinition()?.direction === 'asc'
       "
-      >▲</ng-container
+      ><span>▲</span></ng-container
     >
     <ng-container
       *ngIf="
         column().propertyName === sortDefinition()?.field &&
         sortDefinition()?.direction === 'desc'
       "
-      >▼</ng-container
+      ><span>▼</span></ng-container
     >
   </ng-container>
 </button>

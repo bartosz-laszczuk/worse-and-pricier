@@ -41,14 +41,13 @@ export const dashboardShellRoutes: Route[] = [
             '@my-nx-monorepo/question-randomizer-dashboard-interview-shell'
           ).then((r) => r.InterviewShellComponent),
       },
-      // {
-      //   path: 'settings',
-      //   loadComponent: () =>
-      //     import('../settings/settings.component').then(
-      //       (m) => m.SettingsComponent
-      //     ),
-      //   canActivate: [AuthCanActivate],
-      // },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import(
+            '@my-nx-monorepo/question-randomizer-dashboard-settings-shell'
+          ).then((r) => r.SettingsShellComponent),
+      },
       {
         path: 'randomization',
         loadComponent: () =>

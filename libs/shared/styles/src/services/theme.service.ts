@@ -25,10 +25,9 @@ export class ThemeService {
       body.classList.remove(this.currentTheme());
     }
 
-    // TODO temporarily disabled themes
-    // if (theme !== '') {
-    //   body.classList.add(theme);
-    // }
+    if (theme !== '') {
+      body.classList.add(theme);
+    }
 
     this.currentTheme.set(theme);
     localStorage.setItem(this.storageKey, theme);

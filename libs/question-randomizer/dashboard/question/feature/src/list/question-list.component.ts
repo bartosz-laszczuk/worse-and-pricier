@@ -8,6 +8,7 @@ import {
 import { QuestionListFacade } from './question-list.facade';
 import { EditQuestionComponent } from '@my-nx-monorepo/question-randomizer-dashboard-question-ui';
 import {
+  ButtonComponent,
   ColumnDirective,
   IColumn,
   InputTextComponent,
@@ -35,6 +36,7 @@ import { SvgIconComponent } from 'angular-svg-icon';
     ColumnDirective,
     SvgIconComponent,
     StripHtmlPipe,
+    ButtonComponent,
   ],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',

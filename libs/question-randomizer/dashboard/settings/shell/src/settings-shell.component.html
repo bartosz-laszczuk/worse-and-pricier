@@ -1,0 +1,7 @@
+<lib-button-toggle-group
+  [value]="currentTheme()"
+  (toggled)="onChangeTheme($event ?? '')"
+>
+  <lib-button-toggle value="dark-theme">Dark</lib-button-toggle>
+  <lib-button-toggle value="light-theme">Light</lib-button-toggle>
+</lib-button-toggle-group>

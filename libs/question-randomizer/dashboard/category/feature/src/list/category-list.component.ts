@@ -4,6 +4,7 @@ import { EditCategoryComponent } from '@my-nx-monorepo/question-randomizer-dashb
 import { CategoryListFacade } from './category-list.facade';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import {
+  ButtonComponent,
   ColumnDirective,
   IColumn,
   InputTextComponent,
@@ -26,6 +27,7 @@ import { SvgIconComponent } from 'angular-svg-icon';
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
+    ButtonComponent,
   ],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',

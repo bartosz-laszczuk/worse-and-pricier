@@ -1,4 +1,56 @@
-<p>qualification-list works!</p>
+@if(qualifications(); as qualifications) {
+<div class="search">
+  <lib-input-text
+    type="text"
+    placeholder="Enter search text"
+    [icon]="'search'"
+    [formControl]="searchTextControl"
+  ></lib-input-text>
+  <div class="buttons">
+    <button (click)="onAdd()">Add Qualification</button>
+  </div>
+</div>
+<lib-table
+  [data]="qualifications"
+  [columns]="columns"
+  [sortDefinition]="sort()"
+  [truncateHeaders]="true"
+  [totalCount]="filteredCount()"
+  [pageParameters]="page()"
+  (sort)="onSort($event)"
+  (page)="onPage($event)"
+>
+  <ng-template
+    [libColumn]="{ propertyName: 'edit', type: 'COLUMN' }"
+    let-item="item"
+  >
+    <svg-icon
+      (click)="qualificationToEdit = item"
+      class="c-pointer"
+      src="icons/edit.svg"
+      [svgStyle]="{ width: '18px', height: '18px' }"
+    ></svg-icon>
+  </ng-template>
+  <ng-template
+    [libColumn]="{ propertyName: 'delete', type: 'COLUMN' }"
+    let-item="item"
+  >
+    <svg-icon
+      (click)="onDelete(item.id)"
+      class="c-pointer"
+      src="icons/trash-2.svg"
+      [svgStyle]="{ width: '18px', height: '18px' }"
+    ></svg-icon>
+  </ng-template>
+</lib-table>
+} @if (qualificationToEdit) {
+<lib-edit-qualification
+  [qualification]="qualificationToEdit"
+  (closed)="onClose($event)"
+></lib-edit-qualification>
+}
+
+<!-- <p>qualification-list works!</p>
 
 @for (qualification of qualificationList(); track qualification) {
 {{ qualification.name }}
@@ -13,4 +65,4 @@
   [qualification]="qualificationToEdit"
   (closed)="onClose($event)"
 ></lib-edit-qualification>
-}
+} -->

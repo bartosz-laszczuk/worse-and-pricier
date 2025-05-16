@@ -3,3 +3,8 @@
   cursor: pointer;
   display: inline;
 }
+
+span {
+  color: var(--primary-color);
+  -webkit-text-stroke: 1px black;
+}

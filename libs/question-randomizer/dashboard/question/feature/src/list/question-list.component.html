@@ -7,9 +7,9 @@
     [formControl]="searchTextControl"
   ></lib-input-text>
   <div class="buttons">
-    <button (click)="onImport()">Import</button>
-    <button (click)="onExport()">Export</button>
-    <button (click)="onAdd()">Add Question</button>
+    <lib-button (click)="onImport()" [type]="'light'">Import</lib-button>
+    <lib-button (click)="onExport()" [type]="'dark'">Export</lib-button>
+    <lib-button (click)="onAdd()">Add</lib-button>
   </div>
 </div>
 <lib-table

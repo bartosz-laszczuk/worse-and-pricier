@@ -1,19 +1,32 @@
-import { computed, effect } from '@angular/core';
-import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { computed } from '@angular/core';
 import {
-  getState,
+  filterByTextUsingORLogic,
+  filterEntities,
+  paginateEntities,
+  Qualification,
+  sortEntities,
+} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import {
   patchState,
   signalStore,
   withComputed,
-  withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
 import { OptionItem } from '@my-nx-monorepo/shared-util';
+import {
+  Filters,
+  PageParameters,
+  SortDefinition,
+} from '@my-nx-monorepo/shared-ui';
 
 type QualificationState = {
   entities: Record<string, Qualification> | null;
   ids: string[] | null;
+  sort: SortDefinition<Qualification>;
+  page: PageParameters;
+  filters: Filters<Qualification>;
+  searchText: string;
   isLoading: boolean | null;
   error: string | null;
 };
@@ -21,6 +34,10 @@ type QualificationState = {
 const initialState: QualificationState = {
   entities: null,
   ids: null,
+  filters: {},
+  sort: { field: 'name', direction: 'asc' },
+  page: { index: 0, size: 10 },
+  searchText: '',
   isLoading: null,
   error: null,
 };
@@ -28,31 +45,45 @@ const initialState: QualificationState = {
 export const QualificationListStore = signalStore(
   withState(initialState),
 
-  // withHooks({
-  //   onInit(store) {
-  //     effect(() => {
-  //       console.log('qualification list state', getState(store));
-  //     });
-  //   },
-  // }),
+  withComputed((store) => {
+    const filteredQualifications = computed(() => {
+      const entities = store.entities();
+      const ids = store.ids();
 
-  withComputed((store) => ({
-    qualificationList: computed(() => {
-      const qualificationDictionary = store.entities();
-      return qualificationDictionary
-        ? Object.values(qualificationDictionary)
-        : undefined;
-    }),
-    qualificationOptionItemList: computed(() =>
-      Object.values(store.entities() ?? {}).map(
-        (qualification) =>
-          ({
-            value: qualification.id,
-            label: qualification.name,
-          } as OptionItem)
-      )
-    ),
-  })),
+      if (!entities || !ids) return [];
+
+      const qualifications = ids.map((id) => entities[id]);
+
+      const searched = filterByTextUsingORLogic(
+        qualifications,
+        ['name'],
+        store.searchText()
+      );
+
+      return filterEntities(searched, store.filters());
+    });
+
+    const sortedQualifications = computed(() =>
+      sortEntities(filteredQualifications(), store.sort())
+    );
+
+    const pagedQualifications = computed(() =>
+      paginateEntities(sortedQualifications(), store.page())
+    );
+
+    const qualificationOptionItemList = computed(() =>
+      Object.values(store.entities() ?? {}).map((qualification) => ({
+        value: qualification.id,
+        label: qualification.name,
+      }))
+    );
+
+    return {
+      displayQualifications: pagedQualifications,
+      filteredCount: computed(() => filteredQualifications().length),
+      qualificationOptionItemList,
+    };
+  }),
 
   withMethods((store) => ({
     addQualificationToList(qualification: Qualification) {
@@ -145,6 +176,44 @@ export const QualificationListStore = signalStore(
         isLoading: false,
         error: null,
       });
+    },
+
+    setFilter(parameter: keyof Qualification, value: string) {
+      patchState(store, (state) => ({
+        filters: {
+          ...state.filters,
+          [parameter]: value,
+        },
+        page: {
+          ...state.page,
+          index: 0,
+        },
+      }));
+    },
+
+    setSort(sort: SortDefinition<Qualification>) {
+      patchState(store, (state) => ({
+        ...state,
+        sort,
+      }));
+    },
+
+    setPage(page: PageParameters) {
+      patchState(store, (state) => ({
+        ...state,
+        page,
+      }));
+    },
+
+    setSearchText(searchText: string) {
+      patchState(store, (state) => ({
+        ...state,
+        searchText,
+        page: {
+          ...state.page,
+          index: 0,
+        },
+      }));
     },
 
     startLoading() {
