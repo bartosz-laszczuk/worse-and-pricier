@@ -11,6 +11,7 @@ import {
   PageParameters,
   SortDefinition,
 } from '@my-nx-monorepo/shared-ui';
+import { OptionItem } from '@my-nx-monorepo/shared-util';
 import {
   patchState,
   signalStore,
@@ -78,10 +79,13 @@ export const CategoryListStore = signalStore(
     );
 
     const categoryOptionItemList = computed(() =>
-      Object.values(store.entities() ?? {}).map((category) => ({
-        value: category.id,
-        label: category.name,
-      }))
+      Object.values(store.entities() ?? {}).map(
+        (category) =>
+          ({
+            value: category.id,
+            label: category.name,
+          } as OptionItem)
+      )
     );
 
     return {

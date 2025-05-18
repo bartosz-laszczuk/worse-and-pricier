@@ -1,0 +1,8 @@
+@if (title(); as title) {
+<div class="header">
+  <h4>{{ title }}</h4>
+  <ng-content select="[card-buttons]"></ng-content>
+</div>
+<hr class="divider margin-y-16" />
+}
+<ng-content></ng-content>

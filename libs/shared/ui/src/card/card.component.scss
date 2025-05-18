@@ -1,0 +1,15 @@
+:host {
+  padding: 1rem;
+  border-radius: 3px;
+  background-color: var(--gray-100);
+
+  .divider {
+    background-color: var(--secondary-color);
+    height: 1px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+  }
+}

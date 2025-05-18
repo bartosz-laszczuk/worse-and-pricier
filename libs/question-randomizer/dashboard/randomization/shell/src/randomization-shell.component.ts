@@ -1,10 +1,20 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RandomizationShellFacade } from './randomization-shell.facade';
+import {
+  ButtonComponent,
+  CardComponent,
+  InputCheckGroupComponent,
+} from '@my-nx-monorepo/shared-ui';
 
 @Component({
   selector: 'lib-randomization-shell',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    InputCheckGroupComponent,
+    CardComponent,
+    ButtonComponent,
+  ],
   templateUrl: './randomization-shell.component.html',
   styleUrl: './randomization-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

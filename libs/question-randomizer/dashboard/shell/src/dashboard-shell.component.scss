@@ -7,9 +7,10 @@
 
 .layout {
   display: flex;
-  width: 96rem;
+  // width: 96rem;
+  width: 80rem;
   height: 54rem;
-  @media (max-width: 96rem) {
+  @media (max-width: 80rem) {
     width: 100%;
     height: 100vh;
   }

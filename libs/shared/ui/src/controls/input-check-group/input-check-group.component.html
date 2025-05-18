@@ -1,0 +1,32 @@
+@for (item of items; track item) {
+<article class="checkbox-container">
+  <label class="checkbox">
+    <input
+      id="check-{{ item.value }}"
+      type="checkbox"
+      [value]="item.value"
+      [attr.disabled]="isDisabled ? true : null"
+      [checked]="isChecked(item.value)"
+      (change)="onChanged(item.value, $event)"
+    />
+  </label>
+  <label class="no-select" for="check-{{ item.value }}">{{ item.label }}</label>
+</article>
+}
+<!-- <ng-container *ngFor="let item of items">
+  <label
+    class="checkbox"
+    [class.checkbox_disabled]="isDisabled"
+    [class.checkbox__checked]="isChecked(item.value)"
+  >
+    <span>{{ item.label }}</span>
+    <input
+      type="checkbox"
+      class="checkbox__input"
+      [value]="item.value"
+      [attr.disabled]="isDisabled ? true : null"
+      [checked]="isChecked(item.value)"
+      (change)="onChanged(item.value, $event)"
+    />
+  </label>
+</ng-container> -->

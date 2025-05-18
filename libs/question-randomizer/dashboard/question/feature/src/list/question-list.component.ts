@@ -69,11 +69,10 @@ export class QuestionListComponent {
       displayName: 'Question',
       propertyName: 'question',
       sortable: true,
-      width: '30%',
+      width: '35%',
     },
     { displayName: 'Answer', propertyName: 'answer', width: '25%' },
     { displayName: 'Category', propertyName: 'categoryName' },
-    { displayName: 'Qualification', propertyName: 'qualificationName' },
     {
       displayName: 'Active',
       propertyName: 'isActive',

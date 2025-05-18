@@ -1,22 +1,36 @@
-<h4>Randomization</h4>
+<div class="grid-container">
+  <lib-card class="item1" [title]="'Progress'">
+    <div card-buttons>
+      <!-- <lib-button>test</lib-button> -->
+    </div>
+    Progress content</lib-card
+  >
+  <lib-card class="item2" [title]="'Question'">
+    @if(currentQuestion(); as question){
+    <p>Question:</p>
+    <p>{{ question.question }}</p>
+    <p>Answer:</p>
+    <div [innerHTML]="question.answer"></div>
+    } @else {
+    <p>No questions to display</p>
+    }
+  </lib-card>
+  <lib-card class="item3" [title]="'Categories'">
+    <lib-input-check-group
+      [items]="categoryOptionItemList()"
+    ></lib-input-check-group>
+  </lib-card>
+  <lib-card class="item4" [title]="'Answer'">answer</lib-card>
+</div>
+
+<!-- <h4>Randomization</h4>
 
 @if(randomization(); as randomization) {
 <span>Categories:</span><br />
-@for (categoryOptionItem of categoryOptionItemList(); track
-categoryOptionItem.value) {
-<input
-  type="checkbox"
-  [id]="categoryOptionItem.value"
-  [checked]="selectedCategoryIdList().includes(categoryOptionItem.value)"
-  (change)="
-    onCheckboxChange($event, categoryOptionItem.value, randomization.id)
-  "
-/>
-<label [for]="categoryOptionItem.value">
-  {{ categoryOptionItem.label }}
-</label>
-<br />
-} @if(currentQuestion(); as question){
+
+
+
+@if(currentQuestion(); as question){
 <p>Question:</p>
 <p>{{ question.question }}</p>
 <p>Answer:</p>
@@ -29,4 +43,4 @@ categoryOptionItem.value) {
 </button>
 <button (click)="onNextQuestion(randomization.id)">Next question</button>
 <br /><button (click)="onReset(randomization.id)">Reset</button>
-}
+} -->
