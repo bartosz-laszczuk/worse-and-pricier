@@ -2,19 +2,14 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RandomizationShellFacade } from './randomization-shell.facade';
 import {
-  ButtonComponent,
   CardComponent,
   InputCheckGroupComponent,
 } from '@my-nx-monorepo/shared-ui';
+import { Randomization } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 
 @Component({
   selector: 'lib-randomization-shell',
-  imports: [
-    CommonModule,
-    InputCheckGroupComponent,
-    CardComponent,
-    ButtonComponent,
-  ],
+  imports: [CommonModule, InputCheckGroupComponent, CardComponent],
   templateUrl: './randomization-shell.component.html',
   styleUrl: './randomization-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,12 +30,13 @@ export class RandomizationShellComponent {
   }
 
   public onCheckboxChange(
-    event: Event,
+    // event: Event,
     value: string,
+    checked: boolean,
     randomizationId: string
   ) {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    if (isChecked) {
+    // const isChecked = (event.target as HTMLInputElement).checked;
+    if (checked) {
       this.randomizationShellFacade.selectCategoryForRandomization(
         value,
         randomizationId
@@ -59,6 +55,16 @@ export class RandomizationShellComponent {
 
   public onPreviousQuestion(randomizationId: string) {
     this.randomizationShellFacade.previousQuestion(randomizationId);
+  }
+
+  public onToggleAnswer(
+    currentShowAnswer: boolean,
+    randomization: Randomization
+  ) {
+    this.randomizationShellFacade.updateRandomization({
+      ...randomization,
+      showAnswer: !currentShowAnswer,
+    });
   }
 
   public onReset(randomizationId: string) {

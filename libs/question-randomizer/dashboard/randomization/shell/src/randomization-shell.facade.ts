@@ -1,5 +1,6 @@
 import { computed, effect, inject, Injectable } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { Randomization } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 import {
   CategoryListStore,
   QuestionListService,
@@ -138,6 +139,10 @@ export class RandomizationShellFacade {
         questionDic
       );
     }
+  }
+
+  public async updateRandomization(randomization: Randomization) {
+    this.randomizationService.updateRandomization(randomization);
   }
 
   public async resetRandomization(randomizationId: string) {

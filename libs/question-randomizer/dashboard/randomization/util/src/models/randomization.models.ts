@@ -3,7 +3,7 @@ import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-u
 export interface Randomization {
   id: string;
   currentQuestion?: Question;
-  isAnswerHidden: boolean;
+  showAnswer: boolean;
   status: RandomizationStatus;
   usedQuestionIdList: string[];
   selectedCategoryIdList: string[];

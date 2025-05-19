@@ -14,7 +14,7 @@ export class RandomizationMapperService {
     return {
       id: response.id,
       status: response.status,
-      isAnswerHidden: response.isAnswerHidden,
+      showAnswer: response.showAnswer,
       currentQuestion,
       usedQuestionIdList,
       selectedCategoryIdList,

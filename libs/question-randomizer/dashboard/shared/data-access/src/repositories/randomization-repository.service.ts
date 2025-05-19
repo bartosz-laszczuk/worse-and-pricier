@@ -50,7 +50,7 @@ export class RandomizationRepositoryService {
     const randomizationsRef = collection(this.firestore, this.collectionName);
 
     const request: CreateRandomzationRequest = {
-      isAnswerHidden: true,
+      showAnswer: false,
       status: RandomizationStatus.Ongoing,
       created: serverTimestamp(),
       userId,
@@ -63,7 +63,7 @@ export class RandomizationRepositoryService {
 
   async updateRandomization(randomization: Randomization) {
     const request: UpdateRandomzationRequest = {
-      isAnswerHidden: randomization.isAnswerHidden,
+      showAnswer: randomization.showAnswer,
       status: randomization.status,
       currentQuestionId: randomization.currentQuestion?.id ?? null,
     };

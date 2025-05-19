@@ -4,14 +4,14 @@ import { RandomizationStatus } from '@my-nx-monorepo/question-randomizer-dashboa
 export interface GetRandomizationResponse {
   id: string;
   currentQuestionId?: string;
-  isAnswerHidden: boolean;
+  showAnswer: boolean;
   status: RandomizationStatus;
   userId: string;
   created: FieldValue;
 }
 
 export interface CreateRandomzationRequest {
-  isAnswerHidden: boolean;
+  showAnswer: boolean;
   status: RandomizationStatus;
   currentQuestionId?: string;
   created: FieldValue;
@@ -19,7 +19,7 @@ export interface CreateRandomzationRequest {
 }
 
 export interface UpdateRandomzationRequest {
-  isAnswerHidden: boolean;
+  showAnswer: boolean;
   status: RandomizationStatus;
   currentQuestionId: string | null;
 }

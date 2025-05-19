@@ -178,6 +178,20 @@ export class RandomizationService {
     }
   }
 
+  public async updateRandomization(randomization: Randomization) {
+    try {
+      this.randomizationStore.startLoading();
+      this.randomizationStore.setRandomization(randomization);
+      await this.randomizationRepositoryService.updateRandomization(
+        randomization
+      );
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message || 'Failed to update randomization.'
+      );
+    }
+  }
+
   public async deleteUsedQuestionFromRandomization(
     randomizationId: string,
     questionId: string
@@ -252,7 +266,7 @@ export class RandomizationService {
 
     return {
       id: randomizationId,
-      isAnswerHidden: true,
+      showAnswer: false,
       status: RandomizationStatus.Ongoing,
       usedQuestionIdList: [],
       selectedCategoryIdList: [],

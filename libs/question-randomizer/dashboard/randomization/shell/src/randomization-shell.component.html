@@ -1,16 +1,21 @@
+@if(randomization(); as randomization) {
 <div class="grid-container">
   <lib-card class="item1" [title]="'Progress'">
     <div card-buttons>
-      <!-- <lib-button>test</lib-button> -->
+      <button (click)="onReset(randomization.id)">Reset</button>
     </div>
-    Progress content</lib-card
-  >
+    <div class="status-units"></div>
+    <div class="status-bar"></div>
+  </lib-card>
   <lib-card class="item2" [title]="'Question'">
+    <div card-buttons>
+      <button (click)="onPreviousQuestion(randomization.id)">
+        Previous question
+      </button>
+      <button (click)="onNextQuestion(randomization.id)">Next question</button>
+    </div>
     @if(currentQuestion(); as question){
-    <p>Question:</p>
     <p>{{ question.question }}</p>
-    <p>Answer:</p>
-    <div [innerHTML]="question.answer"></div>
     } @else {
     <p>No questions to display</p>
     }
@@ -18,16 +23,48 @@
   <lib-card class="item3" [title]="'Categories'">
     <lib-input-check-group
       [items]="categoryOptionItemList()"
+      [value]="selectedCategoryIdList()"
+      (checkboxChanged)="
+        onCheckboxChange(
+          $event.value.toString(),
+          $event.checked,
+          randomization.id
+        )
+      "
     ></lib-input-check-group>
   </lib-card>
-  <lib-card class="item4" [title]="'Answer'">answer</lib-card>
+  <lib-card class="item4" [title]="'Answer'">
+    <div card-buttons>
+      <button (click)="onToggleAnswer(randomization.showAnswer, randomization)">
+        {{ randomization.showAnswer ? 'Hide ' : 'Show ' }}answer
+      </button>
+    </div>
+    @if (randomization.showAnswer){ @if(currentQuestion(); as question){
+    <div [innerHTML]="question.answer"></div>
+    }}</lib-card
+  >
 </div>
+}
 
 <!-- <h4>Randomization</h4>
 
 @if(randomization(); as randomization) {
 <span>Categories:</span><br />
-
+@for (categoryOptionItem of categoryOptionItemList(); track
+categoryOptionItem.value) {
+<input
+  type="checkbox"
+  [id]="categoryOptionItem.value"
+  [checked]="selectedCategoryIdList().includes(categoryOptionItem.value)"
+  (change)="
+    onCheckboxChange($event, categoryOptionItem.value, randomization.id)
+  "
+/>
+<label [for]="categoryOptionItem.value">
+  {{ categoryOptionItem.label }}
+</label>
+<br />
+}
 
 
 @if(currentQuestion(); as question){

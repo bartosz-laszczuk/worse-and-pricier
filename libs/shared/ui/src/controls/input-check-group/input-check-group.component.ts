@@ -25,7 +25,11 @@ import { OptionItem, Value } from '@my-nx-monorepo/shared-util';
 export class InputCheckGroupComponent implements ControlValueAccessor {
   @Input() items: OptionItem[] | undefined;
   @Input() value: Value[] = [];
-  @Output() changed = new EventEmitter<Value[]>();
+  @Output() selectedChanged = new EventEmitter<Value[]>();
+  @Output() checkboxChanged = new EventEmitter<{
+    value: Value;
+    checked: boolean;
+  }>();
   public isDisabled = false;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -48,11 +52,13 @@ export class InputCheckGroupComponent implements ControlValueAccessor {
 
   onChanged(value: Value, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
+
+    this.checkboxChanged.emit({ value, checked });
     const selected = this.getSelected(value, checked);
 
     this.value = selected;
     this.propagateChange(selected);
-    this.changed.emit(selected);
+    this.selectedChanged.emit(selected);
   }
 
   private getSelected(value: Value, checked: boolean): Value[] {
