@@ -26,3 +26,12 @@
   grid-column: 1 / 3;
   grid-row: 3 / 4;
 }
+
+.status-units {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  & > * {
+    flex: 1;
+  }
+}

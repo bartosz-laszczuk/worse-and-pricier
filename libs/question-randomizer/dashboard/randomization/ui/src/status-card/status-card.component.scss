@@ -1,0 +1,21 @@
+:host {
+  padding-left: 0.5rem;
+  &.status-card-primary {
+    border-left: 4px solid var(--primary-color);
+  }
+  &.status-card-secondary {
+    border-left: 4px solid var(--secondary-color);
+  }
+  &.status-card-gray-500 {
+    border-left: 4px solid var(--gray-500);
+  }
+  &.status-card-gray-600 {
+    border-left: 4px solid var(--gray-600);
+  }
+  &.status-card-gray-700 {
+    border-left: 4px solid var(--gray-700);
+  }
+  &.status-card-gray-800 {
+    border-left: 4px solid var(--gray-800);
+  }
+}

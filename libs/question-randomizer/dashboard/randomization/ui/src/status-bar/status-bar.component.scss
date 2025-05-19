@@ -1,0 +1,24 @@
+.status-bar {
+  display: flex;
+  height: 2.2rem;
+  width: 100%;
+  border-radius: 3px;
+  overflow: hidden;
+  background-color: #e0e0e0; // optional fallback background
+}
+
+.segment {
+  height: 100%;
+}
+
+.postponed {
+  background-color: var(--primary-color);
+}
+
+.ahead {
+  background-color: var(--gray-600);
+}
+
+.answered {
+  background-color: var(--gray-800);
+}

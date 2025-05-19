@@ -4,8 +4,24 @@
     <div card-buttons>
       <button (click)="onReset(randomization.id)">Reset</button>
     </div>
-    <div class="status-units"></div>
-    <div class="status-bar"></div>
+    <div class="status-units margin-bottom-24">
+      <lib-status-card [count]="18" [title]="'POSTPONED'"></lib-status-card>
+      <lib-status-card
+        [count]="21"
+        [title]="'AHEAD'"
+        [type]="'gray-600'"
+      ></lib-status-card>
+      <lib-status-card
+        [count]="11"
+        [title]="'ANSWERED'"
+        [type]="'gray-800'"
+      ></lib-status-card>
+    </div>
+    <lib-status-bar
+      [postponed]="18"
+      [ahead]="21"
+      [answered]="11"
+    ></lib-status-bar>
   </lib-card>
   <lib-card class="item2" [title]="'Question'">
     <div card-buttons>

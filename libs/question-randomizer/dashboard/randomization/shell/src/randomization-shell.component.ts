@@ -6,10 +6,20 @@ import {
   InputCheckGroupComponent,
 } from '@my-nx-monorepo/shared-ui';
 import { Randomization } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import {
+  StatusBarComponent,
+  StatusCardComponent,
+} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-ui';
 
 @Component({
   selector: 'lib-randomization-shell',
-  imports: [CommonModule, InputCheckGroupComponent, CardComponent],
+  imports: [
+    CommonModule,
+    InputCheckGroupComponent,
+    CardComponent,
+    StatusCardComponent,
+    StatusBarComponent,
+  ],
   templateUrl: './randomization-shell.component.html',
   styleUrl: './randomization-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
