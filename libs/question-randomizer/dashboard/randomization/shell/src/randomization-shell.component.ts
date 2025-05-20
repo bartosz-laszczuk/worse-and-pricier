@@ -34,6 +34,8 @@ export class RandomizationShellComponent {
     this.randomizationShellFacade.categoryOptionItemList;
   public selectedCategoryIdList =
     this.randomizationShellFacade.selectedCategoryIdList;
+  public usedQuestionListLength =
+    this.randomizationShellFacade.usedQuestionListLength;
 
   constructor() {
     this.randomizationShellFacade.loadRandomization();

@@ -22,6 +22,10 @@ export class RandomizationShellFacade {
 
   public randomization = this.randomizationStore.randomization;
   public categoryOptionItemList = this.categoryListStore.categoryOptionItemList;
+  public usedQuestionListLength = computed(
+    () =>
+      (this.randomizationStore.randomization()?.usedQuestionIdList ?? []).length
+  );
   public selectedCategoryIdList = computed(
     () => this.randomizationStore.randomization()?.selectedCategoryIdList ?? []
   );

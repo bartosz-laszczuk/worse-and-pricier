@@ -12,7 +12,7 @@
         [type]="'gray-600'"
       ></lib-status-card>
       <lib-status-card
-        [count]="11"
+        [count]="usedQuestionListLength()"
         [title]="'ANSWERED'"
         [type]="'gray-800'"
       ></lib-status-card>
@@ -20,7 +20,7 @@
     <lib-status-bar
       [postponed]="18"
       [ahead]="21"
-      [answered]="11"
+      [answered]="usedQuestionListLength()"
     ></lib-status-bar>
   </lib-card>
   <lib-card class="item2" [title]="'Question'">
