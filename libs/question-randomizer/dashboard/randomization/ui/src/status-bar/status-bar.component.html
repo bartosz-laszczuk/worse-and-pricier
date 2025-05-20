@@ -5,13 +5,13 @@
     *ngIf="postponed() > 0"
   ></div>
   <div
-    class="segment answered"
-    [style.flex-grow]="answered()"
-    *ngIf="answered() > 0"
-  ></div>
-  <div
     class="segment ahead"
     [style.flex-grow]="ahead()"
     *ngIf="ahead() > 0"
+  ></div>
+  <div
+    class="segment answered"
+    [style.flex-grow]="answered()"
+    *ngIf="answered() > 0"
   ></div>
 </div>

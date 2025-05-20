@@ -1,10 +1,8 @@
-import { computed, effect } from '@angular/core';
+import { computed } from '@angular/core';
 import {
-  getState,
   patchState,
   signalStore,
   withComputed,
-  withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
