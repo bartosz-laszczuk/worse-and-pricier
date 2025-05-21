@@ -1,8 +1,8 @@
 <div class="status-bar">
   <div
-    class="segment postponed"
-    [style.flex-grow]="postponed()"
-    *ngIf="postponed() > 0"
+    class="segment answered"
+    [style.flex-grow]="answered()"
+    *ngIf="answered() > 0"
   ></div>
   <div
     class="segment ahead"
@@ -10,8 +10,8 @@
     *ngIf="ahead() > 0"
   ></div>
   <div
-    class="segment answered"
-    [style.flex-grow]="answered()"
-    *ngIf="answered() > 0"
+    class="segment postponed"
+    [style.flex-grow]="postponed()"
+    *ngIf="postponed() > 0"
   ></div>
 </div>

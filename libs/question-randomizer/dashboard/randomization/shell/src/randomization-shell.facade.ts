@@ -1,6 +1,11 @@
 import { computed, effect, inject, Injectable } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { Randomization } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import {
+  AvailableQuestion,
+  PostponedQuestion,
+  Randomization,
+  UsedQuestion,
+} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 import {
   CategoryListStore,
   QuestionListService,
@@ -23,8 +28,13 @@ export class RandomizationShellFacade {
   public randomization = this.randomizationStore.randomization;
   public categoryOptionItemList = this.categoryListStore.categoryOptionItemList;
   public usedQuestionListLength = computed(
-    () =>
-      (this.randomizationStore.randomization()?.usedQuestionIdList ?? []).length
+    () => (this.randomizationStore.usedQuestionList() ?? []).length
+  );
+  public availableQuestionListLength = computed(
+    () => (this.randomizationStore.availableQuestionList() ?? []).length
+  );
+  public postponedQuestionListLength = computed(
+    () => (this.randomizationStore.postponedQuestionList() ?? []).length
   );
   public selectedCategoryIdList = computed(
     () => this.randomizationStore.randomization()?.selectedCategoryIdList ?? []
@@ -57,16 +67,64 @@ export class RandomizationShellFacade {
   }
 
   public async nextQuestion(randomizationId: string) {
-    const currentQuestionId = this.randomizationStore.currentQuestion()?.id;
-
-    if (currentQuestionId) {
+    const currentQuestion = this.randomizationStore.currentQuestion();
+    let randomization = this.randomizationStore.entity();
+    if (currentQuestion && randomization) {
+      this.randomizationStore.deleteAvailableQuestionFromRandomization(
+        currentQuestion.id
+      );
+      this.randomizationService.deletePostponedQuestionFromRandomization(
+        randomization.id,
+        currentQuestion.id
+      );
+      const usedQuestion: UsedQuestion = {
+        questionId: currentQuestion.id,
+        categoryId: currentQuestion.categoryId,
+      };
       this.randomizationService.addUsedQuestionToRandomization(
         randomizationId,
-        currentQuestionId
+        usedQuestion
       );
     }
 
-    const randomization = this.randomizationStore.entity();
+    randomization = this.randomizationStore.entity();
+    const questionDic = this.questionListStore.entities();
+
+    if (randomization && questionDic) {
+      this.randomizationService.updateCurrentQuestionWithNextQuestion(
+        randomization,
+        questionDic
+      );
+    }
+  }
+
+  public async postponeQuestion(randomizationId: string) {
+    const currentQuestion = this.randomizationStore.currentQuestion();
+    let randomization = this.randomizationStore.entity();
+
+    if (randomization && currentQuestion) {
+      this.randomizationStore.deleteAvailableQuestionFromRandomization(
+        currentQuestion.id
+      );
+      const postponedQuestion: PostponedQuestion = {
+        questionId: currentQuestion.id,
+        categoryId: currentQuestion.categoryId,
+      };
+      if (
+        randomization.postponedQuestionList.some(
+          (pq) => pq.questionId === currentQuestion.id
+        )
+      ) {
+        this.randomizationService.updatePostponedQuestion(postponedQuestion);
+      } else {
+        this.randomizationService.addPostponedQuestionToRandomization(
+          randomizationId,
+          postponedQuestion
+        );
+      }
+    }
+
+    randomization = this.randomizationStore.entity();
     const questionDic = this.questionListStore.entities();
 
     if (randomization && questionDic) {
@@ -81,14 +139,14 @@ export class RandomizationShellFacade {
     const randomization = this.randomizationStore.entity();
     if (
       !randomization ||
-      !randomization.usedQuestionIdList ||
-      randomization.usedQuestionIdList.length === 0
+      !randomization.usedQuestionList ||
+      randomization.usedQuestionList.length === 0
     )
       return;
 
     const lastQuestion =
       this.questionListService.findLastQuestionForCategoryIdList(
-        randomization.usedQuestionIdList,
+        randomization.usedQuestionList,
         randomization.selectedCategoryIdList
       );
 
@@ -98,6 +156,9 @@ export class RandomizationShellFacade {
       randomizationId,
       lastQuestion.id
     );
+    this.randomizationStore.addAvailableQuestionsToRandomization([
+      { questionId: lastQuestion.id, categoryId: lastQuestion.categoryId },
+    ]);
 
     this.randomizationService.setQuestionAsCurrentQuestion(lastQuestion);
   }
@@ -153,6 +214,16 @@ export class RandomizationShellFacade {
     this.randomizationService.deleteAllUsedQuestionsFromRandomization(
       randomizationId
     );
+    this.randomizationService.deleteAllPostponedQuestionsFromRandomization(
+      randomizationId
+    );
+    const questionList: AvailableQuestion[] = Object.values(
+      this.questionListStore.entities() ?? {}
+    ).map((question) => ({
+      questionId: question.id,
+      categoryId: question.categoryId,
+    }));
+    this.randomizationStore.addAvailableQuestionsToRandomization(questionList);
 
     const randomization = this.randomizationStore.entity();
     const questionDic = this.questionListStore.entities();

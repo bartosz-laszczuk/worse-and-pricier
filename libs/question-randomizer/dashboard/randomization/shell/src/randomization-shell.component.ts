@@ -36,6 +36,10 @@ export class RandomizationShellComponent {
     this.randomizationShellFacade.selectedCategoryIdList;
   public usedQuestionListLength =
     this.randomizationShellFacade.usedQuestionListLength;
+  public postponedQuestionListLength =
+    this.randomizationShellFacade.postponedQuestionListLength;
+  public availableQuestionListLength =
+    this.randomizationShellFacade.availableQuestionListLength;
 
   constructor() {
     this.randomizationShellFacade.loadRandomization();
@@ -63,6 +67,10 @@ export class RandomizationShellComponent {
 
   public onNextQuestion(randomizationId: string) {
     this.randomizationShellFacade.nextQuestion(randomizationId);
+  }
+
+  public onPostponeQuestion(randomizationId: string) {
+    this.randomizationShellFacade.postponeQuestion(randomizationId);
   }
 
   public onPreviousQuestion(randomizationId: string) {

@@ -10,6 +10,7 @@ import { QuestionRepositoryService } from '../repositories';
 import { QuestionListStore, RandomizationStore } from '../store';
 import { QuestionMapperService } from './question-mapper.service';
 import { RandomizationService } from './randomization.service';
+import { UsedQuestion } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 
 @Injectable()
 export class QuestionListService {
@@ -43,34 +44,12 @@ export class QuestionListService {
       };
 
       this.questionListStore.addQuestionToList(question);
-    } catch (error: any) {
-      this.questionListStore.logError(
-        error.message || 'Question creation failed'
-      );
-    }
-  }
-
-  public async createQuestionByImport(createdQuestion: EditQuestionFormValue) {
-    const userId = this.userStore.uid();
-    if (!userId) return;
-    this.questionListStore.startLoading();
-    try {
-      const createQuestionRequest =
-        this.questionMapperService.mapEditQuestionFormValueToCreateQuestionRequest(
-          createdQuestion,
-          userId
-        );
-      const questionId = await this.questionRepositoryService.createQuestion(
-        createQuestionRequest
-      );
-
-      const question: Question = {
-        ...createdQuestion,
-        id: questionId,
-        userId,
-      };
-
-      this.questionListStore.addQuestionToList(question);
+      this.randomizationStore.addAvailableQuestionsToRandomization([
+        {
+          questionId: question.id,
+          categoryId: question.categoryId,
+        },
+      ]);
     } catch (error: any) {
       this.questionListStore.logError(
         error.message || 'Question creation failed'
@@ -183,16 +162,16 @@ export class QuestionListService {
   }
 
   public findLastQuestionForCategoryIdList(
-    usedQuestionIdList: string[],
+    usedQuestionList: UsedQuestion[],
     selectedCategoryIdList: string[]
   ): Question | undefined {
     const questionDic = this.questionListStore.entities();
 
     if (!questionDic) return undefined;
 
-    for (let i = usedQuestionIdList.length - 1; i >= 0; i--) {
-      const questionId = usedQuestionIdList[i];
-      const question = questionDic[questionId];
+    for (let i = usedQuestionList.length - 1; i >= 0; i--) {
+      const usedQuestion = usedQuestionList[i];
+      const question = questionDic[usedQuestion.questionId];
 
       if (
         question &&

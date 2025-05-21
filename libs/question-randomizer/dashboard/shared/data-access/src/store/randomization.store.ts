@@ -6,7 +6,13 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { Randomization } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import {
+  AvailableQuestion,
+  PostponedQuestion,
+  Randomization,
+  UsedQuestion,
+} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 
 type RandomizationState = {
   entity: Randomization | null;
@@ -33,6 +39,13 @@ export const RandomizationStore = signalStore(
   // }),
   withComputed((store) => ({
     randomization: computed(() => store.entity()),
+    usedQuestionList: computed(() => store.entity()?.usedQuestionList),
+    availableQuestionList: computed(
+      () => store.entity()?.availableQuestionList
+    ),
+    postponedQuestionList: computed(
+      () => store.entity()?.postponedQuestionList
+    ),
     currentQuestion: computed(() => store.entity()?.currentQuestion),
   })),
   withMethods((store) => ({
@@ -65,21 +78,80 @@ export const RandomizationStore = signalStore(
       });
     },
 
-    addUsedQuestionIdToRandomization(questionId: string) {
+    addAvailableQuestionsToRandomization(
+      availableQuestionList: AvailableQuestion[]
+    ) {
       const entity = store.entity();
 
       if (!entity) return;
 
-      const usedQuestionList = entity.usedQuestionIdList;
+      const existingQuestionIds = new Set(
+        entity.availableQuestionList.map((aq) => aq.questionId)
+      );
 
-      if (usedQuestionList.includes(questionId)) return;
+      const newQuestions = availableQuestionList.filter(
+        (q) => !existingQuestionIds.has(q.questionId)
+      );
 
-      const updatedUsedQuestionList = [...usedQuestionList, questionId];
+      if (newQuestions.length === 0) return;
+
+      const updatedAvailableQuestionList = [
+        ...entity.availableQuestionList,
+        ...newQuestions,
+      ];
 
       patchState(store, {
         entity: {
           ...entity,
-          usedQuestionIdList: updatedUsedQuestionList,
+          availableQuestionList: updatedAvailableQuestionList,
+        },
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    addUsedQuestionToRandomization(usedQuestion: UsedQuestion) {
+      const entity = store.entity();
+
+      if (!entity) return;
+
+      const usedQuestionList = entity.usedQuestionList;
+
+      if (
+        usedQuestionList
+          .map((uq) => uq.questionId)
+          .includes(usedQuestion.questionId)
+      )
+        return;
+
+      const updatedUsedQuestionList = [...usedQuestionList, usedQuestion];
+
+      patchState(store, {
+        entity: {
+          ...entity,
+          usedQuestionList: updatedUsedQuestionList,
+        },
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    addPostponedQuestionToRandomization(postponedQuestion: PostponedQuestion) {
+      const entity = store.entity();
+
+      if (!entity) return;
+
+      const postponedQuestionList = entity.postponedQuestionList;
+
+      const updatedPostponedQuestionList = postponedQuestionList.filter(
+        (pq) => pq.questionId !== postponedQuestion.questionId
+      );
+      updatedPostponedQuestionList.push(postponedQuestion);
+
+      patchState(store, {
+        entity: {
+          ...entity,
+          postponedQuestionList: updatedPostponedQuestionList,
         },
         isLoading: false,
         error: null,
@@ -105,19 +177,57 @@ export const RandomizationStore = signalStore(
       });
     },
 
-    deleteQuestionIdFromRandomization(questionId: string) {
+    deleteUsedQuestionFromRandomization(questionId: string) {
       const entity = store.entity();
 
       if (!entity) return;
 
-      const updatedUsedQuestionList = entity.usedQuestionIdList.filter(
-        (id) => id !== questionId
+      const updatedUsedQuestionList = entity.usedQuestionList.filter(
+        (uq) => uq.questionId !== questionId
       );
 
       patchState(store, {
         entity: {
           ...entity,
-          usedQuestionIdList: updatedUsedQuestionList,
+          usedQuestionList: updatedUsedQuestionList,
+        },
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    deleteAvailableQuestionFromRandomization(questionId: string) {
+      const entity = store.entity();
+
+      if (!entity) return;
+
+      const updatedAvailableQuestionList = entity.availableQuestionList.filter(
+        (aq) => aq.questionId !== questionId
+      );
+
+      patchState(store, {
+        entity: {
+          ...entity,
+          availableQuestionList: updatedAvailableQuestionList,
+        },
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    deletePostponedQuestionFromRandomization(questionId: string) {
+      const entity = store.entity();
+
+      if (!entity) return;
+
+      const updatedPostponedQuestionList = entity.postponedQuestionList.filter(
+        (pq) => pq.questionId !== questionId
+      );
+
+      patchState(store, {
+        entity: {
+          ...entity,
+          postponedQuestionList: updatedPostponedQuestionList,
         },
         isLoading: false,
         error: null,
@@ -132,7 +242,22 @@ export const RandomizationStore = signalStore(
       patchState(store, {
         entity: {
           ...entity,
-          usedQuestionIdList: [],
+          usedQuestionList: [],
+        },
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    clearPostponedQuestions() {
+      const entity = store.entity();
+
+      if (!entity) return;
+
+      patchState(store, {
+        entity: {
+          ...entity,
+          postponedQuestionList: [],
         },
         isLoading: false,
         error: null,
@@ -149,6 +274,14 @@ export const RandomizationStore = signalStore(
           ...entity,
           currentQuestion: undefined,
         },
+        isLoading: false,
+        error: null,
+      });
+    },
+
+    clearRandomization() {
+      patchState(store, {
+        entity: undefined,
         isLoading: false,
         error: null,
       });

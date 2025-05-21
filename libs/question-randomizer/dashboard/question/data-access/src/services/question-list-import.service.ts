@@ -10,6 +10,7 @@ import {
   QuestionListStore,
   QuestionMapperService,
   QuestionRepositoryService,
+  RandomizationStore,
   UpdateQuestionRequest,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import {
@@ -27,6 +28,7 @@ export class QuestionListImportService {
   private readonly categoryListStore = inject(CategoryListStore);
   private readonly qualificationListStore = inject(QualificationListStore);
   private readonly questionMapperService = inject(QuestionMapperService);
+  private readonly randomizationStore = inject(RandomizationStore);
   private readonly questionRepositoryService = inject(
     QuestionRepositoryService
   );
@@ -68,6 +70,7 @@ export class QuestionListImportService {
       qualificationDic,
       true
     );
+    this.randomizationStore.clearRandomization();
   }
 
   public parseCsvFile(file: File): Promise<QuestionCsvListItem[]> {

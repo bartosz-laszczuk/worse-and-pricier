@@ -5,30 +5,32 @@
       <button (click)="onReset(randomization.id)">Reset</button>
     </div>
     <div class="status-units margin-bottom-24">
-      <lib-status-card [count]="18" [title]="'POSTPONED'"></lib-status-card>
-      <lib-status-card
-        [count]="21"
-        [title]="'AHEAD'"
-        [type]="'gray-600'"
-      ></lib-status-card>
       <lib-status-card
         [count]="usedQuestionListLength()"
         [title]="'ANSWERED'"
         [type]="'gray-800'"
       ></lib-status-card>
+      <lib-status-card
+        [count]="availableQuestionListLength()"
+        [title]="'AHEAD'"
+        [type]="'gray-600'"
+      ></lib-status-card>
+      <lib-status-card
+        [count]="postponedQuestionListLength()"
+        [title]="'POSTPONED'"
+      ></lib-status-card>
     </div>
     <lib-status-bar
-      [postponed]="18"
-      [ahead]="21"
+      [postponed]="postponedQuestionListLength()"
+      [ahead]="availableQuestionListLength()"
       [answered]="usedQuestionListLength()"
     ></lib-status-bar>
   </lib-card>
   <lib-card class="item2" [title]="'Question'">
     <div card-buttons>
-      <button (click)="onPreviousQuestion(randomization.id)">
-        Previous question
-      </button>
-      <button (click)="onNextQuestion(randomization.id)">Next question</button>
+      <button (click)="onPreviousQuestion(randomization.id)">Previous</button>
+      <button (click)="onNextQuestion(randomization.id)">Next</button>
+      <button (click)="onPostponeQuestion(randomization.id)">Postpone</button>
     </div>
     @if(currentQuestion(); as question){
     <p>{{ question.question }}</p>

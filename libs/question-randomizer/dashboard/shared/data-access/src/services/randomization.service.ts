@@ -7,10 +7,13 @@ import {
 import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { RandomizationMapperService } from './randomization-mapper.service';
 import {
+  PostponedQuestion,
   Randomization,
   RandomizationStatus,
+  UsedQuestion,
 } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 import { RandomizationStore } from '../store';
+import { PostponedQuestionListRepositoryService } from '../repositories/postponed-question-list-repository.service';
 
 @Injectable()
 export class RandomizationService {
@@ -27,6 +30,9 @@ export class RandomizationService {
   private readonly usedQuestionListRepositoryService = inject(
     UsedQuestionListRepositoryService
   );
+  private readonly postponedQuestionListRepositoryService = inject(
+    PostponedQuestionListRepositoryService
+  );
 
   public async loadRandomization(
     userId: string,
@@ -42,11 +48,15 @@ export class RandomizationService {
 
       if (!response) {
         this.randomizationStore.setRandomization(
-          await this.getNewRandomization(userId)
+          await this.getNewRandomization(userId, questionDic)
         );
       } else {
-        const usedQuestionIdList =
+        const usedQuestionList =
           await this.usedQuestionListRepositoryService.getUsedQuestionIdListForRandomization(
+            response.id
+          );
+        const postponedQuestionList =
+          await this.postponedQuestionListRepositoryService.getPostponedQuestionIdListForRandomization(
             response.id
           );
         const selectedCategoryIdList =
@@ -65,8 +75,10 @@ export class RandomizationService {
         const randomization =
           this.randomizationMapperService.mapGetRandomizationResopnseToRandomization(
             response,
-            usedQuestionIdList,
+            usedQuestionList,
+            postponedQuestionList,
             selectedCategoryIdList,
+            questionDic,
             currentQuestion
           );
 
@@ -101,16 +113,60 @@ export class RandomizationService {
 
   public async addUsedQuestionToRandomization(
     randomizationId: string,
-    questionId: string
+    usedQuestion: UsedQuestion
   ) {
     this.randomizationStore.startLoading();
 
     try {
-      this.randomizationStore.addUsedQuestionIdToRandomization(questionId);
+      this.randomizationStore.addUsedQuestionToRandomization(usedQuestion);
 
       await this.usedQuestionListRepositoryService.addQuestionToUsedQuestions(
         randomizationId,
+        usedQuestion
+      );
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message || 'Failed to add Category to Randomization.'
+      );
+    }
+  }
+
+  public async deletePostponedQuestionFromRandomization(
+    randomizationId: string,
+    questionId: string
+  ) {
+    this.randomizationStore.startLoading();
+    try {
+      this.randomizationStore.deletePostponedQuestionFromRandomization(
         questionId
+      );
+      await this.postponedQuestionListRepositoryService.deleteQuestionFromPostponedQuestions(
+        randomizationId,
+        questionId
+      );
+    } catch (error: any) {
+      const message =
+        error.message ||
+        'Failed to delete postponed question from Randomization.';
+      console.error(message);
+      this.randomizationStore.logError(message);
+    }
+  }
+
+  public async addPostponedQuestionToRandomization(
+    randomizationId: string,
+    postponedQuestion: PostponedQuestion
+  ) {
+    this.randomizationStore.startLoading();
+
+    try {
+      this.randomizationStore.addPostponedQuestionToRandomization(
+        postponedQuestion
+      );
+
+      await this.postponedQuestionListRepositoryService.addQuestionToPostponedQuestions(
+        randomizationId,
+        postponedQuestion
       );
     } catch (error: any) {
       this.randomizationStore.logError(
@@ -146,19 +202,21 @@ export class RandomizationService {
     questionDic: Record<string, Question>
   ): Promise<void> {
     try {
-      const availableQuestions = Object.values(questionDic).filter(
-        (question) =>
-          question.isActive &&
-          question.categoryId &&
-          randomization.selectedCategoryIdList.includes(question.categoryId) &&
-          !randomization.usedQuestionIdList.includes(question.id)
-      );
+      const availableQuestionList = randomization.availableQuestionList;
+      const postponedQuestionList = randomization.postponedQuestionList;
 
-      if (availableQuestions.length > 0) {
-        const nextQuestion =
-          availableQuestions[
-            Math.floor(Math.random() * availableQuestions.length)
-          ];
+      if (availableQuestionList.length > 0) {
+        const nextQuestionId =
+          availableQuestionList[
+            Math.floor(Math.random() * availableQuestionList.length)
+          ].questionId;
+        randomization.currentQuestion = questionDic[nextQuestionId];
+      } else if (postponedQuestionList.length > 0) {
+        const nextQuestion = this.findFirstQuestionForCategoryIdList(
+          randomization.postponedQuestionList.map((pq) => pq.questionId),
+          randomization.selectedCategoryIdList,
+          questionDic
+        );
         randomization.currentQuestion = nextQuestion;
       } else if (randomization.currentQuestion) {
         randomization.currentQuestion = undefined;
@@ -192,13 +250,29 @@ export class RandomizationService {
     }
   }
 
+  public async updatePostponedQuestion(postponedQuestion: PostponedQuestion) {
+    try {
+      this.randomizationStore.startLoading();
+      this.randomizationStore.addPostponedQuestionToRandomization(
+        postponedQuestion
+      );
+      await this.postponedQuestionListRepositoryService.updatePostponedQuestion(
+        postponedQuestion.questionId
+      );
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message || 'Failed to update postponed question.'
+      );
+    }
+  }
+
   public async deleteUsedQuestionFromRandomization(
     randomizationId: string,
     questionId: string
   ) {
     this.randomizationStore.startLoading();
     try {
-      this.randomizationStore.deleteQuestionIdFromRandomization(questionId);
+      this.randomizationStore.deleteUsedQuestionFromRandomization(questionId);
       await this.usedQuestionListRepositoryService.deleteQuestionFromUsedQuestions(
         randomizationId,
         questionId
@@ -260,7 +334,47 @@ export class RandomizationService {
     }
   }
 
-  private async getNewRandomization(userId: string): Promise<Randomization> {
+  public async deleteAllPostponedQuestionsFromRandomization(
+    randomizationId: string
+  ) {
+    this.randomizationStore.startLoading();
+    try {
+      this.randomizationStore.clearPostponedQuestions();
+      await this.postponedQuestionListRepositoryService.deleteAllPostponedQuestionsFromRandomization(
+        randomizationId
+      );
+    } catch (error: any) {
+      this.randomizationStore.logError(
+        error.message ||
+          'Failed to delete all postponed questions from Randomization.'
+      );
+    }
+  }
+
+  public findFirstQuestionForCategoryIdList(
+    postponedQuestionIdList: string[],
+    selectedCategoryIdList: string[],
+    questionDic: Record<string, Question>
+  ): Question | undefined {
+    for (let i = 0; i < postponedQuestionIdList.length; i++) {
+      const questionId = postponedQuestionIdList[i];
+      const question = questionDic[questionId];
+
+      if (
+        question &&
+        selectedCategoryIdList.includes(question.categoryId ?? '')
+      ) {
+        return question;
+      }
+    }
+
+    return undefined;
+  }
+
+  private async getNewRandomization(
+    userId: string,
+    questionDic: Record<string, Question>
+  ): Promise<Randomization> {
     const randomizationId =
       await this.randomizationRepositoryService.createRandomization(userId);
 
@@ -268,8 +382,13 @@ export class RandomizationService {
       id: randomizationId,
       showAnswer: false,
       status: RandomizationStatus.Ongoing,
-      usedQuestionIdList: [],
+      usedQuestionList: [],
+      postponedQuestionList: [],
       selectedCategoryIdList: [],
+      availableQuestionList: Object.values(questionDic).map((question) => ({
+        questionId: question.id,
+        categoryId: question.categoryId,
+      })),
     };
   }
 }

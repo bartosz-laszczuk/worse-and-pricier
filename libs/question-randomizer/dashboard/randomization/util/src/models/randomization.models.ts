@@ -5,8 +5,21 @@ export interface Randomization {
   currentQuestion?: Question;
   showAnswer: boolean;
   status: RandomizationStatus;
-  usedQuestionIdList: string[];
+  usedQuestionList: UsedQuestion[];
+  postponedQuestionList: PostponedQuestion[];
+  availableQuestionList: AvailableQuestion[];
   selectedCategoryIdList: string[];
+}
+
+export type PostponedQuestion = QuestionCategory;
+
+export type AvailableQuestion = QuestionCategory;
+
+export type UsedQuestion = QuestionCategory;
+
+export interface QuestionCategory {
+  questionId: string;
+  categoryId?: string;
 }
 
 export enum RandomizationStatus {

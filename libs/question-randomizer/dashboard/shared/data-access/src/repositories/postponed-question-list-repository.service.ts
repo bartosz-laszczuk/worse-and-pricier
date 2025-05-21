@@ -9,55 +9,74 @@ import {
   query,
   where,
   CollectionReference,
+  updateDoc,
 } from '@angular/fire/firestore';
-import { UsedQuestion } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import { PostponedQuestion } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 import { orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UsedQuestionListRepositoryService {
-  private usedQuestionsCollection: CollectionReference;
+export class PostponedQuestionListRepositoryService {
+  private postponedQuestionsCollection: CollectionReference;
 
   constructor(private firestore: Firestore) {
-    this.usedQuestionsCollection = collection(this.firestore, 'usedQuestions');
+    this.postponedQuestionsCollection = collection(
+      this.firestore,
+      'postponedQuestions'
+    );
   }
 
-  async addQuestionToUsedQuestions(
+  async addQuestionToPostponedQuestions(
     randomizationId: string,
-    usedQuestion: UsedQuestion
+    postponedQuestion: PostponedQuestion
   ): Promise<string> {
-    const docRef = await addDoc(this.usedQuestionsCollection, {
-      ...usedQuestion,
+    const docRef = await addDoc(this.postponedQuestionsCollection, {
+      ...postponedQuestion,
       randomizationId,
       created: serverTimestamp(),
     });
     return docRef.id;
   }
 
-  async deleteQuestionFromUsedQuestions(
+  async updatePostponedQuestion(questionId: string): Promise<void> {
+    const q = query(
+      this.postponedQuestionsCollection,
+      where('questionId', '==', questionId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      await updateDoc(doc.ref, {
+        created: serverTimestamp(),
+      });
+    }
+  }
+
+  async deleteQuestionFromPostponedQuestions(
     randomizationId: string,
     questionId: string
   ): Promise<void> {
     const q = query(
-      this.usedQuestionsCollection,
+      this.postponedQuestionsCollection,
       where('questionId', '==', questionId),
       where('randomizationId', '==', randomizationId)
     );
 
     const snapshot = await getDocs(q);
     const deletions = snapshot.docs.map((docSnap) =>
-      deleteDoc(doc(this.usedQuestionsCollection, docSnap.id))
+      deleteDoc(doc(this.postponedQuestionsCollection, docSnap.id))
     );
 
     await Promise.all(deletions);
   }
 
-  async getUsedQuestionIdListForRandomization(
+  async getPostponedQuestionIdListForRandomization(
     randomizationId: string
-  ): Promise<UsedQuestion[]> {
+  ): Promise<PostponedQuestion[]> {
     const q = query(
-      this.usedQuestionsCollection,
+      this.postponedQuestionsCollection,
       where('randomizationId', '==', randomizationId),
       orderBy('created', 'asc')
     );
@@ -67,23 +86,13 @@ export class UsedQuestionListRepositoryService {
       const { questionId, categoryId } = docSnap.data();
       return { questionId, categoryId };
     });
-    // const q = query(
-    //   this.usedQuestionsCollection,
-    //   where('randomizationId', '==', randomizationId),
-    //   orderBy('created', 'asc') // sort from earliest to latest
-    // );
-
-    // const snapshot = await getDocs(q);
-    // return snapshot.docs.map(
-    //   (docSnap) => docSnap.data()['questionId']
-    // ) as string[];
   }
 
-  async deleteAllUsedQuestionsFromRandomization(
+  async deleteAllPostponedQuestionsFromRandomization(
     randomizationId: string
   ): Promise<void> {
     const q = query(
-      this.usedQuestionsCollection,
+      this.postponedQuestionsCollection,
       where('randomizationId', '==', randomizationId)
     );
 
@@ -91,7 +100,7 @@ export class UsedQuestionListRepositoryService {
 
     const batch = writeBatch(this.firestore);
     snapshot.docs.forEach((docSnap) => {
-      batch.delete(doc(this.usedQuestionsCollection, docSnap.id));
+      batch.delete(doc(this.postponedQuestionsCollection, docSnap.id));
     });
 
     await batch.commit();
