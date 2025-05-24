@@ -28,13 +28,13 @@ export class RandomizationShellFacade {
   public randomization = this.randomizationStore.randomization;
   public categoryOptionItemList = this.categoryListStore.categoryOptionItemList;
   public usedQuestionListLength = computed(
-    () => (this.randomizationStore.usedQuestionList() ?? []).length
+    () => (this.randomizationStore.filteredUsedQuestionList() ?? []).length
   );
   public availableQuestionListLength = computed(
-    () => (this.randomizationStore.availableQuestionList() ?? []).length
+    () => (this.randomizationStore.filteredAvailableQuestionList() ?? []).length
   );
   public postponedQuestionListLength = computed(
-    () => (this.randomizationStore.postponedQuestionList() ?? []).length
+    () => (this.randomizationStore.filteredPostponedQuestionList() ?? []).length
   );
   public selectedCategoryIdList = computed(
     () => this.randomizationStore.randomization()?.selectedCategoryIdList ?? []
@@ -60,7 +60,6 @@ export class RandomizationShellFacade {
     ]).subscribe(([randomization, questionDic]) => {
       if (!randomization.currentQuestion)
         this.randomizationService.updateCurrentQuestionWithNextQuestion(
-          randomization,
           questionDic
         );
     });
@@ -92,7 +91,6 @@ export class RandomizationShellFacade {
 
     if (randomization && questionDic) {
       this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        randomization,
         questionDic
       );
     }
@@ -115,7 +113,7 @@ export class RandomizationShellFacade {
           (pq) => pq.questionId === currentQuestion.id
         )
       ) {
-        this.randomizationService.updatePostponedQuestion(postponedQuestion);
+        this.randomizationService.movePostponedQuestionToEnd(postponedQuestion);
       } else {
         this.randomizationService.addPostponedQuestionToRandomization(
           randomizationId,
@@ -129,7 +127,6 @@ export class RandomizationShellFacade {
 
     if (randomization && questionDic) {
       this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        randomization,
         questionDic
       );
     }
@@ -177,7 +174,6 @@ export class RandomizationShellFacade {
     const questionDic = this.questionListStore.entities();
     if (!randomization.currentQuestion && questionDic) {
       this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        randomization,
         questionDic
       );
     }
@@ -200,7 +196,6 @@ export class RandomizationShellFacade {
       questionDic
     ) {
       this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        randomization,
         questionDic
       );
     }
@@ -229,7 +224,6 @@ export class RandomizationShellFacade {
     const questionDic = this.questionListStore.entities();
     if (randomization && questionDic) {
       this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        randomization,
         questionDic
       );
     }

@@ -65,10 +65,15 @@ export class CategoryListService {
 
     try {
       this.categoryListStore.deleteCategoryFromList(categoryId);
+      this.randomizationStore.deleteAvailableQuestionsFromRandomizationByCategoryId(
+        categoryId
+      );
       await Promise.all([
         this.categoryRepositoryService.deleteCategory(categoryId),
         this.questionListService.deleteCategoryIdFromQuestions(categoryId),
         this.deleteSelectedCategoryFromRandomization(categoryId),
+        this.deleteUsedQuestionsFromRandomizationByCategoryId(categoryId),
+        this.deletePostponedQuestionsFromRandomizationByCategoryId(categoryId),
         this.updateCurrentQuestionAfterCategoryDeletion(categoryId),
       ]);
     } catch (error: any) {
@@ -113,6 +118,28 @@ export class CategoryListService {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (randomizationId)
       await this.randomizationService.deselectCategoryFromRandomization(
+        randomizationId,
+        categoryId
+      );
+  }
+
+  private async deleteUsedQuestionsFromRandomizationByCategoryId(
+    categoryId: string
+  ) {
+    const randomizationId = this.randomizationStore.entity()?.id;
+    if (randomizationId)
+      await this.randomizationService.deleteUsedQuestionsFromRandomizationByCategoryId(
+        randomizationId,
+        categoryId
+      );
+  }
+
+  private async deletePostponedQuestionsFromRandomizationByCategoryId(
+    categoryId: string
+  ) {
+    const randomizationId = this.randomizationStore.entity()?.id;
+    if (randomizationId)
+      await this.randomizationService.deletePostponedQuestionsFromRandomizationByCategoryId(
         randomizationId,
         categoryId
       );

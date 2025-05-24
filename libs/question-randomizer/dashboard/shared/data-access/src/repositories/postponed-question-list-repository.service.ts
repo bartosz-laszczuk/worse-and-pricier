@@ -11,8 +11,12 @@ import {
   CollectionReference,
   updateDoc,
 } from '@angular/fire/firestore';
-import { PostponedQuestion } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import {
+  PostponedQuestion,
+  QuestionCategory,
+} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 import { orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +43,7 @@ export class PostponedQuestionListRepositoryService {
     return docRef.id;
   }
 
-  async updatePostponedQuestion(questionId: string): Promise<void> {
+  async updatePostponedQuestionCreateDate(questionId: string): Promise<void> {
     const q = query(
       this.postponedQuestionsCollection,
       where('questionId', '==', questionId)
@@ -101,6 +105,52 @@ export class PostponedQuestionListRepositoryService {
     const batch = writeBatch(this.firestore);
     snapshot.docs.forEach((docSnap) => {
       batch.delete(doc(this.postponedQuestionsCollection, docSnap.id));
+    });
+
+    await batch.commit();
+  }
+
+  async deleteQuestionsFromPostponedQuestionsByCategoryId(
+    randomizationId: string,
+    categoryId: string
+  ): Promise<void> {
+    const q = query(
+      this.postponedQuestionsCollection,
+      where('randomizationId', '==', randomizationId),
+      where('categoryId', '==', categoryId)
+    );
+
+    const snapshot = await getDocs(q);
+
+    const batch = writeBatch(this.firestore);
+    snapshot.docs.forEach((docSnap) => {
+      batch.delete(doc(this.postponedQuestionsCollection, docSnap.id));
+    });
+
+    await batch.commit();
+  }
+
+  async updatePostponedQuestionCategoryId(
+    newQuestionCategory: QuestionCategory
+  ): Promise<void> {
+    const q = query(
+      this.postponedQuestionsCollection,
+      where('questionId', '==', newQuestionCategory.questionId)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      return;
+    }
+
+    const batch = writeBatch(this.firestore);
+
+    snapshot.docs.forEach((docSnap) => {
+      const docRef = doc(this.postponedQuestionsCollection, docSnap.id);
+      batch.update(docRef, {
+        categoryId: newQuestionCategory.categoryId || null,
+      });
     });
 
     await batch.commit();

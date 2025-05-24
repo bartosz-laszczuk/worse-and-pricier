@@ -10,7 +10,10 @@ import { QuestionRepositoryService } from '../repositories';
 import { QuestionListStore, RandomizationStore } from '../store';
 import { QuestionMapperService } from './question-mapper.service';
 import { RandomizationService } from './randomization.service';
-import { UsedQuestion } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import {
+  QuestionCategory,
+  UsedQuestion,
+} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 
 @Injectable()
 export class QuestionListService {
@@ -64,9 +67,23 @@ export class QuestionListService {
     this.questionListStore.startLoading();
     try {
       this.questionListStore.updateQuestionInList(questionId, updatedQuestion);
+      const randomization = this.randomizationStore.entity();
+      if (randomization?.currentQuestion?.id === questionId) {
+        // this.randomizationService.clearCurrentQuestion(randomization.id);
+        randomization.currentQuestion = undefined;
+      }
+
       await this.questionRepositoryService.updateQuestion(
         questionId,
         updatedQuestion
+      );
+      const questionCategory: QuestionCategory = {
+        questionId,
+        categoryId: updatedQuestion.categoryId,
+      };
+      console.log('updated category:', updatedQuestion.categoryId);
+      await this.randomizationService.updateCategoryQuestionListsCategoryId(
+        questionCategory
       );
     } catch (error: any) {
       this.questionListStore.logError(
@@ -79,9 +96,13 @@ export class QuestionListService {
     this.questionListStore.startLoading();
     try {
       this.questionListStore.deleteQuestionFromList(questionId);
+      this.randomizationStore.deleteAvailableQuestionFromRandomization(
+        questionId
+      );
       await Promise.all([
         this.questionRepositoryService.deleteQuestion(questionId),
         this.deleteUsedQuestionFromRandomization(questionId),
+        this.deletePostponedQuestionFromRandomization(questionId),
         this.updateCurrentQuestionAfterQuestionDeletion(questionId),
       ]);
     } catch (error: any) {
@@ -188,6 +209,15 @@ export class QuestionListService {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (randomizationId)
       await this.randomizationService.deleteUsedQuestionFromRandomization(
+        randomizationId,
+        questionId
+      );
+  }
+
+  private async deletePostponedQuestionFromRandomization(questionId: string) {
+    const randomizationId = this.randomizationStore.entity()?.id;
+    if (randomizationId)
+      await this.randomizationService.deletePostponedQuestionFromRandomization(
         randomizationId,
         questionId
       );

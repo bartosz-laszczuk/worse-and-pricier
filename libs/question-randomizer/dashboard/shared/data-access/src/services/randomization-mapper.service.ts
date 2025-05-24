@@ -27,11 +27,8 @@ export class RandomizationMapperService {
       .filter(
         (question) =>
           question.isActive &&
-          question.categoryId &&
-          selectedCategoryIdList.includes(question.categoryId) &&
           !usedQuestionIdSet.has(question.id) &&
           !postponedQuestionIdSet.has(question.id)
-          // && question.id !== currentQuestion?.id
       )
       .map((q) => ({ questionId: q.id, categoryId: q.categoryId }));
 

@@ -10,7 +10,10 @@ import {
   where,
   CollectionReference,
 } from '@angular/fire/firestore';
-import { UsedQuestion } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import {
+  QuestionCategory,
+  UsedQuestion,
+} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 import { orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
 
 @Injectable({
@@ -67,16 +70,6 @@ export class UsedQuestionListRepositoryService {
       const { questionId, categoryId } = docSnap.data();
       return { questionId, categoryId };
     });
-    // const q = query(
-    //   this.usedQuestionsCollection,
-    //   where('randomizationId', '==', randomizationId),
-    //   orderBy('created', 'asc') // sort from earliest to latest
-    // );
-
-    // const snapshot = await getDocs(q);
-    // return snapshot.docs.map(
-    //   (docSnap) => docSnap.data()['questionId']
-    // ) as string[];
   }
 
   async deleteAllUsedQuestionsFromRandomization(
@@ -92,6 +85,52 @@ export class UsedQuestionListRepositoryService {
     const batch = writeBatch(this.firestore);
     snapshot.docs.forEach((docSnap) => {
       batch.delete(doc(this.usedQuestionsCollection, docSnap.id));
+    });
+
+    await batch.commit();
+  }
+
+  async deleteQuestionsFromUsedQuestionsByCategoryId(
+    randomizationId: string,
+    categoryId: string
+  ): Promise<void> {
+    const q = query(
+      this.usedQuestionsCollection,
+      where('randomizationId', '==', randomizationId),
+      where('categoryId', '==', categoryId)
+    );
+
+    const snapshot = await getDocs(q);
+
+    const batch = writeBatch(this.firestore);
+    snapshot.docs.forEach((docSnap) => {
+      batch.delete(doc(this.usedQuestionsCollection, docSnap.id));
+    });
+
+    await batch.commit();
+  }
+
+  async updateUsedQuestionCategoryId(
+    newQuestionCategory: QuestionCategory
+  ): Promise<void> {
+    const q = query(
+      this.usedQuestionsCollection,
+      where('questionId', '==', newQuestionCategory.questionId)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      return;
+    }
+
+    const batch = writeBatch(this.firestore);
+
+    snapshot.docs.forEach((docSnap) => {
+      const docRef = doc(this.usedQuestionsCollection, docSnap.id);
+      batch.update(docRef, {
+        categoryId: newQuestionCategory.categoryId || null,
+      });
     });
 
     await batch.commit();
