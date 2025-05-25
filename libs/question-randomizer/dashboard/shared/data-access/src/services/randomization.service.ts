@@ -312,16 +312,14 @@ export class RandomizationService {
     }
   }
 
-  public async deleteUsedQuestionsFromRandomizationByCategoryId(
+  public async resetUsedQuestionsCategoryId(
     randomizationId: string,
     categoryId: string
   ) {
     this.randomizationStore.startLoading();
     try {
-      this.randomizationStore.deleteUsedQuestionsFromRandomizationByCategoryId(
-        categoryId
-      );
-      await this.usedQuestionListRepositoryService.deleteQuestionsFromUsedQuestionsByCategoryId(
+      this.randomizationStore.resetUsedQuestionsCategoryId(categoryId);
+      await this.usedQuestionListRepositoryService.resetUsedQuestionsCategoryId(
         randomizationId,
         categoryId
       );
@@ -332,16 +330,14 @@ export class RandomizationService {
     }
   }
 
-  public async deletePostponedQuestionsFromRandomizationByCategoryId(
+  public async resetPostponedQuestionsCategoryId(
     randomizationId: string,
     categoryId: string
   ) {
     this.randomizationStore.startLoading();
     try {
-      this.randomizationStore.deletePostponedQuestionsFromRandomizationByCategoryId(
-        categoryId
-      );
-      await this.postponedQuestionListRepositoryService.deleteQuestionsFromPostponedQuestionsByCategoryId(
+      this.randomizationStore.resetPostponedQuestionsCategoryId(categoryId);
+      await this.postponedQuestionListRepositoryService.resetPostponedQuestionsCategoryId(
         randomizationId,
         categoryId
       );

@@ -110,7 +110,27 @@ export class PostponedQuestionListRepositoryService {
     await batch.commit();
   }
 
-  async deleteQuestionsFromPostponedQuestionsByCategoryId(
+  // async deleteQuestionsFromPostponedQuestionsByCategoryId(
+  //   randomizationId: string,
+  //   categoryId: string
+  // ): Promise<void> {
+  //   const q = query(
+  //     this.postponedQuestionsCollection,
+  //     where('randomizationId', '==', randomizationId),
+  //     where('categoryId', '==', categoryId)
+  //   );
+
+  //   const snapshot = await getDocs(q);
+
+  //   const batch = writeBatch(this.firestore);
+  //   snapshot.docs.forEach((docSnap) => {
+  //     batch.delete(doc(this.postponedQuestionsCollection, docSnap.id));
+  //   });
+
+  //   await batch.commit();
+  // }
+
+  async resetPostponedQuestionsCategoryId(
     randomizationId: string,
     categoryId: string
   ): Promise<void> {
@@ -122,9 +142,14 @@ export class PostponedQuestionListRepositoryService {
 
     const snapshot = await getDocs(q);
 
+    if (snapshot.empty) {
+      return;
+    }
+
     const batch = writeBatch(this.firestore);
     snapshot.docs.forEach((docSnap) => {
-      batch.delete(doc(this.postponedQuestionsCollection, docSnap.id));
+      const docRef = doc(this.postponedQuestionsCollection, docSnap.id);
+      batch.update(docRef, { categoryId: null });
     });
 
     await batch.commit();

@@ -47,10 +47,10 @@ export class CategoryListService {
     this.categoryListStore.startLoading();
 
     try {
-      await this.categoryRepositoryService.updateCategory(updatedCategory.id, {
+      this.categoryListStore.updateCategoryInList(updatedCategory.id, {
         name: updatedCategory.name,
       });
-      this.categoryListStore.updateCategoryInList(updatedCategory.id, {
+      await this.categoryRepositoryService.updateCategory(updatedCategory.id, {
         name: updatedCategory.name,
       });
     } catch (error: any) {
@@ -65,15 +65,13 @@ export class CategoryListService {
 
     try {
       this.categoryListStore.deleteCategoryFromList(categoryId);
-      this.randomizationStore.deleteAvailableQuestionsFromRandomizationByCategoryId(
-        categoryId
-      );
+      this.randomizationStore.resetAvailableQuestionsCategoryId(categoryId);
       await Promise.all([
         this.categoryRepositoryService.deleteCategory(categoryId),
         this.questionListService.deleteCategoryIdFromQuestions(categoryId),
         this.deleteSelectedCategoryFromRandomization(categoryId),
-        this.deleteUsedQuestionsFromRandomizationByCategoryId(categoryId),
-        this.deletePostponedQuestionsFromRandomizationByCategoryId(categoryId),
+        this.resetUsedQuestionsCategoryId(categoryId),
+        this.resetPostponedQuestionsCategoryId(categoryId),
         this.updateCurrentQuestionAfterCategoryDeletion(categoryId),
       ]);
     } catch (error: any) {
@@ -123,23 +121,19 @@ export class CategoryListService {
       );
   }
 
-  private async deleteUsedQuestionsFromRandomizationByCategoryId(
-    categoryId: string
-  ) {
+  private async resetUsedQuestionsCategoryId(categoryId: string) {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (randomizationId)
-      await this.randomizationService.deleteUsedQuestionsFromRandomizationByCategoryId(
+      await this.randomizationService.resetUsedQuestionsCategoryId(
         randomizationId,
         categoryId
       );
   }
 
-  private async deletePostponedQuestionsFromRandomizationByCategoryId(
-    categoryId: string
-  ) {
+  private async resetPostponedQuestionsCategoryId(categoryId: string) {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (randomizationId)
-      await this.randomizationService.deletePostponedQuestionsFromRandomizationByCategoryId(
+      await this.randomizationService.resetPostponedQuestionsCategoryId(
         randomizationId,
         categoryId
       );

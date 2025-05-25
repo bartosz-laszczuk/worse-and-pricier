@@ -90,7 +90,27 @@ export class UsedQuestionListRepositoryService {
     await batch.commit();
   }
 
-  async deleteQuestionsFromUsedQuestionsByCategoryId(
+  // async deleteQuestionsFromUsedQuestionsByCategoryId(
+  //   randomizationId: string,
+  //   categoryId: string
+  // ): Promise<void> {
+  //   const q = query(
+  //     this.usedQuestionsCollection,
+  //     where('randomizationId', '==', randomizationId),
+  //     where('categoryId', '==', categoryId)
+  //   );
+
+  //   const snapshot = await getDocs(q);
+
+  //   const batch = writeBatch(this.firestore);
+  //   snapshot.docs.forEach((docSnap) => {
+  //     batch.delete(doc(this.usedQuestionsCollection, docSnap.id));
+  //   });
+
+  //   await batch.commit();
+  // }
+
+  async resetUsedQuestionsCategoryId(
     randomizationId: string,
     categoryId: string
   ): Promise<void> {
@@ -102,9 +122,14 @@ export class UsedQuestionListRepositoryService {
 
     const snapshot = await getDocs(q);
 
+    if (snapshot.empty) {
+      return;
+    }
+
     const batch = writeBatch(this.firestore);
     snapshot.docs.forEach((docSnap) => {
-      batch.delete(doc(this.usedQuestionsCollection, docSnap.id));
+      const docRef = doc(this.usedQuestionsCollection, docSnap.id);
+      batch.update(docRef, { categoryId: null });
     });
 
     await batch.commit();

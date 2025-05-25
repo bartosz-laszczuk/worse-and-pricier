@@ -55,7 +55,7 @@ export const RandomizationStore = signalStore(
         store.entity()?.usedQuestionList,
         store.entity()?.selectedCategoryIdList
       );
-      console.log('usedQuestionList', store.entity()?.usedQuestionList);
+      // console.log('usedQuestionList', store.entity()?.usedQuestionList);
       // console.log('filteredUsedQuestionList', q);
       return q;
     }),
@@ -63,14 +63,16 @@ export const RandomizationStore = signalStore(
       () => store.entity()?.availableQuestionList
     ),
     filteredAvailableQuestionList: computed(() => {
+      const g = store.entity()?.availableQuestionList;
+      const z = store.entity()?.selectedCategoryIdList;
       const q = filterQuestionCategory(
         store.entity()?.availableQuestionList,
         store.entity()?.selectedCategoryIdList
       );
-      console.log(
-        'availableQuestionList',
-        store.entity()?.availableQuestionList
-      );
+      // console.log(
+      //   'availableQuestionList',
+      //   store.entity()?.availableQuestionList
+      // );
       // console.log(
       //   'selectedCategoryIdList',
       //   store.entity()?.selectedCategoryIdList
@@ -320,57 +322,57 @@ export const RandomizationStore = signalStore(
       });
     },
 
-    deleteAvailableQuestionsFromRandomizationByCategoryId(categoryId: string) {
+    resetAvailableQuestionsCategoryId(categoryId: string) {
       const entity = store.entity();
 
       if (!entity) return;
 
-      const updatedAvailableQuestionList = entity.availableQuestionList.filter(
-        (aq) => aq.categoryId !== categoryId
-      );
+      entity.availableQuestionList.forEach((aq) => {
+        if (aq.categoryId === categoryId) aq.categoryId = undefined;
+      });
 
       patchState(store, {
         entity: {
           ...entity,
-          availableQuestionList: updatedAvailableQuestionList,
+          availableQuestionList: [...entity.availableQuestionList],
         },
         isLoading: false,
         error: null,
       });
     },
 
-    deleteUsedQuestionsFromRandomizationByCategoryId(categoryId: string) {
+    resetUsedQuestionsCategoryId(categoryId: string) {
       const entity = store.entity();
 
       if (!entity) return;
 
-      const updatedUsedQuestionList = entity.usedQuestionList.filter(
-        (aq) => aq.categoryId !== categoryId
-      );
+      entity.usedQuestionList.forEach((aq) => {
+        if (aq.categoryId !== categoryId) aq.categoryId = undefined;
+      });
 
       patchState(store, {
         entity: {
           ...entity,
-          usedQuestionList: updatedUsedQuestionList,
+          usedQuestionList: [...entity.usedQuestionList],
         },
         isLoading: false,
         error: null,
       });
     },
 
-    deletePostponedQuestionsFromRandomizationByCategoryId(categoryId: string) {
+    resetPostponedQuestionsCategoryId(categoryId: string) {
       const entity = store.entity();
 
       if (!entity) return;
 
-      const updatedPostponedQuestionList = entity.postponedQuestionList.filter(
-        (aq) => aq.categoryId !== categoryId
-      );
+      entity.postponedQuestionList.forEach((aq) => {
+        if (aq.categoryId !== categoryId) aq.categoryId = undefined;
+      });
 
       patchState(store, {
         entity: {
           ...entity,
-          postponedQuestionList: updatedPostponedQuestionList,
+          postponedQuestionList: [...entity.postponedQuestionList],
         },
         isLoading: false,
         error: null,
