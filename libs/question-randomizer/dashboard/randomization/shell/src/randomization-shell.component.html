@@ -2,35 +2,33 @@
 <div class="grid-container">
   <lib-card class="item1" [title]="'Progress'">
     <div card-buttons>
-      <button (click)="onReset(randomization.id)">Reset</button>
+      <!-- <lib-button-text-icon (click)="onReset(randomization.id)">Reset</lib-button-text-icon> -->
+      <lib-button-icon (click)="onReset(randomization.id)" [icon]="'rotate-ccw'" [type]="'dark'"
+        [animation]="'rotate360-counter'">Reset</lib-button-icon>
     </div>
     <div class="status-units margin-bottom-24">
-      <lib-status-card
-        [count]="usedQuestionListLength()"
-        [title]="'ANSWERED'"
-        [type]="'gray-800'"
-      ></lib-status-card>
-      <lib-status-card
-        [count]="availableQuestionListLength()"
-        [title]="'AHEAD'"
-        [type]="'gray-600'"
-      ></lib-status-card>
-      <lib-status-card
-        [count]="postponedQuestionListLength()"
-        [title]="'POSTPONED'"
-      ></lib-status-card>
+      <lib-status-card [count]="usedQuestionListLength()" [title]="'ANSWERED'" [type]="'gray-800'"></lib-status-card>
+      <lib-status-card [count]="availableQuestionListLength()" [title]="'AHEAD'" [type]="'gray-600'"></lib-status-card>
+      <lib-status-card [count]="postponedQuestionListLength()" [title]="'POSTPONED'"></lib-status-card>
     </div>
-    <lib-status-bar
-      [postponed]="postponedQuestionListLength()"
-      [ahead]="availableQuestionListLength()"
-      [answered]="usedQuestionListLength()"
-    ></lib-status-bar>
+    <lib-status-bar [postponed]="postponedQuestionListLength()" [ahead]="availableQuestionListLength()"
+      [answered]="usedQuestionListLength()"></lib-status-bar>
   </lib-card>
   <lib-card class="item2" [title]="'Question'">
+    <div title-button>
+      <lib-button-icon [icon]="'edit'" [type]="'icon'"></lib-button-icon>
+    </div>
     <div card-buttons>
-      <button (click)="onPreviousQuestion(randomization.id)">Previous</button>
+      <lib-button-group>
+        <lib-button-icon (click)="onPreviousQuestion(randomization.id)" [icon]="'arrow-left'" [type]="'light'"
+          [animation]="'bounce-right-left'"></lib-button-icon>
+        <lib-button-icon (click)="onPostponeQuestion(randomization.id)" [icon]="'corner-up-right'"></lib-button-icon>
+        <lib-button-icon (click)="onNextQuestion(randomization.id)" [icon]="'arrow-right'" [type]="'light'"
+          [animation]="'bounce-left-right'"></lib-button-icon>
+      </lib-button-group>
+      <!-- <button (click)="onPreviousQuestion(randomization.id)">Previous</button>
       <button (click)="onNextQuestion(randomization.id)">Next</button>
-      <button (click)="onPostponeQuestion(randomization.id)">Postpone</button>
+      <button (click)="onPostponeQuestion(randomization.id)">Postpone</button> -->
     </div>
     @if(currentQuestion(); as question){
     <p>{{ question.question }}</p>
@@ -39,28 +37,27 @@
     }
   </lib-card>
   <lib-card class="item3" [title]="'Categories'">
-    <lib-input-check-group
-      [items]="categoryOptionItemList()"
-      [value]="selectedCategoryIdList()"
-      (checkboxChanged)="
+    <lib-input-check-group [items]="categoryOptionItemList()" [value]="selectedCategoryIdList()" (checkboxChanged)="
         onCheckboxChange(
           $event.value.toString(),
           $event.checked,
           randomization.id
         )
-      "
-    ></lib-input-check-group>
+      "></lib-input-check-group>
   </lib-card>
   <lib-card class="item4" [title]="'Answer'">
     <div card-buttons>
-      <button (click)="onToggleAnswer(randomization.showAnswer, randomization)">
+      <lib-button-icon (click)="onToggleAnswer(randomization.showAnswer, randomization)"
+        [icon]="randomization.showAnswer ? 'eye-off' : 'eye'"
+        [type]="randomization.showAnswer ? 'dark' : 'light'"></lib-button-icon>
+      <!-- <button (click)="onToggleAnswer(randomization.showAnswer, randomization)">
         {{ randomization.showAnswer ? 'Hide ' : 'Show ' }}answer
-      </button>
+      </button> -->
     </div>
     @if (randomization.showAnswer){ @if(currentQuestion(); as question){
     <div [innerHTML]="question.answer"></div>
-    }}</lib-card
-  >
+    }}
+  </lib-card>
 </div>
 }
 

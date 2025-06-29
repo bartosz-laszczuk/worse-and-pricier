@@ -1,6 +1,6 @@
 @if (title(); as title) {
 <div class="header">
-  <h4>{{ title }}</h4>
+  <h4 class="header__title">{{ title }}<ng-content select="[title-button]"></ng-content></h4>
   <ng-content select="[card-buttons]"></ng-content>
 </div>
 <hr class="divider margin-y-16" />

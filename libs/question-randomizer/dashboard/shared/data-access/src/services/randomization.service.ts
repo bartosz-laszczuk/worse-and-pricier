@@ -228,6 +228,7 @@ export class RandomizationService {
       } else {
         return;
       }
+      randomization.showAnswer = false;
 
       this.randomizationStore.startLoading();
       this.randomizationStore.setCurrentQuestion(newCurrentQuestion);
@@ -393,7 +394,7 @@ export class RandomizationService {
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message ||
-          'Failed to delete all used questions from Randomization.'
+        'Failed to delete all used questions from Randomization.'
       );
     }
   }
@@ -410,7 +411,7 @@ export class RandomizationService {
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message ||
-          'Failed to delete all postponed questions from Randomization.'
+        'Failed to delete all postponed questions from Randomization.'
       );
     }
   }

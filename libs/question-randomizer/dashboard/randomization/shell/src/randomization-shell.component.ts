@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RandomizationShellFacade } from './randomization-shell.facade';
 import {
+  ButtonIconComponent,
+  ButtonTextIconComponent,
   CardComponent,
   InputCheckGroupComponent,
 } from '@my-nx-monorepo/shared-ui';
@@ -10,6 +12,8 @@ import {
   StatusBarComponent,
   StatusCardComponent,
 } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-ui';
+import { ButtonToggleComponent } from "../../../../../shared/ui/src/buttons/button-toggle/button-toggle.component";
+import { ButtonGroupComponent } from "../../../../../shared/ui/src/buttons/button-group/button-group.component";
 
 @Component({
   selector: 'lib-randomization-shell',
@@ -19,6 +23,8 @@ import {
     CardComponent,
     StatusCardComponent,
     StatusBarComponent,
+    ButtonGroupComponent,
+    ButtonIconComponent,
   ],
   templateUrl: './randomization-shell.component.html',
   styleUrl: './randomization-shell.component.scss',

@@ -1,8 +1,6 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-const ButtonTypes = ['default', 'dark', 'light'] as const;
-type ButtonType = (typeof ButtonTypes)[number];
+import { ButtonType } from '@my-nx-monorepo/shared-util';
 
 @Component({
   selector: 'lib-button',

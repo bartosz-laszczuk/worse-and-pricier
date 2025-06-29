@@ -1,7 +1,15 @@
 :host {
-  ::ng-deep button {
-    border: none !important;
-    border-radius: 0 !important;
+
+  ::ng-deep lib-button-icon,
+  ::ng-deep lib-button {
+    button {
+      border: none !important;
+      border-radius: 0 !important;
+    }
+
+    &:not(:last-child) {
+      border-right: 1px solid var(--secondary-color) !important;
+    }
   }
 }
 

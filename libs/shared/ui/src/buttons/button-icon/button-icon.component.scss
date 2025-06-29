@@ -1,64 +1,128 @@
-/* From Uiverse.io by OnCloud125252 */
-/* Note that you only needs to edit the config to customize the button! */
-
-.plusButton {
-  /* Config start */
-  --plus_sideLength: 2.5rem;
-  --plus_topRightTriangleSideLength: 0.9rem;
-  /* Config end */
-  position: relative;
+.button {
+  // width: 120px;
+  height: 1.6rem;
+  width: 1.6rem;
+  padding: 0px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  border: 1px solid white;
-  width: var(--plus_sideLength);
-  height: var(--plus_sideLength);
-  background-color: #000000;
-  overflow: hidden;
-}
-
-.plusButton::before {
-  position: absolute;
-  content: '';
-  top: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-width: 0 var(--plus_topRightTriangleSideLength)
-    var(--plus_topRightTriangleSideLength) 0;
-  border-style: solid;
-  border-color: transparent white transparent transparent;
-  transition-timing-function: ease-in-out;
-  transition-duration: 0.2s;
-}
-
-.plusButton:hover {
+  justify-content: center;
+  // gap: 12px;
   cursor: pointer;
+  border: 1px solid var(--secondary-color);
+  // border: 1.5px solid var(--gray-700);
+  border-radius: 3px;
+  background-color: var(--primary-color);
+  // box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.137);
+
+  svg-icon {
+    display: flex;
+    color: var(--secondary-color);
+    transition: all 0.2s;
+  }
+
+  &.dark {
+    background: var(--secondary-color);
+    color: var(--background-color);
+
+    svg-icon {
+      color: var(--gray-100);
+    }
+  }
+
+  &.light {
+    background: var(--background-color);
+    color: var(--secondary-color);
+
+    svg-icon {
+      color: var(--text-color);
+    }
+  }
+
+  &.icon {
+    background: transparent;
+    border: none;
+    color: var(--secondary-color);
+
+    svg-icon {
+      color: var(--text-color);
+    }
+  }
+
+  &.animate-rotate360:hover .icon {
+    animation: rotate360 1s ease-out infinite;
+  }
+
+  &.animate-rotate360-counter:hover .icon {
+    animation: rotate360-counter 1s ease-out infinite;
+  }
+
+  &.animate-bounce-left-right:hover .icon {
+    animation: bounce-left-right 1s ease-out infinite;
+  }
+
+  &.animate-bounce-right-left:hover .icon {
+    animation: bounce-right-left 1s ease-out infinite;
+  }
 }
 
-.plusButton:hover::before {
-  --plus_topRightTriangleSideLength: calc(var(--plus_sideLength) * 2);
+.arrow {
+  // background-color: var(--secondary-color);
+  color: white;
 }
 
-.plusButton:focus-visible::before {
-  --plus_topRightTriangleSideLength: calc(var(--plus_sideLength) * 2);
+.arrow path {
+  fill: var(--gray-100);
 }
 
-.plusButton > .plusIcon {
-  color: var(--gray-100);
-  width: calc(var(--plus_sideLength) * 0.7);
-  height: calc(var(--plus_sideLength) * 0.7);
-  z-index: 1;
-  transition-timing-function: ease-in-out;
-  transition-duration: 0.2s;
+// .button:hover .icon {
+//   // animation: rotate360 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite;
+//   animation: rotate360-counter 1s ease-out infinite;
+// }
+
+@keyframes bounce-left-right {
+  0% {
+    transform: translateX(-6px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(6px);
+    opacity: 1;
+  }
 }
 
-.plusButton:hover > .plusIcon {
-  color: var(--text-color);
-  transform: rotate(180deg);
+@keyframes bounce-right-left {
+  0% {
+    transform: translateX(6px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-6px);
+    opacity: 1;
+  }
 }
 
-.plusButton:focus-visible > .plusIcon {
-  fill: black;
-  transform: rotate(180deg);
+@keyframes rotate360 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate360-counter {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+.button:active {
+  transform: scale(0.97);
 }

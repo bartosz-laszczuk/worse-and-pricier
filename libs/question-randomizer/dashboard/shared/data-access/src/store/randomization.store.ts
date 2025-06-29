@@ -437,6 +437,7 @@ export const RandomizationStore = signalStore(
         entity: {
           ...entity,
           currentQuestion: question,
+          showAnswer: false
         },
         isLoading: false,
         error: null,
