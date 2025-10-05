@@ -14,7 +14,7 @@ import { doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 export class SelectedCategoryListRepositoryService {
   constructor(private firestore: Firestore) {}
 
-  async addCategoryToRandomization(
+  async addSelectedCategoryToRandomization(
     randomizationId: string,
     categoryId: string
   ): Promise<string> {

@@ -5,6 +5,9 @@ import { CategoryListStore, RandomizationStore } from '../store';
 import { CategoryRepositoryService } from '../repositories';
 import { QuestionListService } from './question-list.service';
 import { RandomizationService } from './randomization.service';
+import { UsedQuestionListService } from './used-question-list.service';
+import { PostponedQuestionListService } from './postponed-question-list.service';
+import { SelectedCategoryListService } from './selected-category-list.service';
 
 @Injectable()
 export class CategoryListService {
@@ -16,6 +19,13 @@ export class CategoryListService {
   private readonly questionListService = inject(QuestionListService);
   private readonly randomizationService = inject(RandomizationService);
   private readonly randomizationStore = inject(RandomizationStore);
+  private readonly usedQuestionListService = inject(UsedQuestionListService);
+  private readonly postponedQuestionListService = inject(
+    PostponedQuestionListService
+  );
+  private readonly selectedCategoryListService = inject(
+    SelectedCategoryListService
+  );
 
   public async createCategory(createdCategory: Category) {
     const userId = this.userStore.uid();
@@ -115,7 +125,7 @@ export class CategoryListService {
   private async deleteSelectedCategoryFromRandomization(categoryId: string) {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (randomizationId)
-      await this.randomizationService.deselectCategoryFromRandomization(
+      await this.selectedCategoryListService.deselectSelectedCategoryFromRandomization(
         randomizationId,
         categoryId
       );
@@ -124,7 +134,7 @@ export class CategoryListService {
   private async resetUsedQuestionsCategoryId(categoryId: string) {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (randomizationId)
-      await this.randomizationService.resetUsedQuestionsCategoryId(
+      await this.usedQuestionListService.resetUsedQuestionsCategoryId(
         randomizationId,
         categoryId
       );
@@ -133,7 +143,7 @@ export class CategoryListService {
   private async resetPostponedQuestionsCategoryId(categoryId: string) {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (randomizationId)
-      await this.randomizationService.resetPostponedQuestionsCategoryId(
+      await this.postponedQuestionListService.resetPostponedQuestionsCategoryId(
         randomizationId,
         categoryId
       );

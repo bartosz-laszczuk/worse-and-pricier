@@ -5,12 +5,15 @@ import { DashboardShellFacade } from './dashboard-shell.facade';
 import {
   CategoryListService,
   CategoryListStore,
+  PostponedQuestionListService,
   QualificationListService,
   QualificationListStore,
   QuestionListService,
   QuestionListStore,
   RandomizationService,
   RandomizationStore,
+  SelectedCategoryListService,
+  UsedQuestionListService,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { Theme } from '@my-nx-monorepo/shared-styles';
 import { DashboardSidebarComponent } from './ui/sidebar/dashboard-sidebar.component';
@@ -38,6 +41,9 @@ import { DashboardNavigationBarComponent } from './ui/navigation-bar/dashboard-n
     QualificationListService,
     QuestionListService,
     RandomizationService,
+    UsedQuestionListService,
+    SelectedCategoryListService,
+    PostponedQuestionListService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

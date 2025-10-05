@@ -14,6 +14,8 @@ import {
   QuestionCategory,
   UsedQuestion,
 } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import { UsedQuestionListService } from './used-question-list.service';
+import { PostponedQuestionListService } from './postponed-question-list.service';
 
 @Injectable()
 export class QuestionListService {
@@ -25,6 +27,10 @@ export class QuestionListService {
   private readonly questionListStore = inject(QuestionListStore);
   private readonly randomizationService = inject(RandomizationService);
   private readonly randomizationStore = inject(RandomizationStore);
+  private readonly usedQuestionListService = inject(UsedQuestionListService);
+  private readonly postponedQuestionListService = inject(
+    PostponedQuestionListService
+  );
 
   public async createQuestionByForm(createdQuestion: EditQuestionFormValue) {
     const userId = this.userStore.uid();
@@ -208,7 +214,7 @@ export class QuestionListService {
   private async deleteUsedQuestionFromRandomization(questionId: string) {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (randomizationId)
-      await this.randomizationService.deleteUsedQuestionFromRandomization(
+      await this.usedQuestionListService.deleteUsedQuestionFromRandomization(
         randomizationId,
         questionId
       );
@@ -217,7 +223,7 @@ export class QuestionListService {
   private async deletePostponedQuestionFromRandomization(questionId: string) {
     const randomizationId = this.randomizationStore.entity()?.id;
     if (randomizationId)
-      await this.randomizationService.deletePostponedQuestionFromRandomization(
+      await this.postponedQuestionListService.deletePostponedQuestionFromRandomization(
         randomizationId,
         questionId
       );

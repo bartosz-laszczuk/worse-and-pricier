@@ -4,3 +4,6 @@ export * from './category-list.service';
 export * from './question-mapper.service';
 export * from './randomization.service';
 export * from './randomization-mapper.service';
+export * from './used-question-list.service';
+export * from './postponed-question-list.service';
+export * from './selected-category-list.service';

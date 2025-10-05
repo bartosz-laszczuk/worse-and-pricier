@@ -7,11 +7,9 @@ import {
 import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { RandomizationMapperService } from './randomization-mapper.service';
 import {
-  PostponedQuestion,
   QuestionCategory,
   Randomization,
   RandomizationStatus,
-  UsedQuestion,
 } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 import { RandomizationStore } from '../store';
 import { PostponedQuestionListRepositoryService } from '../repositories/postponed-question-list-repository.service';
@@ -92,112 +90,6 @@ export class RandomizationService {
     }
   }
 
-  public async addCategoryToRandomization(
-    randomizationId: string,
-    categoryId: string
-  ) {
-    this.randomizationStore.startLoading();
-
-    try {
-      this.randomizationStore.addCategoryIdToRandomization(categoryId);
-
-      await this.selectedCategoryListRepositoryService.addCategoryToRandomization(
-        randomizationId,
-        categoryId
-      );
-    } catch (error: any) {
-      this.randomizationStore.logError(
-        error.message || 'Failed to add Category to Randomization.'
-      );
-    }
-  }
-
-  public async addUsedQuestionToRandomization(
-    randomizationId: string,
-    usedQuestion: UsedQuestion
-  ) {
-    this.randomizationStore.startLoading();
-
-    try {
-      this.randomizationStore.addUsedQuestionToRandomization(usedQuestion);
-
-      await this.usedQuestionListRepositoryService.addQuestionToUsedQuestions(
-        randomizationId,
-        usedQuestion
-      );
-    } catch (error: any) {
-      this.randomizationStore.logError(
-        error.message || 'Failed to add Category to Randomization.'
-      );
-    }
-  }
-
-  public async deletePostponedQuestionFromRandomization(
-    randomizationId: string,
-    questionId: string
-  ) {
-    this.randomizationStore.startLoading();
-    try {
-      this.randomizationStore.deletePostponedQuestionFromRandomization(
-        questionId
-      );
-      await this.postponedQuestionListRepositoryService.deleteQuestionFromPostponedQuestions(
-        randomizationId,
-        questionId
-      );
-    } catch (error: any) {
-      const message =
-        error.message ||
-        'Failed to delete postponed question from Randomization.';
-      console.error(message);
-      this.randomizationStore.logError(message);
-    }
-  }
-
-  public async addPostponedQuestionToRandomization(
-    randomizationId: string,
-    postponedQuestion: PostponedQuestion
-  ) {
-    this.randomizationStore.startLoading();
-
-    try {
-      this.randomizationStore.addPostponedQuestionToRandomization(
-        postponedQuestion
-      );
-
-      await this.postponedQuestionListRepositoryService.addQuestionToPostponedQuestions(
-        randomizationId,
-        postponedQuestion
-      );
-    } catch (error: any) {
-      this.randomizationStore.logError(
-        error.message || 'Failed to add Category to Randomization.'
-      );
-    }
-  }
-
-  public async deselectCategoryFromRandomization(
-    randomizationId: string,
-    categoryId: string
-  ) {
-    this.randomizationStore.startLoading();
-
-    try {
-      this.randomizationStore.deleteSelectedCategoryIdFromRandomization(
-        categoryId
-      );
-
-      await this.selectedCategoryListRepositoryService.deleteSelectedCategoryFromRandomization(
-        randomizationId,
-        categoryId
-      );
-    } catch (error: any) {
-      this.randomizationStore.logError(
-        error.message || 'Failed to delete Category from Randomization.'
-      );
-    }
-  }
-
   public async updateCurrentQuestionWithNextQuestion(
     questionDic: Record<string, Question>
   ): Promise<void> {
@@ -256,22 +148,6 @@ export class RandomizationService {
     }
   }
 
-  public async movePostponedQuestionToEnd(
-    postponedQuestion: PostponedQuestion
-  ) {
-    try {
-      this.randomizationStore.startLoading();
-      this.randomizationStore.movePostponedQuestionToEnd(postponedQuestion);
-      await this.postponedQuestionListRepositoryService.updatePostponedQuestionCreateDate(
-        postponedQuestion.questionId
-      );
-    } catch (error: any) {
-      this.randomizationStore.logError(
-        error.message || 'Failed to update postponed question.'
-      );
-    }
-  }
-
   public async updateCategoryQuestionListsCategoryId(
     newQuestionCategory: QuestionCategory
   ) {
@@ -291,60 +167,6 @@ export class RandomizationService {
     } catch (error: any) {
       this.randomizationStore.logError(
         error.message || 'Failed to update postponed question.'
-      );
-    }
-  }
-
-  public async deleteUsedQuestionFromRandomization(
-    randomizationId: string,
-    questionId: string
-  ) {
-    this.randomizationStore.startLoading();
-    try {
-      this.randomizationStore.deleteUsedQuestionFromRandomization(questionId);
-      await this.usedQuestionListRepositoryService.deleteQuestionFromUsedQuestions(
-        randomizationId,
-        questionId
-      );
-    } catch (error: any) {
-      this.randomizationStore.logError(
-        error.message || 'Failed to delete used question from Randomization.'
-      );
-    }
-  }
-
-  public async resetUsedQuestionsCategoryId(
-    randomizationId: string,
-    categoryId: string
-  ) {
-    this.randomizationStore.startLoading();
-    try {
-      this.randomizationStore.resetUsedQuestionsCategoryId(categoryId);
-      await this.usedQuestionListRepositoryService.resetUsedQuestionsCategoryId(
-        randomizationId,
-        categoryId
-      );
-    } catch (error: any) {
-      this.randomizationStore.logError(
-        error.message || 'Failed to delete used question from Randomization.'
-      );
-    }
-  }
-
-  public async resetPostponedQuestionsCategoryId(
-    randomizationId: string,
-    categoryId: string
-  ) {
-    this.randomizationStore.startLoading();
-    try {
-      this.randomizationStore.resetPostponedQuestionsCategoryId(categoryId);
-      await this.postponedQuestionListRepositoryService.resetPostponedQuestionsCategoryId(
-        randomizationId,
-        categoryId
-      );
-    } catch (error: any) {
-      this.randomizationStore.logError(
-        error.message || 'Failed to delete used question from Randomization.'
       );
     }
   }
@@ -382,41 +204,7 @@ export class RandomizationService {
     }
   }
 
-  public async deleteAllUsedQuestionsFromRandomization(
-    randomizationId: string
-  ) {
-    this.randomizationStore.startLoading();
-    try {
-      this.randomizationStore.clearUsedQuestions();
-      await this.usedQuestionListRepositoryService.deleteAllUsedQuestionsFromRandomization(
-        randomizationId
-      );
-    } catch (error: any) {
-      this.randomizationStore.logError(
-        error.message ||
-        'Failed to delete all used questions from Randomization.'
-      );
-    }
-  }
-
-  public async deleteAllPostponedQuestionsFromRandomization(
-    randomizationId: string
-  ) {
-    this.randomizationStore.startLoading();
-    try {
-      this.randomizationStore.clearPostponedQuestions();
-      await this.postponedQuestionListRepositoryService.deleteAllPostponedQuestionsFromRandomization(
-        randomizationId
-      );
-    } catch (error: any) {
-      this.randomizationStore.logError(
-        error.message ||
-        'Failed to delete all postponed questions from Randomization.'
-      );
-    }
-  }
-
-  public findFirstQuestionForCategoryIdList(
+  private findFirstQuestionForCategoryIdList(
     postponedQuestionIdList: string[],
     selectedCategoryIdList: string[],
     questionDic: Record<string, Question>

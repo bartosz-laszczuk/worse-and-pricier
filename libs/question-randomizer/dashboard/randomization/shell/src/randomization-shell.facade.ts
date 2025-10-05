@@ -8,10 +8,13 @@ import {
 } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 import {
   CategoryListStore,
+  PostponedQuestionListService,
   QuestionListService,
   QuestionListStore,
   RandomizationService,
   RandomizationStore,
+  SelectedCategoryListService,
+  UsedQuestionListService,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
 import { filter, forkJoin, take } from 'rxjs';
@@ -22,6 +25,13 @@ export class RandomizationShellFacade {
   private readonly randomizationStore = inject(RandomizationStore);
   private readonly questionListStore = inject(QuestionListStore);
   private readonly questionListService = inject(QuestionListService);
+  private readonly usedQuestionListService = inject(UsedQuestionListService);
+  private readonly postponedQuestionListService = inject(
+    PostponedQuestionListService
+  );
+  private readonly selectedCategoryListService = inject(
+    SelectedCategoryListService
+  );
   private readonly userStore = inject(UserStore);
   private readonly categoryListStore = inject(CategoryListStore);
 
@@ -72,7 +82,7 @@ export class RandomizationShellFacade {
       this.randomizationStore.deleteAvailableQuestionFromRandomization(
         currentQuestion.id
       );
-      this.randomizationService.deletePostponedQuestionFromRandomization(
+      this.postponedQuestionListService.deletePostponedQuestionFromRandomization(
         randomization.id,
         currentQuestion.id
       );
@@ -80,7 +90,7 @@ export class RandomizationShellFacade {
         questionId: currentQuestion.id,
         categoryId: currentQuestion.categoryId,
       };
-      this.randomizationService.addUsedQuestionToRandomization(
+      this.usedQuestionListService.addUsedQuestionToRandomization(
         randomizationId,
         usedQuestion
       );
@@ -113,9 +123,11 @@ export class RandomizationShellFacade {
           (pq) => pq.questionId === currentQuestion.id
         )
       ) {
-        this.randomizationService.movePostponedQuestionToEnd(postponedQuestion);
+        this.postponedQuestionListService.movePostponedQuestionToEnd(
+          postponedQuestion
+        );
       } else {
-        this.randomizationService.addPostponedQuestionToRandomization(
+        this.postponedQuestionListService.addPostponedQuestionToRandomization(
           randomizationId,
           postponedQuestion
         );
@@ -149,7 +161,7 @@ export class RandomizationShellFacade {
 
     if (!lastQuestion) return;
 
-    this.randomizationService.deleteUsedQuestionFromRandomization(
+    this.usedQuestionListService.deleteUsedQuestionFromRandomization(
       randomizationId,
       lastQuestion.id
     );
@@ -164,7 +176,7 @@ export class RandomizationShellFacade {
     categoryId: string,
     randomizationId: string
   ) {
-    this.randomizationService.addCategoryToRandomization(
+    this.selectedCategoryListService.addSelectedCategoryToRandomization(
       randomizationId,
       categoryId
     );
@@ -183,7 +195,7 @@ export class RandomizationShellFacade {
     categoryId: string,
     randomizationId: string
   ) {
-    this.randomizationService.deselectCategoryFromRandomization(
+    this.selectedCategoryListService.deselectSelectedCategoryFromRandomization(
       randomizationId,
       categoryId
     );
@@ -206,10 +218,10 @@ export class RandomizationShellFacade {
   }
 
   public async resetRandomization(randomizationId: string) {
-    this.randomizationService.deleteAllUsedQuestionsFromRandomization(
+    this.usedQuestionListService.deleteAllUsedQuestionsFromRandomization(
       randomizationId
     );
-    this.randomizationService.deleteAllPostponedQuestionsFromRandomization(
+    this.postponedQuestionListService.deleteAllPostponedQuestionsFromRandomization(
       randomizationId
     );
     const questionList: AvailableQuestion[] = Object.values(

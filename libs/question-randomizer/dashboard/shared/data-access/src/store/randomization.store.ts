@@ -50,47 +50,30 @@ export const RandomizationStore = signalStore(
   withComputed((store) => ({
     randomization: computed(() => store.entity()),
     usedQuestionList: computed(() => store.entity()?.usedQuestionList),
-    filteredUsedQuestionList: computed(() => {
-      const q = filterQuestionCategory(
+    filteredUsedQuestionList: computed(() =>
+      filterQuestionCategory(
         store.entity()?.usedQuestionList,
         store.entity()?.selectedCategoryIdList
-      );
-      // console.log('usedQuestionList', store.entity()?.usedQuestionList);
-      // console.log('filteredUsedQuestionList', q);
-      return q;
-    }),
+      )
+    ),
     availableQuestionList: computed(
       () => store.entity()?.availableQuestionList
     ),
-    filteredAvailableQuestionList: computed(() => {
-      const g = store.entity()?.availableQuestionList;
-      const z = store.entity()?.selectedCategoryIdList;
-      const q = filterQuestionCategory(
+    filteredAvailableQuestionList: computed(() =>
+      filterQuestionCategory(
         store.entity()?.availableQuestionList,
         store.entity()?.selectedCategoryIdList
-      );
-      // console.log(
-      //   'availableQuestionList',
-      //   store.entity()?.availableQuestionList
-      // );
-      // console.log(
-      //   'selectedCategoryIdList',
-      //   store.entity()?.selectedCategoryIdList
-      // );
-      // console.log('filteredAvailableQuestionList', q);
-      return q;
-    }),
+      )
+    ),
     postponedQuestionList: computed(
       () => store.entity()?.postponedQuestionList
     ),
-    filteredPostponedQuestionList: computed(() => {
-      const q = filterQuestionCategory(
+    filteredPostponedQuestionList: computed(() =>
+      filterQuestionCategory(
         store.entity()?.postponedQuestionList,
         store.entity()?.selectedCategoryIdList
-      );
-      // console.log('filteredPostponedQuestionList', q);
-      return q;
-    }),
+      )
+    ),
     currentQuestion: computed(() => store.entity()?.currentQuestion),
   })),
   withMethods((store) => ({
@@ -102,7 +85,7 @@ export const RandomizationStore = signalStore(
       });
     },
 
-    addCategoryIdToRandomization(categoryId: string) {
+    addSelectedCategoryIdToRandomization(categoryId: string) {
       const entity = store.entity();
 
       if (!entity) return;
@@ -437,7 +420,7 @@ export const RandomizationStore = signalStore(
         entity: {
           ...entity,
           currentQuestion: question,
-          showAnswer: false
+          showAnswer: false,
         },
         isLoading: false,
         error: null,
