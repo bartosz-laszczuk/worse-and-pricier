@@ -41,10 +41,10 @@ export default [
               sourceTag: 'type:util',
               onlyDependOnLibsWithTags: ['type:util'],
             },
-            // Styles libraries are leaf nodes (no dependencies)
+            // Styles libraries can depend on util (for tokens)
             {
               sourceTag: 'type:styles',
-              onlyDependOnLibsWithTags: [],
+              onlyDependOnLibsWithTags: ['type:util'],
             },
             // Apps can depend on everything
             {

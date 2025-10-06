@@ -1,7 +1,7 @@
 import { Component, effect, inject, input, output } from '@angular/core';
 
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { InputTextComponent } from '@my-nx-monorepo/shared-ui';
+import { InputTextComponent } from '@my-nx-monorepo/design-system-ui';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 
 interface EditCategoryForm {

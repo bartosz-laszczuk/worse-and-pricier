@@ -15,6 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@my-nx-monorepo/design-system-styles": [
+        "libs/design-system/styles/src/index.ts"
+      ],
+      "@my-nx-monorepo/design-system-tokens": [
+        "libs/design-system/tokens/src/index.ts"
+      ],
+      "@my-nx-monorepo/design-system-ui": [
+        "libs/design-system/ui/src/index.ts"
+      ],
       "@my-nx-monorepo/question-randomizer-auth-data-access": [
         "libs/question-randomizer/auth/data-access/src/index.ts"
       ],
@@ -85,7 +94,6 @@
         "libs/question-randomizer/shared/util/src/index.ts"
       ],
       "@my-nx-monorepo/shared-styles": ["libs/shared/styles/src/index.ts"],
-      "@my-nx-monorepo/shared-ui": ["libs/shared/ui/src/index.ts"],
       "@my-nx-monorepo/shared-util": ["libs/shared/util/src/index.ts"]
     }
   },

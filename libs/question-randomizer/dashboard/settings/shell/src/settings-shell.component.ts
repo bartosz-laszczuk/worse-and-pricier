@@ -3,8 +3,8 @@ import { Component, inject } from '@angular/core';
 import {
   ButtonToggleComponent,
   ButtonToggleGroupComponent,
-} from '@my-nx-monorepo/shared-ui';
-import { Theme } from '@my-nx-monorepo/shared-styles';
+} from '@my-nx-monorepo/design-system-ui';
+import { Theme } from '@my-nx-monorepo/design-system-styles';
 import { SettingsShellFacade } from './settings-shell.facade';
 
 @Component({

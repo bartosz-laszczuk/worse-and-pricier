@@ -6,7 +6,7 @@ import {
   CardComponent,
   InputCheckGroupComponent,
   ButtonGroupComponent,
-} from '@my-nx-monorepo/shared-ui';
+} from '@my-nx-monorepo/design-system-ui';
 import { Randomization } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 import {
   StatusBarComponent,

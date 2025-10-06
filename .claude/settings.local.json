@@ -7,7 +7,16 @@
       "Bash(netstat:*)",
       "Bash(findstr:*)",
       "Bash(taskkill:*)",
-      "Bash(npx nx lint:*)"
+      "Bash(npx nx lint:*)",
+      "mcp__nx-mcp__nx_workspace",
+      "mcp__nx-mcp__nx_available_plugins",
+      "mcp__nx-mcp__nx_docs",
+      "mcp__nx-mcp__nx_project_details",
+      "Bash(npx nx g:*)",
+      "Bash(npx nx show project:*)",
+      "Bash(npx nx build:*)",
+      "Bash(find:*)",
+      "Bash(npx nx storybook:*)"
     ],
     "deny": [],
     "ask": []

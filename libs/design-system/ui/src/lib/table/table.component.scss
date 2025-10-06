@@ -1,0 +1,21 @@
+// Note: Mixins should be imported from design-system-tokens when available
+// For now, define locally or remove if not used
+
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.tbody-cell {
+  background-color: var(--gray-100);
+  padding: 0.5rem;
+  height: 100%;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 1rem;
+}

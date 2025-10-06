@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { InputTextComponent } from '@my-nx-monorepo/shared-ui';
+import { InputTextComponent } from '@my-nx-monorepo/design-system-ui';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
 import { LoginFacade } from './login.facade';

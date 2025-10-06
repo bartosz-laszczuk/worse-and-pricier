@@ -15,7 +15,6 @@ import {
   SelectedCategoryListService,
   UsedQuestionListService,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
-import { Theme } from '@my-nx-monorepo/shared-styles';
 import { DashboardSidebarComponent } from './ui/sidebar/dashboard-sidebar.component';
 import { DashboardHeaderComponent } from './ui/header/dashboard-header.component';
 import { DashboardNavigationBarComponent } from './ui/navigation-bar/dashboard-navigation-bar.component';
@@ -26,8 +25,8 @@ import { DashboardNavigationBarComponent } from './ui/navigation-bar/dashboard-n
     RouterModule,
     DashboardSidebarComponent,
     DashboardHeaderComponent,
-    DashboardNavigationBarComponent
-],
+    DashboardNavigationBarComponent,
+  ],
   templateUrl: './dashboard-shell.component.html',
   styleUrl: './dashboard-shell.component.scss',
   providers: [

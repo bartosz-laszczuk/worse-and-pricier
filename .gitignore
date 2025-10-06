@@ -50,3 +50,6 @@ Thumbs.db
 
 # Claude Code local context
 .claude/context.md
+
+
+storybook-static

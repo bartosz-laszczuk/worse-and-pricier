@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Theme, ThemeService } from '@my-nx-monorepo/shared-styles';
+import { Theme, ThemeService } from '@my-nx-monorepo/design-system-styles';
 
 @Injectable()
 export class SettingsShellFacade {

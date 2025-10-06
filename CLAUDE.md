@@ -11,6 +11,7 @@ This is an Nx monorepo containing an Angular application called **question-rando
 ## Commands
 
 ### Development
+
 ```bash
 npx nx serve question-randomizer        # Run dev server (http://localhost:4200)
 npx nx build question-randomizer        # Production build
@@ -18,6 +19,7 @@ npx nx build question-randomizer --configuration=development  # Development buil
 ```
 
 ### Testing
+
 ```bash
 npx nx test question-randomizer         # Run app tests
 npx nx test <project-name>              # Run tests for specific lib
@@ -27,6 +29,7 @@ npx nx run-many --target=test           # Run all tests
 ```
 
 ### Linting
+
 ```bash
 npx nx lint question-randomizer         # Lint the app
 npx nx lint <project-name>              # Lint specific project
@@ -34,11 +37,27 @@ npx nx run-many --target=lint           # Lint all projects
 ```
 
 ### E2E Testing
+
 ```bash
 npx nx e2e question-randomizer-e2e      # Run Playwright e2e tests
 ```
 
+### Design System
+
+```bash
+# Build design system libraries
+npx nx build tokens                     # Build design tokens
+npx nx build styles                     # Build global styles
+npx nx build ui                         # Build UI components
+npx nx run-many --target=build --projects=tokens,styles,ui  # Build all
+
+# Storybook (component documentation)
+npx nx storybook ui                     # Run Storybook dev server
+npx nx build-storybook ui               # Build static Storybook
+```
+
 ### Code Generation
+
 ```bash
 npx nx g @nx/angular:library <lib-name>             # Generate new library
 npx nx g @nx/angular:component <component-name>     # Generate component
@@ -60,6 +79,11 @@ The repository follows Nx's recommended structure with domain-driven design:
 Libraries follow a layered architecture pattern organized by domain:
 
 **Domain structure:**
+
+- `design-system/` - **Publishable design system:**
+  - `design-system/tokens/` - Design tokens (colors, typography, spacing) - SCSS + TypeScript
+  - `design-system/styles/` - Global styles, theme service, utilities
+  - `design-system/ui/` - Reusable UI components with Storybook
 - `question-randomizer/auth/` - Authentication domain (login, registration, email verification)
 - `question-randomizer/dashboard/` - **Namespace for dashboard-related domains:**
   - `dashboard/questions/` - Question management domain
@@ -70,7 +94,7 @@ Libraries follow a layered architecture pattern organized by domain:
   - `dashboard/settings/` - Settings domain
   - `dashboard/shared/` - Shared dashboard code (cross-cutting stores, services)
 - `question-randomizer/shared/` - App-wide shared code
-- `shared/` - Workspace-wide reusable libraries (ui, util, styles)
+- `shared/util/` - Workspace-wide utility library (for non-UI code only)
 
 **Important:** The `dashboard/` folder is a namespace for grouping related domains, NOT a single monolithic domain. Each subfolder represents a distinct bounded context with its own features and concerns.
 
@@ -88,16 +112,18 @@ Libraries follow a layered architecture pattern organized by domain:
 ### Module Boundaries
 
 The workspace enforces strict module boundaries using ESLint's `@nx/enforce-module-boundaries` rule. Each library is tagged with:
+
 - **type tag** - Defines the library type (ui, feature, data-access, util, shell, app, e2e, styles)
 - **scope tag** - Defines the domain/namespace (shared, auth, category, question, etc.)
 
 **Dependency rules:**
+
 - **UI libraries** can only depend on: other UI, util, and styles libraries
 - **Feature libraries** can depend on: UI, data-access, and util libraries
 - **Data-access libraries** can depend on: other data-access, util, and UI libraries (for types)
 - **Shell libraries** can depend on: shell, feature, UI, data-access, util, and styles libraries
 - **Util libraries** can only depend on: other util libraries
-- **Styles libraries** cannot depend on any libraries (leaf nodes)
+- **Styles libraries** can depend on: util libraries (for tokens)
 - **Apps** can depend on any library type
 - **E2E tests** can only depend on apps
 
@@ -108,12 +134,14 @@ The workspace enforces strict module boundaries using ESLint's `@nx/enforce-modu
 The app uses **@ngrx/signals** (NgRx SignalStore) for state management, NOT the traditional Redux pattern.
 
 Key stores are located in `libs/question-randomizer/dashboard/shared/data-access/src/store/`:
+
 - `category-list.store.ts` - Category management with normalized state pattern
 - `qualification-list.store.ts` - Qualification management
 - `question-list.store.ts` - Question management
 - `randomization.store.ts` - Randomization state
 
 Each store follows a normalized state pattern with:
+
 - `entities` - Record<string, T> for O(1) lookups
 - `ids` - string[] for maintaining order
 - Computed selectors for filtering, sorting, pagination
@@ -154,6 +182,7 @@ The app uses Angular's lazy-loaded routes organized by domain:
 ```
 
 Routes are defined in shell libraries:
+
 - `apps/question-randomizer/src/app/app.routes.ts` - Root routes
 - `libs/question-randomizer/auth/shell/src/auth-shell.routes.ts` - Auth routes
 - `libs/question-randomizer/dashboard/shell/src/dashboard-shell.routes.ts` - Dashboard routes
@@ -166,32 +195,135 @@ All libraries use TypeScript path aliases defined in `tsconfig.base.json`:
 // Import pattern: @my-nx-monorepo/<scope>-<domain>-<type>
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { LoginComponent } from '@my-nx-monorepo/question-randomizer-auth-feature';
-import { OptionItem } from '@my-nx-monorepo/shared-util';
+
+// Design System imports
+import { colors, typography } from '@my-nx-monorepo/design-system-tokens';
+import { Theme, ThemeService } from '@my-nx-monorepo/design-system-styles';
+import {
+  ButtonComponent,
+  InputTextComponent,
+  OptionItem,
+  SortDefinition,
+  PageEvent
+} from '@my-nx-monorepo/design-system-ui';
 ```
 
 ### Firebase Integration
 
 Firebase is used for:
+
 - Authentication (email/password with verification)
 - Firestore database for questions, categories, qualifications, randomization state
 - Configuration in `apps/question-randomizer/src/environments/`
 
 Repository pattern with services:
+
 - Repositories handle Firestore operations (in `data-access` libraries)
 - Services provide business logic layer
 - Mappers transform between Firestore documents and domain models
 
 ### Styling
 
-- Global styles: `libs/shared/styles/src/styles/main.scss`
-- SCSS preprocessor with shared include paths
+**Design System:**
+
+- Design tokens: `libs/design-system/tokens/` - Colors, typography, spacing (SCSS + TypeScript)
+- Global styles: `libs/design-system/styles/` - Base styles, theme service (light/dark), utilities
+- UI components: `libs/design-system/ui/` - Pre-built components with consistent styling
+
+**Configuration:**
+
+- SCSS preprocessor with include paths configured in `apps/question-randomizer/project.json`
 - Component styles: SCSS (configured in `nx.json`)
-- Quill editor CSS imported in build config
+- Main stylesheet: `libs/design-system/styles/src/lib/styles/main.scss`
+- Theme switching: Handled by `ThemeService` from `@my-nx-monorepo/design-system-styles`
+
+## Design System
+
+### Overview
+
+The workspace includes a comprehensive, publishable design system under `libs/design-system/`. All three packages are configured with `@nx/angular:package` executor for Angular Package Format (APF) compliance and can be published to NPM.
+
+### Packages
+
+1. **`@my-nx-monorepo/design-system-tokens`** (`libs/design-system/tokens`)
+
+   - Design tokens: colors, typography, spacing, mixins, functions
+   - Available as both SCSS and TypeScript exports
+   - Tags: `type:util`, `scope:design-system`
+   - No dependencies (foundational layer)
+
+2. **`@my-nx-monorepo/design-system-styles`** (`libs/design-system/styles`)
+
+   - Global styles, base resets, typography
+   - Light/dark theme support via `ThemeService`
+   - Theme models: `Theme` type and `ThemeService` for theme switching
+   - Utilities and component styles
+   - Tags: `type:styles`, `scope:design-system`
+   - Depends on: `design-system-tokens`
+
+3. **`@my-nx-monorepo/design-system-ui`** (`libs/design-system-ui`)
+   - Complete UI component library with Storybook
+   - Components: buttons, controls, table, card, paginator
+   - Includes models: `ButtonType`, `OptionItem`, `SortDefinition`, `PageEvent`, etc.
+   - Tags: `type:ui`, `scope:design-system`
+   - Self-contained models (no external util dependencies)
+
+### Usage
+
+**TypeScript:**
+
+```typescript
+// Tokens
+import { colors, typography } from '@my-nx-monorepo/design-system-tokens';
+
+// Theme service and models
+import { Theme, ThemeService } from '@my-nx-monorepo/design-system-styles';
+
+// UI components and models
+import {
+  ButtonComponent,
+  TableComponent,
+  OptionItem,
+  SortDefinition,
+  PageEvent
+} from '@my-nx-monorepo/design-system-ui';
+```
+
+**SCSS:**
+
+```scss
+// Import tokens during development (source)
+@use '../../../../../design-system/tokens/src/lib/scss/variables';
+@use '../../../../../design-system/tokens/src/lib/scss/colors';
+
+// Or import from built package (when published)
+@use '@my-nx-monorepo/design-system-tokens/scss' as tokens;
+```
+
+**Angular project.json:**
+
+```json
+"styles": [
+  "node_modules/quill/dist/quill.snow.css",
+  "libs/design-system/styles/src/lib/styles/main.scss",
+  "apps/question-randomizer/src/styles.scss"
+],
+"stylePreprocessorOptions": {
+  "includePaths": ["libs/design-system/tokens/src/lib/scss"]
+}
+```
+
+### Documentation
+
+- Component documentation: `npx nx storybook ui`
+- README: `libs/design-system/README.md`
+- Stories: `libs/design-system/ui/src/lib/**/*.stories.ts`
 
 ## Development Notes
 
 - **Jest** is used for unit testing
 - **Playwright** is used for e2e testing
+- **Storybook** is used for design system component documentation
 - **ESLint** with Angular ESLint rules
 - **Prettier** for code formatting
 - Default branch: `master` (for Nx Cloud)
@@ -205,3 +337,33 @@ Repository pattern with services:
 4. Add TypeScript path aliases to `tsconfig.base.json`
 5. Follow the normalized state pattern for stores if using @ngrx/signals
 6. Use dependency injection and standalone components (Angular 20+)
+7. **Use design-system components** instead of creating custom UI components
+8. **Import UI components and models from `@my-nx-monorepo/design-system-ui`**
+9. **Import theme service from `@my-nx-monorepo/design-system-styles`**
+
+### When Working with the Design System
+
+1. **Adding new components:**
+
+   - Add to `libs/design-system/ui/src/lib/`
+   - Export from `libs/design-system/ui/src/index.ts`
+   - Create Storybook stories (`.stories.ts`)
+   - Use relative imports within the library to avoid circular dependencies
+
+2. **Adding new tokens:**
+
+   - Add SCSS tokens to `libs/design-system/tokens/src/lib/scss/`
+   - Add TypeScript exports to `libs/design-system/tokens/src/lib/`
+   - Export from `libs/design-system/tokens/src/index.ts`
+
+3. **Publishing:**
+
+   - Build all packages: `npx nx run-many --target=build --projects=tokens,styles,ui`
+   - Packages are output to `dist/libs/design-system/`
+   - Use `nx release` or publish manually from dist folders
+
+4. **Module boundaries:**
+   - Design system packages follow strict ESLint boundaries
+   - `tokens` (util) → no dependencies
+   - `styles` (styles) → can depend on `tokens`
+   - `ui` (ui) → self-contained, includes own models

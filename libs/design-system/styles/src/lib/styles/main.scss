@@ -1,0 +1,30 @@
+// Design System Styles - Main Entry Point
+// This file imports all design system styles in the correct order
+
+// Tokens (imported from design-system-tokens package)
+// When this package is published, import from: '@my-nx-monorepo/design-system-tokens/scss'
+// For now, using relative path during development
+@use '../../../../../design-system/tokens/src/lib/scss/variables';
+@use '../../../../../design-system/tokens/src/lib/scss/functions';
+@use '../../../../../design-system/tokens/src/lib/scss/mixins';
+@use '../../../../../design-system/tokens/src/lib/scss/colors';
+
+// Base styles
+@use 'base/reset';
+@use 'base/base';
+@use 'base/typography';
+
+// Themes
+@use 'themes/dark';
+@use 'themes/light';
+
+// Components
+@use 'components/table';
+
+// Utilities
+@use 'utilities/spacing';
+@use 'utilities/utilities';
+
+// Vendors
+@use 'vendors/material';
+@use 'vendors/quill';

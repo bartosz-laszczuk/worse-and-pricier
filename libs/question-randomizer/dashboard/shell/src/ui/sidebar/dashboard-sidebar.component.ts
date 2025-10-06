@@ -4,8 +4,7 @@ import { RouterModule } from '@angular/router';
 import {
   ButtonToggleComponent,
   ButtonToggleGroupComponent,
-} from '@my-nx-monorepo/shared-ui';
-import { Theme } from '@my-nx-monorepo/shared-styles';
+} from '@my-nx-monorepo/design-system-ui';
 import { SvgIconComponent } from 'angular-svg-icon';
 
 export interface NavigationItem {
@@ -21,8 +20,8 @@ export interface NavigationItem {
     RouterModule,
     ButtonToggleComponent,
     ButtonToggleGroupComponent,
-    SvgIconComponent
-],
+    SvgIconComponent,
+  ],
   templateUrl: './dashboard-sidebar.component.html',
   styleUrl: './dashboard-sidebar.component.scss',
 })

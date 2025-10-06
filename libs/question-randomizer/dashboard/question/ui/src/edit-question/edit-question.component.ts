@@ -10,12 +10,12 @@ import {
   InputRichTextEditorComponent,
   InputSelectComponent,
   InputTextComponent,
-} from '@my-nx-monorepo/shared-ui';
+} from '@my-nx-monorepo/design-system-ui';
 import {
   EditQuestionFormValue,
   Question,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { OptionItem } from '@my-nx-monorepo/shared-util';
+import { OptionItem } from '@my-nx-monorepo/design-system-ui';
 import { QuillModule } from 'ngx-quill';
 
 interface EditQuestionForm {
