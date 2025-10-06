@@ -59,11 +59,20 @@ The repository follows Nx's recommended structure with domain-driven design:
 
 Libraries follow a layered architecture pattern organized by domain:
 
-**Main domains:**
+**Domain structure:**
 - `question-randomizer/auth/` - Authentication domain (login, registration, email verification)
-- `question-randomizer/dashboard/` - Main application features (questions, categories, qualifications, interview mode, randomization, settings)
+- `question-randomizer/dashboard/` - **Namespace for dashboard-related domains:**
+  - `dashboard/questions/` - Question management domain
+  - `dashboard/categories/` - Category management domain
+  - `dashboard/qualifications/` - Qualification management domain
+  - `dashboard/randomization/` - Question randomization domain
+  - `dashboard/interview/` - Interview mode domain
+  - `dashboard/settings/` - Settings domain
+  - `dashboard/shared/` - Shared dashboard code (cross-cutting stores, services)
 - `question-randomizer/shared/` - App-wide shared code
 - `shared/` - Workspace-wide reusable libraries (ui, util, styles)
+
+**Important:** The `dashboard/` folder is a namespace for grouping related domains, NOT a single monolithic domain. Each subfolder represents a distinct bounded context with its own features and concerns.
 
 ### Library Type Meanings
 
