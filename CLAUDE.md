@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an Nx monorepo containing an Angular application called **question-randomizer** - an interview preparation tool that randomizes questions for practice. The application uses Firebase for authentication and data persistence, Angular 19, and @ngrx/signals for state management.
+This is an Nx monorepo containing an Angular application called **question-randomizer** - an interview preparation tool that randomizes questions for practice. The application uses Firebase for authentication and data persistence, Angular 20, and @ngrx/signals for state management.
 
 **Note:** This workspace has Nx MCP enabled, which provides direct access to project information, dependency graphs, and Nx commands.
 
@@ -161,4 +161,4 @@ Repository pattern with services:
 3. Use Nx generators to maintain consistency
 4. Add TypeScript path aliases to `tsconfig.base.json`
 5. Follow the normalized state pattern for stores if using @ngrx/signals
-6. Use dependency injection and standalone components (Angular 19+)
+6. Use dependency injection and standalone components (Angular 20+)
