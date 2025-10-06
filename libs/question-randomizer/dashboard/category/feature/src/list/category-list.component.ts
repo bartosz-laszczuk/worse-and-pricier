@@ -9,13 +9,13 @@ import {
   IColumn,
   InputTextComponent,
   PageEvent,
-  SortDefinition,
   TableComponent,
 } from '@my-nx-monorepo/shared-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, take } from 'rxjs';
 import { SvgIconComponent } from 'angular-svg-icon';
+import { SortDefinition } from '@my-nx-monorepo/shared-util';
 
 @Component({
   selector: 'lib-category-list',
@@ -26,8 +26,8 @@ import { SvgIconComponent } from 'angular-svg-icon';
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
-    ButtonComponent
-],
+    ButtonComponent,
+  ],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

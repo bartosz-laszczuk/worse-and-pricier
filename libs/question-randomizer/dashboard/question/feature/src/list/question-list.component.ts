@@ -14,7 +14,6 @@ import {
   IColumn,
   InputTextComponent,
   PageEvent,
-  SortDefinition,
   TableComponent,
 } from '@my-nx-monorepo/shared-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -25,6 +24,7 @@ import {
   QuestionListImportService,
 } from '@my-nx-monorepo/question-randomizer-dashboard-question-data-access';
 import { SvgIconComponent } from 'angular-svg-icon';
+import { SortDefinition } from '@my-nx-monorepo/shared-util';
 
 @Component({
   selector: 'lib-question-list',
@@ -37,8 +37,8 @@ import { SvgIconComponent } from 'angular-svg-icon';
     SvgIconComponent,
     StripHtmlPipe,
     ButtonComponent,
-    ButtonGroupComponent
-],
+    ButtonGroupComponent,
+  ],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

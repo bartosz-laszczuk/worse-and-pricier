@@ -9,7 +9,8 @@ import {
   QueryList,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IColumn, PageParameters, SortDefinition } from './table.models';
+import { IColumn } from './table.models';
+import { PageParameters, SortDefinition } from '@my-nx-monorepo/shared-util';
 import { ColumnDirective } from './column-directive/column.directive';
 import { TableService } from './table.service';
 import { SortableHeaderComponent } from './sortable-header/sortable-header.component';

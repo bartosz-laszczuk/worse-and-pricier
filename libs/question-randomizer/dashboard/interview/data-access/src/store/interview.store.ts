@@ -17,7 +17,7 @@ import {
   Filters,
   PageParameters,
   SortDefinition,
-} from '@my-nx-monorepo/shared-ui';
+} from '@my-nx-monorepo/shared-util';
 
 type InterviewState = {
   entities: Record<string, Question> | null;

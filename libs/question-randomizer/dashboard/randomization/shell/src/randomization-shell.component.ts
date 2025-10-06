@@ -5,13 +5,13 @@ import {
   ButtonIconComponent,
   CardComponent,
   InputCheckGroupComponent,
+  ButtonGroupComponent,
 } from '@my-nx-monorepo/shared-ui';
 import { Randomization } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
 import {
   StatusBarComponent,
   StatusCardComponent,
 } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-ui';
-import { ButtonGroupComponent } from "../../../../../shared/ui/src/buttons/button-group/button-group.component";
 
 @Component({
   selector: 'lib-randomization-shell',

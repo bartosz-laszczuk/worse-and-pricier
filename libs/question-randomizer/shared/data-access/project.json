@@ -4,11 +4,16 @@
   "sourceRoot": "libs/question-randomizer/shared/data-access/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": [
+    "type:data-access",
+    "scope:question-randomizer-shared"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "libs/question-randomizer/shared/data-access/jest.config.ts",
         "tsConfig": "libs/question-randomizer/shared/data-access/tsconfig.spec.json"

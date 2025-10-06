@@ -10,8 +10,8 @@ import {
   Filters,
   PageParameters,
   SortDefinition,
-} from '@my-nx-monorepo/shared-ui';
-import { OptionItem } from '@my-nx-monorepo/shared-util';
+  OptionItem,
+} from '@my-nx-monorepo/shared-util';
 import {
   patchState,
   signalStore,

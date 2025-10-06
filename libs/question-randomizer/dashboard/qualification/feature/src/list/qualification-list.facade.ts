@@ -4,7 +4,8 @@ import {
   QualificationListStore,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
 import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { PageEvent, SortDefinition } from '@my-nx-monorepo/shared-ui';
+import { PageEvent } from '@my-nx-monorepo/shared-ui';
+import { SortDefinition } from '@my-nx-monorepo/shared-util';
 
 @Injectable()
 export class QualificationListFacade {

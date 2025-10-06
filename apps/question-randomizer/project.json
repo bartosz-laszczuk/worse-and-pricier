@@ -4,16 +4,23 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/question-randomizer/src",
-  "tags": [],
+  "tags": [
+    "type:app",
+    "scope:question-randomizer"
+  ],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/question-randomizer",
         "index": "apps/question-randomizer/src/index.html",
         "browser": "apps/question-randomizer/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/question-randomizer/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -29,7 +36,9 @@
         ],
         "scripts": [],
         "stylePreprocessorOptions": {
-          "includePaths": ["libs/shared/styles/src/styles"]
+          "includePaths": [
+            "libs/shared/styles/src/styles"
+          ]
         }
       },
       "configurations": {
@@ -86,7 +95,9 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/question-randomizer/jest.config.ts",
         "tsConfig": "apps/question-randomizer/tsconfig.spec.json"

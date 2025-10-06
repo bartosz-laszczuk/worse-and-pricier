@@ -6,7 +6,8 @@
       "Bash(npm ls:*)",
       "Bash(netstat:*)",
       "Bash(findstr:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(npx nx lint:*)"
     ],
     "deny": [],
     "ask": []

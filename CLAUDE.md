@@ -81,6 +81,27 @@ Libraries follow a layered architecture pattern organized by domain:
 - **ui** - Presentational components (dumb components)
 - **data-access** - State management, services, repositories, Firebase integration
 - **util** - Utility functions, models, types, helpers
+- **app** - Application entry points
+- **e2e** - End-to-end tests
+- **styles** - Global styles and theming
+
+### Module Boundaries
+
+The workspace enforces strict module boundaries using ESLint's `@nx/enforce-module-boundaries` rule. Each library is tagged with:
+- **type tag** - Defines the library type (ui, feature, data-access, util, shell, app, e2e, styles)
+- **scope tag** - Defines the domain/namespace (shared, auth, category, question, etc.)
+
+**Dependency rules:**
+- **UI libraries** can only depend on: other UI, util, and styles libraries
+- **Feature libraries** can depend on: UI, data-access, and util libraries
+- **Data-access libraries** can depend on: other data-access, util, and UI libraries (for types)
+- **Shell libraries** can depend on: shell, feature, UI, data-access, util, and styles libraries
+- **Util libraries** can only depend on: other util libraries
+- **Styles libraries** cannot depend on any libraries (leaf nodes)
+- **Apps** can depend on any library type
+- **E2E tests** can only depend on apps
+
+**Configuration:** Module boundaries are configured in `eslint.config.mjs` and enforced via `npx nx lint`.
 
 ### State Management
 

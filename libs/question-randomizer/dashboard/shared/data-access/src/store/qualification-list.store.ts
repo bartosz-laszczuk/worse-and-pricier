@@ -13,12 +13,12 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { OptionItem } from '@my-nx-monorepo/shared-util';
 import {
+  OptionItem,
   Filters,
   PageParameters,
   SortDefinition,
-} from '@my-nx-monorepo/shared-ui';
+} from '@my-nx-monorepo/shared-util';
 
 type QualificationState = {
   entities: Record<string, Qualification> | null;

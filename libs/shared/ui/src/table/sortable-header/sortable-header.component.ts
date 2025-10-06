@@ -5,7 +5,8 @@ import {
   output,
 } from '@angular/core';
 
-import { IColumn, SortDefinition, SortDirection } from '../table.models';
+import { IColumn } from '../table.models';
+import { SortDefinition, SortDirection } from '@my-nx-monorepo/shared-util';
 
 @Component({
   selector: 'lib-sortable-header',

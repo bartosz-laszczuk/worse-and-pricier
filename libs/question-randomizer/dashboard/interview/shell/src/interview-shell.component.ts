@@ -5,7 +5,6 @@ import {
   IColumn,
   InputTextComponent,
   PageEvent,
-  SortDefinition,
   TableComponent,
 } from '@my-nx-monorepo/shared-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -17,6 +16,7 @@ import {
   Question,
 } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { InterviewStore } from '@my-nx-monorepo/question-randomizer-dashboard-interview-data-access';
+import { SortDefinition } from '@my-nx-monorepo/shared-util';
 
 @Component({
   selector: 'lib-interview-shell',
@@ -25,8 +25,8 @@ import { InterviewStore } from '@my-nx-monorepo/question-randomizer-dashboard-in
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
-    NormalizeSpacePipe
-],
+    NormalizeSpacePipe,
+  ],
   templateUrl: './interview-shell.component.html',
   styleUrl: './interview-shell.component.scss',
   providers: [InterviewShellFacade, InterviewStore],

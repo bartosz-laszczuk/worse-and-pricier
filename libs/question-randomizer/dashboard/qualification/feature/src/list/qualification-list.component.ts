@@ -9,13 +9,13 @@ import {
   IColumn,
   InputTextComponent,
   PageEvent,
-  SortDefinition,
   TableComponent,
 } from '@my-nx-monorepo/shared-ui';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, take } from 'rxjs';
+import { SortDefinition } from '@my-nx-monorepo/shared-util';
 
 @Component({
   selector: 'lib-qualification-list',
@@ -26,8 +26,8 @@ import { debounceTime, take } from 'rxjs';
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
-    ButtonComponent
-],
+    ButtonComponent,
+  ],
   templateUrl: './qualification-list.component.html',
   styleUrl: './qualification-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

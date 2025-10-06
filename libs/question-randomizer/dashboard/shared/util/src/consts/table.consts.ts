@@ -2,7 +2,7 @@ import {
   Filters,
   PageParameters,
   SortDefinition,
-} from '@my-nx-monorepo/shared-ui';
+} from '@my-nx-monorepo/shared-util';
 
 export const filterEntities = <T>(entities: T[], filters: Filters<T>): T[] => {
   return entities.filter((entity) =>
