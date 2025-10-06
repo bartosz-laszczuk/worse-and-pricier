@@ -89,6 +89,19 @@ Each store follows a normalized state pattern with:
 - Computed selectors for filtering, sorting, pagination
 - Methods for CRUD operations
 
+#### Shared State Architecture
+
+The `DashboardShellComponent` provides all shared stores and services at the shell level. This architectural decision enables:
+
+- **Single source of truth** - All dashboard routes share the same store instances, preventing data inconsistencies
+- **Cross-domain updates** - When data changes in one domain (e.g., deleting a category), related data in other domains (e.g., questions) updates automatically without refetching
+- **Optimistic client-side updates** - Changes are persisted to backend AND immediately reflected in client stores, minimizing redundant requests
+- **Shared cache strategy** - Data is loaded once on dashboard entry and kept synchronized across route navigation
+
+**Note:** While the `/settings` route doesn't require access to question/category/qualification stores, they are still provided at the shell level. This trade-off prioritizes architectural simplicity over the negligible overhead of unused service instances in the DI tree.
+
+**Store provider location:** `libs/question-randomizer/dashboard/shell/src/dashboard-shell.component.ts:33-46`
+
 ### Routing Architecture
 
 The app uses Angular's lazy-loaded routes organized by domain:
