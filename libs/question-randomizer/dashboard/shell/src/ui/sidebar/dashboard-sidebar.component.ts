@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import {
   ButtonToggleComponent,
@@ -18,12 +18,11 @@ export interface NavigationItem {
 @Component({
   selector: 'lib-dashboard-sidebar',
   imports: [
-    CommonModule,
     RouterModule,
     ButtonToggleComponent,
     ButtonToggleGroupComponent,
-    SvgIconComponent,
-  ],
+    SvgIconComponent
+],
   templateUrl: './dashboard-sidebar.component.html',
   styleUrl: './dashboard-sidebar.component.scss',
 })

@@ -1,5 +1,5 @@
 import { Component, HostBinding, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 export type StatusCardType =
   | 'primary'
@@ -11,7 +11,7 @@ export type StatusCardType =
 
 @Component({
   selector: 'lib-status-card',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './status-card.component.html',
   styleUrl: './status-card.component.scss',
 })

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { QualificationListFacade } from './qualification-list.facade';
 import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
 import { EditQualificationComponent } from '@my-nx-monorepo/question-randomizer-dashboard-qualification-ui';
@@ -20,15 +20,14 @@ import { debounceTime, take } from 'rxjs';
 @Component({
   selector: 'lib-qualification-list',
   imports: [
-    CommonModule,
     EditQualificationComponent,
     TableComponent,
     SvgIconComponent,
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
-    ButtonComponent,
-  ],
+    ButtonComponent
+],
   templateUrl: './qualification-list.component.html',
   styleUrl: './qualification-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

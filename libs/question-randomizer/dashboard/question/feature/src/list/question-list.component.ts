@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   EditQuestionFormValue,
   Question,
@@ -29,7 +29,6 @@ import { SvgIconComponent } from 'angular-svg-icon';
 @Component({
   selector: 'lib-question-list',
   imports: [
-    CommonModule,
     EditQuestionComponent,
     TableComponent,
     InputTextComponent,
@@ -38,8 +37,8 @@ import { SvgIconComponent } from 'angular-svg-icon';
     SvgIconComponent,
     StripHtmlPipe,
     ButtonComponent,
-    ButtonGroupComponent,
-  ],
+    ButtonGroupComponent
+],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

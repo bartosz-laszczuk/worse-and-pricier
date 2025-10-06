@@ -2,48 +2,49 @@
   <table>
     <thead>
       <tr>
-        <th
-          *ngFor="let col of columns"
-          [class.truncate]="truncateHeaders"
-          [ngStyle]="{ width: col.width }"
-        >
-          <ng-container
-            *ngIf="
+        @for (col of columns; track col) {
+          <th
+            [class.truncate]="truncateHeaders"
+            [ngStyle]="{ width: col.width }"
+            >
+            @if (
               !filterTemplates[col.propertyName]?.templateRef && !col.sortable
-            "
-          >
-            {{ col.displayName }}
-          </ng-container>
-          <ng-container
-            *ngIf="
+              ) {
+              {{ col.displayName }}
+            }
+            @if (
               filterTemplates[col.propertyName]?.templateRef || col.sortable
-            "
-          >
-            <ng-container
-              *ngIf="col.sortable"
-              [ngTemplateOutlet]="sortHeader"
-              [ngTemplateOutletContext]="{ column: col }"
-            ></ng-container>
-          </ng-container>
-        </th>
+              ) {
+              @if (col.sortable) {
+                <ng-container
+                  [ngTemplateOutlet]="sortHeader"
+                  [ngTemplateOutletContext]="{ column: col }"
+                ></ng-container>
+              }
+            }
+          </th>
+        }
       </tr>
     </thead>
     <tbody>
-      <tr
-        *ngFor="let element of dataSource; let i = index"
-        (click)="onRowClick(element)"
-      >
-        <td *ngFor="let col of columns">
-          <div class="tbody-cell" [class.d-center]="col.center">
-            <ng-container
+      @for (element of dataSource; track element; let i = $index) {
+        <tr
+          (click)="onRowClick(element)"
+          >
+          @for (col of columns; track col) {
+            <td>
+              <div class="tbody-cell" [class.d-center]="col.center">
+                <ng-container
               *ngTemplateOutlet="
                 columnTemplates[col.propertyName]?.templateRef || defaultCell;
                 context: { item: element, col: col.propertyName, i: i }
               "
-            ></ng-container>
-          </div>
-        </td>
-      </tr>
+                ></ng-container>
+              </div>
+            </td>
+          }
+        </tr>
+      }
     </tbody>
     <tfoot>
       <tr>
@@ -51,37 +52,37 @@
           <div class="footer">
             <span
               >{{
-                pageParameters.index * pageParameters.size +
-                  1 +
-                  ' - ' +
-                  ((pageParameters.index + 1) * pageParameters.size > totalCount
-                    ? totalCount
-                    : (pageParameters.index + 1) * pageParameters.size)
+              pageParameters.index * pageParameters.size +
+              1 +
+              ' - ' +
+              ((pageParameters.index + 1) * pageParameters.size > totalCount
+              ? totalCount
+              : (pageParameters.index + 1) * pageParameters.size)
               }}
               of {{ totalCount }}</span
-            >
-            <lib-shared-ui-paginator
-              [totalCount]="totalCount"
-              [pageIndex]="pageParameters.index"
-              [pageSize]="pageParameters.size"
-              [pageSizeOptions]="[5, 10, 15]"
-              (page)="page.emit($event)"
-            ></lib-shared-ui-paginator>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
-</div>
+              >
+              <lib-shared-ui-paginator
+                [totalCount]="totalCount"
+                [pageIndex]="pageParameters.index"
+                [pageSize]="pageParameters.size"
+                [pageSizeOptions]="[5, 10, 15]"
+                (page)="page.emit($event)"
+              ></lib-shared-ui-paginator>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 
-<ng-template #defaultCell let-item="item" let-col="col">
-  <span>{{ item[col] ?? '-' }}</span>
-</ng-template>
+  <ng-template #defaultCell let-item="item" let-col="col">
+    <span>{{ item[col] ?? '-' }}</span>
+  </ng-template>
 
-<ng-template #sortHeader let-column="column">
-  <lib-sortable-header
-    [sortDefinition]="sortDefinition"
-    [column]="column"
-    (sort)="onSort($event)"
-  ></lib-sortable-header>
-</ng-template>
+  <ng-template #sortHeader let-column="column">
+    <lib-sortable-header
+      [sortDefinition]="sortDefinition"
+      [column]="column"
+      (sort)="onSort($event)"
+    ></lib-sortable-header>
+  </ng-template>

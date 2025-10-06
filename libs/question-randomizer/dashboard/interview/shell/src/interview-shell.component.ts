@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   ColumnDirective,
   IColumn,
@@ -21,13 +21,12 @@ import { InterviewStore } from '@my-nx-monorepo/question-randomizer-dashboard-in
 @Component({
   selector: 'lib-interview-shell',
   imports: [
-    CommonModule,
     TableComponent,
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
-    NormalizeSpacePipe,
-  ],
+    NormalizeSpacePipe
+],
   templateUrl: './interview-shell.component.html',
   styleUrl: './interview-shell.component.scss',
   providers: [InterviewShellFacade, InterviewStore],

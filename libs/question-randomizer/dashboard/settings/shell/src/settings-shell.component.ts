@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   ButtonToggleComponent,
   ButtonToggleGroupComponent,
@@ -9,7 +9,7 @@ import { SettingsShellFacade } from './settings-shell.facade';
 
 @Component({
   selector: 'lib-settings-shell',
-  imports: [CommonModule, ButtonToggleComponent, ButtonToggleGroupComponent],
+  imports: [ButtonToggleComponent, ButtonToggleGroupComponent],
   templateUrl: './settings-shell.component.html',
   styleUrl: './settings-shell.component.scss',
   providers: [SettingsShellFacade],

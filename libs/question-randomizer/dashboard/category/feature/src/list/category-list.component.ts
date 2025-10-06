@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { EditCategoryComponent } from '@my-nx-monorepo/question-randomizer-dashboard-category-ui';
 import { CategoryListFacade } from './category-list.facade';
 import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
@@ -20,15 +20,14 @@ import { SvgIconComponent } from 'angular-svg-icon';
 @Component({
   selector: 'lib-category-list',
   imports: [
-    CommonModule,
     EditCategoryComponent,
     TableComponent,
     SvgIconComponent,
     InputTextComponent,
     ReactiveFormsModule,
     ColumnDirective,
-    ButtonComponent,
-  ],
+    ButtonComponent
+],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RandomizationShellFacade } from './randomization-shell.facade';
 import {
   ButtonIconComponent,
@@ -16,14 +16,13 @@ import { ButtonGroupComponent } from "../../../../../shared/ui/src/buttons/butto
 @Component({
   selector: 'lib-randomization-shell',
   imports: [
-    CommonModule,
     InputCheckGroupComponent,
     CardComponent,
     StatusCardComponent,
     StatusBarComponent,
     ButtonGroupComponent,
-    ButtonIconComponent,
-  ],
+    ButtonIconComponent
+],
   templateUrl: './randomization-shell.component.html',
   styleUrl: './randomization-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

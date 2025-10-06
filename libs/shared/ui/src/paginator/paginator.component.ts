@@ -8,11 +8,11 @@ import {
   signal,
 } from '@angular/core';
 import { PageEvent } from './_models/page-event.model';
-import { NgIf } from '@angular/common';
+
 
 @Component({
   selector: 'lib-shared-ui-paginator',
-  imports: [NgIf],
+  imports: [],
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

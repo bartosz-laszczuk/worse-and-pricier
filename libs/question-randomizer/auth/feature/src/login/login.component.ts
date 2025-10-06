@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { InputTextComponent } from '@my-nx-monorepo/shared-ui';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
@@ -8,7 +8,7 @@ import { LoginService } from '@my-nx-monorepo/question-randomizer-auth-data-acce
 
 @Component({
   selector: 'lib-login',
-  imports: [CommonModule, InputTextComponent, ReactiveFormsModule],
+  imports: [InputTextComponent, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

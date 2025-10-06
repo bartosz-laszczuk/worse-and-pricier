@@ -5,13 +5,13 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { OptionItem, Value } from '@my-nx-monorepo/shared-util';
 
 @Component({
   selector: 'lib-input-check-group',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './input-check-group.component.html',
   styleUrl: './input-check-group.component.scss',
   providers: [

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'lib-button-toggle',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <button
       type="button"

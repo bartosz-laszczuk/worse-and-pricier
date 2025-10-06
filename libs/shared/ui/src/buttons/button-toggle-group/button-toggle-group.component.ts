@@ -7,13 +7,13 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ButtonToggleComponent } from '../button-toggle/button-toggle.component';
 
 @Component({
   selector: 'lib-button-toggle-group',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="toggle-group-container">
       <ng-content></ng-content>

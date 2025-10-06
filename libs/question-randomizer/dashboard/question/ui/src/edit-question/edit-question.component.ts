@@ -1,5 +1,5 @@
 import { Component, effect, inject, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormBuilder,
   FormControl,
@@ -30,13 +30,12 @@ interface EditQuestionForm {
 @Component({
   selector: 'lib-edit-question',
   imports: [
-    CommonModule,
     InputTextComponent,
     ReactiveFormsModule,
     InputSelectComponent,
     QuillModule,
-    InputRichTextEditorComponent,
-  ],
+    InputRichTextEditorComponent
+],
   templateUrl: './edit-question.component.html',
   styleUrl: './edit-question.component.scss',
 })

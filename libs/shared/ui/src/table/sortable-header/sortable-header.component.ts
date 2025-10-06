@@ -4,12 +4,12 @@ import {
   input,
   output,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { IColumn, SortDefinition, SortDirection } from '../table.models';
 
 @Component({
   selector: 'lib-sortable-header',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './sortable-header.component.html',
   styleUrl: './sortable-header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

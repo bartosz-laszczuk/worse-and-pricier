@@ -1,9 +1,9 @@
 import { Component, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'lib-status-bar',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './status-bar.component.html',
   styleUrl: './status-bar.component.scss',
 })

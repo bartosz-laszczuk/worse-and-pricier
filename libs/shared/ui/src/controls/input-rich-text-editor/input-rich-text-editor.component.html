@@ -1,5 +1,7 @@
 <div class="form-group" role="group" [attr.aria-labelledby]="inputId">
-  <label *ngIf="label" [for]="inputId">{{ label }}</label>
+  @if (label) {
+    <label [for]="inputId">{{ label }}</label>
+  }
 
   <quill-editor
     [id]="inputId"
@@ -15,14 +17,17 @@
     (blur)="markAsTouched()"
   ></quill-editor>
 
-  <small *ngIf="hint" [id]="inputId + '-hint'" class="text-muted">
-    {{ hint }}
-  </small>
+  @if (hint) {
+    <small [id]="inputId + '-hint'" class="text-muted">
+      {{ hint }}
+    </small>
+  }
 
-  <div
-    *ngIf="control?.invalid && (control?.touched || control?.dirty)"
-    class="invalid-feedback"
-  >
-    {{ getErrorMessage() }}
-  </div>
+  @if (control.invalid && (control.touched || control.dirty)) {
+    <div
+      class="invalid-feedback"
+      >
+      {{ getErrorMessage() }}
+    </div>
+  }
 </div>

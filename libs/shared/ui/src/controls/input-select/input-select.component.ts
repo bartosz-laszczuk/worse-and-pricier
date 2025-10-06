@@ -7,14 +7,14 @@ import {
   input,
   output,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { OptionItem } from '@my-nx-monorepo/shared-util';
 
 @Component({
   selector: 'lib-input-select',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './input-select.component.html',
   styleUrls: ['./input-select.component.scss'],
   providers: [

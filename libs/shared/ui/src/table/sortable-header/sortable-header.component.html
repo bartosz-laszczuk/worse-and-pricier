@@ -1,19 +1,17 @@
 <button class="button-as-span" (click)="sortByColumn(column())">
   {{ column().displayName
-  }}<ng-container *ngIf="sortDefinition()">
-    <ng-container
-      *ngIf="
-        column().propertyName === sortDefinition()?.field &&
-        sortDefinition()?.direction === 'asc'
-      "
-      ><span>▲</span></ng-container
-    >
-    <ng-container
-      *ngIf="
-        column().propertyName === sortDefinition()?.field &&
-        sortDefinition()?.direction === 'desc'
-      "
-      ><span>▼</span></ng-container
-    >
-  </ng-container>
+  }}@if (sortDefinition()) {
+  @if (
+    column().propertyName === sortDefinition()?.field &&
+    sortDefinition()?.direction === 'asc'
+    ) {
+    <span>▲</span>
+  }
+  @if (
+    column().propertyName === sortDefinition()?.field &&
+    sortDefinition()?.direction === 'desc'
+    ) {
+    <span>▼</span>
+  }
+}
 </button>

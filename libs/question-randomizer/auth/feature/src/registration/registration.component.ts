@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RegistrationFacade } from './registration.facade';
 import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
 import { InputTextComponent } from '@my-nx-monorepo/shared-ui';
@@ -8,7 +8,7 @@ import { RegistrationService } from '@my-nx-monorepo/question-randomizer-auth-da
 
 @Component({
   selector: 'lib-registration',
-  imports: [CommonModule, InputTextComponent, ReactiveFormsModule],
+  imports: [InputTextComponent, ReactiveFormsModule],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
   providers: [RegistrationFacade, RegistrationService],

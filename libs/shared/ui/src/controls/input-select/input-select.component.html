@@ -4,14 +4,15 @@
     [disabled]="isDisabled"
     (change)="onChangedPureHtmlSelect($event)"
     (blur)="onBlur()"
-  >
-    <option value=""></option>
-    <option
-      *ngFor="let option of options()"
-      [value]="option.value"
-      [attr.selected]="option.value === value ? true : null"
     >
-      {{ option.label }}
-    </option>
+    <option value=""></option>
+    @for (option of options(); track option) {
+      <option
+        [value]="option.value"
+        [attr.selected]="option.value === value ? true : null"
+        >
+        {{ option.label }}
+      </option>
+    }
   </select>
 </div>

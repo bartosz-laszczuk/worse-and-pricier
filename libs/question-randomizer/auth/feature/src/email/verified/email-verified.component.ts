@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import {
   UserService,
@@ -8,7 +8,7 @@ import {
 
 @Component({
   selector: 'lib-email-verified',
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './email-verified.component.html',
   styleUrl: './email-verified.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

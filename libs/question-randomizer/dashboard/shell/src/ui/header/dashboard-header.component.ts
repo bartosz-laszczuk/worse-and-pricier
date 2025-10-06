@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'lib-dashboard-header',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './dashboard-header.component.html',
   styleUrl: './dashboard-header.component.scss',
 })
