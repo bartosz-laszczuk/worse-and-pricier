@@ -52,7 +52,7 @@
     let-item="item"
   >
     <svg-icon
-      (click)="questionToEdit = item"
+      (click)="onEdit(item)"
       class="c-pointer"
       src="icons/edit.svg"
       [svgStyle]="{ width: '18px', height: '18px' }"
@@ -70,13 +70,6 @@
     ></svg-icon>
   </ng-template>
 </lib-table>
-} @if (questionToEdit) {
-<lib-edit-question
-  [question]="questionToEdit"
-  [categoryOptionItemList]="categoryOptionItemList()"
-  [qualificationOptionItemList]="qualificationOptionItemList()"
-  (closed)="onClose($event)"
-></lib-edit-question>
 }
 <input
   type="file"

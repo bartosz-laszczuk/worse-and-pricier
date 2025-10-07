@@ -6,7 +6,10 @@ import {
   StripHtmlPipe,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { QuestionListFacade } from './question-list.facade';
-import { EditQuestionComponent } from '@worse-and-pricier/question-randomizer-dashboard-question-ui';
+import {
+  EditQuestionComponent,
+  EditQuestionDialogData,
+} from '@worse-and-pricier/question-randomizer-dashboard-question-ui';
 import {
   ButtonComponent,
   ButtonGroupComponent,
@@ -25,11 +28,11 @@ import {
   QuestionListImportService,
 } from '@worse-and-pricier/question-randomizer-dashboard-question-data-access';
 import { SvgIconComponent } from 'angular-svg-icon';
+import { Dialog } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'lib-question-list',
   imports: [
-    EditQuestionComponent,
     TableComponent,
     InputTextComponent,
     ReactiveFormsModule,
@@ -50,10 +53,11 @@ import { SvgIconComponent } from 'angular-svg-icon';
 })
 export class QuestionListComponent {
   private readonly questionListFacade = inject(QuestionListFacade);
+  private readonly dialog = inject(Dialog);
+
   public questions = this.questionListFacade.questions;
   public sort = this.questionListFacade.sort;
   public page = this.questionListFacade.page;
-  public questionToEdit?: Question = undefined;
   public categoryOptionItemList =
     this.questionListFacade.categoryOptionItemList;
   public qualificationOptionItemList =
@@ -94,26 +98,48 @@ export class QuestionListComponent {
   }
 
   public onAdd() {
-    this.questionToEdit = {
-      id: '',
-      question: '',
-      answer: '',
-      answerPl: '',
-      isActive: true,
-      userId: '',
-    };
+    const dialogRef = this.dialog.open<EditQuestionFormValue | undefined, EditQuestionDialogData>(
+      EditQuestionComponent,
+      {
+        data: {
+          question: {
+            id: '',
+            question: '',
+            answer: '',
+            answerPl: '',
+            isActive: true,
+            userId: '',
+          },
+          categoryOptionItemList: this.categoryOptionItemList(),
+          qualificationOptionItemList: this.qualificationOptionItemList(),
+        },
+      }
+    );
+
+    dialogRef.closed.subscribe((result) => {
+      if (result) {
+        this.questionListFacade.createQuestion(result);
+      }
+    });
   }
 
-  public onClose(editedQuestion?: EditQuestionFormValue) {
-    if (editedQuestion) {
-      if (this.questionToEdit?.id)
-        this.questionListFacade.updateQuestion(
-          this.questionToEdit.id,
-          editedQuestion
-        );
-      else this.questionListFacade.createQuestion(editedQuestion);
-    }
-    this.questionToEdit = undefined;
+  public onEdit(question: Question) {
+    const dialogRef = this.dialog.open<EditQuestionFormValue | undefined, EditQuestionDialogData>(
+      EditQuestionComponent,
+      {
+        data: {
+          question,
+          categoryOptionItemList: this.categoryOptionItemList(),
+          qualificationOptionItemList: this.qualificationOptionItemList(),
+        },
+      }
+    );
+
+    dialogRef.closed.subscribe((result) => {
+      if (result) {
+        this.questionListFacade.updateQuestion(question.id, result);
+      }
+    });
   }
 
   public onDelete(questionId: string) {

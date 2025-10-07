@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import {
   FormBuilder,
@@ -17,6 +17,13 @@ import {
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { OptionItem } from '@worse-and-pricier/design-system-ui';
 import { QuillModule } from 'ngx-quill';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+
+export interface EditQuestionDialogData {
+  question: Question;
+  categoryOptionItemList: OptionItem[];
+  qualificationOptionItemList: OptionItem[];
+}
 
 interface EditQuestionForm {
   question: FormControl<string>;
@@ -40,11 +47,13 @@ interface EditQuestionForm {
   styleUrl: './edit-question.component.scss',
 })
 export class EditQuestionComponent {
-  public question = input.required<Question>();
-  public categoryOptionItemList = input.required<OptionItem[]>();
-  public qualificationOptionItemList = input.required<OptionItem[]>();
-  public closed = output<EditQuestionFormValue | undefined>();
+  private readonly dialogData = inject(DIALOG_DATA) as EditQuestionDialogData;
+  private readonly dialogRef = inject(DialogRef<EditQuestionFormValue | undefined>);
   private readonly fb = inject(FormBuilder);
+
+  // Initialize once - no getters to avoid re-execution on every change detection
+  public readonly categoryOptionItemList: OptionItem[];
+  public readonly qualificationOptionItemList: OptionItem[];
 
   public form = this.fb.group<EditQuestionForm>({
     question: this.fb.control<string>('', {
@@ -71,16 +80,19 @@ export class EditQuestionComponent {
   });
 
   public constructor() {
-    effect(() => {
-      const question = this.question();
-      this.form.setValue({
-        question: question.question,
-        answer: question.answer,
-        answerPl: question.answerPl,
-        categoryId: question.categoryId ?? '',
-        qualificationId: question.qualificationId ?? null,
-        isActive: question.isActive,
-      });
+    // Initialize data from dialog once
+    this.categoryOptionItemList = this.dialogData.categoryOptionItemList;
+    this.qualificationOptionItemList = this.dialogData.qualificationOptionItemList;
+
+    // Set form values once
+    const question = this.dialogData.question;
+    this.form.setValue({
+      question: question.question,
+      answer: question.answer,
+      answerPl: question.answerPl,
+      categoryId: question.categoryId ?? '',
+      qualificationId: question.qualificationId ?? null,
+      isActive: question.isActive,
     });
   }
 
@@ -95,19 +107,24 @@ export class EditQuestionComponent {
         answerPl: this.form.controls.answerPl.value,
         categoryId,
         categoryName:
-          this.categoryOptionItemList().find(
+          this.categoryOptionItemList.find(
             (category) => category.value === categoryId
           )?.label ?? '',
         qualificationId: qualificationId ?? undefined,
-        qualificationName: this.qualificationOptionItemList().find(
+        qualificationName: this.qualificationOptionItemList.find(
           (qualification) => qualification.value === qualificationId
         )?.label,
         isActive: this.form.controls.isActive.value,
       };
-      this.closed.emit(question);
+
+      this.dialogRef.close(question);
     } else {
       this.form.markAllAsTouched();
     }
+  }
+
+  public onCancel(): void {
+    this.dialogRef.close(undefined);
   }
 
   content = 'some content';

@@ -5,6 +5,7 @@
   "scripts": {},
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^20.2.7",
     "@angular/common": "20.3.3",
     "@angular/compiler": "20.3.3",
     "@angular/core": "20.3.3",

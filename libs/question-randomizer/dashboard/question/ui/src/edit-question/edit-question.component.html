@@ -21,17 +21,17 @@
     label="Category"
     placeholder="Choose category"
     formControlName="categoryId"
-    [options]="categoryOptionItemList()"
+    [options]="categoryOptionItemList"
   ></lib-input-select>
   <lib-input-select
     label="Qualification"
     placeholder="Choose qualification"
     formControlName="qualificationId"
-    [options]="qualificationOptionItemList()"
+    [options]="qualificationOptionItemList"
   ></lib-input-select>
   <input type="checkbox" formControlName="isActive" /><span>Is active</span>
   <button type="submit" [disabled]="form.invalid" (click)="onSubmit()">
     Submit
   </button>
-  <button type="button" (click)="this.closed.emit(undefined)">Close</button>
+  <button type="button" (click)="onCancel()">Close</button>
 </form>
