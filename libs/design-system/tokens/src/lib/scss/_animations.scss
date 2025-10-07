@@ -1,0 +1,70 @@
+// ========================================
+// Design System Animations
+// ========================================
+// Reusable keyframe animations for UI components
+
+// ========================================
+// Horizontal Slide Animations (Initial Entry)
+// ========================================
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(24px);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-24px);
+  }
+}
+
+// ========================================
+// Horizontal Bounce Animations (Continuous Loop)
+// ========================================
+
+@keyframes horizontal-bounce-ltr {
+  0% {
+    transform: translateX(-24px);
+  }
+  100% {
+    transform: translateX(24px);
+  }
+}
+
+@keyframes horizontal-bounce-rtl {
+  0% {
+    transform: translateX(24px);
+  }
+  100% {
+    transform: translateX(-24px);
+  }
+}
+
+// ========================================
+// Rotation Animations
+// ========================================
+
+@keyframes rotate-clockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-counter-clockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
