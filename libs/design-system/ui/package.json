@@ -5,6 +5,8 @@
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0",
     "@angular/forms": "^20.3.0",
+    "@my-nx-monorepo/design-system-tokens": "^0.0.1",
+    "@my-nx-monorepo/design-system-styles": "^0.0.1",
     "angular-svg-icon": "^19.1.1",
     "ngx-quill": "^28.0.1"
   },

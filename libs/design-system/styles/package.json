@@ -2,8 +2,8 @@
   "name": "@my-nx-monorepo/design-system-styles",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/core": "^20.3.0",
+    "@my-nx-monorepo/design-system-tokens": "^0.0.1"
   },
   "sideEffects": false
 }
