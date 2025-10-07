@@ -120,7 +120,9 @@ export class RandomizationService {
       } else {
         return;
       }
+      
       randomization.showAnswer = false;
+      randomization.currentQuestion = newCurrentQuestion;
 
       this.randomizationStore.startLoading();
       this.randomizationStore.setCurrentQuestion(newCurrentQuestion);
