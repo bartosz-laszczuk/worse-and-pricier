@@ -1,20 +1,20 @@
 # Design System Styles
 
-Global styles, base resets, themes (light/dark), utilities, and component styles. Part of the `@my-nx-monorepo/design-system` package suite.
+Global styles, base resets, themes (light/dark), utilities, and component styles. Part of the `@worse-and-pricier/design-system` package suite.
 
 ## Features
 
 - **Global Styles:** Base resets, typography, and component styles
 - **Theme Support:** Light and dark themes with programmatic switching via `ThemeService`
 - **Utilities:** Spacing utilities and helper classes
-- **Design Tokens:** Uses tokens from `@my-nx-monorepo/design-system-tokens`
+- **Design Tokens:** Uses tokens from `@worse-and-pricier/design-system-tokens`
 
 ## Usage
 
 ### Theme Service
 
 ```typescript
-import { Theme, ThemeService } from '@my-nx-monorepo/design-system-styles';
+import { Theme, ThemeService } from '@worse-and-pricier/design-system-styles';
 
 @Component({
   selector: 'app-settings',

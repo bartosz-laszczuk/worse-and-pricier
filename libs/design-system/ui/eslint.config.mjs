@@ -11,8 +11,8 @@ export default [
         {
           ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}'],
           ignoredDependencies: [
-            '@my-nx-monorepo/design-system-tokens',
-            '@my-nx-monorepo/design-system-styles',
+            '@worse-and-pricier/design-system-tokens',
+            '@worse-and-pricier/design-system-styles',
           ],
         },
       ],

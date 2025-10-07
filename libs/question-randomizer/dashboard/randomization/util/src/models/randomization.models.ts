@@ -1,4 +1,4 @@
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { Question } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 
 export interface Randomization {
   id: string;

@@ -14,7 +14,7 @@ import {
   RandomizationStore,
   SelectedCategoryListService,
   UsedQuestionListService,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
 import { DashboardSidebarComponent } from './ui/sidebar/dashboard-sidebar.component';
 import { DashboardHeaderComponent } from './ui/header/dashboard-header.component';
 import { DashboardNavigationBarComponent } from './ui/navigation-bar/dashboard-navigation-bar.component';

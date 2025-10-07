@@ -192,20 +192,20 @@ Routes are defined in shell libraries:
 All libraries use TypeScript path aliases defined in `tsconfig.base.json`:
 
 ```typescript
-// Import pattern: @my-nx-monorepo/<scope>-<domain>-<type>
-import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
-import { LoginComponent } from '@my-nx-monorepo/question-randomizer-auth-feature';
+// Import pattern: @worse-and-pricier/<scope>-<domain>-<type>
+import { Category } from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
+import { LoginComponent } from '@worse-and-pricier/question-randomizer-auth-feature';
 
 // Design System imports
-import { colors, typography } from '@my-nx-monorepo/design-system-tokens';
-import { Theme, ThemeService } from '@my-nx-monorepo/design-system-styles';
+import { colors, typography } from '@worse-and-pricier/design-system-tokens';
+import { Theme, ThemeService } from '@worse-and-pricier/design-system-styles';
 import {
   ButtonComponent,
   InputTextComponent,
   OptionItem,
   SortDefinition,
   PageEvent
-} from '@my-nx-monorepo/design-system-ui';
+} from '@worse-and-pricier/design-system-ui';
 ```
 
 ### Firebase Integration
@@ -235,7 +235,7 @@ Repository pattern with services:
 - SCSS preprocessor with include paths configured in `apps/question-randomizer/project.json`
 - Component styles: SCSS (configured in `nx.json`)
 - Main stylesheet: `libs/design-system/styles/src/lib/styles/main.scss`
-- Theme switching: Handled by `ThemeService` from `@my-nx-monorepo/design-system-styles`
+- Theme switching: Handled by `ThemeService` from `@worse-and-pricier/design-system-styles`
 
 ## Design System
 
@@ -245,14 +245,14 @@ The workspace includes a comprehensive, publishable design system under `libs/de
 
 ### Packages
 
-1. **`@my-nx-monorepo/design-system-tokens`** (`libs/design-system/tokens`)
+1. **`@worse-and-pricier/design-system-tokens`** (`libs/design-system/tokens`)
 
    - Design tokens: colors, typography, spacing, mixins, functions
    - Available as both SCSS and TypeScript exports
    - Tags: `type:util`, `scope:design-system`
    - No dependencies (foundational layer)
 
-2. **`@my-nx-monorepo/design-system-styles`** (`libs/design-system/styles`)
+2. **`@worse-and-pricier/design-system-styles`** (`libs/design-system/styles`)
 
    - Global styles, base resets, typography
    - Light/dark theme support via `ThemeService`
@@ -261,7 +261,7 @@ The workspace includes a comprehensive, publishable design system under `libs/de
    - Tags: `type:styles`, `scope:design-system`
    - Depends on: `design-system-tokens`
 
-3. **`@my-nx-monorepo/design-system-ui`** (`libs/design-system-ui`)
+3. **`@worse-and-pricier/design-system-ui`** (`libs/design-system-ui`)
    - Complete UI component library with Storybook
    - Components: buttons, controls, table, card, paginator
    - Includes models: `ButtonType`, `OptionItem`, `SortDefinition`, `PageEvent`, etc.
@@ -274,10 +274,10 @@ The workspace includes a comprehensive, publishable design system under `libs/de
 
 ```typescript
 // Tokens
-import { colors, typography } from '@my-nx-monorepo/design-system-tokens';
+import { colors, typography } from '@worse-and-pricier/design-system-tokens';
 
 // Theme service and models
-import { Theme, ThemeService } from '@my-nx-monorepo/design-system-styles';
+import { Theme, ThemeService } from '@worse-and-pricier/design-system-styles';
 
 // UI components and models
 import {
@@ -286,7 +286,7 @@ import {
   OptionItem,
   SortDefinition,
   PageEvent
-} from '@my-nx-monorepo/design-system-ui';
+} from '@worse-and-pricier/design-system-ui';
 ```
 
 **SCSS:**
@@ -297,7 +297,7 @@ import {
 @use '../../../../../design-system/tokens/src/lib/scss/colors';
 
 // Or import from built package (when published)
-@use '@my-nx-monorepo/design-system-tokens/scss' as tokens;
+@use '@worse-and-pricier/design-system-tokens/scss' as tokens;
 ```
 
 **Angular project.json:**
@@ -338,8 +338,8 @@ import {
 5. Follow the normalized state pattern for stores if using @ngrx/signals
 6. Use dependency injection and standalone components (Angular 20+)
 7. **Use design-system components** instead of creating custom UI components
-8. **Import UI components and models from `@my-nx-monorepo/design-system-ui`**
-9. **Import theme service from `@my-nx-monorepo/design-system-styles`**
+8. **Import UI components and models from `@worse-and-pricier/design-system-ui`**
+9. **Import theme service from `@worse-and-pricier/design-system-styles`**
 
 ### When Working with the Design System
 

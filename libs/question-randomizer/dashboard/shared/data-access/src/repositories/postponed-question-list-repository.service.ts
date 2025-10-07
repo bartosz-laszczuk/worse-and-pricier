@@ -14,7 +14,7 @@ import {
 import {
   PostponedQuestion,
   QuestionCategory,
-} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
 import { orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { firstValueFrom } from 'rxjs';
 

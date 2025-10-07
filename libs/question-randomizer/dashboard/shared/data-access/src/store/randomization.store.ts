@@ -12,8 +12,8 @@ import {
   QuestionCategory,
   Randomization,
   UsedQuestion,
-} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
+import { Question } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 
 type RandomizationState = {
   entity: Randomization | null;

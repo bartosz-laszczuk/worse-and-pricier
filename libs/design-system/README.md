@@ -6,9 +6,9 @@ A comprehensive, publishable design system for building consistent user interfac
 
 This design system is organized into three publishable NPM packages, all following the Angular Package Format (APF) specification:
 
-- **`@my-nx-monorepo/design-system-tokens`** - Design tokens (colors, typography, spacing)
-- **`@my-nx-monorepo/design-system-styles`** - Global styles, theme service (light/dark), and utilities
-- **`@my-nx-monorepo/design-system-ui`** - UI components and models library
+- **`@worse-and-pricier/design-system-tokens`** - Design tokens (colors, typography, spacing)
+- **`@worse-and-pricier/design-system-styles`** - Global styles, theme service (light/dark), and utilities
+- **`@worse-and-pricier/design-system-ui`** - UI components and models library
 
 ## Packages
 
@@ -18,7 +18,7 @@ Design tokens provide programmatic access to design values.
 
 **TypeScript Usage:**
 ```typescript
-import { colors, typography, spacing } from '@my-nx-monorepo/design-system-tokens';
+import { colors, typography, spacing } from '@worse-and-pricier/design-system-tokens';
 
 console.log(colors.primary); // '#eddf64'
 console.log(typography.fontFamily.base); // "'Figtree', sans-serif"
@@ -46,7 +46,7 @@ Global styles, base resets, themes (light/dark), utilities, and component styles
 
 **TypeScript Usage:**
 ```typescript
-import { Theme, ThemeService } from '@my-nx-monorepo/design-system-styles';
+import { Theme, ThemeService } from '@worse-and-pricier/design-system-styles';
 
 // Inject in component/service
 constructor(private themeService = inject(ThemeService)) {}
@@ -103,7 +103,7 @@ import {
   OptionItem,
   SortDefinition,
   PageEvent
-} from '@my-nx-monorepo/design-system-ui';
+} from '@worse-and-pricier/design-system-ui';
 
 @Component({
   standalone: true,

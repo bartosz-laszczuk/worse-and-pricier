@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { Qualification } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import { UserStore } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { QualificationListStore } from '../store';
 import { QualificationRepositoryService } from '../repositories';
 import { QuestionListService } from './question-list.service';

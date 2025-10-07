@@ -3,7 +3,7 @@ import {
   Category,
   EditQuestionFormValue,
   Qualification,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import {
   CreateQuestionRequest,
   QuestionCsvListItem,

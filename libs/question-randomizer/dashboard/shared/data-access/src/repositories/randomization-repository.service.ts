@@ -15,7 +15,7 @@ import {
 import {
   Randomization,
   RandomizationStatus,
-} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
 import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 
 @Injectable({

@@ -4,13 +4,13 @@ import {
   SelectedCategoryListRepositoryService,
   UsedQuestionListRepositoryService,
 } from '../repositories';
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { Question } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { RandomizationMapperService } from './randomization-mapper.service';
 import {
   QuestionCategory,
   Randomization,
   RandomizationStatus,
-} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
 import { RandomizationStore } from '../store';
 import { PostponedQuestionListRepositoryService } from '../repositories/postponed-question-list-repository.service';
 

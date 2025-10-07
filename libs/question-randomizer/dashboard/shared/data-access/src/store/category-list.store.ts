@@ -5,13 +5,13 @@ import {
   filterEntities,
   paginateEntities,
   sortEntities,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import {
   Filters,
   PageParameters,
   SortDefinition,
   OptionItem,
-} from '@my-nx-monorepo/shared-util';
+} from '@worse-and-pricier/shared-util';
 import {
   patchState,
   signalStore,

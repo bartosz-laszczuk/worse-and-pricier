@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   UserService,
   UserStore,
-} from '@my-nx-monorepo/question-randomizer-shared-data-access';
+} from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { Router } from '@angular/router';
 
 @Component({

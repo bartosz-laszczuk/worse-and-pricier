@@ -6,12 +6,12 @@ import {
   CardComponent,
   InputCheckGroupComponent,
   ButtonGroupComponent,
-} from '@my-nx-monorepo/design-system-ui';
-import { Randomization } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/design-system-ui';
+import { Randomization } from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
 import {
   StatusBarComponent,
   StatusCardComponent,
-} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-ui';
+} from '@worse-and-pricier/question-randomizer-dashboard-randomization-ui';
 
 @Component({
   selector: 'lib-randomization-shell',

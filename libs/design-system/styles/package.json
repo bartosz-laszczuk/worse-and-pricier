@@ -1,9 +1,9 @@
 {
-  "name": "@my-nx-monorepo/design-system-styles",
+  "name": "@worse-and-pricier/design-system-styles",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/core": "^20.3.0",
-    "@my-nx-monorepo/design-system-tokens": "^0.0.1"
+    "@worse-and-pricier/design-system-tokens": "^0.0.1"
   },
   "sideEffects": false
 }

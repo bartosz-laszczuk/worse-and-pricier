@@ -2,13 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { CategoryListService } from './category-list.service';
 import { CategoryRepositoryService } from '../repositories';
 import { CategoryListStore, RandomizationStore } from '../store';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { UserStore } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { QuestionListService } from './question-list.service';
 import { RandomizationService } from './randomization.service';
 import { UsedQuestionListService } from './used-question-list.service';
 import { PostponedQuestionListService } from './postponed-question-list.service';
 import { SelectedCategoryListService } from './selected-category-list.service';
-import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { Category } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { signal } from '@angular/core';
 
 // Mock Firebase modules to prevent module initialization during import

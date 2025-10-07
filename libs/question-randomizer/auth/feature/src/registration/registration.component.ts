@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { RegistrationFacade } from './registration.facade';
-import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
-import { InputTextComponent } from '@my-nx-monorepo/design-system-ui';
+import { EmailPasswordCredentials } from '@worse-and-pricier/question-randomizer-auth-util';
+import { InputTextComponent } from '@worse-and-pricier/design-system-ui';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RegistrationService } from '@my-nx-monorepo/question-randomizer-auth-data-access';
+import { RegistrationService } from '@worse-and-pricier/question-randomizer-auth-data-access';
 
 @Component({
   selector: 'lib-registration',

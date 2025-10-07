@@ -1,9 +1,9 @@
-import { QuestionCsvListItem } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
+import { QuestionCsvListItem } from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
 import {
   Category,
   Qualification,
   Question,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 
 export interface CreateAndUpdateQuestionsContext {
   importItemList: QuestionCsvListItem[];

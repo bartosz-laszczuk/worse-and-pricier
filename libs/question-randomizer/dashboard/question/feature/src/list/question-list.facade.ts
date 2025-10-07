@@ -2,18 +2,18 @@ import { inject, Injectable } from '@angular/core';
 import {
   QuestionListExportService,
   QuestionListImportService,
-} from '@my-nx-monorepo/question-randomizer-dashboard-question-data-access';
+} from '@worse-and-pricier/question-randomizer-dashboard-question-data-access';
 import {
   CategoryListStore,
   QualificationListStore,
   QuestionListService,
   QuestionListStore,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
 import {
   EditQuestionFormValue,
   Question,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { PageEvent, SortDefinition } from '@my-nx-monorepo/design-system-ui';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import { PageEvent, SortDefinition } from '@worse-and-pricier/design-system-ui';
 
 @Injectable()
 export class QuestionListFacade {

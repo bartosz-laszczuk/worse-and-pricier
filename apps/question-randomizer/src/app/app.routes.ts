@@ -9,14 +9,14 @@ export const appRoutes: Route[] = [
   {
     path: 'auth',
     loadChildren: () =>
-      import('@my-nx-monorepo/question-randomizer-auth-shell').then(
+      import('@worse-and-pricier/question-randomizer-auth-shell').then(
         (r) => r.authShellRoutes
       ),
   },
   {
     path: 'dashboard',
     loadChildren: () =>
-      import('@my-nx-monorepo/question-randomizer-dashboard-shell').then(
+      import('@worse-and-pricier/question-randomizer-dashboard-shell').then(
         (r) => r.dashboardShellRoutes
       ),
   },

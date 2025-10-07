@@ -15,86 +15,86 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@my-nx-monorepo/design-system-styles": [
+      "@worse-and-pricier/design-system-styles": [
         "libs/design-system/styles/src/index.ts"
       ],
-      "@my-nx-monorepo/design-system-tokens": [
+      "@worse-and-pricier/design-system-tokens": [
         "libs/design-system/tokens/src/index.ts"
       ],
-      "@my-nx-monorepo/design-system-ui": [
+      "@worse-and-pricier/design-system-ui": [
         "libs/design-system/ui/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-auth-data-access": [
+      "@worse-and-pricier/question-randomizer-auth-data-access": [
         "libs/question-randomizer/auth/data-access/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-auth-feature": [
+      "@worse-and-pricier/question-randomizer-auth-feature": [
         "libs/question-randomizer/auth/feature/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-auth-shell": [
+      "@worse-and-pricier/question-randomizer-auth-shell": [
         "libs/question-randomizer/auth/shell/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-auth-util": [
+      "@worse-and-pricier/question-randomizer-auth-util": [
         "libs/question-randomizer/auth/util/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-category-feature": [
+      "@worse-and-pricier/question-randomizer-dashboard-category-feature": [
         "libs/question-randomizer/dashboard/category/feature/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-category-ui": [
+      "@worse-and-pricier/question-randomizer-dashboard-category-ui": [
         "libs/question-randomizer/dashboard/category/ui/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-interview-data-access": [
+      "@worse-and-pricier/question-randomizer-dashboard-interview-data-access": [
         "libs/question-randomizer/dashboard/interview/data-access/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-interview-shell": [
+      "@worse-and-pricier/question-randomizer-dashboard-interview-shell": [
         "libs/question-randomizer/dashboard/interview/shell/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-qualification-feature": [
+      "@worse-and-pricier/question-randomizer-dashboard-qualification-feature": [
         "libs/question-randomizer/dashboard/qualification/feature/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-qualification-ui": [
+      "@worse-and-pricier/question-randomizer-dashboard-qualification-ui": [
         "libs/question-randomizer/dashboard/qualification/ui/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-question-data-access": [
+      "@worse-and-pricier/question-randomizer-dashboard-question-data-access": [
         "libs/question-randomizer/dashboard/question/data-access/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-question-feature": [
+      "@worse-and-pricier/question-randomizer-dashboard-question-feature": [
         "libs/question-randomizer/dashboard/question/feature/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-question-ui": [
+      "@worse-and-pricier/question-randomizer-dashboard-question-ui": [
         "libs/question-randomizer/dashboard/question/ui/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-randomization-shell": [
+      "@worse-and-pricier/question-randomizer-dashboard-randomization-shell": [
         "libs/question-randomizer/dashboard/randomization/shell/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-randomization-ui": [
+      "@worse-and-pricier/question-randomizer-dashboard-randomization-ui": [
         "libs/question-randomizer/dashboard/randomization/ui/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-randomization-util": [
+      "@worse-and-pricier/question-randomizer-dashboard-randomization-util": [
         "libs/question-randomizer/dashboard/randomization/util/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-settings-shell": [
+      "@worse-and-pricier/question-randomizer-dashboard-settings-shell": [
         "libs/question-randomizer/dashboard/settings/shell/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-shared-data-access": [
+      "@worse-and-pricier/question-randomizer-dashboard-shared-data-access": [
         "libs/question-randomizer/dashboard/shared/data-access/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-shared-ui": [
+      "@worse-and-pricier/question-randomizer-dashboard-shared-ui": [
         "libs/question-randomizer/dashboard/shared/ui/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-shared-util": [
+      "@worse-and-pricier/question-randomizer-dashboard-shared-util": [
         "libs/question-randomizer/dashboard/shared/util/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-dashboard-shell": [
+      "@worse-and-pricier/question-randomizer-dashboard-shell": [
         "libs/question-randomizer/dashboard/shell/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-shared-data-access": [
+      "@worse-and-pricier/question-randomizer-shared-data-access": [
         "libs/question-randomizer/shared/data-access/src/index.ts"
       ],
-      "@my-nx-monorepo/question-randomizer-shared-util": [
+      "@worse-and-pricier/question-randomizer-shared-util": [
         "libs/question-randomizer/shared/util/src/index.ts"
       ],
-      "@my-nx-monorepo/shared-styles": ["libs/shared/styles/src/index.ts"],
-      "@my-nx-monorepo/shared-util": ["libs/shared/util/src/index.ts"]
+      "@worse-and-pricier/shared-styles": ["libs/shared/styles/src/index.ts"],
+      "@worse-and-pricier/shared-util": ["libs/shared/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

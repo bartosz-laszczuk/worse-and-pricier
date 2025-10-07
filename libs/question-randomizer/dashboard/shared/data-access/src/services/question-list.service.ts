@@ -4,8 +4,8 @@ import {
   EditQuestionFormValue,
   Qualification,
   Question,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import { UserStore } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { QuestionRepositoryService } from '../repositories';
 import { QuestionListStore, RandomizationStore } from '../store';
 import { QuestionMapperService } from './question-mapper.service';
@@ -13,7 +13,7 @@ import { RandomizationService } from './randomization.service';
 import {
   QuestionCategory,
   UsedQuestion,
-} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
 import { UsedQuestionListService } from './used-question-list.service';
 import { PostponedQuestionListService } from './postponed-question-list.service';
 

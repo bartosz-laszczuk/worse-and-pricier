@@ -1,6 +1,6 @@
 # Design System UI
 
-Complete UI component library with buttons, controls, tables, cards, and more. Part of the `@my-nx-monorepo/design-system` package suite.
+Complete UI component library with buttons, controls, tables, cards, and more. Part of the `@worse-and-pricier/design-system` package suite.
 
 ## Components
 
@@ -46,7 +46,7 @@ import {
   OptionItem,
   SortDefinition,
   PageEvent
-} from '@my-nx-monorepo/design-system-ui';
+} from '@worse-and-pricier/design-system-ui';
 
 @Component({
   standalone: true,

@@ -2,7 +2,7 @@
 // This file imports all design system styles in the correct order
 
 // Tokens (imported from design-system-tokens package)
-// When this package is published, import from: '@my-nx-monorepo/design-system-tokens/scss'
+// When this package is published, import from: '@worse-and-pricier/design-system-tokens/scss'
 // For now, using relative path during development
 @use '../../../../../design-system/tokens/src/lib/scss/variables';
 @use '../../../../../design-system/tokens/src/lib/scss/functions';

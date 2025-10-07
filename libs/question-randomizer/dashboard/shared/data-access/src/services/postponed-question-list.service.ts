@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { RandomizationStore } from '../store';
 import { PostponedQuestionListRepositoryService } from '../repositories/postponed-question-list-repository.service';
-import { PostponedQuestion } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import { PostponedQuestion } from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
 
 @Injectable()
 export class PostponedQuestionListService {

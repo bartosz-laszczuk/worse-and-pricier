@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GetRandomizationResponse } from '../models';
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { Question } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import {
   PostponedQuestion,
   Randomization,
   UsedQuestion,
-} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
 
 @Injectable({ providedIn: 'root' })
 export class RandomizationMapperService {

@@ -12,12 +12,12 @@ import {
   QuestionRepositoryService,
   RandomizationStore,
   UpdateQuestionRequest,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
 import {
   Category,
   Qualification,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import { UserStore } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { CreateAndUpdateQuestionsContext } from '../models/question-list-import.models';
 import * as Papa from 'papaparse';
 

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { LoginService } from '@my-nx-monorepo/question-randomizer-auth-data-access';
-import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
-import { UserService } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { LoginService } from '@worse-and-pricier/question-randomizer-auth-data-access';
+import { EmailPasswordCredentials } from '@worse-and-pricier/question-randomizer-auth-util';
+import { UserService } from '@worse-and-pricier/question-randomizer-shared-data-access';
 
 @Injectable()
 export class LoginFacade {

@@ -10,7 +10,7 @@ export default [
         'error',
         {
           ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}'],
-          ignoredDependencies: ['@my-nx-monorepo/design-system-tokens'],
+          ignoredDependencies: ['@worse-and-pricier/design-system-tokens'],
         },
       ],
     },

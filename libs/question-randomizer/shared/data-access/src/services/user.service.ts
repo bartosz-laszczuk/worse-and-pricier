@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import {
   EmailPasswordCredentials,
   User,
-} from '@my-nx-monorepo/question-randomizer-auth-util';
+} from '@worse-and-pricier/question-randomizer-auth-util';
 import { UserStore } from '../store';
 import { AuthService } from '../repositories';
 

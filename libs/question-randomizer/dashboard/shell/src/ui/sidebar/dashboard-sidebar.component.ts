@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import {
   ButtonToggleComponent,
   ButtonToggleGroupComponent,
-} from '@my-nx-monorepo/design-system-ui';
+} from '@worse-and-pricier/design-system-ui';
 import { SvgIconComponent } from 'angular-svg-icon';
 
 export interface NavigationItem {

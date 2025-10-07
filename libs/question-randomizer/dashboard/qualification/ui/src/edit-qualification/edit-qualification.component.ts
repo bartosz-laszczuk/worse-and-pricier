@@ -1,8 +1,8 @@
 import { Component, effect, inject, input, output } from '@angular/core';
 
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { InputTextComponent } from '@my-nx-monorepo/design-system-ui';
-import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { InputTextComponent } from '@worse-and-pricier/design-system-ui';
+import { Qualification } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 
 interface EditQualificationForm {
   name: FormControl<string>;

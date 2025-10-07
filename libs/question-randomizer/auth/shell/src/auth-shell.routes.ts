@@ -3,7 +3,7 @@ import {
   AuthCanActivate,
   AuthVerifiedCanActivate,
   UnauthCanActivate,
-} from '@my-nx-monorepo/question-randomizer-shared-data-access';
+} from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { AuthShellComponent } from './auth-shell.component';
 
 export const authShellRoutes: Route[] = [
@@ -13,14 +13,14 @@ export const authShellRoutes: Route[] = [
       {
         path: 'verify',
         loadComponent: () =>
-          import('@my-nx-monorepo/question-randomizer-auth-feature').then(
+          import('@worse-and-pricier/question-randomizer-auth-feature').then(
             (x) => x.EmailVerifyComponent
           ),
       },
       {
         path: 'verified',
         loadComponent: () =>
-          import('@my-nx-monorepo/question-randomizer-auth-feature').then(
+          import('@worse-and-pricier/question-randomizer-auth-feature').then(
             (x) => x.EmailVerifiedComponent
           ),
         canActivate: [AuthVerifiedCanActivate],
@@ -28,7 +28,7 @@ export const authShellRoutes: Route[] = [
       {
         path: 'not-verified',
         loadComponent: () =>
-          import('@my-nx-monorepo/question-randomizer-auth-feature').then(
+          import('@worse-and-pricier/question-randomizer-auth-feature').then(
             (x) => x.EmailNotVerifiedComponent
           ),
         canActivate: [AuthCanActivate],
@@ -42,7 +42,7 @@ export const authShellRoutes: Route[] = [
       {
         path: 'login',
         loadComponent: () =>
-          import('@my-nx-monorepo/question-randomizer-auth-feature').then(
+          import('@worse-and-pricier/question-randomizer-auth-feature').then(
             (x) => x.LoginComponent
           ),
         canActivate: [UnauthCanActivate],
@@ -50,7 +50,7 @@ export const authShellRoutes: Route[] = [
       {
         path: 'registration',
         loadComponent: () =>
-          import('@my-nx-monorepo/question-randomizer-auth-feature').then(
+          import('@worse-and-pricier/question-randomizer-auth-feature').then(
             (x) => x.RegistrationComponent
           ),
         canActivate: [UnauthCanActivate],

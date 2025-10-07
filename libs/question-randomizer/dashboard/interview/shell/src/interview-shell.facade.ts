@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { InterviewStore } from '@my-nx-monorepo/question-randomizer-dashboard-interview-data-access';
-import { QuestionListStore } from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
-import { Question } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { PageEvent, SortDefinition } from '@my-nx-monorepo/design-system-ui';
+import { InterviewStore } from '@worse-and-pricier/question-randomizer-dashboard-interview-data-access';
+import { QuestionListStore } from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
+import { Question } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import { PageEvent, SortDefinition } from '@worse-and-pricier/design-system-ui';
 import { filter, take } from 'rxjs';
 
 @Injectable()

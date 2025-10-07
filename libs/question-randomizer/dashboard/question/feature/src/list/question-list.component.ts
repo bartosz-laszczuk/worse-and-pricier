@@ -4,9 +4,9 @@ import {
   EditQuestionFormValue,
   Question,
   StripHtmlPipe,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { QuestionListFacade } from './question-list.facade';
-import { EditQuestionComponent } from '@my-nx-monorepo/question-randomizer-dashboard-question-ui';
+import { EditQuestionComponent } from '@worse-and-pricier/question-randomizer-dashboard-question-ui';
 import {
   ButtonComponent,
   ButtonGroupComponent,
@@ -16,14 +16,14 @@ import {
   PageEvent,
   SortDefinition,
   TableComponent,
-} from '@my-nx-monorepo/design-system-ui';
+} from '@worse-and-pricier/design-system-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, take } from 'rxjs';
 import {
   QuestionListExportService,
   QuestionListImportService,
-} from '@my-nx-monorepo/question-randomizer-dashboard-question-data-access';
+} from '@worse-and-pricier/question-randomizer-dashboard-question-data-access';
 import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({

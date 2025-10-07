@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { AuthVerifiedCanActivate } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { AuthVerifiedCanActivate } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { DashboardShellComponent } from './dashboard-shell.component';
 
 export const dashboardShellRoutes: Route[] = [
@@ -17,42 +17,42 @@ export const dashboardShellRoutes: Route[] = [
         path: 'questions',
         loadComponent: () =>
           import(
-            '@my-nx-monorepo/question-randomizer-dashboard-question-feature'
+            '@worse-and-pricier/question-randomizer-dashboard-question-feature'
           ).then((r) => r.QuestionListComponent),
       },
       {
         path: 'categories',
         loadComponent: () =>
           import(
-            '@my-nx-monorepo/question-randomizer-dashboard-category-feature'
+            '@worse-and-pricier/question-randomizer-dashboard-category-feature'
           ).then((r) => r.CategoryListComponent),
       },
       {
         path: 'qualifications',
         loadComponent: () =>
           import(
-            '@my-nx-monorepo/question-randomizer-dashboard-qualification-feature'
+            '@worse-and-pricier/question-randomizer-dashboard-qualification-feature'
           ).then((r) => r.QualificationListComponent),
       },
       {
         path: 'interview',
         loadComponent: () =>
           import(
-            '@my-nx-monorepo/question-randomizer-dashboard-interview-shell'
+            '@worse-and-pricier/question-randomizer-dashboard-interview-shell'
           ).then((r) => r.InterviewShellComponent),
       },
       {
         path: 'settings',
         loadComponent: () =>
           import(
-            '@my-nx-monorepo/question-randomizer-dashboard-settings-shell'
+            '@worse-and-pricier/question-randomizer-dashboard-settings-shell'
           ).then((r) => r.SettingsShellComponent),
       },
       {
         path: 'randomization',
         loadComponent: () =>
           import(
-            '@my-nx-monorepo/question-randomizer-dashboard-randomization-shell'
+            '@worse-and-pricier/question-randomizer-dashboard-randomization-shell'
           ).then((r) => r.RandomizationShellComponent),
       },
       // {

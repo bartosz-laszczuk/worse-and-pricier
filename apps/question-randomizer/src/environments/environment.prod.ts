@@ -1,4 +1,4 @@
-import { AppConfig } from '@my-nx-monorepo/question-randomizer-shared-util';
+import { AppConfig } from '@worse-and-pricier/question-randomizer-shared-util';
 
 export const environment: AppConfig = {
   production: true,

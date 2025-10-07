@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { EmailPasswordCredentials } from '@my-nx-monorepo/question-randomizer-auth-util';
+import { EmailPasswordCredentials } from '@worse-and-pricier/question-randomizer-auth-util';
 import {
   Auth,
   signInWithEmailAndPassword,
@@ -18,7 +18,7 @@ import {
 } from '@angular/fire/firestore';
 import { firstValueFrom } from 'rxjs';
 import { serverTimestamp } from 'firebase/firestore';
-import { APP_CONFIG } from '@my-nx-monorepo/question-randomizer-shared-util';
+import { APP_CONFIG } from '@worse-and-pricier/question-randomizer-shared-util';
 import { AuthenticatedUserResponse, User } from '../models';
 
 @Injectable({ providedIn: 'root' })

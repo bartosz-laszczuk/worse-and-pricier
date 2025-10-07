@@ -12,7 +12,7 @@ import {
   where,
   writeBatch,
 } from '@angular/fire/firestore';
-import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { Qualification } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { lastValueFrom, Observable, take } from 'rxjs';
 import { CreateQualificationRequest } from '../models';
 

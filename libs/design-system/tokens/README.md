@@ -1,6 +1,6 @@
 # Design System Tokens
 
-Design tokens provide programmatic access to design values (colors, typography, spacing). Part of the `@my-nx-monorepo/design-system` package suite.
+Design tokens provide programmatic access to design values (colors, typography, spacing). Part of the `@worse-and-pricier/design-system` package suite.
 
 ## Features
 
@@ -14,7 +14,7 @@ Design tokens provide programmatic access to design values (colors, typography, 
 ### TypeScript
 
 ```typescript
-import { colors, typography, spacing } from '@my-nx-monorepo/design-system-tokens';
+import { colors, typography, spacing } from '@worse-and-pricier/design-system-tokens';
 
 // Colors
 console.log(colors.primary);           // '#eddf64'
@@ -38,7 +38,7 @@ console.log(spacing.base);  // '1rem'
 @use '../../../../../design-system/tokens/src/lib/scss/functions';
 
 // Or import from built package (when published)
-@use '@my-nx-monorepo/design-system-tokens/scss' as tokens;
+@use '@worse-and-pricier/design-system-tokens/scss' as tokens;
 
 .my-component {
   // CSS variables (defined in colors.scss)

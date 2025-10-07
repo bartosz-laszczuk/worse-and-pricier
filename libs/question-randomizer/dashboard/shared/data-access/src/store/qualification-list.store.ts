@@ -5,7 +5,7 @@ import {
   paginateEntities,
   Qualification,
   sortEntities,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import {
   patchState,
   signalStore,
@@ -18,7 +18,7 @@ import {
   Filters,
   PageParameters,
   SortDefinition,
-} from '@my-nx-monorepo/shared-util';
+} from '@worse-and-pricier/shared-util';
 
 type QualificationState = {
   entities: Record<string, Qualification> | null;

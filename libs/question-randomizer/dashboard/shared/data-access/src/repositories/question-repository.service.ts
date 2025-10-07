@@ -16,7 +16,7 @@ import {
 import {
   EditQuestionFormValue,
   Question,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { lastValueFrom, Observable, take } from 'rxjs';
 import { CreateQuestionRequest, UpdateQuestionRequest } from '../models';
 

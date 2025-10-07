@@ -1,12 +1,12 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { UserService } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+import { UserService } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import {
   CategoryListService,
   CategoryListStore,
   QualificationListService,
   QualificationListStore,
   QuestionListService,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
 import { forkJoin } from 'rxjs';
 
 @Injectable()

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { EditCategoryComponent } from '@my-nx-monorepo/question-randomizer-dashboard-category-ui';
+import { EditCategoryComponent } from '@worse-and-pricier/question-randomizer-dashboard-category-ui';
 import { CategoryListFacade } from './category-list.facade';
-import { Category } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
+import { Category } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import {
   ButtonComponent,
   ColumnDirective,
@@ -11,7 +11,7 @@ import {
   PageEvent,
   SortDefinition,
   TableComponent,
-} from '@my-nx-monorepo/design-system-ui';
+} from '@worse-and-pricier/design-system-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, take } from 'rxjs';

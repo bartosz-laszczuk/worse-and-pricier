@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import {
   UserService,
   UserStore,
-} from '@my-nx-monorepo/question-randomizer-shared-data-access';
+} from '@worse-and-pricier/question-randomizer-shared-data-access';
 
 @Component({
   selector: 'lib-email-verified',

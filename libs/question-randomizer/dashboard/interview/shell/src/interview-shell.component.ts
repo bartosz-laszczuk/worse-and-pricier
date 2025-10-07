@@ -7,7 +7,7 @@ import {
   PageEvent,
   SortDefinition,
   TableComponent,
-} from '@my-nx-monorepo/design-system-ui';
+} from '@worse-and-pricier/design-system-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,8 +15,8 @@ import { InterviewShellFacade } from './interview-shell.facade';
 import {
   NormalizeSpacePipe,
   Question,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { InterviewStore } from '@my-nx-monorepo/question-randomizer-dashboard-interview-data-access';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import { InterviewStore } from '@worse-and-pricier/question-randomizer-dashboard-interview-data-access';
 
 @Component({
   selector: 'lib-interview-shell',

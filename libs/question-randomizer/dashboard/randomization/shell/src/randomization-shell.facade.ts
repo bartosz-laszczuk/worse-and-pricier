@@ -5,7 +5,7 @@ import {
   PostponedQuestion,
   Randomization,
   UsedQuestion,
-} from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
 import {
   CategoryListStore,
   PostponedQuestionListService,
@@ -15,8 +15,8 @@ import {
   RandomizationStore,
   SelectedCategoryListService,
   UsedQuestionListService,
-} from '@my-nx-monorepo/question-randomizer-dashboard-shared-data-access';
-import { UserStore } from '@my-nx-monorepo/question-randomizer-shared-data-access';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
+import { UserStore } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { filter, forkJoin, take } from 'rxjs';
 
 Injectable();

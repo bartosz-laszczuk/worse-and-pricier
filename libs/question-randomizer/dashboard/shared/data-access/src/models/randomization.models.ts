@@ -1,5 +1,5 @@
 import { FieldValue } from '@angular/fire/firestore';
-import { RandomizationStatus } from '@my-nx-monorepo/question-randomizer-dashboard-randomization-util';
+import { RandomizationStatus } from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
 
 export interface GetRandomizationResponse {
   id: string;

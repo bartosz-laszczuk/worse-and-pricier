@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { RegistrationForm } from '@my-nx-monorepo/question-randomizer-auth-util';
+import { RegistrationForm } from '@worse-and-pricier/question-randomizer-auth-util';
 
 @Injectable()
 export class RegistrationService {

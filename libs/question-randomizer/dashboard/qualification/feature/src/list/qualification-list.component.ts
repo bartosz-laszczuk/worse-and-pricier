@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { QualificationListFacade } from './qualification-list.facade';
-import { Qualification } from '@my-nx-monorepo/question-randomizer-dashboard-shared-util';
-import { EditQualificationComponent } from '@my-nx-monorepo/question-randomizer-dashboard-qualification-ui';
+import { Qualification } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import { EditQualificationComponent } from '@worse-and-pricier/question-randomizer-dashboard-qualification-ui';
 import {
   ButtonComponent,
   ColumnDirective,
@@ -11,7 +11,7 @@ import {
   PageEvent,
   SortDefinition,
   TableComponent,
-} from '@my-nx-monorepo/design-system-ui';
+} from '@worse-and-pricier/design-system-ui';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
