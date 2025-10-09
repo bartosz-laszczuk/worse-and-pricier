@@ -12,7 +12,6 @@ export default [
           ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}'],
           ignoredDependencies: [
             '@worse-and-pricier/design-system-tokens',
-            '@worse-and-pricier/design-system-styles',
           ],
         },
       ],

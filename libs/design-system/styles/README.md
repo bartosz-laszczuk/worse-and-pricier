@@ -9,6 +9,18 @@ Global styles, base resets, themes (light/dark), utilities, and component styles
 - **Utilities:** Spacing utilities and helper classes
 - **Design Tokens:** Uses tokens from `@worse-and-pricier/design-system-tokens`
 
+## Dependencies
+
+This package depends on:
+- `@worse-and-pricier/design-system-tokens` - For SCSS variables and functions
+- `@angular/core` - For ThemeService (Angular 20+)
+
+## Installation
+
+```bash
+npm install @worse-and-pricier/design-system-tokens @worse-and-pricier/design-system-styles
+```
+
 ## Usage
 
 ### Theme Service

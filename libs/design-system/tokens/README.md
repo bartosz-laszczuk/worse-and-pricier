@@ -4,10 +4,21 @@ Design tokens provide programmatic access to design values (colors, typography, 
 
 ## Features
 
+- **Framework-agnostic:** Works with React, Vue, Angular, or vanilla JavaScript
 - **Colors:** Primary, secondary, success, warning, danger, and grayscale colors
 - **Typography:** Font families, sizes, weights, and line heights
 - **Spacing:** Consistent spacing scale
 - **Available in TypeScript and SCSS**
+
+## Dependencies
+
+This package has **no dependencies** and can be used in any JavaScript/TypeScript project.
+
+## Installation
+
+```bash
+npm install @worse-and-pricier/design-system-tokens
+```
 
 ## Usage
 

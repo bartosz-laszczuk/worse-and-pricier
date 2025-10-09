@@ -2,6 +2,42 @@
 
 Complete UI component library with buttons, controls, tables, cards, and more. Part of the `@worse-and-pricier/design-system` package suite.
 
+## Dependencies
+
+This package depends on:
+- `@worse-and-pricier/design-system-tokens` - For SCSS compilation (mixins, functions, animations)
+- `@angular/core`, `@angular/common`, `@angular/forms` - Angular framework (20+)
+- `angular-svg-icon` - For SVG icon support
+- `ngx-quill` - For rich text editor component
+
+**Note:** This package does **NOT** depend on `@worse-and-pricier/design-system-styles`. If you need global styles and theme switching, install `styles` separately.
+
+## Installation
+
+```bash
+# Minimal installation (UI components only)
+npm install @worse-and-pricier/design-system-tokens @worse-and-pricier/design-system-ui
+
+# Full installation (with global styles and theming)
+npm install @worse-and-pricier/design-system-tokens @worse-and-pricier/design-system-styles @worse-and-pricier/design-system-ui
+```
+
+## Angular Configuration
+
+Add to your `angular.json` or `project.json`:
+
+```json
+{
+  "stylePreprocessorOptions": {
+    "includePaths": [
+      "node_modules/@worse-and-pricier/design-system-tokens/scss"
+    ]
+  }
+}
+```
+
+This is **required** for UI components to compile SCSS that references token files.
+
 ## Components
 
 ### Buttons

@@ -170,15 +170,41 @@ npx nx release
 
 ## Using Published Packages (External Projects)
 
-If you're installing these packages from npm in a **different project**, follow these setup instructions:
+If you're installing these packages from npm in a **different project**, choose the installation based on your needs:
 
-### Installation
+### Installation Scenarios
 
+**Scenario 1: Token-only usage (React/Vue/vanilla JS)**
+```bash
+npm install @worse-and-pricier/design-system-tokens
+```
+
+Use when you only need design tokens (colors, spacing, typography) in any framework:
+```typescript
+import { colors, spacing, typography } from '@worse-and-pricier/design-system-tokens';
+
+const MyComponent = () => (
+  <div style={{ color: colors.primary, padding: spacing.md }}>
+    Hello World
+  </div>
+);
+```
+
+**Scenario 2: Theming in Angular (tokens + styles)**
+```bash
+npm install @worse-and-pricier/design-system-tokens @worse-and-pricier/design-system-styles
+```
+
+Use when you need global styles, theme switching, but not the UI components.
+
+**Scenario 3: Full UI library (tokens + styles + ui)**
 ```bash
 npm install @worse-and-pricier/design-system-tokens @worse-and-pricier/design-system-styles @worse-and-pricier/design-system-ui
 ```
 
-### Angular Configuration
+Use when you want the complete Angular component library with theming.
+
+### Angular Configuration (Required for Scenarios 2 & 3)
 
 Add the following to your **Angular project's `angular.json` or `project.json`**:
 
@@ -204,7 +230,7 @@ Add the following to your **Angular project's `angular.json` or `project.json`**
 
 ### Why is `stylePreprocessorOptions` Required?
 
-The UI components use SCSS imports like `@use 'animations'` that reference files from the tokens package. The `includePaths` configuration tells Angular's SCSS compiler where to find these files.
+Both `styles` and `ui` packages use SCSS imports like `@use 'animations'` or `@use 'colors'` that reference files from the tokens package. The `includePaths` configuration tells Angular's SCSS compiler where to find these files.
 
 **Without this configuration**, you'll see errors like:
 ```
@@ -212,10 +238,10 @@ Error: Can't find stylesheet to import.
 @use 'animations';
 ```
 
-### Usage Example
+### Full Usage Example (All 3 Packages)
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   ButtonComponent,
   InputTextComponent,
@@ -230,13 +256,18 @@ import { colors } from '@worse-and-pricier/design-system-tokens';
   standalone: true,
   imports: [ButtonComponent, InputTextComponent, TableComponent],
   template: `
-    <lib-button type="primary" (click)="toggleTheme()">
-      Toggle Theme
-    </lib-button>
+    <div [style.background-color]="backgroundColor">
+      <lib-button type="primary" (click)="toggleTheme()">
+        Toggle Theme
+      </lib-button>
+    </div>
   `
 })
 export class ExampleComponent {
-  constructor(private themeService: ThemeService) {}
+  private themeService = inject(ThemeService);
+
+  // Access design tokens programmatically
+  backgroundColor = colors.surface;
 
   toggleTheme() {
     const current = this.themeService.currentTheme();
@@ -251,26 +282,57 @@ export class ExampleComponent {
 
 The design system follows strict module boundaries enforced by ESLint:
 
-- **tokens** (type:util, scope:design-system) - No dependencies
-- **styles** (type:styles, scope:design-system) - Can depend on tokens
-- **ui** (type:ui, scope:design-system) - Contains its own models and can depend on util libraries
+- **tokens** (type:util, scope:design-system) - Foundation layer with no dependencies
+- **styles** (type:styles, scope:design-system) - Depends on tokens for SCSS variables/functions
+- **ui** (type:ui, scope:design-system) - Depends on tokens for SCSS compilation (via styleIncludePaths)
 
 ### Dependency Graph
 
 ```
-┌─────────┐
-│ tokens  │
-└────┬────┘
-     │
-     ▼
-┌─────────┐
-│ styles  │
-└─────────┘
-
-┌─────────┐
-│   ui    │
-└─────────┘
+        ┌─────────────────┐
+        │     tokens      │ (Foundation)
+        │  SCSS + TypeScript │
+        └────────┬─────────┘
+                 │
+         ┌───────┴───────┐
+         │               │
+         ▼               ▼
+    ┌─────────┐     ┌─────────┐
+    │ styles  │     │   ui    │
+    │  (SCSS) │     │ (Angular)│
+    └─────────┘     └─────────┘
 ```
+
+**Key points:**
+- `tokens` is framework-agnostic and can be used in any project (React, Vue, vanilla JS)
+- `styles` imports tokens via SCSS `@use` statements for global styles and themes
+- `ui` imports tokens via `styleIncludePaths` for component SCSS compilation
+- `ui` does NOT depend on `styles` at runtime (consumers include styles separately if needed)
+- Both `styles` and `ui` are independent consumers of `tokens`
+
+### Why 3 Separate Packages?
+
+This architecture provides maximum flexibility for different use cases:
+
+| Use Case | Install | Bundle Size | Framework Required |
+|----------|---------|-------------|--------------------|
+| React app needs design tokens only | `tokens` | ~5KB | None |
+| Vue app needs colors/spacing | `tokens` | ~5KB | None |
+| Angular app needs theming | `tokens` + `styles` | ~50KB | Angular |
+| Angular app needs full UI library | `tokens` + `styles` + `ui` | ~200KB | Angular |
+
+**Benefits:**
+- ✅ Framework-agnostic foundation (use tokens in any project)
+- ✅ Better tree-shaking and bundle optimization
+- ✅ Independent versioning (token updates don't force UI updates)
+- ✅ Follows industry standards (Material Design, Carbon, Polaris)
+- ✅ Future-proof (can add `design-system-react` later without breaking changes)
+
+**Alternative (1 merged package) would:**
+- ❌ Force Angular dependency on all consumers (even React apps wanting just colors)
+- ❌ Larger bundles for simple use cases
+- ❌ Violate separation of concerns
+- ❌ Prevent use in non-Angular projects
 
 ## Documentation
 
