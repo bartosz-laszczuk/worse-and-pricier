@@ -1,2 +1,3 @@
 export * from './paginator.component';
-export * from './_models/page-event.model';
+// PageEvent is now exported from @worse-and-pricier/design-system-tokens
+export { PageEvent } from '@worse-and-pricier/design-system-tokens';

@@ -7,9 +7,22 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { PageEvent } from './_models/page-event.model';
+import { PageEvent } from '@worse-and-pricier/design-system-tokens';
 
-
+/**
+ * Pagination control component for navigating through paginated data.
+ *
+ * @example
+ * ```html
+ * <lib-shared-ui-paginator
+ *   [totalCount]="100"
+ *   [pageIndex]="0"
+ *   [pageSize]="10"
+ *   [pageSizeOptions]="[5, 10, 25, 50]"
+ *   (page)="onPageChange($event)">
+ * </lib-shared-ui-paginator>
+ * ```
+ */
 @Component({
   selector: 'lib-shared-ui-paginator',
   imports: [],
@@ -18,13 +31,21 @@ import { PageEvent } from './_models/page-event.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginatorComponent {
+  /** Whether to show first/last page buttons */
   @Input() showFirstLastButtons = true;
+  /** Total count of all items across all pages */
   public totalCount = input.required<number>();
+  /** Current page index (zero-based) */
   public pageIndex = input.required<number>();
+  /** Number of items per page */
   public pageSize = input.required<number>();
+  /** Available page size options */
   public pageSizeOptions = input.required<number[]>();
+  /** Whether pagination controls are disabled */
   public disabled = signal<boolean>(false);
+  /** Emits when user navigates to a different page */
   public page = output<PageEvent>();
+  /** Calculated number of total pages */
   public numberOfPages = 0;
 
   constructor() {

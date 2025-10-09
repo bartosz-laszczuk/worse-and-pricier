@@ -1,6 +1,8 @@
+@use '../../../../../tokens/src/lib/scss/variables' as *;
+
 button {
   display: inline-block;
-  border-radius: 3px;
+  border-radius: $border-radius;
   background-color: var(--primary-color);
   border: 1px solid var(--secondary-color);
   color: var(--text-color);

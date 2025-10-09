@@ -13,7 +13,6 @@ import { OptionItem } from '@worse-and-pricier/design-system-tokens';
 
 @Component({
   selector: 'lib-input-select',
-  standalone: true,
   imports: [],
   templateUrl: './input-select.component.html',
   styleUrls: ['./input-select.component.scss'],
@@ -29,27 +28,29 @@ import { OptionItem } from '@worse-and-pricier/design-system-tokens';
 export class InputSelectComponent implements ControlValueAccessor {
   public options = input<OptionItem[] | undefined>();
   public placeholder = input('');
-  public changed = output<any>();
+  public changed = output<string | number | boolean | null>();
   private readonly cdr = inject(ChangeDetectorRef);
 
-  value?: any;
+  value?: string | number | boolean | null;
   isDisabled = false;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private propagateChange: any = () => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private propagateTouched: any = () => {};
+  private propagateChange: (value: string | number | boolean | null) => void = () => {
+    /* CVA callback */
+  };
+  private propagateTouched: () => void = () => {
+    /* CVA callback */
+  };
 
-  writeValue(value: any): void {
+  writeValue(value: string | number | boolean | null): void {
     this.value = value;
     this.cdr.markForCheck();
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: string | number | boolean | null) => void): void {
     this.propagateChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.propagateTouched = fn;
   }
 
@@ -58,17 +59,16 @@ export class InputSelectComponent implements ControlValueAccessor {
   }
 
   onChangedPureHtmlSelect(event: Event) {
-    const value = (event as any)?.target?.value
-      ? (event as any).target.value
-      : null;
+    const target = event.target as HTMLSelectElement;
+    const value = target.value || null;
 
     this.value = value;
     this.propagateChange(value);
     this.changed.emit(value);
   }
 
-  onChanged(event: any): void {
-    const value = event.value ? event.value : null;
+  onChanged(event: { value?: string | number | boolean }): void {
+    const value = event.value ?? null;
 
     this.value = value;
     this.propagateChange(value);

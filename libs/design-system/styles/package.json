@@ -2,6 +2,7 @@
   "name": "@worse-and-pricier/design-system-styles",
   "version": "0.0.1",
   "peerDependencies": {
+    "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0",
     "@worse-and-pricier/design-system-tokens": "^0.0.1"
   },

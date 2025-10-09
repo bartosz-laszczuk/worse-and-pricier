@@ -8,24 +8,23 @@
   --danger-color: #be5715;
 
   /* UI Colors */
-  --background-color: #e8e8e8; // to verify
+  --background-color: #e8e8e8;
   --border-color: #c2c2c0;
   --text-color: #2d2b2e;
-
-  --bar-color: #222; // to verify
-  --muted-text: #777; // to verify
+  --bar-color: #222;
+  --muted-text: #777;
 
   /* Grayscale */
   --white: #ffffff;
   --black: #000000;
 
-  --gray-100: #fcfdf8; // card-bg-color
-  --gray-200: #f2f2f2; // dashboard-background-color and table headers
-  --gray-300: #e3e3e1; // sidebar-background-color and table header background
-  --gray-400: #cececc; // vertical bar on the left and I think not selected icons on sidebar
-  --gray-500: #b1b1af; // divider-color
+  --gray-100: #fcfdf8; /* card backgrounds */
+  --gray-200: #f2f2f2; /* dashboard background, table headers */
+  --gray-300: #e3e3e1; /* sidebar background, table header background */
+  --gray-400: #cececc; /* vertical bars, unselected sidebar icons */
+  --gray-500: #b1b1af; /* dividers */
   --gray-600: #bebebe;
-  --gray-700: #acadaa; // sidebar-icon-color
-  --gray-800: #5b5b59; // sidebar-text-color
+  --gray-700: #acadaa; /* sidebar icons */
+  --gray-800: #5b5b59; /* sidebar text */
   --gray-900: #6c6a6b;
 }

@@ -1,6 +1,6 @@
 import { Injectable, QueryList } from '@angular/core';
 import { ColumnDirective } from './column-directive/column.directive';
-import { TypeOfTemplateEnum } from './table.models';
+import { TemplateType } from './table.models';
 
 @Injectable()
 export class TableService {
@@ -18,7 +18,7 @@ export class TableService {
 
   private setColumnsViewDef(columnTemps: QueryList<ColumnDirective>): void {
     this._columnTemplates = columnTemps
-      .filter((item) => item.libColumn.type === TypeOfTemplateEnum.COLUMN)
+      .filter((item) => item.libColumn.type === TemplateType.Column)
       .reduce((i, curr) => {
         return {
           ...i,
@@ -29,7 +29,7 @@ export class TableService {
 
   private setColumnsFiltersDef(columnTemps: QueryList<ColumnDirective>): void {
     this._filterTemplates = columnTemps
-      .filter((item) => item.libColumn?.type === TypeOfTemplateEnum.FILTER)
+      .filter((item) => item.libColumn?.type === TemplateType.Filter)
       .reduce((i, curr) => {
         return {
           ...i,

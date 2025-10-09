@@ -2,9 +2,9 @@
   <table>
     <thead>
       <tr>
-        @for (col of columns; track col) {
+        @for (col of columns(); track col) {
           <th
-            [class.truncate]="truncateHeaders"
+            [class.truncate]="truncateHeaders()"
             [ngStyle]="{ width: col.width }"
             >
             @if (
@@ -27,11 +27,11 @@
       </tr>
     </thead>
     <tbody>
-      @for (element of dataSource; track element; let i = $index) {
+      @for (element of dataSource(); track element; let i = $index) {
         <tr
           (click)="onRowClick(element)"
           >
-          @for (col of columns; track col) {
+          @for (col of columns(); track col) {
             <td>
               <div class="tbody-cell" [class.d-center]="col.center">
                 <ng-container
@@ -48,23 +48,23 @@
     </tbody>
     <tfoot>
       <tr>
-        <td [attr.colspan]="columns.length">
+        <td [attr.colspan]="columns().length">
           <div class="footer">
             <span
               >{{
-              pageParameters.index * pageParameters.size +
+              pageParameters().index * pageParameters().size +
               1 +
               ' - ' +
-              ((pageParameters.index + 1) * pageParameters.size > totalCount
-              ? totalCount
-              : (pageParameters.index + 1) * pageParameters.size)
+              ((pageParameters().index + 1) * pageParameters().size > totalCount()
+              ? totalCount()
+              : (pageParameters().index + 1) * pageParameters().size)
               }}
-              of {{ totalCount }}</span
+              of {{ totalCount() }}</span
               >
               <lib-shared-ui-paginator
-                [totalCount]="totalCount"
-                [pageIndex]="pageParameters.index"
-                [pageSize]="pageParameters.size"
+                [totalCount]="totalCount()"
+                [pageIndex]="pageParameters().index"
+                [pageSize]="pageParameters().size"
                 [pageSizeOptions]="[5, 10, 15]"
                 (page)="page.emit($event)"
               ></lib-shared-ui-paginator>
@@ -81,7 +81,7 @@
 
   <ng-template #sortHeader let-column="column">
     <lib-sortable-header
-      [sortDefinition]="sortDefinition"
+      [sortDefinition]="sortDefinition()"
       [column]="column"
       (sort)="onSort($event)"
     ></lib-sortable-header>

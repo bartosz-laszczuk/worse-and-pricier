@@ -1,10 +1,10 @@
-import { Directive, Input, TemplateRef } from '@angular/core';
-import { IComlumInputDirective } from '../table.models';
+import { Directive, inject, Input, TemplateRef } from '@angular/core';
+import { IColumnInputDirective } from '../table.models';
 
 @Directive({
   selector: '[libColumn]',
 })
 export class ColumnDirective {
-  @Input() libColumn!: IComlumInputDirective;
-  constructor(public templateRef: TemplateRef<any>) {}
+  @Input() libColumn!: IColumnInputDirective;
+  public templateRef = inject(TemplateRef<unknown>);
 }

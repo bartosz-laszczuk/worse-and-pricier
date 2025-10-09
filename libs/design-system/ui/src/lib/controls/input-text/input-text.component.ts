@@ -18,6 +18,22 @@ import {
 } from '@angular/forms';
 import { SvgIconComponent } from 'angular-svg-icon';
 
+/**
+ * Text input component with form validation support.
+ * Implements Angular's ControlValueAccessor for reactive forms integration.
+ *
+ * @example
+ * ```html
+ * <lib-input-text
+ *   label="Email"
+ *   placeholder="Enter your email"
+ *   type="email"
+ *   hint="We'll never share your email"
+ *   [errorMessages]="{ required: 'Email is required' }"
+ *   formControlName="email">
+ * </lib-input-text>
+ * ```
+ */
 @Component({
   selector: 'lib-input-text',
   imports: [CommonModule, SvgIconComponent],
@@ -38,12 +54,19 @@ import { SvgIconComponent } from 'angular-svg-icon';
   ],
 })
 export class InputTextComponent implements ControlValueAccessor, Validator {
+  /** Label text displayed above the input */
   @Input() label = '';
+  /** Placeholder text shown when input is empty */
   @Input() placeholder = '';
+  /** HTML input type (text, email, password, etc.) */
   @Input() type = 'text';
+  /** Optional hint text displayed below the input */
   @Input() hint?: string;
+  /** Additional CSS classes to apply */
   @Input() classes = '';
+  /** Optional icon name to display */
   @Input() icon = '';
+  /** Custom error messages for validation errors */
   @Input() errorMessages: { [key: string]: string } = {};
 
   @HostBinding('class.invalid') get isInvalid() {
@@ -54,7 +77,7 @@ export class InputTextComponent implements ControlValueAccessor, Validator {
 
   private readonly cdr = inject(ChangeDetectorRef);
 
-  value: any = '';
+  value: string | number = '';
   touched = false;
   disabled = false;
   control!: AbstractControl;
@@ -65,22 +88,24 @@ export class InputTextComponent implements ControlValueAccessor, Validator {
     this.onChange(inputElement.value);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onChange = (value: any) => {};
+  onChange: (value: string | number) => void = () => {
+    /* CVA callback */
+  };
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched = () => {};
+  onTouched: () => void = () => {
+    /* CVA callback */
+  };
 
-  writeValue(value: any): void {
+  writeValue(value: string | number): void {
     this.value = value;
     this.cdr.markForCheck();
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: string | number) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 

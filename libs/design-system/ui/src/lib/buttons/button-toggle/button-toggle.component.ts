@@ -16,8 +16,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   `,
   styleUrls: ['./button-toggle.component.scss'],
 })
-export class ButtonToggleComponent {
-  @Input() value!: any;
+export class ButtonToggleComponent<T = unknown> {
+  @Input() value!: T;
   @Input() selected = false;
-  @Output() toggled = new EventEmitter<any>();
+  @Output() toggled = new EventEmitter<T>();
 }

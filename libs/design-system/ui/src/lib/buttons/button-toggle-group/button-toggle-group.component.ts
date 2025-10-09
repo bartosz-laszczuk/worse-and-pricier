@@ -21,11 +21,11 @@ import { ButtonToggleComponent } from '../button-toggle/button-toggle.component'
   `,
   styleUrls: ['./button-toggle-group.component.scss'],
 })
-export class ButtonToggleGroupComponent implements AfterContentInit {
-  @Input() value?: any;
-  @Output() toggled = new EventEmitter<any>();
+export class ButtonToggleGroupComponent<T = unknown> implements AfterContentInit {
+  @Input() value?: T;
+  @Output() toggled = new EventEmitter<T | undefined>();
   @ContentChildren(ButtonToggleComponent)
-  toggles!: QueryList<ButtonToggleComponent>;
+  toggles!: QueryList<ButtonToggleComponent<T>>;
 
   ngAfterContentInit() {
     this.toggles.forEach((toggle) => {
@@ -34,7 +34,7 @@ export class ButtonToggleGroupComponent implements AfterContentInit {
     });
   }
 
-  handleToggle(val: any) {
+  handleToggle(val: T) {
     this.value = this.value === val ? undefined : val;
     this.toggled.emit(this.value);
     this.updateSelection();

@@ -54,19 +54,23 @@ export class InputRichTextEditorComponent
   disabled = false;
   control!: AbstractControl;
 
-  onChange?: (value: any) => void;
-  onTouched?: () => void;
+  onChange: (value: string) => void = () => {
+    /* CVA callback */
+  };
+  onTouched: () => void = () => {
+    /* CVA callback */
+  };
 
-  writeValue(value: any): void {
-    this.value = value;
+  writeValue(value: string): void {
+    this.value = value || '';
     this.cdr.markForCheck();
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
@@ -82,7 +86,7 @@ export class InputRichTextEditorComponent
 
   markAsTouched(): void {
     if (!this.touched) {
-      this.onTouched?.();
+      this.onTouched();
       this.touched = true;
     }
   }

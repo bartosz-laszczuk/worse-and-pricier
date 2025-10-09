@@ -14,9 +14,6 @@ table {
     th {
       border-bottom: $border;
       padding: 0 0.5rem;
-      &:not(:last-child) {
-        // border-right: $border;
-      }
     }
   }
   tbody {

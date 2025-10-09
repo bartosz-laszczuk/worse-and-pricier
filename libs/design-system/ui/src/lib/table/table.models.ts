@@ -5,6 +5,7 @@ export {
   SortDefinition,
   PageParameters,
   Filters,
+  PageEvent,
 } from '@worse-and-pricier/design-system-tokens';
 
 import { SortDirection } from '@worse-and-pricier/design-system-tokens';
@@ -21,12 +22,12 @@ export interface IColumn {
   center?: boolean;
 }
 
-export interface IComlumInputDirective {
+export interface IColumnInputDirective {
   propertyName: string;
   type: string;
 }
 
-export const TypeOfTemplateEnum = {
-  COLUMN: 'COLUMN',
-  FILTER: 'FILTER',
-};
+export enum TemplateType {
+  Column = 'COLUMN',
+  Filter = 'FILTER',
+}

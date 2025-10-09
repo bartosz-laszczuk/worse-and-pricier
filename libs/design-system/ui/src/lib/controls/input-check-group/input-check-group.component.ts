@@ -32,19 +32,22 @@ export class InputCheckGroupComponent implements ControlValueAccessor {
   }>();
   public isDisabled = false;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private propagateChange: any = () => {};
+  private propagateChange: (value: Value[]) => void = () => {
+    /* CVA callback */
+  };
 
   writeValue(value: Value[]): void {
     this.value = value;
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: Value[]) => void): void {
     this.propagateChange = fn;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  registerOnTouched(fn: any): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  registerOnTouched(_fn: () => void): void {
+    /* CVA callback - not used in this component */
+  }
 
   setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;

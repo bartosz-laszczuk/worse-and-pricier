@@ -13,7 +13,7 @@
     [ngClass]="{
       'is-invalid': control.invalid && (control.touched || control.dirty)
     }"
-    (ngModelChange)="onChange?.($event)"
+    (ngModelChange)="onChange($event)"
     (blur)="markAsTouched()"
   ></quill-editor>
 
