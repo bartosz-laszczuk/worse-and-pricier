@@ -1,10 +1,11 @@
-import { Directive, inject, Input, TemplateRef } from '@angular/core';
+import { Directive, inject, input, TemplateRef } from '@angular/core';
 import { IColumnInputDirective } from '../table.models';
 
 @Directive({
   selector: '[libColumn]',
+  standalone: true,
 })
 export class ColumnDirective {
-  @Input() libColumn!: IColumnInputDirective;
+  public libColumn = input.required<IColumnInputDirective>();
   public templateRef = inject(TemplateRef<unknown>);
 }

@@ -1,9 +1,8 @@
 import {
   Component,
-  EventEmitter,
   forwardRef,
-  Input,
-  Output,
+  input,
+  output,
 } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -11,6 +10,7 @@ import { OptionItem, Value } from '@worse-and-pricier/design-system-tokens';
 
 @Component({
   selector: 'lib-input-check-group',
+  standalone: true,
   imports: [],
   templateUrl: './input-check-group.component.html',
   styleUrl: './input-check-group.component.scss',
@@ -23,13 +23,16 @@ import { OptionItem, Value } from '@worse-and-pricier/design-system-tokens';
   ],
 })
 export class InputCheckGroupComponent implements ControlValueAccessor {
-  @Input() items: OptionItem[] | undefined;
-  @Input() value: Value[] = [];
-  @Output() selectedChanged = new EventEmitter<Value[]>();
-  @Output() checkboxChanged = new EventEmitter<{
+  public items = input<OptionItem[] | undefined>();
+  public value = input<Value[]>([]);
+  public selectedChanged = output<Value[]>();
+  public checkboxChanged = output<{
     value: Value;
     checked: boolean;
   }>();
+
+  // Internal state for ControlValueAccessor
+  public internalValue: Value[] = [];
   public isDisabled = false;
 
   private propagateChange: (value: Value[]) => void = () => {
@@ -37,7 +40,7 @@ export class InputCheckGroupComponent implements ControlValueAccessor {
   };
 
   writeValue(value: Value[]): void {
-    this.value = value;
+    this.internalValue = value || this.value() || [];
   }
 
   registerOnChange(fn: (value: Value[]) => void): void {
@@ -59,13 +62,13 @@ export class InputCheckGroupComponent implements ControlValueAccessor {
     this.checkboxChanged.emit({ value, checked });
     const selected = this.getSelected(value, checked);
 
-    this.value = selected;
+    this.internalValue = selected;
     this.propagateChange(selected);
     this.selectedChanged.emit(selected);
   }
 
   private getSelected(value: Value, checked: boolean): Value[] {
-    const selected: Value[] = this.value ? [...this.value] : [];
+    const selected: Value[] = this.internalValue ? [...this.internalValue] : [];
 
     if (checked) {
       if (!selected.includes(value)) {
@@ -80,6 +83,6 @@ export class InputCheckGroupComponent implements ControlValueAccessor {
   }
 
   isChecked(value: Value): boolean {
-    return this.value && this.value.includes(value);
+    return this.internalValue && this.internalValue.includes(value);
   }
 }

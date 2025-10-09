@@ -22,7 +22,9 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(npx nx serve:*)",
+      "Bash(del nul)"
     ],
     "deny": [],
     "ask": []

@@ -3,9 +3,10 @@ import {
   ContentChildren,
   QueryList,
   AfterContentInit,
-  Input,
-  Output,
-  EventEmitter,
+  input,
+  output,
+  signal,
+  effect,
 } from '@angular/core';
 
 import { ButtonToggleComponent } from '../button-toggle/button-toggle.component';
@@ -22,27 +23,31 @@ import { ButtonToggleComponent } from '../button-toggle/button-toggle.component'
   styleUrls: ['./button-toggle-group.component.scss'],
 })
 export class ButtonToggleGroupComponent<T = unknown> implements AfterContentInit {
-  @Input() value?: T;
-  @Output() toggled = new EventEmitter<T | undefined>();
+  public value = input<T | undefined>();
+  public toggled = output<T | undefined>();
   @ContentChildren(ButtonToggleComponent)
   toggles!: QueryList<ButtonToggleComponent<T>>;
 
+  // Signal for tracking the current selected value
+  public selectedValue = signal<T | undefined>(undefined);
+
+  constructor() {
+    // Sync input value to internal signal
+    effect(() => {
+      this.selectedValue.set(this.value());
+    });
+  }
+
   ngAfterContentInit() {
+    this.selectedValue.set(this.value());
     this.toggles.forEach((toggle) => {
-      toggle.selected = toggle.value === this.value;
       toggle.toggled.subscribe((val) => this.handleToggle(val));
     });
   }
 
   handleToggle(val: T) {
-    this.value = this.value === val ? undefined : val;
-    this.toggled.emit(this.value);
-    this.updateSelection();
-  }
-
-  updateSelection() {
-    this.toggles.forEach((toggle) => {
-      toggle.selected = toggle.value === this.value;
-    });
+    const newValue = this.selectedValue() === val ? undefined : val;
+    this.selectedValue.set(newValue);
+    this.toggled.emit(newValue);
   }
 }

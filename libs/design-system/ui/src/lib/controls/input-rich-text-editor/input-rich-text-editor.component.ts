@@ -4,7 +4,7 @@ import {
   Component,
   forwardRef,
   inject,
-  Input,
+  input,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -41,10 +41,10 @@ import { QuillModule } from 'ngx-quill';
 export class InputRichTextEditorComponent
   implements ControlValueAccessor, Validator
 {
-  @Input() label!: string;
-  @Input() hint?: string;
-  @Input() placeholder = 'Write something...';
-  @Input() errorMessages: { [key: string]: string } = {};
+  public label = input.required<string>();
+  public hint = input<string | undefined>();
+  public placeholder = input<string>('Write something...');
+  public errorMessages = input<{ [key: string]: string }>({});
 
   inputId = `rich-text-${crypto.randomUUID()}`;
   private readonly cdr = inject(ChangeDetectorRef);
@@ -100,7 +100,7 @@ export class InputRichTextEditorComponent
       maxlength: 'The input is too long.',
     };
 
-    const mergedMessages = { ...defaultMessages, ...this.errorMessages };
+    const mergedMessages = { ...defaultMessages, ...this.errorMessages() };
 
     for (const errorKey in this.control.errors) {
       if (this.control.errors?.[errorKey] && mergedMessages[errorKey]) {

@@ -1,15 +1,15 @@
 <div class="form-group" role="group" [attr.aria-labelledby]="inputId">
-  @if (label) {
-    <label [for]="inputId">{{ label }}</label>
+  @if (label()) {
+    <label [for]="inputId">{{ label() }}</label>
   }
 
   <quill-editor
     [id]="inputId"
     [(ngModel)]="value"
-    [placeholder]="placeholder"
+    [placeholder]="placeholder()"
     [readOnly]="disabled"
     [attr.aria-invalid]="control.invalid"
-    [attr.aria-describedby]="hint ? inputId + '-hint' : null"
+    [attr.aria-describedby]="hint() ? inputId + '-hint' : null"
     [ngClass]="{
       'is-invalid': control.invalid && (control.touched || control.dirty)
     }"
@@ -17,9 +17,9 @@
     (blur)="markAsTouched()"
   ></quill-editor>
 
-  @if (hint) {
+  @if (hint()) {
     <small [id]="inputId + '-hint'" class="text-muted">
-      {{ hint }}
+      {{ hint() }}
     </small>
   }
 

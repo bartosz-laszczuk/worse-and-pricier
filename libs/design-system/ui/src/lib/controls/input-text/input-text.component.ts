@@ -5,7 +5,7 @@ import {
   forwardRef,
   HostBinding,
   inject,
-  Input,
+  input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -55,19 +55,19 @@ import { SvgIconComponent } from 'angular-svg-icon';
 })
 export class InputTextComponent implements ControlValueAccessor, Validator {
   /** Label text displayed above the input */
-  @Input() label = '';
+  public label = input<string>('');
   /** Placeholder text shown when input is empty */
-  @Input() placeholder = '';
+  public placeholder = input<string>('');
   /** HTML input type (text, email, password, etc.) */
-  @Input() type = 'text';
+  public type = input<string>('text');
   /** Optional hint text displayed below the input */
-  @Input() hint?: string;
+  public hint = input<string | undefined>();
   /** Additional CSS classes to apply */
-  @Input() classes = '';
+  public classes = input<string>('');
   /** Optional icon name to display */
-  @Input() icon = '';
+  public icon = input<string>('');
   /** Custom error messages for validation errors */
-  @Input() errorMessages: { [key: string]: string } = {};
+  public errorMessages = input<{ [key: string]: string }>({});
 
   @HostBinding('class.invalid') get isInvalid() {
     return (
@@ -138,7 +138,7 @@ export class InputTextComponent implements ControlValueAccessor, Validator {
     };
 
     // Merge default and custom error messages
-    const mergedMessages = { ...defaultMessages, ...this.errorMessages };
+    const mergedMessages = { ...defaultMessages, ...this.errorMessages() };
 
     // Find and return the first relevant error message
     for (const errorKey in this.control.errors) {

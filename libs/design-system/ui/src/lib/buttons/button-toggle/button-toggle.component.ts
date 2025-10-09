@@ -1,5 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-
+import {
+  Component,
+  input,
+  output,
+  computed,
+  inject,
+} from '@angular/core';
+import { ButtonToggleGroupComponent } from '../button-toggle-group/button-toggle-group.component';
 
 @Component({
   selector: 'lib-button-toggle',
@@ -8,8 +14,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   template: `
     <button
       type="button"
-      [class.selected]="selected"
-      (click)="toggled.emit(value)"
+      [class.selected]="isSelected()"
+      (click)="toggled.emit(value())"
     >
       <ng-content></ng-content>
     </button>
@@ -17,7 +23,17 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./button-toggle.component.scss'],
 })
 export class ButtonToggleComponent<T = unknown> {
-  @Input() value!: T;
-  @Input() selected = false;
-  @Output() toggled = new EventEmitter<T>();
+  public value = input.required<T>();
+  public toggled = output<T>();
+
+  // Inject parent group (optional if used standalone)
+  private readonly parentGroup = inject(ButtonToggleGroupComponent<T>, {
+    optional: true,
+  });
+
+  // Compute selected state based on parent's selectedValue
+  public isSelected = computed(() => {
+    if (!this.parentGroup) return false;
+    return this.parentGroup.selectedValue() === this.value();
+  });
 }

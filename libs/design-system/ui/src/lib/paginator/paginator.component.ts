@@ -3,7 +3,6 @@ import {
   Component,
   effect,
   input,
-  Input,
   output,
   signal,
 } from '@angular/core';
@@ -32,7 +31,7 @@ import { PageEvent } from '@worse-and-pricier/design-system-tokens';
 })
 export class PaginatorComponent {
   /** Whether to show first/last page buttons */
-  @Input() showFirstLastButtons = true;
+  public showFirstLastButtons = input<boolean>(true);
   /** Total count of all items across all pages */
   public totalCount = input.required<number>();
   /** Current page index (zero-based) */
