@@ -56,6 +56,11 @@ export default [
               sourceTag: 'type:e2e',
               onlyDependOnLibsWithTags: ['type:app'],
             },
+            // Design-system meta-package can depend on ui, styles, and util
+            {
+              sourceTag: 'type:design-system',
+              onlyDependOnLibsWithTags: ['type:ui', 'type:styles', 'type:util'],
+            },
           ],
         },
       ],

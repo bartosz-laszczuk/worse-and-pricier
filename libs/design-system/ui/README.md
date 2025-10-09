@@ -2,6 +2,8 @@
 
 Complete UI component library with buttons, controls, tables, cards, and more. Part of the `@worse-and-pricier/design-system` package suite.
 
+> **💡 Recommended:** Use the meta-package [`@worse-and-pricier/design-system`](../design-system) which bundles tokens, styles, and UI components together for simplified installation and guaranteed version compatibility.
+
 ## Dependencies
 
 This package depends on:

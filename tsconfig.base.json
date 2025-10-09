@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@worse-and-pricier/design-system": [
+        "libs/design-system/design-system/src/index.ts"
+      ],
       "@worse-and-pricier/design-system-styles": [
         "libs/design-system/styles/src/index.ts"
       ],

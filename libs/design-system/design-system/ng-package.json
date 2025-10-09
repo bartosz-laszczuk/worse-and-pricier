@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/libs/design-system/design-system",
+  "lib": {
+    "entryFile": "src/index.ts"
+  },
+  "allowedNonPeerDependencies": [
+    "@worse-and-pricier/design-system-tokens",
+    "@worse-and-pricier/design-system-styles",
+    "@worse-and-pricier/design-system-ui"
+  ]
+}

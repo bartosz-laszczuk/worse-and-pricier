@@ -2,6 +2,8 @@
 
 Global styles, base resets, themes (light/dark), utilities, and component styles. Part of the `@worse-and-pricier/design-system` package suite.
 
+> **💡 For Angular apps:** Consider using the meta-package [`@worse-and-pricier/design-system`](../design-system) which bundles tokens, styles, and UI components together for simplified installation.
+
 ## Features
 
 - **Global Styles:** Base resets, typography, and component styles

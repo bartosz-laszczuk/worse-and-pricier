@@ -4,11 +4,22 @@ A comprehensive, publishable design system for building consistent user interfac
 
 ## Overview
 
-This design system is organized into three publishable NPM packages, all following the Angular Package Format (APF) specification:
+This design system is organized into **four publishable NPM packages**, all following the Angular Package Format (APF) specification:
 
+- **`@worse-and-pricier/design-system`** - **Meta-package** that bundles all three packages for simplified Angular installation
 - **`@worse-and-pricier/design-system-tokens`** - Design tokens (colors, typography, spacing)
 - **`@worse-and-pricier/design-system-styles`** - Global styles, theme service (light/dark), and utilities
 - **`@worse-and-pricier/design-system-ui`** - UI components and models library
+
+### Quick Start (Recommended for Angular)
+
+For Angular applications, use the meta-package for simplified installation:
+
+```bash
+npm install @worse-and-pricier/design-system
+```
+
+This single command installs all three sub-packages with guaranteed version compatibility. See the [meta-package README](./design-system/README.md) for details.
 
 ## Packages
 
@@ -132,28 +143,36 @@ npx nx build-storybook ui    # Build static Storybook
 ### Building All Packages
 
 ```bash
+# Build sub-packages
 npx nx run-many --target=build --projects=tokens,styles,ui
+
+# Build meta-package (optional - depends on sub-packages)
+npx nx build @worse-and-pricier/design-system
+
+# Or build everything at once
+npx nx run-many --target=build --projects=tokens,styles,ui,design-system
 ```
 
 ### Running Tests
 
 ```bash
-npx nx run-many --target=test --projects=tokens,styles,ui
+npx nx run-many --target=test --projects=tokens,styles,ui,design-system
 ```
 
 ### Linting
 
 ```bash
-npx nx run-many --target=lint --projects=tokens,styles,ui
+npx nx run-many --target=lint --projects=tokens,styles,ui,design-system
 ```
 
 ## Publishing
 
-All three libraries are configured as publishable packages. To publish to NPM or a private registry:
+All four libraries are configured as publishable packages. To publish to NPM or a private registry:
 
 1. Build the packages:
 ```bash
-npx nx run-many --target=build --projects=tokens,styles,ui
+# Build all packages
+npx nx run-many --target=build --projects=tokens,styles,ui,design-system
 ```
 
 2. Publish from dist folders:
@@ -161,9 +180,10 @@ npx nx run-many --target=build --projects=tokens,styles,ui
 cd dist/libs/design-system/tokens && npm publish
 cd dist/libs/design-system/styles && npm publish
 cd dist/libs/design-system/ui && npm publish
+cd dist/libs/design-system/design-system && npm publish
 ```
 
-Or use Nx release:
+Or use Nx release (recommended):
 ```bash
 npx nx release
 ```
@@ -174,7 +194,16 @@ If you're installing these packages from npm in a **different project**, choose 
 
 ### Installation Scenarios
 
-**Scenario 1: Token-only usage (React/Vue/vanilla JS)**
+**Scenario 1: Complete Angular app (RECOMMENDED) ⭐**
+```bash
+npm install @worse-and-pricier/design-system
+```
+
+Use the **meta-package** for Angular applications. This installs all three sub-packages (tokens, styles, ui) with guaranteed version compatibility. Simplest option for most Angular projects.
+
+See [meta-package README](./design-system/README.md) for complete documentation.
+
+**Scenario 2: Token-only usage (React/Vue/vanilla JS)**
 ```bash
 npm install @worse-and-pricier/design-system-tokens
 ```
@@ -190,21 +219,21 @@ const MyComponent = () => (
 );
 ```
 
-**Scenario 2: Theming in Angular (tokens + styles)**
+**Scenario 3: Theming in Angular (tokens + styles)**
 ```bash
 npm install @worse-and-pricier/design-system-tokens @worse-and-pricier/design-system-styles
 ```
 
-Use when you need global styles, theme switching, but not the UI components.
+Use when you need global styles and theme switching, but not the UI components.
 
-**Scenario 3: Full UI library (tokens + styles + ui)**
+**Scenario 4: Granular control (individual packages)**
 ```bash
 npm install @worse-and-pricier/design-system-tokens @worse-and-pricier/design-system-styles @worse-and-pricier/design-system-ui
 ```
 
-Use when you want the complete Angular component library with theming.
+Use when you want fine-grained control over individual package versions. Same result as the meta-package, but you manage versions separately.
 
-### Angular Configuration (Required for Scenarios 2 & 3)
+### Angular Configuration (Required for Scenarios 1, 3 & 4)
 
 Add the following to your **Angular project's `angular.json` or `project.json`**:
 

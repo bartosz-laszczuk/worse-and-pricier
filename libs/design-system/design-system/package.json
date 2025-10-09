@@ -1,0 +1,12 @@
+{
+  "name": "@worse-and-pricier/design-system",
+  "version": "0.0.1",
+  "description": "Complete design system meta-package for Angular applications - includes tokens, styles, and UI components",
+  "keywords": ["design-system", "angular", "ui", "components", "tokens", "styles"],
+  "dependencies": {
+    "@worse-and-pricier/design-system-tokens": "^0.0.1",
+    "@worse-and-pricier/design-system-styles": "^0.0.1",
+    "@worse-and-pricier/design-system-ui": "^0.0.1"
+  },
+  "sideEffects": false
+}

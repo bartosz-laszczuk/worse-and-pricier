@@ -46,14 +46,15 @@ npx nx e2e question-randomizer-e2e      # Run Playwright e2e tests
 
 ```bash
 # Build design system libraries
-npx nx build tokens                     # Build design tokens
-npx nx build styles                     # Build global styles
-npx nx build ui                         # Build UI components
-npx nx run-many --target=build --projects=tokens,styles,ui  # Build all
+npx nx build @worse-and-pricier/design-system-tokens   # Build design tokens
+npx nx build @worse-and-pricier/design-system-styles   # Build global styles
+npx nx build @worse-and-pricier/design-system-ui       # Build UI components
+npx nx build @worse-and-pricier/design-system          # Build meta-package
+npx nx run-many --target=build --projects=@worse-and-pricier/design-system-tokens,@worse-and-pricier/design-system-styles,@worse-and-pricier/design-system-ui,@worse-and-pricier/design-system  # Build all
 
 # Storybook (component documentation)
-npx nx storybook ui                     # Run Storybook dev server
-npx nx build-storybook ui               # Build static Storybook
+npx nx storybook @worse-and-pricier/design-system-ui       # Run Storybook dev server
+npx nx build-storybook @worse-and-pricier/design-system-ui # Build static Storybook
 ```
 
 ### Code Generation
@@ -81,6 +82,7 @@ Libraries follow a layered architecture pattern organized by domain:
 **Domain structure:**
 
 - `design-system/` - **Publishable design system:**
+  - `design-system/design-system/` - Meta-package that bundles all design system packages
   - `design-system/tokens/` - Design tokens (colors, typography, spacing) - SCSS + TypeScript
   - `design-system/styles/` - Global styles, theme service, utilities
   - `design-system/ui/` - Reusable UI components with Storybook
@@ -196,7 +198,18 @@ All libraries use TypeScript path aliases defined in `tsconfig.base.json`:
 import { Category } from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
 import { LoginComponent } from '@worse-and-pricier/question-randomizer-auth-feature';
 
-// Design System imports
+// Design System imports (Option 1: via meta-package - recommended)
+import {
+  colors, typography,
+  Theme, ThemeService,
+  ButtonComponent,
+  InputTextComponent,
+  OptionItem,
+  SortDefinition,
+  PageEvent
+} from '@worse-and-pricier/design-system';
+
+// Design System imports (Option 2: direct imports - for fine-grained control)
 import { colors, typography } from '@worse-and-pricier/design-system-tokens';
 import { Theme, ThemeService } from '@worse-and-pricier/design-system-styles';
 import {
@@ -241,18 +254,28 @@ Repository pattern with services:
 
 ### Overview
 
-The workspace includes a comprehensive, publishable design system under `libs/design-system/`. All three packages are configured with `@nx/angular:package` executor for Angular Package Format (APF) compliance and can be published to NPM.
+The workspace includes a comprehensive, publishable design system under `libs/design-system/`. All four packages are configured with `@nx/angular:package` executor for Angular Package Format (APF) compliance and can be published to NPM.
 
 ### Packages
 
-1. **`@worse-and-pricier/design-system-tokens`** (`libs/design-system/tokens`)
+1. **`@worse-and-pricier/design-system`** (`libs/design-system/design-system`) - **Meta-package (RECOMMENDED)**
+
+   - Umbrella package that bundles all three design system packages
+   - Simplifies installation for Angular applications
+   - Guarantees version compatibility between packages
+   - Re-exports everything from tokens, styles, and ui
+   - Tags: `type:design-system`, `scope:design-system`
+   - Dependencies: `design-system-tokens`, `design-system-styles`, `design-system-ui`
+
+2. **`@worse-and-pricier/design-system-tokens`** (`libs/design-system/tokens`)
 
    - Design tokens: colors, typography, spacing, mixins, functions
    - Available as both SCSS and TypeScript exports
+   - Framework-agnostic (can be used in React, Vue, vanilla JS)
    - Tags: `type:util`, `scope:design-system`
    - No dependencies (foundational layer)
 
-2. **`@worse-and-pricier/design-system-styles`** (`libs/design-system/styles`)
+3. **`@worse-and-pricier/design-system-styles`** (`libs/design-system/styles`)
 
    - Global styles, base resets, typography
    - Light/dark theme support via `ThemeService`
@@ -261,16 +284,32 @@ The workspace includes a comprehensive, publishable design system under `libs/de
    - Tags: `type:styles`, `scope:design-system`
    - Depends on: `design-system-tokens`
 
-3. **`@worse-and-pricier/design-system-ui`** (`libs/design-system-ui`)
+4. **`@worse-and-pricier/design-system-ui`** (`libs/design-system-ui`)
    - Complete UI component library with Storybook
    - Components: buttons, controls, table, card, paginator
    - Includes models: `ButtonType`, `OptionItem`, `SortDefinition`, `PageEvent`, etc.
    - Tags: `type:ui`, `scope:design-system`
-   - Self-contained models (no external util dependencies)
+   - Depends on: `design-system-tokens` (for SCSS compilation only)
 
 ### Usage
 
-**TypeScript:**
+**TypeScript (Option 1: Meta-package - RECOMMENDED):**
+
+```typescript
+// Import everything from meta-package
+import {
+  // Tokens
+  colors, typography, spacing,
+  // Theme service
+  Theme, ThemeService,
+  // UI components
+  ButtonComponent, TableComponent, CardComponent,
+  // Models
+  OptionItem, SortDefinition, PageEvent
+} from '@worse-and-pricier/design-system';
+```
+
+**TypeScript (Option 2: Direct imports):**
 
 ```typescript
 // Tokens
@@ -315,7 +354,7 @@ import {
 
 ### Documentation
 
-- Component documentation: `npx nx storybook ui`
+- Component documentation: `npx nx storybook @worse-and-pricier/design-system-ui`
 - README: `libs/design-system/README.md`
 - Stories: `libs/design-system/ui/src/lib/**/*.stories.ts`
 
@@ -338,8 +377,8 @@ import {
 5. Follow the normalized state pattern for stores if using @ngrx/signals
 6. Use dependency injection and standalone components (Angular 20+)
 7. **Use design-system components** instead of creating custom UI components
-8. **Import UI components and models from `@worse-and-pricier/design-system-ui`**
-9. **Import theme service from `@worse-and-pricier/design-system-styles`**
+8. **Import from `@worse-and-pricier/design-system` meta-package (recommended)** or from individual packages
+9. **Use tokens programmatically** when you need dynamic styling (e.g., `colors.primary`)
 
 ### When Working with the Design System
 
@@ -358,12 +397,14 @@ import {
 
 3. **Publishing:**
 
-   - Build all packages: `npx nx run-many --target=build --projects=tokens,styles,ui`
+   - Build all packages: `npx nx run-many --target=build --projects=@worse-and-pricier/design-system-tokens,@worse-and-pricier/design-system-styles,@worse-and-pricier/design-system-ui,@worse-and-pricier/design-system`
    - Packages are output to `dist/libs/design-system/`
    - Use `nx release` or publish manually from dist folders
+   - **Publish order:** tokens → styles → ui → design-system (dependencies first)
 
 4. **Module boundaries:**
    - Design system packages follow strict ESLint boundaries
-   - `tokens` (util) → no dependencies
-   - `styles` (styles) → can depend on `tokens`
-   - `ui` (ui) → self-contained, includes own models
+   - `design-system` (meta-package) → depends on `tokens`, `styles`, `ui`
+   - `tokens` (util) → no dependencies (foundation)
+   - `styles` (styles) → depends on `tokens`
+   - `ui` (ui) → depends on `tokens` (for SCSS only)
