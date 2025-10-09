@@ -19,7 +19,9 @@
       "Bash(npx nx storybook:*)",
       "Bash(dir:*)",
       "Bash(npx nx run-many:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
