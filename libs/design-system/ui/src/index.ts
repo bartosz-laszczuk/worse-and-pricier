@@ -1,9 +1,16 @@
 // Design System UI Components
 // Exports all UI components for use in applications
 
-// Models and Enums
-export * from './lib/models/option-item.model';
-export * from './lib/models/table.models';
+// Models and Enums (re-exported from tokens for convenience)
+export {
+  OptionItem,
+  Icon,
+  Value,
+  SortDirection,
+  SortDefinition,
+  PageParameters,
+  Filters,
+} from '@worse-and-pricier/design-system-tokens';
 export * from './lib/enums/button-type.enum';
 
 // Components

@@ -1,8 +1,13 @@
 // Table-specific models
-// Re-export shared table types
-export * from '../models/table.models';
+// Re-export shared table types from tokens library
+export {
+  SortDirection,
+  SortDefinition,
+  PageParameters,
+  Filters,
+} from '@worse-and-pricier/design-system-tokens';
 
-import { SortDirection } from '../models/table.models';
+import { SortDirection } from '@worse-and-pricier/design-system-tokens';
 
 export interface IColumn {
   displayName: string;

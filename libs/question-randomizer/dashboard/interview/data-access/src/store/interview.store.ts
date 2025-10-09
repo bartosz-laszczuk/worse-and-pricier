@@ -17,7 +17,7 @@ import {
   Filters,
   PageParameters,
   SortDefinition,
-} from '@worse-and-pricier/shared-util';
+} from '@worse-and-pricier/design-system-ui';
 
 type InterviewState = {
   entities: Record<string, Question> | null;

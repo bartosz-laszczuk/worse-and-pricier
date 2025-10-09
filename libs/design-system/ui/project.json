@@ -1,5 +1,5 @@
 {
-  "name": "ui",
+  "name": "@worse-and-pricier/design-system-ui",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/design-system/ui/src",
   "prefix": "lib",

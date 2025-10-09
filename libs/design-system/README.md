@@ -168,6 +168,83 @@ Or use Nx release:
 npx nx release
 ```
 
+## Using Published Packages (External Projects)
+
+If you're installing these packages from npm in a **different project**, follow these setup instructions:
+
+### Installation
+
+```bash
+npm install @worse-and-pricier/design-system-tokens @worse-and-pricier/design-system-styles @worse-and-pricier/design-system-ui
+```
+
+### Angular Configuration
+
+Add the following to your **Angular project's `angular.json` or `project.json`**:
+
+```json
+{
+  "architect": {
+    "build": {
+      "options": {
+        "styles": [
+          "node_modules/@worse-and-pricier/design-system-styles/styles/main.scss",
+          "src/styles.scss"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "node_modules/@worse-and-pricier/design-system-tokens/scss"
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+### Why is `stylePreprocessorOptions` Required?
+
+The UI components use SCSS imports like `@use 'animations'` that reference files from the tokens package. The `includePaths` configuration tells Angular's SCSS compiler where to find these files.
+
+**Without this configuration**, you'll see errors like:
+```
+Error: Can't find stylesheet to import.
+@use 'animations';
+```
+
+### Usage Example
+
+```typescript
+import { Component } from '@angular/core';
+import {
+  ButtonComponent,
+  InputTextComponent,
+  TableComponent,
+  OptionItem
+} from '@worse-and-pricier/design-system-ui';
+import { ThemeService } from '@worse-and-pricier/design-system-styles';
+import { colors } from '@worse-and-pricier/design-system-tokens';
+
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  imports: [ButtonComponent, InputTextComponent, TableComponent],
+  template: `
+    <lib-button type="primary" (click)="toggleTheme()">
+      Toggle Theme
+    </lib-button>
+  `
+})
+export class ExampleComponent {
+  constructor(private themeService: ThemeService) {}
+
+  toggleTheme() {
+    const current = this.themeService.currentTheme();
+    this.themeService.setTheme(current === 'dark' ? 'light' : 'dark');
+  }
+}
+```
+
 ## Architecture
 
 ### Module Boundaries

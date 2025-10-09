@@ -1,2 +1,1 @@
-export * from './option-item.model';
-export * from './table.models';
+// Models have been moved to the appropriate libraries

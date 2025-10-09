@@ -22,7 +22,7 @@ import { APP_CONFIG } from '@worse-and-pricier/question-randomizer-shared-util';
 import { AuthenticatedUserResponse, User } from '../models';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class AuthRepository {
   private readonly afAuth = inject(Auth);
   private readonly afDb = inject(Firestore);
   private readonly appConfig = inject(APP_CONFIG);

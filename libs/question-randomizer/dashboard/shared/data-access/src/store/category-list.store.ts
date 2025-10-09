@@ -11,7 +11,7 @@ import {
   PageParameters,
   SortDefinition,
   OptionItem,
-} from '@worse-and-pricier/shared-util';
+} from '@worse-and-pricier/design-system-ui';
 import {
   patchState,
   signalStore,

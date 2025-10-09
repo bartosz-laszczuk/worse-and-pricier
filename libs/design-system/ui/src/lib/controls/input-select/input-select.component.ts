@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { OptionItem } from '../../models/option-item.model';
+import { OptionItem } from '@worse-and-pricier/design-system-tokens';
 
 @Component({
   selector: 'lib-input-select',

@@ -15,9 +15,11 @@ import {
   SelectedCategoryListService,
   UsedQuestionListService,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
-import { DashboardSidebarComponent } from './ui/sidebar/dashboard-sidebar.component';
-import { DashboardHeaderComponent } from './ui/header/dashboard-header.component';
-import { DashboardNavigationBarComponent } from './ui/navigation-bar/dashboard-navigation-bar.component';
+import {
+  DashboardSidebarComponent,
+  DashboardHeaderComponent,
+  DashboardNavigationBarComponent,
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-ui';
 
 @Component({
   selector: 'lib-dashboard-shell',

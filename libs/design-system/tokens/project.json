@@ -1,5 +1,5 @@
 {
-  "name": "tokens",
+  "name": "@worse-and-pricier/design-system-tokens",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/design-system/tokens/src",
   "prefix": "lib",

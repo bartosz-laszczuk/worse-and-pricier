@@ -1,7 +1,8 @@
 {
-  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "$schema": "../../../node_modules/ng-packagr/ng-package.json",
   "dest": "../../../dist/libs/design-system/ui",
   "lib": {
-    "entryFile": "src/index.ts"
+    "entryFile": "src/index.ts",
+    "styleIncludePaths": ["../../../dist/libs/design-system/tokens/scss"]
   }
 }

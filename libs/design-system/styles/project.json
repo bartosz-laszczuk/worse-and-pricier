@@ -1,5 +1,5 @@
 {
-  "name": "styles",
+  "name": "@worse-and-pricier/design-system-styles",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/design-system/styles/src",
   "prefix": "lib",

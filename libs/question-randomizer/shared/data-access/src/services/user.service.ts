@@ -5,19 +5,19 @@ import {
   User,
 } from '@worse-and-pricier/question-randomizer-auth-util';
 import { UserStore } from '../store';
-import { AuthService } from '../repositories';
+import { AuthRepository } from '../repositories';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private readonly userStore = inject(UserStore);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly router = inject(Router);
 
   async initUser() {
     this.userStore.startLoading();
 
     try {
-      const authUser = await this.authService.getAuthenticatedUser();
+      const authUser = await this.authRepository.getAuthenticatedUser();
       this.userStore.initUser(authUser);
     } catch (error: any) {
       console.error(error);
@@ -30,7 +30,7 @@ export class UserService {
     this.userStore.startLoading();
 
     try {
-      await this.authService.signInEmail(credentials);
+      await this.authRepository.signInEmail(credentials);
       await this.initUser();
 
       this.router.navigate(['/dashboard/randomization']);
@@ -45,7 +45,7 @@ export class UserService {
     this.userStore.startLoading();
 
     try {
-      const uid = await this.authService.signUpEmail(credentials);
+      const uid = await this.authRepository.signUpEmail(credentials);
       this.userStore.signUpEmail(uid);
 
       this.router.navigate(['/auth', 'email', 'verify']);
@@ -60,7 +60,7 @@ export class UserService {
     this.userStore.startLoading();
 
     try {
-      await this.authService.signOut();
+      await this.authRepository.signOut();
 
       this.userStore.signOut();
 
@@ -76,7 +76,7 @@ export class UserService {
     this.userStore.startLoading();
 
     try {
-      const entity = await this.authService.createUser(request);
+      const entity = await this.authRepository.createUser(request);
 
       this.userStore.createUser(entity);
 
@@ -92,7 +92,7 @@ export class UserService {
     this.userStore.startLoading();
 
     try {
-      const updatedEntity = await this.authService.updateUser(entity);
+      const updatedEntity = await this.authRepository.updateUser(entity);
 
       this.userStore.updateUser(updatedEntity);
 

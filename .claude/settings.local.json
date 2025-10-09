@@ -16,7 +16,9 @@
       "Bash(npx nx show project:*)",
       "Bash(npx nx build:*)",
       "Bash(find:*)",
-      "Bash(npx nx storybook:*)"
+      "Bash(npx nx storybook:*)",
+      "Bash(dir:*)",
+      "Bash(npx nx run-many:*)"
     ],
     "deny": [],
     "ask": []

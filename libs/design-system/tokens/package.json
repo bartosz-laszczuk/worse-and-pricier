@@ -1,9 +1,6 @@
 {
   "name": "@worse-and-pricier/design-system-tokens",
   "version": "0.0.1",
-  "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
-  },
+  "peerDependencies": {},
   "sideEffects": false
 }

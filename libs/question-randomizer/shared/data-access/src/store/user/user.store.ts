@@ -8,7 +8,7 @@ import {
 import { AuthenticatedUserResponse, User } from '../../models/user.models';
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../repositories/auth.service';
+import { AuthRepository } from '../../repositories/auth.repository';
 
 type UserState = {
   entity: User | null;
@@ -34,7 +34,7 @@ export const UserStore = signalStore(
     isVerified: computed(() => !!store.verified()),
   })),
   withMethods(
-    (store, router = inject(Router), authService = inject(AuthService)) => ({
+    (store, router = inject(Router), authRepository = inject(AuthRepository)) => ({
       initUser(authUser: AuthenticatedUserResponse | null) {
         patchState(store, { isLoading: true, error: null });
 
