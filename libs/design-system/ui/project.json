@@ -52,7 +52,10 @@
         "browserTarget": "@worse-and-pricier/design-system-ui:build-storybook",
         "tsConfig": "libs/design-system/ui/.storybook/tsconfig.json",
         "compodoc": false,
-        "styles": ["libs/design-system/styles/src/lib/styles/main.scss"],
+        "styles": [
+          "node_modules/quill/dist/quill.snow.css",
+          "libs/design-system/styles/src/lib/styles/main.scss"
+        ],
         "stylePreprocessorOptions": {
           "includePaths": ["libs/design-system/tokens/src/lib/scss"]
         }
@@ -72,7 +75,10 @@
         "browserTarget": "@worse-and-pricier/design-system-ui:build-storybook",
         "tsConfig": "libs/design-system/ui/.storybook/tsconfig.json",
         "compodoc": false,
-        "styles": ["libs/design-system/styles/src/lib/styles/main.scss"],
+        "styles": [
+          "node_modules/quill/dist/quill.snow.css",
+          "libs/design-system/styles/src/lib/styles/main.scss"
+        ],
         "stylePreprocessorOptions": {
           "includePaths": ["libs/design-system/tokens/src/lib/scss"]
         }

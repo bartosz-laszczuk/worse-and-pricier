@@ -16,7 +16,6 @@ import {
   Question,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { OptionItem } from '@worse-and-pricier/design-system-ui';
-import { QuillModule } from 'ngx-quill';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 export interface EditQuestionDialogData {
@@ -40,9 +39,8 @@ interface EditQuestionForm {
     InputTextComponent,
     ReactiveFormsModule,
     InputSelectComponent,
-    QuillModule,
     InputRichTextEditorComponent
-],
+  ],
   templateUrl: './edit-question.component.html',
   styleUrl: './edit-question.component.scss',
 })
@@ -125,11 +123,5 @@ export class EditQuestionComponent {
 
   public onCancel(): void {
     this.dialogRef.close(undefined);
-  }
-
-  content = 'some content';
-  placeholder = 'Write something...';
-  onContentChanged(value: any) {
-    console.log(value.html);
   }
 }

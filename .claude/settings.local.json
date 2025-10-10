@@ -28,7 +28,8 @@
       "Bash(npx storybook:*)",
       "WebSearch",
       "Bash(if exist \"node_modules\\.cache\\storybook\" rmdir /s /q \"node_modules\\.cache\\storybook\")",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(timeout:*)"
     ],
     "deny": [],
     "ask": []

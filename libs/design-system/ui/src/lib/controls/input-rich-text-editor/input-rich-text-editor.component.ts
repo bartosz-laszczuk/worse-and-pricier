@@ -81,7 +81,10 @@ export class InputRichTextEditorComponent
 
   validate(control: AbstractControl): ValidationErrors | null {
     this.control = control;
-    return control.valid ? null : { invalid: true };
+
+    // No custom validation - let Angular's built-in validators handle it
+    // (e.g., Validators.required checks for empty string)
+    return null;
   }
 
   markAsTouched(): void {
