@@ -1,4 +1,5 @@
 :host {
+  display: block;
   padding: 1rem;
   border-radius: 3px;
   background-color: var(--gray-100);
@@ -13,7 +14,7 @@
     justify-content: space-between;
     align-items: center;
     &__title {
-      display:flex;
+      display: flex;
       align-items: center;
       gap: 0.1rem;
     }

@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/angular';
-import { ButtonIconComponent } from './button-icon.component';
+import { ButtonIconComponent, Icons } from './button-icon.component';
 
 const meta: Meta<ButtonIconComponent> = {
   component: ButtonIconComponent,
@@ -9,6 +9,11 @@ const meta: Meta<ButtonIconComponent> = {
       control: 'select',
       options: ['default', 'dark', 'light', 'transparent'],
       description: 'The visual style of the button',
+    },
+    icon: {
+      control: 'select',
+      options: Icons,
+      description: 'The icon to display in the button',
     },
   },
 };
