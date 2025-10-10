@@ -1,9 +1,4 @@
-import {
-  Component,
-  forwardRef,
-  input,
-  output,
-} from '@angular/core';
+import { Component, effect, forwardRef, input, output } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { OptionItem, Value } from '@worse-and-pricier/design-system-tokens';
@@ -30,6 +25,16 @@ export class InputCheckGroupComponent implements ControlValueAccessor {
     value: Value;
     checked: boolean;
   }>();
+
+  constructor() {
+    effect(() => {
+      // Sync internalValue with value input when it changes
+      const currentValue = this.value();
+      if (currentValue && currentValue.length > 0) {
+        this.internalValue = currentValue;
+      }
+    });
+  }
 
   // Internal state for ControlValueAccessor
   public internalValue: Value[] = [];
