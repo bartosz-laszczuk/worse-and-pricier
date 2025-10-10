@@ -49,9 +49,13 @@
       "options": {
         "port": 4400,
         "configDir": "libs/design-system/ui/.storybook",
-        "browserTarget": "ui:build-storybook",
+        "browserTarget": "@worse-and-pricier/design-system-ui:build-storybook",
+        "tsConfig": "libs/design-system/ui/.storybook/tsconfig.json",
         "compodoc": false,
-        "styles": ["libs/design-system/styles/src/lib/styles/main.scss"]
+        "styles": ["libs/design-system/styles/src/lib/styles/main.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/design-system/tokens/src/lib/scss"]
+        }
       },
       "configurations": {
         "ci": {
@@ -65,9 +69,13 @@
       "options": {
         "outputDir": "dist/storybook/ui",
         "configDir": "libs/design-system/ui/.storybook",
-        "browserTarget": "ui:build-storybook",
+        "browserTarget": "@worse-and-pricier/design-system-ui:build-storybook",
+        "tsConfig": "libs/design-system/ui/.storybook/tsconfig.json",
         "compodoc": false,
-        "styles": ["libs/design-system/styles/src/lib/styles/main.scss"]
+        "styles": ["libs/design-system/styles/src/lib/styles/main.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/design-system/tokens/src/lib/scss"]
+        }
       },
       "configurations": {
         "ci": {
