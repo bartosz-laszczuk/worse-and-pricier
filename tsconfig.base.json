@@ -95,8 +95,7 @@
       ],
       "@worse-and-pricier/question-randomizer-shared-util": [
         "libs/question-randomizer/shared/util/src/index.ts"
-      ],
-      "@worse-and-pricier/shared-util": ["libs/shared/util/src/index.ts"]
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
