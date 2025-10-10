@@ -1,2 +1,2 @@
-export const ButtonTypes = ['default', 'dark', 'light', 'icon'] as const;
+export const ButtonTypes = ['default', 'dark', 'light', 'transparent'] as const;
 export type ButtonType = (typeof ButtonTypes)[number];

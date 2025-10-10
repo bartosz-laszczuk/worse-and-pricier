@@ -37,6 +37,7 @@ export type Animation = (typeof Animations)[number];
  * ```html
  * <lib-button-icon icon="arrow-right" type="default"></lib-button-icon>
  * <lib-button-icon icon="rotate-ccw" animation="rotate360"></lib-button-icon>
+ * <lib-button-icon icon="eye" type="transparent"></lib-button-icon>
  * ```
  */
 @Component({
@@ -59,7 +60,7 @@ export class ButtonIconComponent {
     const classes: Record<string, boolean> = {
       dark: type === 'dark',
       light: type === 'light',
-      icon: type === 'icon',
+      transparent: type === 'transparent',
     };
 
     if (animation) classes[`animate-${animation}`] = true;

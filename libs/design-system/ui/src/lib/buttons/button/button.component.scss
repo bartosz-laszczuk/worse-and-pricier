@@ -22,6 +22,12 @@ button {
     background: var(--background-color);
     color: var(--secondary-color);
   }
+
+  &.transparent {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+  }
 }
 
 button span {

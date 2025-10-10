@@ -10,6 +10,7 @@ import { ButtonType } from '../../enums/button-type.enum';
  * <lib-button type="default">Click me</lib-button>
  * <lib-button type="dark">Dark button</lib-button>
  * <lib-button type="light">Light button</lib-button>
+ * <lib-button type="transparent">Transparent button</lib-button>
  * ```
  */
 @Component({
@@ -19,6 +20,6 @@ import { ButtonType } from '../../enums/button-type.enum';
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
-  /** Button visual style variant (default, dark, light, icon) */
+  /** Button visual style variant (default, dark, light, transparent) */
   public type = input<ButtonType>('default');
 }

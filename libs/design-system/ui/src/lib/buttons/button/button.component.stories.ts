@@ -7,7 +7,7 @@ const meta: Meta<ButtonComponent> = {
   argTypes: {
     type: {
       control: 'select',
-      options: ['default', 'dark', 'light', 'icon'],
+      options: ['default', 'dark', 'light', 'transparent'],
       description: 'The visual style of the button',
       defaultValue: 'default',
     },
@@ -47,12 +47,12 @@ export const Light: Story = {
   }),
 };
 
-export const Icon: Story = {
+export const Transparent: Story = {
   args: {
-    type: 'icon',
+    type: 'transparent',
   },
   render: (args) => ({
     props: args,
-    template: `<lib-button [type]="type">Icon Button</lib-button>`,
+    template: `<lib-button [type]="type">Transparent Button</lib-button>`,
   }),
 };

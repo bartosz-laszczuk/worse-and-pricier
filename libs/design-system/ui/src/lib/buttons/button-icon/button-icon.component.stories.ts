@@ -7,7 +7,7 @@ const meta: Meta<ButtonIconComponent> = {
   argTypes: {
     type: {
       control: 'select',
-      options: ['default', 'dark', 'light', 'icon'],
+      options: ['default', 'dark', 'light', 'transparent'],
       description: 'The visual style of the button',
     },
   },
@@ -46,6 +46,19 @@ export const Light: Story = {
   args: {
     type: 'light',
     icon: 'eye',
+  },
+  render: (args) => ({
+    props: args,
+    template: `
+      <lib-button-icon [type]="type" [icon]="icon" />
+    `,
+  }),
+};
+
+export const Transparent: Story = {
+  args: {
+    type: 'transparent',
+    icon: 'rotate-ccw',
   },
   render: (args) => ({
     props: args,
