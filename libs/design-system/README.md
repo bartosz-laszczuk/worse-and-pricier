@@ -267,6 +267,45 @@ Error: Can't find stylesheet to import.
 @use 'animations';
 ```
 
+### Icon Assets Configuration (Required for ButtonIconComponent)
+
+The `ButtonIconComponent` requires SVG icon files to be available at runtime. The icons are included in the `@worse-and-pricier/design-system-ui` package under `assets/icons/`.
+
+**Add the following to your Angular project's `angular.json` or `project.json`:**
+
+```json
+{
+  "architect": {
+    "build": {
+      "options": {
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "node_modules/@worse-and-pricier/design-system-ui/assets",
+            "output": "/assets"
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+This configuration copies the icon files from the library to your application's output directory at `/assets/icons/`, making them accessible at runtime via the path `icons/[icon-name].svg`.
+
+**Without this configuration**, `ButtonIconComponent` will fail to load icons with 404 errors.
+
+**Available Icons:**
+- `arrow-left.svg`
+- `arrow-right.svg`
+- `corner-up-right.svg`
+- `rotate-ccw.svg`
+- `eye.svg`
+- `eye-off.svg`
+- `edit.svg`
+
+For the complete list, see `node_modules/@worse-and-pricier/design-system-ui/assets/icons/` after installation.
+
 ### Full Usage Example (All 3 Packages)
 
 ```typescript

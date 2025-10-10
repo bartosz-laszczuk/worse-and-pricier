@@ -26,7 +26,8 @@
       "Bash(npx nx serve:*)",
       "Bash(del nul)",
       "Bash(npx storybook:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(if exist \"node_modules\\.cache\\storybook\" rmdir /s /q \"node_modules\\.cache\\storybook\")"
     ],
     "deny": [],
     "ask": []

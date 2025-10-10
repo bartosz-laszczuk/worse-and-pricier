@@ -40,6 +40,63 @@ Add to your `angular.json` or `project.json`:
 
 This is **required** for UI components to compile SCSS that references token files.
 
+### Icon Assets (Required for ButtonIconComponent)
+
+The `ButtonIconComponent` requires SVG icon files to be available at runtime. These are included in the package under `assets/icons/`.
+
+**Add the following assets configuration to your `angular.json` or `project.json`:**
+
+```json
+{
+  "architect": {
+    "build": {
+      "options": {
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "node_modules/@worse-and-pricier/design-system-ui/assets",
+            "output": "/assets"
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+This copies icon files to your application's output directory at `/assets/icons/`, making them accessible via `icons/[icon-name].svg`.
+
+**Without this configuration**, `ButtonIconComponent` will fail to load icons with 404 errors.
+
+**Example:**
+```typescript
+import { ButtonIconComponent } from '@worse-and-pricier/design-system-ui';
+
+@Component({
+  standalone: true,
+  imports: [ButtonIconComponent],
+  template: `
+    <lib-button-icon
+      icon="arrow-right"
+      type="default"
+      (click)="handleClick()"
+    />
+  `
+})
+export class MyComponent {}
+```
+
+**Available icons:**
+- `arrow-left`
+- `arrow-right`
+- `corner-up-right`
+- `rotate-ccw`
+- `eye`
+- `eye-off`
+- `edit`
+
+See `assets/icons/` in the package for the complete list.
+
 ## Components
 
 ### Buttons
