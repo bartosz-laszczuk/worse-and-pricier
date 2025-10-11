@@ -6,7 +6,7 @@
   "projectType": "library",
   "tags": [
     "type:data-access",
-    "scope:question-randomizer-shared"
+    "scope:shared"
   ],
   "targets": {
     "test": {

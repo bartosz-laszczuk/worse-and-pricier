@@ -61,6 +61,67 @@ export default [
               sourceTag: 'type:design-system',
               onlyDependOnLibsWithTags: ['type:ui', 'type:styles', 'type:util'],
             },
+            // Domain isolation: Dashboard domains cannot depend on each other
+            {
+              sourceTag: 'scope:question',
+              notDependOnLibsWithTags: [
+                'scope:category',
+                'scope:qualification',
+                'scope:randomization',
+                'scope:interview',
+                'scope:settings',
+              ],
+            },
+            {
+              sourceTag: 'scope:category',
+              notDependOnLibsWithTags: [
+                'scope:question',
+                'scope:qualification',
+                'scope:randomization',
+                'scope:interview',
+                'scope:settings',
+              ],
+            },
+            {
+              sourceTag: 'scope:qualification',
+              notDependOnLibsWithTags: [
+                'scope:question',
+                'scope:category',
+                'scope:randomization',
+                'scope:interview',
+                'scope:settings',
+              ],
+            },
+            {
+              sourceTag: 'scope:randomization',
+              notDependOnLibsWithTags: [
+                'scope:question',
+                'scope:category',
+                'scope:qualification',
+                'scope:interview',
+                'scope:settings',
+              ],
+            },
+            {
+              sourceTag: 'scope:interview',
+              notDependOnLibsWithTags: [
+                'scope:question',
+                'scope:category',
+                'scope:qualification',
+                'scope:randomization',
+                'scope:settings',
+              ],
+            },
+            {
+              sourceTag: 'scope:settings',
+              notDependOnLibsWithTags: [
+                'scope:question',
+                'scope:category',
+                'scope:qualification',
+                'scope:randomization',
+                'scope:interview',
+              ],
+            },
           ],
         },
       ],

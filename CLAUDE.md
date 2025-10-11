@@ -95,8 +95,7 @@ Libraries follow a layered architecture pattern organized by domain:
   - `dashboard/interview/` - Interview mode domain
   - `dashboard/settings/` - Settings domain
   - `dashboard/shared/` - Shared dashboard code (cross-cutting stores, services)
-- `question-randomizer/shared/` - App-wide shared code
-- `shared/util/` - Workspace-wide utility library (for non-UI code only)
+- `question-randomizer/shared/` - App-wide shared code (utilities, services used across all app domains)
 
 **Important:** The `dashboard/` folder is a namespace for grouping related domains, NOT a single monolithic domain. Each subfolder represents a distinct bounded context with its own features and concerns.
 
@@ -116,7 +115,23 @@ Libraries follow a layered architecture pattern organized by domain:
 The workspace enforces strict module boundaries using ESLint's `@nx/enforce-module-boundaries` rule. Each library is tagged with:
 
 - **type tag** - Defines the library type (ui, feature, data-access, util, shell, app, e2e, styles)
-- **scope tag** - Defines the domain/namespace (shared, auth, category, question, etc.)
+- **scope tag** - Defines the domain boundary (not the folder structure)
+
+**Scope tag structure:**
+
+Scope tags represent **domain boundaries**, not folder organization. The `dashboard/` folder is just a namespace for organizing related domains.
+
+- `scope:auth` - Authentication domain
+- `scope:shared` - App-wide shared code
+- `scope:design-system` - Design system infrastructure
+- `scope:dashboard` - Dashboard shell/container
+- `scope:dashboard-shared` - Shared dashboard utilities (cross-cutting concerns for dashboard domains)
+- `scope:question` - Question management domain
+- `scope:category` - Category management domain
+- `scope:qualification` - Qualification management domain
+- `scope:randomization` - Randomization domain
+- `scope:interview` - Interview mode domain
+- `scope:settings` - Settings domain
 
 **Dependency rules:**
 
@@ -128,6 +143,12 @@ The workspace enforces strict module boundaries using ESLint's `@nx/enforce-modu
 - **Styles libraries** can depend on: util libraries (for tokens)
 - **Apps** can depend on any library type
 - **E2E tests** can only depend on apps
+
+**Domain isolation rules:**
+- Dashboard domains (question, category, qualification, randomization, interview, settings) **cannot depend on each other**
+- All dashboard domains **can depend on** `dashboard-shared` for cross-cutting concerns
+- This enforces horizontal slicing and prevents coupling between bounded contexts
+- Each domain has its own business logic and cannot reach across domain boundaries
 
 **Configuration:** Module boundaries are configured in `eslint.config.mjs` and enforced via `npx nx lint`.
 
