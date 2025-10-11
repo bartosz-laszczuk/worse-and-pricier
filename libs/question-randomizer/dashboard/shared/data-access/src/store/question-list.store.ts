@@ -117,6 +117,7 @@ export const QuestionListStore = signalStore(
       patchState(store, (state) => {
         if (!state.entities || !state.ids) return state;
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [questionId]: _, ...remainingEntities } = state.entities;
 
         return {

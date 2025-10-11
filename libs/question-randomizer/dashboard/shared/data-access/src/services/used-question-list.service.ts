@@ -21,9 +21,9 @@ export class UsedQuestionListService {
         randomizationId,
         questionId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to delete used question from Randomization.'
+        error instanceof Error ? error.message : 'Failed to delete used question from Randomization.'
       );
     }
   }
@@ -39,9 +39,9 @@ export class UsedQuestionListService {
         randomizationId,
         categoryId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to delete used question from Randomization.'
+        error instanceof Error ? error.message : 'Failed to delete used question from Randomization.'
       );
     }
   }
@@ -55,9 +55,9 @@ export class UsedQuestionListService {
       await this.usedQuestionListRepositoryService.deleteAllUsedQuestionsFromRandomization(
         randomizationId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message ||
+        error instanceof Error ? error.message :
           'Failed to delete all used questions from Randomization.'
       );
     }
@@ -76,9 +76,9 @@ export class UsedQuestionListService {
         randomizationId,
         usedQuestion
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to add Category to Randomization.'
+        error instanceof Error ? error.message : 'Failed to add Category to Randomization.'
       );
     }
   }

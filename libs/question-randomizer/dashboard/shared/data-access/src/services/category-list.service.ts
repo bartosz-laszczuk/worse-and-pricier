@@ -46,9 +46,9 @@ export class CategoryListService {
       };
 
       this.categoryListStore.addCategoryToList(category);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.categoryListStore.logError(
-        error.message || 'Category creation failed'
+        error instanceof Error ? error.message : 'Category creation failed'
       );
     }
   }
@@ -63,9 +63,9 @@ export class CategoryListService {
       await this.categoryRepositoryService.updateCategory(updatedCategory.id, {
         name: updatedCategory.name,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.categoryListStore.logError(
-        error.message || 'Category update failed'
+        error instanceof Error ? error.message : 'Category update failed'
       );
     }
   }
@@ -84,9 +84,9 @@ export class CategoryListService {
         this.resetPostponedQuestionsCategoryId(categoryId),
         this.updateCurrentQuestionAfterCategoryDeletion(categoryId),
       ]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.categoryListStore.logError(
-        error.message || 'Category deletion failed'
+        error instanceof Error ? error.message : 'Category deletion failed'
       );
     }
   }
@@ -104,9 +104,9 @@ export class CategoryListService {
       );
 
       this.categoryListStore.loadCategoryList(categories);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.categoryListStore.logError(
-        error.message || 'Load category list failed'
+        error instanceof Error ? error.message : 'Load category list failed'
       );
     }
   }

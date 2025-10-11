@@ -83,9 +83,9 @@ export class RandomizationService {
 
         this.randomizationStore.setRandomization(randomization);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to load Randomization.'
+        error instanceof Error ? error.message : 'Failed to load Randomization.'
       );
     }
   }
@@ -129,9 +129,9 @@ export class RandomizationService {
       await this.randomizationRepositoryService.updateRandomization(
         randomization
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to update current question with next question.'
+        error instanceof Error ? error.message : 'Failed to update current question with next question.'
       );
     }
   }
@@ -143,9 +143,9 @@ export class RandomizationService {
       await this.randomizationRepositoryService.updateRandomization(
         randomization
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to update randomization.'
+        error instanceof Error ? error.message : 'Failed to update randomization.'
       );
     }
   }
@@ -166,9 +166,9 @@ export class RandomizationService {
           newQuestionCategory
         ),
       ]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to update postponed question.'
+        error instanceof Error ? error.message : 'Failed to update postponed question.'
       );
     }
   }
@@ -185,9 +185,9 @@ export class RandomizationService {
       await this.randomizationRepositoryService.updateRandomization(
         randomization
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to set question as current question.'
+        error instanceof Error ? error.message : 'Failed to set question as current question.'
       );
     }
   }
@@ -199,9 +199,9 @@ export class RandomizationService {
       await this.randomizationRepositoryService.clearCurrentQuestion(
         randomizationId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to clear current question.'
+        error instanceof Error ? error.message : 'Failed to clear current question.'
       );
     }
   }

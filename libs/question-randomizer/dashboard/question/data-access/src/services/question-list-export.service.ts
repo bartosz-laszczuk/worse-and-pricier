@@ -55,9 +55,9 @@ export class QuestionListExportService {
   }
 }
 
-export const exportToCsv = (
+export const exportToCsv = <T extends Record<string, unknown>>(
   filename: string,
-  rows: Record<string, any>[],
+  rows: T[],
   headers?: string[],
   keys?: string[]
 ): void => {
@@ -74,7 +74,7 @@ export const exportToCsv = (
     rows
       .map((row) =>
         actualKeys
-          .map((key) => escapeCsvValue(row[key], separator))
+          .map((key) => escapeCsvValue((row as Record<string, unknown>)[key], separator))
           .join(separator)
       )
       .join('\n');
@@ -93,7 +93,7 @@ export const exportToCsv = (
   document.body.removeChild(link);
 };
 
-const escapeCsvValue = (value: any, separator = ';') => {
+const escapeCsvValue = (value: unknown, separator = ';') => {
   if (value == null) return '';
   let cell = String(value);
   const needsQuotes =

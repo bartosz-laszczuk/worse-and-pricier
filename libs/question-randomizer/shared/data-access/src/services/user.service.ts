@@ -19,10 +19,10 @@ export class UserService {
     try {
       const authUser = await this.authRepository.getAuthenticatedUser();
       this.userStore.initUser(authUser);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       // notification.error(error.message);
-      this.userStore.logError(error.message || 'User initialization failed');
+      this.userStore.logError(error instanceof Error ? error.message : 'User initialization failed');
     }
   }
 
@@ -34,10 +34,10 @@ export class UserService {
       await this.initUser();
 
       this.router.navigate(['/dashboard/randomization']);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       // notification.error(error.message);
-      this.userStore.logError(error.message || 'Sign-in failed');
+      this.userStore.logError(error instanceof Error ? error.message : 'Sign-in failed');
     }
   }
 
@@ -49,10 +49,10 @@ export class UserService {
       this.userStore.signUpEmail(uid);
 
       this.router.navigate(['/auth', 'email', 'verify']);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       // notification.error(error.message);
-      this.userStore.logError(error.message || 'Sign-up failed');
+      this.userStore.logError(error instanceof Error ? error.message : 'Sign-up failed');
     }
   }
 
@@ -65,10 +65,10 @@ export class UserService {
       this.userStore.signOut();
 
       this.router.navigate(['/auth', 'login']);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       // notification.error(error.message);
-      this.userStore.logError(error.message || 'Sign-out failed');
+      this.userStore.logError(error instanceof Error ? error.message : 'Sign-out failed');
     }
   }
 
@@ -81,10 +81,10 @@ export class UserService {
       this.userStore.createUser(entity);
 
       this.router.navigate(['/profile', entity.uid]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       // notification.error(error.message);
-      this.userStore.logError(error.message || 'User creation failed');
+      this.userStore.logError(error instanceof Error ? error.message : 'User creation failed');
     }
   }
 
@@ -97,10 +97,10 @@ export class UserService {
       this.userStore.updateUser(updatedEntity);
 
       this.router.navigate(['/profile', updatedEntity.uid]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       // notification.error(error.message);
-      this.userStore.logError(error.message || 'User update failed');
+      this.userStore.logError(error instanceof Error ? error.message : 'User update failed');
     }
   }
 }

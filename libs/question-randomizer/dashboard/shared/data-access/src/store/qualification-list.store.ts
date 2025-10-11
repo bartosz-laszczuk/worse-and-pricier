@@ -14,7 +14,6 @@ import {
   withState,
 } from '@ngrx/signals';
 import {
-  OptionItem,
   Filters,
   PageParameters,
   SortDefinition,
@@ -123,6 +122,7 @@ export const QualificationListStore = signalStore(
       patchState(store, (state) => {
         if (!state.entities || !state.ids) return state;
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [qualificationId]: _, ...remainingEntities } = state.entities;
 
         return {

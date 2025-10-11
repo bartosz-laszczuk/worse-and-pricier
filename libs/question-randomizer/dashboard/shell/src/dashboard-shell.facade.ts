@@ -24,7 +24,7 @@ export class DashboardShellFacade {
     this.userService.signOut();
   }
 
-  public changeLanguage(language: string /* TODO Language */) {
+  public changeLanguage(/* _language: string, TODO Language */) {
     // this.languageService.setLanguage(language);
   }
 

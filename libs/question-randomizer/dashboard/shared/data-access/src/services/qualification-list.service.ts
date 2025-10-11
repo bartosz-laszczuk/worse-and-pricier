@@ -34,9 +34,9 @@ export class QualificationListService {
       };
 
       this.qualificationListStore.addQualificationToList(qualification);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.qualificationListStore.logError(
-        error.message || 'Qualification creation failed'
+        error instanceof Error ? error.message : 'Qualification creation failed'
       );
     }
   }
@@ -57,9 +57,9 @@ export class QualificationListService {
           name: updatedQualification.name,
         }
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.qualificationListStore.logError(
-        error.message || 'Qualification update failed'
+        error instanceof Error ? error.message : 'Qualification update failed'
       );
     }
   }
@@ -77,9 +77,9 @@ export class QualificationListService {
           qualificationId
         ),
       ]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.qualificationListStore.logError(
-        error.message || 'Qualification deletion failed'
+        error instanceof Error ? error.message : 'Qualification deletion failed'
       );
     }
   }
@@ -94,9 +94,9 @@ export class QualificationListService {
       const qualifications =
         await this.qualificationRepositoryService.getQualifications(userId);
       this.qualificationListStore.loadQualificationList(qualifications);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.qualificationListStore.logError(
-        error.message || 'Load qualification list failed'
+        error instanceof Error ? error.message : 'Load qualification list failed'
       );
     }
   }

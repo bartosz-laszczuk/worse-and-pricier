@@ -55,8 +55,8 @@ export class DashboardShellComponent {
     this.dashboardShellFacade.loadLists();
   }
 
-  public onChangeLanguage(language: string /* TODO Language */) {
-    this.dashboardShellFacade.changeLanguage(language);
+  public onChangeLanguage(/* _language: string, TODO Language */) {
+    this.dashboardShellFacade.changeLanguage();
   }
 
   public onSignOut() {

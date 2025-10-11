@@ -8,7 +8,7 @@ export const filterEntities = <T>(entities: T[], filters: Filters<T>): T[] => {
   return entities.filter((entity) =>
     Object.entries(filters).every(([key, value]) =>
       value
-        ? String((entity as any)[key])
+        ? String((entity as Record<string, unknown>)[key])
             .toLowerCase()
             .includes((value as string).toLowerCase())
         : true

@@ -59,9 +59,9 @@ export class QuestionListService {
           categoryId: question.categoryId,
         },
       ]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.questionListStore.logError(
-        error.message || 'Question creation failed'
+        error instanceof Error ? error.message : 'Question creation failed'
       );
     }
   }
@@ -91,9 +91,9 @@ export class QuestionListService {
       await this.randomizationService.updateCategoryQuestionListsCategoryId(
         questionCategory
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.questionListStore.logError(
-        error.message || 'Question update failed'
+        error instanceof Error ? error.message : 'Question update failed'
       );
     }
   }
@@ -111,9 +111,9 @@ export class QuestionListService {
         this.deletePostponedQuestionFromRandomization(questionId),
         this.updateCurrentQuestionAfterQuestionDeletion(questionId),
       ]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.questionListStore.logError(
-        error.message || 'Question deletion failed'
+        error instanceof Error ? error.message : 'Question deletion failed'
       );
     }
   }
@@ -143,9 +143,9 @@ export class QuestionListService {
       }));
 
       this.questionListStore.loadQuestionList(questions);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.questionListStore.logError(
-        error.message || 'Failed to load questions'
+        error instanceof Error ? error.message : 'Failed to load questions'
       );
     }
   }
@@ -161,9 +161,9 @@ export class QuestionListService {
         categoryId,
         userId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.questionListStore.logError(
-        error.message || 'Failed to delete categoryId from questions'
+        error instanceof Error ? error.message : 'Failed to delete categoryId from questions'
       );
     }
   }
@@ -181,9 +181,9 @@ export class QuestionListService {
         qualificationId,
         userId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.questionListStore.logError(
-        error.message || 'Failed to delete qualificationId from questions'
+        error instanceof Error ? error.message : 'Failed to delete qualificationId from questions'
       );
     }
   }

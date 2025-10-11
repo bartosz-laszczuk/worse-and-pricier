@@ -22,9 +22,9 @@ export class SelectedCategoryListService {
         randomizationId,
         categoryId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to add Category to Randomization.'
+        error instanceof Error ? error.message : 'Failed to add Category to Randomization.'
       );
     }
   }
@@ -44,9 +44,9 @@ export class SelectedCategoryListService {
         randomizationId,
         categoryId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to delete Category from Randomization.'
+        error instanceof Error ? error.message : 'Failed to delete Category from Randomization.'
       );
     }
   }

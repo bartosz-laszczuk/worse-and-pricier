@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   Firestore,
   collection,
@@ -20,11 +20,8 @@ import { orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
   providedIn: 'root',
 })
 export class UsedQuestionListRepositoryService {
-  private usedQuestionsCollection: CollectionReference;
-
-  constructor(private firestore: Firestore) {
-    this.usedQuestionsCollection = collection(this.firestore, 'usedQuestions');
-  }
+  private readonly firestore = inject(Firestore);
+  private usedQuestionsCollection: CollectionReference = collection(this.firestore, 'usedQuestions');
 
   async addQuestionToUsedQuestions(
     randomizationId: string,

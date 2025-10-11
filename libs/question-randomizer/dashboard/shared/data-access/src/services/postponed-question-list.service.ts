@@ -23,10 +23,9 @@ export class PostponedQuestionListService {
         randomizationId,
         questionId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message =
-        error.message ||
-        'Failed to delete postponed question from Randomization.';
+        error instanceof Error ? error.message : 'Failed to delete postponed question from Randomization.';
       console.error(message);
       this.randomizationStore.logError(message);
     }
@@ -47,9 +46,9 @@ export class PostponedQuestionListService {
         randomizationId,
         postponedQuestion
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to add Category to Randomization.'
+        error instanceof Error ? error.message : 'Failed to add Category to Randomization.'
       );
     }
   }
@@ -63,9 +62,9 @@ export class PostponedQuestionListService {
       await this.postponedQuestionListRepositoryService.updatePostponedQuestionCreateDate(
         postponedQuestion.questionId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to update postponed question.'
+        error instanceof Error ? error.message : 'Failed to update postponed question.'
       );
     }
   }
@@ -81,9 +80,9 @@ export class PostponedQuestionListService {
         randomizationId,
         categoryId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message || 'Failed to delete used question from Randomization.'
+        error instanceof Error ? error.message : 'Failed to delete used question from Randomization.'
       );
     }
   }
@@ -97,10 +96,9 @@ export class PostponedQuestionListService {
       await this.postponedQuestionListRepositoryService.deleteAllPostponedQuestionsFromRandomization(
         randomizationId
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.randomizationStore.logError(
-        error.message ||
-          'Failed to delete all postponed questions from Randomization.'
+        error instanceof Error ? error.message : 'Failed to delete all postponed questions from Randomization.'
       );
     }
   }

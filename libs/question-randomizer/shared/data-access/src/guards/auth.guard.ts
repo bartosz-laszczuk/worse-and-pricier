@@ -4,14 +4,11 @@ import { Router } from '@angular/router';
 import { UserStore } from '../store';
 import { UserService } from '../services/user.service';
 
-export const AuthVerifiedCanActivate: CanActivateFn = async (route, state) => {
+export const AuthVerifiedCanActivate: CanActivateFn = async () => {
   return check(true);
 };
-export const AuthVerifiedCanActivateChild: CanActivateChildFn = async (
-  route,
-  state
-) => check(true);
-export const AuthCanActivate: CanActivateFn = async (route, state) => {
+export const AuthVerifiedCanActivateChild: CanActivateChildFn = async () => check(true);
+export const AuthCanActivate: CanActivateFn = async () => {
   return check();
 };
 

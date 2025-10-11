@@ -97,9 +97,8 @@ export class QuestionRepositoryService {
   ): Promise<void> {
     const batch = writeBatch(this.afDb);
 
-    requests.forEach((request) => {
-      const questionDoc = doc(this.afDb, `questions/${request.id}`);
-      const { id, ...data } = request;
+    requests.forEach(({ id, ...data }) => {
+      const questionDoc = doc(this.afDb, `questions/${id}`);
       batch.update(questionDoc, data);
     });
 

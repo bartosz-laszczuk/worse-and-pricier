@@ -95,7 +95,7 @@ export class QuestionListImportService {
           const contentRows = allRows.slice(2);
           console.log('contentRows', contentRows);
           const result: QuestionCsvListItem[] = contentRows
-            .map((row: any, index: number) => {
+            .map((row: string[], index: number) => {
               if (row.length < 6) {
                 console.error(
                   'Import error: field number in a row is lower than 6. Row index:',
@@ -114,7 +114,7 @@ export class QuestionListImportService {
                 isActive: row[5].trim().toLowerCase() === 'true',
               };
             })
-            .filter((r: any): r is QuestionCsvListItem => r !== null);
+            .filter((r: QuestionCsvListItem | null): r is QuestionCsvListItem => r !== null);
 
           resolve(result);
         } catch (e) {
@@ -182,9 +182,9 @@ export class QuestionListImportService {
         : Promise.resolve();
 
       await Promise.all([createPromise, updatePromise]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(
-        error.message || 'Import update and create Questions failed'
+        error instanceof Error ? error.message : 'Import update and create Questions failed'
       );
     }
   }

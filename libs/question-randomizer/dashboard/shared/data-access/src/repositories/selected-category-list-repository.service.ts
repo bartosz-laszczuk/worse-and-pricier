@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   addDoc,
   collection,
@@ -12,7 +12,7 @@ import { doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class SelectedCategoryListRepositoryService {
-  constructor(private firestore: Firestore) {}
+  private firestore = inject(Firestore);
 
   async addSelectedCategoryToRandomization(
     randomizationId: string,

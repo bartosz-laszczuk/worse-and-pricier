@@ -15,14 +15,33 @@ import { signal } from '@angular/core';
 jest.mock('@angular/fire/auth', () => ({}));
 jest.mock('@angular/fire/firestore', () => ({}));
 
+interface MockCategoryListStore {
+  entities: ReturnType<typeof signal<Record<string, Category> | null>>;
+  startLoading: jest.Mock;
+  addCategoryToList: jest.Mock;
+  updateCategoryInList: jest.Mock;
+  deleteCategoryFromList: jest.Mock;
+  loadCategoryList: jest.Mock;
+  logError: jest.Mock;
+}
+
+interface MockUserStore {
+  uid: ReturnType<typeof signal<string | null>>;
+}
+
+interface MockRandomizationStore {
+  entity: ReturnType<typeof signal<{ id: string; currentQuestion?: { id: string; categoryId?: string } } | null>>;
+  resetAvailableQuestionsCategoryId: jest.Mock;
+}
+
 describe('CategoryListService', () => {
   let service: CategoryListService;
   let categoryRepositoryService: jest.Mocked<CategoryRepositoryService>;
-  let categoryListStore: any;
-  let userStore: any;
+  let categoryListStore: MockCategoryListStore;
+  let userStore: MockUserStore;
   let questionListService: jest.Mocked<QuestionListService>;
   let randomizationService: jest.Mocked<RandomizationService>;
-  let randomizationStore: any;
+  let randomizationStore: MockRandomizationStore;
   let usedQuestionListService: jest.Mocked<UsedQuestionListService>;
   let postponedQuestionListService: jest.Mocked<PostponedQuestionListService>;
   let selectedCategoryListService: jest.Mocked<SelectedCategoryListService>;
@@ -48,7 +67,7 @@ describe('CategoryListService', () => {
 
     // Mock CategoryListStore
     const categoryListStoreMock = {
-      entities: signal(null),
+      entities: signal<Record<string, Category> | null>(null),
       startLoading: jest.fn(),
       addCategoryToList: jest.fn(),
       updateCategoryInList: jest.fn(),
@@ -59,12 +78,12 @@ describe('CategoryListService', () => {
 
     // Mock UserStore
     const userStoreMock = {
-      uid: signal(mockUserId),
+      uid: signal<string | null>(mockUserId),
     };
 
     // Mock RandomizationStore
     const randomizationStoreMock = {
-      entity: signal(null),
+      entity: signal<{ id: string; currentQuestion?: { id: string; categoryId?: string } } | null>(null),
       resetAvailableQuestionsCategoryId: jest.fn(),
     };
 

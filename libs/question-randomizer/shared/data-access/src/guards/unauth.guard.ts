@@ -20,8 +20,8 @@ const checkUnauth = async (): Promise<boolean> => {
   return true;
 };
 
-export const UnauthCanActivate: CanActivateFn = async (next, state) =>
+export const UnauthCanActivate: CanActivateFn = async () =>
   checkUnauth();
 
-export const UnauthCanActivateChild: CanActivateChildFn = async (next, state) =>
+export const UnauthCanActivateChild: CanActivateChildFn = async () =>
   checkUnauth();

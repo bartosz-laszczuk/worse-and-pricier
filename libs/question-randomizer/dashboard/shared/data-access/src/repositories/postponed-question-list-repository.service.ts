@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   Firestore,
   collection,
@@ -16,20 +16,16 @@ import {
   QuestionCategory,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostponedQuestionListRepositoryService {
-  private postponedQuestionsCollection: CollectionReference;
-
-  constructor(private firestore: Firestore) {
-    this.postponedQuestionsCollection = collection(
-      this.firestore,
-      'postponedQuestions'
-    );
-  }
+  private firestore = inject(Firestore);
+  private postponedQuestionsCollection: CollectionReference = collection(
+    this.firestore,
+    'postponedQuestions'
+  );
 
   async addQuestionToPostponedQuestions(
     randomizationId: string,

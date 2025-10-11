@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   Firestore,
   collection,
@@ -22,9 +22,8 @@ import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
   providedIn: 'root',
 })
 export class RandomizationRepositoryService {
+  private readonly firestore = inject(Firestore);
   private readonly collectionName = 'randomizations';
-
-  constructor(private firestore: Firestore) {}
 
   async getRandomization(
     userId: string
