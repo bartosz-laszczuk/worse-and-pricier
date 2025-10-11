@@ -1,5 +1,4 @@
 {
-  "enableAllProjectMcpServers": true,
   "permissions": {
     "allow": [
       "Bash(npx nx migrate:*)",
@@ -31,9 +30,11 @@
       "Bash(if exist \"node_modules\\.cache\\storybook\" rmdir /s /q \"node_modules\\.cache\\storybook\")",
       "Bash(test:*)",
       "Bash(timeout:*)",
-      "Bash(claude config show)"
+      "Bash(claude config show)",
+      "mcp__nx-mcp__nx_visualize_graph"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enableAllProjectMcpServers": true
 }
