@@ -38,13 +38,34 @@ export class RandomizationShellFacade {
   public randomization = this.randomizationStore.randomization;
   public categoryOptionItemList = this.categoryListStore.categoryOptionItemList;
   public usedQuestionListLength = computed(
-    () => (this.randomizationStore.filteredUsedQuestionList() ?? []).length
+    () =>
+      (
+        this.randomizationStore
+          .filteredUsedQuestionList()
+          .filter(
+            (qc) => this.questionListStore.entities()?.[qc.questionId].isActive
+          ) ?? []
+      ).length
   );
   public availableQuestionListLength = computed(
-    () => (this.randomizationStore.filteredAvailableQuestionList() ?? []).length
+    () =>
+      (
+        this.randomizationStore
+          .filteredAvailableQuestionList()
+          .filter(
+            (qc) => this.questionListStore.entities()?.[qc.questionId].isActive
+          ) ?? []
+      ).length
   );
   public postponedQuestionListLength = computed(
-    () => (this.randomizationStore.filteredPostponedQuestionList() ?? []).length
+    () =>
+      (
+        this.randomizationStore
+          .filteredPostponedQuestionList()
+          .filter(
+            (qc) => this.questionListStore.entities()?.[qc.questionId].isActive
+          ) ?? []
+      ).length
   );
   public selectedCategoryIdList = computed(
     () => this.randomizationStore.randomization()?.selectedCategoryIdList ?? []

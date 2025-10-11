@@ -26,7 +26,6 @@ export class RandomizationMapperService {
     const availableQuestionList = Object.values(questionDic)
       .filter(
         (question) =>
-          question.isActive &&
           !usedQuestionIdSet.has(question.id) &&
           !postponedQuestionIdSet.has(question.id)
       )
