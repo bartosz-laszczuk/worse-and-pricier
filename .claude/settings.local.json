@@ -1,4 +1,5 @@
 {
+  "enableAllProjectMcpServers": true,
   "permissions": {
     "allow": [
       "Bash(npx nx migrate:*)",
@@ -29,7 +30,8 @@
       "WebSearch",
       "Bash(if exist \"node_modules\\.cache\\storybook\" rmdir /s /q \"node_modules\\.cache\\storybook\")",
       "Bash(test:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(claude config show)"
     ],
     "deny": [],
     "ask": []
