@@ -13,7 +13,7 @@ import { RandomizationService } from './randomization.service';
 import {
   QuestionCategory,
   UsedQuestion,
-} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { UsedQuestionListService } from './used-question-list.service';
 import { PostponedQuestionListService } from './postponed-question-list.service';
 

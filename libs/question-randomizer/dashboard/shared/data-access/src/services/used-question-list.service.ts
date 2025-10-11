@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { UsedQuestionListRepositoryService } from '../repositories';
-import { UsedQuestion } from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
+import { UsedQuestion } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { RandomizationStore } from '../store';
 
 @Injectable()

@@ -31,7 +31,8 @@
       "Bash(test:*)",
       "Bash(timeout:*)",
       "Bash(claude config show)",
-      "mcp__nx-mcp__nx_visualize_graph"
+      "mcp__nx-mcp__nx_visualize_graph",
+      "Bash(npx nx run:*)"
     ],
     "deny": [],
     "ask": []

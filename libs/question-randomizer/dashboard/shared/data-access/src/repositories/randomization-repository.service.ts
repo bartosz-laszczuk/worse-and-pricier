@@ -15,7 +15,7 @@ import {
 import {
   Randomization,
   RandomizationStatus,
-} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 
 @Injectable({

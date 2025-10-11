@@ -10,7 +10,7 @@ import {
   QuestionCategory,
   Randomization,
   RandomizationStatus,
-} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { RandomizationStore } from '../store';
 import { PostponedQuestionListRepositoryService } from '../repositories/postponed-question-list-repository.service';
 

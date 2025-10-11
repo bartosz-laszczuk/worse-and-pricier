@@ -72,9 +72,6 @@
       "@worse-and-pricier/question-randomizer-dashboard-randomization-ui": [
         "libs/question-randomizer/dashboard/randomization/ui/src/index.ts"
       ],
-      "@worse-and-pricier/question-randomizer-dashboard-randomization-util": [
-        "libs/question-randomizer/dashboard/randomization/util/src/index.ts"
-      ],
       "@worse-and-pricier/question-randomizer-dashboard-settings-shell": [
         "libs/question-randomizer/dashboard/settings/shell/src/index.ts"
       ],

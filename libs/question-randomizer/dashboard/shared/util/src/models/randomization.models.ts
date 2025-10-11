@@ -1,4 +1,4 @@
-import { Question } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import { Question } from './question.models';
 
 export interface Randomization {
   id: string;

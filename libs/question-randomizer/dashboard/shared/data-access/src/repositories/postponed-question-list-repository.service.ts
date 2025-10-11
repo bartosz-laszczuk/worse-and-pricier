@@ -14,7 +14,7 @@ import {
 import {
   PostponedQuestion,
   QuestionCategory,
-} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { firstValueFrom } from 'rxjs';
 

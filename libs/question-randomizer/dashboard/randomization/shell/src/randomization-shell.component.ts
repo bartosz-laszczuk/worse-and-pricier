@@ -7,7 +7,7 @@ import {
   InputCheckGroupComponent,
   ButtonGroupComponent,
 } from '@worse-and-pricier/design-system-ui';
-import { Randomization } from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
+import { Randomization } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import {
   StatusBarComponent,
   StatusCardComponent,

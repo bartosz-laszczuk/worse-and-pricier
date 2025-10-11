@@ -13,7 +13,7 @@ import {
 import {
   QuestionCategory,
   UsedQuestion,
-} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
 
 @Injectable({

@@ -12,7 +12,7 @@ import {
   QuestionCategory,
   Randomization,
   UsedQuestion,
-} from '@worse-and-pricier/question-randomizer-dashboard-randomization-util';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { Question } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 
 type RandomizationState = {
