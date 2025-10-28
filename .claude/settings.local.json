@@ -32,7 +32,14 @@
       "Bash(timeout:*)",
       "Bash(claude config show)",
       "mcp__nx-mcp__nx_visualize_graph",
-      "Bash(npx nx run:*)"
+      "Bash(npx nx run:*)",
+      "Bash(if exist \"libs\\design-system\\README.md\" echo File exists)",
+      "Bash(if exist \".claude\\commands\\optimize-claude-md.md\" echo File exists)",
+      "Bash(if exist \"docs\\COMMANDS.md\" echo File exists)",
+      "Bash(if exist \"docs\\MODULE_BOUNDARIES.md\" echo File exists)",
+      "Bash(if exist \"docs\\DESIGN_SYSTEM_CONTRIBUTING.md\" echo File exists)",
+      "Bash(del \"C:\\D\\Repositories\\worse-and-pricier\\docs\\COMMANDS.md\")",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

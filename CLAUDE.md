@@ -8,63 +8,28 @@ This is an Nx monorepo containing an Angular application called **question-rando
 
 **Note:** This workspace has Nx MCP enabled, which provides direct access to project information, dependency graphs, and Nx commands.
 
-## Commands
+## Working with Nx
 
-### Development
+**IMPORTANT: This workspace uses Nx MCP for all Nx-related operations.**
+
+When working with this workspace, you MUST:
+
+1. **Use Nx MCP tools instead of assumptions** - Never assume Nx knowledge or configuration
+2. **Use Nx MCP generators instead of direct commands** - Never run `npx nx g` directly
+3. **Always query MCP tools for current workspace state** - Nx versions and features change frequently
+
+See the **[MCP Integrations](#mcp-integrations)** section below for detailed tool descriptions.
+
+## Quick Command Reference
+
+Common commands for development, testing, linting, and building. This reference is primarily for human developers; Claude uses Nx MCP tools for up-to-date workspace information.
 
 ```bash
 npx nx serve question-randomizer        # Run dev server (http://localhost:4200)
-npx nx build question-randomizer        # Production build
-npx nx build question-randomizer --configuration=development  # Development build
-```
-
-### Testing
-
-```bash
-npx nx test question-randomizer         # Run app tests
-npx nx test <project-name>              # Run tests for specific lib
-npx nx test <project-name> --watch      # Run tests in watch mode
-npx nx test <project-name> --testFile=<file-path>  # Run single test file
-npx nx run-many --target=test           # Run all tests
-```
-
-### Linting
-
-```bash
+npx nx test question-randomizer         # Run tests
 npx nx lint question-randomizer         # Lint the app
-npx nx lint <project-name>              # Lint specific project
-npx nx run-many --target=lint           # Lint all projects
+npx nx build question-randomizer        # Production build
 ```
-
-### E2E Testing
-
-```bash
-npx nx e2e question-randomizer-e2e      # Run Playwright e2e tests
-```
-
-### Design System
-
-```bash
-# Build design system libraries
-npx nx build @worse-and-pricier/design-system-tokens   # Build design tokens
-npx nx build @worse-and-pricier/design-system-styles   # Build global styles
-npx nx build @worse-and-pricier/design-system-ui       # Build UI components
-npx nx build @worse-and-pricier/design-system          # Build meta-package
-npx nx run-many --target=build --projects=@worse-and-pricier/design-system-tokens,@worse-and-pricier/design-system-styles,@worse-and-pricier/design-system-ui,@worse-and-pricier/design-system  # Build all
-
-# Storybook (component documentation)
-npx nx storybook @worse-and-pricier/design-system-ui       # Run Storybook dev server
-npx nx build-storybook @worse-and-pricier/design-system-ui # Build static Storybook
-```
-
-### Code Generation
-
-```bash
-npx nx g @nx/angular:library <lib-name>             # Generate new library
-npx nx g @nx/angular:component <component-name>     # Generate component
-```
-
-**Note:** Project information, dependency graphs, and available targets can be queried via Nx MCP tools instead of manual commands.
 
 ## Architecture
 
@@ -81,11 +46,7 @@ Libraries follow a layered architecture pattern organized by domain:
 
 **Domain structure:**
 
-- `design-system/` - **Publishable design system:**
-  - `design-system/design-system/` - Meta-package that bundles all design system packages
-  - `design-system/tokens/` - Design tokens (colors, typography, spacing) - SCSS + TypeScript
-  - `design-system/styles/` - Global styles, theme service, utilities
-  - `design-system/ui/` - Reusable UI components with Storybook
+- `design-system/` - Publishable design system (tokens, styles, UI components) - See **[Design System](#design-system)** section below
 - `question-randomizer/auth/` - Authentication domain (login, registration, email verification)
 - `question-randomizer/dashboard/` - **Namespace for dashboard-related domains:**
   - `dashboard/questions/` - Question management domain
@@ -117,38 +78,14 @@ The workspace enforces strict module boundaries using ESLint's `@nx/enforce-modu
 - **type tag** - Defines the library type (ui, feature, data-access, util, shell, app, e2e, styles)
 - **scope tag** - Defines the domain boundary (not the folder structure)
 
-**Scope tag structure:**
+**Key rules:**
 
-Scope tags represent **domain boundaries**, not folder organization. The `dashboard/` folder is just a namespace for organizing related domains.
-
-- `scope:auth` - Authentication domain
-- `scope:shared` - App-wide shared code
-- `scope:design-system` - Design system infrastructure
-- `scope:dashboard` - Dashboard shell/container
-- `scope:dashboard-shared` - Shared dashboard utilities (cross-cutting concerns for dashboard domains)
-- `scope:question` - Question management domain
-- `scope:category` - Category management domain
-- `scope:qualification` - Qualification management domain
-- `scope:randomization` - Randomization domain
-- `scope:interview` - Interview mode domain
-- `scope:settings` - Settings domain
-
-**Dependency rules:**
-
-- **UI libraries** can only depend on: other UI, util, and styles libraries
-- **Feature libraries** can depend on: UI, data-access, and util libraries
-- **Data-access libraries** can depend on: other data-access, util, and UI libraries (for types)
-- **Shell libraries** can depend on: shell, feature, UI, data-access, util, and styles libraries
-- **Util libraries** can only depend on: other util libraries
-- **Styles libraries** can depend on: util libraries (for tokens)
-- **Apps** can depend on any library type
-- **E2E tests** can only depend on apps
-
-**Domain isolation rules:**
+- UI libraries can only depend on: other UI, util, and styles libraries
+- Feature libraries can depend on: UI, data-access, and util libraries
 - Dashboard domains (question, category, qualification, randomization, interview, settings) **cannot depend on each other**
 - All dashboard domains **can depend on** `dashboard-shared` for cross-cutting concerns
-- This enforces horizontal slicing and prevents coupling between bounded contexts
-- Each domain has its own business logic and cannot reach across domain boundaries
+
+**For detailed module boundary rules, dependency constraints, and examples, see:** **[`/docs/MODULE_BOUNDARIES.md`](docs/MODULE_BOUNDARIES.md)**
 
 **Configuration:** Module boundaries are configured in `eslint.config.mjs` and enforced via `npx nx lint`.
 
@@ -218,29 +155,9 @@ All libraries use TypeScript path aliases defined in `tsconfig.base.json`:
 // Import pattern: @worse-and-pricier/<scope>-<domain>-<type>
 import { Category } from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
 import { LoginComponent } from '@worse-and-pricier/question-randomizer-auth-feature';
-
-// Design System imports (Option 1: via meta-package - recommended)
-import {
-  colors, typography,
-  Theme, ThemeService,
-  ButtonComponent,
-  InputTextComponent,
-  OptionItem,
-  SortDefinition,
-  PageEvent
-} from '@worse-and-pricier/design-system';
-
-// Design System imports (Option 2: direct imports - for fine-grained control)
-import { colors, typography } from '@worse-and-pricier/design-system-tokens';
-import { Theme, ThemeService } from '@worse-and-pricier/design-system-styles';
-import {
-  ButtonComponent,
-  InputTextComponent,
-  OptionItem,
-  SortDefinition,
-  PageEvent
-} from '@worse-and-pricier/design-system-ui';
 ```
+
+See **[Design System](#design-system)** section for design system import examples.
 
 ### Firebase Integration
 
@@ -256,128 +173,37 @@ Repository pattern with services:
 - Services provide business logic layer
 - Mappers transform between Firestore documents and domain models
 
-### Styling
+## Design System
 
-**Design System:**
+The workspace includes a comprehensive, publishable design system under `libs/design-system/`. The design system provides:
 
-- Design tokens: `libs/design-system/tokens/` - Colors, typography, spacing (SCSS + TypeScript)
-- Global styles: `libs/design-system/styles/` - Base styles, theme service (light/dark), utilities
-- UI components: `libs/design-system/ui/` - Pre-built components with consistent styling
+- **Design tokens** (`libs/design-system/tokens/`) - Colors, typography, spacing (SCSS + TypeScript)
+- **Global styles** (`libs/design-system/styles/`) - Base styles, theme service (light/dark), utilities
+- **UI component library** (`libs/design-system/ui/`) - Pre-built components with Storybook documentation
+- **Meta-package** (`@worse-and-pricier/design-system`) that bundles all packages
 
-**Configuration:**
+### Import Examples
+
+```typescript
+// Option 1: via meta-package (recommended)
+import { colors, typography, Theme, ThemeService, ButtonComponent, InputTextComponent, OptionItem, SortDefinition, PageEvent } from '@worse-and-pricier/design-system';
+
+// Option 2: direct imports (for fine-grained control)
+import { colors, typography } from '@worse-and-pricier/design-system-tokens';
+import { Theme, ThemeService } from '@worse-and-pricier/design-system-styles';
+import { ButtonComponent, InputTextComponent, OptionItem, SortDefinition, PageEvent } from '@worse-and-pricier/design-system-ui';
+```
+
+### Styling Configuration
 
 - SCSS preprocessor with include paths configured in `apps/question-randomizer/project.json`
 - Component styles: SCSS (configured in `nx.json`)
 - Main stylesheet: `libs/design-system/styles/src/lib/styles/main.scss`
 - Theme switching: Handled by `ThemeService` from `@worse-and-pricier/design-system-styles`
 
-## Design System
+**For complete documentation:** [`/libs/design-system/README.md`](libs/design-system/README.md)
 
-### Overview
-
-The workspace includes a comprehensive, publishable design system under `libs/design-system/`. All four packages are configured with `@nx/angular:package` executor for Angular Package Format (APF) compliance and can be published to NPM.
-
-### Packages
-
-1. **`@worse-and-pricier/design-system`** (`libs/design-system/design-system`) - **Meta-package (RECOMMENDED)**
-
-   - Umbrella package that bundles all three design system packages
-   - Simplifies installation for Angular applications
-   - Guarantees version compatibility between packages
-   - Re-exports everything from tokens, styles, and ui
-   - Tags: `type:design-system`, `scope:design-system`
-   - Dependencies: `design-system-tokens`, `design-system-styles`, `design-system-ui`
-
-2. **`@worse-and-pricier/design-system-tokens`** (`libs/design-system/tokens`)
-
-   - Design tokens: colors, typography, spacing, mixins, functions
-   - Available as both SCSS and TypeScript exports
-   - Framework-agnostic (can be used in React, Vue, vanilla JS)
-   - Tags: `type:util`, `scope:design-system`
-   - No dependencies (foundational layer)
-
-3. **`@worse-and-pricier/design-system-styles`** (`libs/design-system/styles`)
-
-   - Global styles, base resets, typography
-   - Light/dark theme support via `ThemeService`
-   - Theme models: `Theme` type and `ThemeService` for theme switching
-   - Utilities and component styles
-   - Tags: `type:styles`, `scope:design-system`
-   - Depends on: `design-system-tokens`
-
-4. **`@worse-and-pricier/design-system-ui`** (`libs/design-system-ui`)
-   - Complete UI component library with Storybook
-   - Components: buttons, controls, table, card, paginator
-   - Includes models: `ButtonType`, `OptionItem`, `SortDefinition`, `PageEvent`, etc.
-   - Tags: `type:ui`, `scope:design-system`
-   - Depends on: `design-system-tokens` (for SCSS compilation only)
-
-### Usage
-
-**TypeScript (Option 1: Meta-package - RECOMMENDED):**
-
-```typescript
-// Import everything from meta-package
-import {
-  // Tokens
-  colors, typography, spacing,
-  // Theme service
-  Theme, ThemeService,
-  // UI components
-  ButtonComponent, TableComponent, CardComponent,
-  // Models
-  OptionItem, SortDefinition, PageEvent
-} from '@worse-and-pricier/design-system';
-```
-
-**TypeScript (Option 2: Direct imports):**
-
-```typescript
-// Tokens
-import { colors, typography } from '@worse-and-pricier/design-system-tokens';
-
-// Theme service and models
-import { Theme, ThemeService } from '@worse-and-pricier/design-system-styles';
-
-// UI components and models
-import {
-  ButtonComponent,
-  TableComponent,
-  OptionItem,
-  SortDefinition,
-  PageEvent
-} from '@worse-and-pricier/design-system-ui';
-```
-
-**SCSS:**
-
-```scss
-// Import tokens during development (source)
-@use '../../../../../design-system/tokens/src/lib/scss/variables';
-@use '../../../../../design-system/tokens/src/lib/scss/colors';
-
-// Or import from built package (when published)
-@use '@worse-and-pricier/design-system-tokens/scss' as tokens;
-```
-
-**Angular project.json:**
-
-```json
-"styles": [
-  "node_modules/quill/dist/quill.snow.css",
-  "libs/design-system/styles/src/lib/styles/main.scss",
-  "apps/question-randomizer/src/styles.scss"
-],
-"stylePreprocessorOptions": {
-  "includePaths": ["libs/design-system/tokens/src/lib/scss"]
-}
-```
-
-### Documentation
-
-- Component documentation: `npx nx storybook @worse-and-pricier/design-system-ui`
-- README: `libs/design-system/README.md`
-- Stories: `libs/design-system/ui/src/lib/**/*.stories.ts`
+**For contributing:** [`/docs/DESIGN_SYSTEM_CONTRIBUTING.md`](docs/DESIGN_SYSTEM_CONTRIBUTING.md)
 
 ## Development Notes
 
@@ -386,46 +212,56 @@ import {
 - **Storybook** is used for design system component documentation
 - **ESLint** with Angular ESLint rules
 - **Prettier** for code formatting
-- Default branch: `master` (for Nx Cloud)
+- Main branch: `main`
 - Default dev server: `http://localhost:4200`
 
 ### When Creating New Features
 
 1. Identify the correct domain (auth, dashboard subdomain, or shared)
 2. Create libraries following the type pattern (feature, ui, data-access, etc.)
-3. Use Nx generators to maintain consistency
+3. **Use Nx MCP generators** to maintain consistency: `mcp__nx-mcp__nx_run_generator` with appropriate generator
 4. Add TypeScript path aliases to `tsconfig.base.json`
 5. Follow the normalized state pattern for stores if using @ngrx/signals
 6. Use dependency injection and standalone components (Angular 20+)
-7. **Use design-system components** instead of creating custom UI components
-8. **Import from `@worse-and-pricier/design-system` meta-package (recommended)** or from individual packages
-9. **Use tokens programmatically** when you need dynamic styling (e.g., `colors.primary`)
+7. **Use design-system components** instead of creating custom UI components (see [Design System](#design-system) section)
+8. Respect module boundaries - see [`/docs/MODULE_BOUNDARIES.md`](docs/MODULE_BOUNDARIES.md)
 
-### When Working with the Design System
+---
 
-1. **Adding new components:**
+## MCP Integrations
 
-   - Add to `libs/design-system/ui/src/lib/`
-   - Export from `libs/design-system/ui/src/index.ts`
-   - Create Storybook stories (`.stories.ts`)
-   - Use relative imports within the library to avoid circular dependencies
+This project uses Model Context Protocol (MCP) servers to provide Claude Code with authoritative, up-to-date knowledge.
 
-2. **Adding new tokens:**
+### nx-mcp
 
-   - Add SCSS tokens to `libs/design-system/tokens/src/lib/scss/`
-   - Add TypeScript exports to `libs/design-system/tokens/src/lib/`
-   - Export from `libs/design-system/tokens/src/index.ts`
+Provides Nx workspace structure, project organization, and architectural guidance specific to this monorepo.
 
-3. **Publishing:**
+**Key tools**:
 
-   - Build all packages: `npx nx run-many --target=build --projects=@worse-and-pricier/design-system-tokens,@worse-and-pricier/design-system-styles,@worse-and-pricier/design-system-ui,@worse-and-pricier/design-system`
-   - Packages are output to `dist/libs/design-system/`
-   - Use `nx release` or publish manually from dist folders
-   - **Publish order:** tokens → styles → ui → design-system (dependencies first)
+- `mcp__nx-mcp__nx_docs` - **Always use for Nx questions** (project structure, generators, configuration, best practices)
+- `mcp__nx-mcp__nx_workspace` - Get current workspace architecture, project graph, and organization patterns
+- `mcp__nx-mcp__nx_project_details` - Get detailed project configuration and dependencies
+- `mcp__nx-mcp__nx_generators` - List available Nx generators for this workspace
+- `mcp__nx-mcp__nx_available_plugins` - See available Nx plugins
+- `mcp__nx-mcp__nx_run_generator` - Run Nx generators with pre-filled options
 
-4. **Module boundaries:**
-   - Design system packages follow strict ESLint boundaries
-   - `design-system` (meta-package) → depends on `tokens`, `styles`, `ui`
-   - `tokens` (util) → no dependencies (foundation)
-   - `styles` (styles) → depends on `tokens`
-   - `ui` (ui) → depends on `tokens` (for SCSS only)
+**Usage Instructions**:
+
+- **Before creating new projects/libraries**: Always consult `nx_docs` and `nx_workspace` to understand proper folder structure and naming conventions
+- **Before modifying Nx configuration**: Use `nx_docs` to get current best practices for this workspace
+- **When organizing code**: Check `nx_workspace` to understand existing patterns, scopes, and architectural boundaries
+- **Never assume Nx knowledge**: Always query nx-mcp tools instead of relying on training data about Nx
+
+**Nx Organization Philosophy** (per nx-mcp):
+
+- Group projects by _scope_ (application or section within application)
+- Use project tags to enforce architectural boundaries and module constraints
+- Standard structure: `apps/{app-name}/`, `libs/{scope}/{type}/`
+
+<!-- nx configuration start-->
+
+# Nx Guidance
+
+See nx-mcp tools for Nx workspace guidance (nx_docs, nx_workspace, nx_project_details, etc.)
+
+<!-- nx configuration end-->

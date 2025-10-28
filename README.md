@@ -1,101 +1,216 @@
-# MyNxMonorepo
+# Question Randomizer
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+An interview preparation tool that helps you practice interview questions through intelligent randomization and category-based organization.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Overview
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+Question Randomizer is an Angular-based web application built with Nx that helps users prepare for interviews by:
 
-## Run tasks
+- **Managing interview questions** organized by categories and qualifications
+- **Randomizing questions** based on customizable criteria
+- **Tracking practice sessions** with interview mode
+- **Organizing knowledge** through a flexible categorization system
 
-To run the dev server for your app, use:
+The application uses Firebase for authentication and data persistence, ensuring your questions are securely stored and accessible across devices.
 
-```sh
+## Tech Stack
+
+- **Framework:** Angular 20 (standalone components)
+- **Build System:** Nx (monorepo)
+- **State Management:** @ngrx/signals (SignalStore)
+- **Backend:** Firebase (Authentication + Firestore)
+- **Styling:** SCSS with custom design system
+- **Testing:** Jest (unit), Playwright (e2e)
+
+## Features
+
+### Authentication
+- Email/password authentication with verification
+- Protected routes with email verification guards
+- Secure session management
+
+### Question Management
+- Create, edit, and delete interview questions
+- Rich text editor support for detailed question content
+- Tag questions with categories and qualifications
+
+### Categories & Qualifications
+- Organize questions by custom categories (e.g., "JavaScript", "System Design")
+- Tag questions by qualification levels (e.g., "Junior", "Senior")
+- Flexible categorization for any interview type
+
+### Randomization
+- Randomize questions based on selected criteria
+- Filter by categories, qualifications, and active status
+- Customizable randomization settings
+
+### Interview Mode
+- Practice interview sessions with randomized question sets
+- Track your progress through practice sessions
+- Review mode for completed sessions
+
+### Settings
+- Theme switching (light/dark mode)
+- Customize application preferences
+
+## Quick Start
+
+### Prerequisites
+- Node.js (20+)
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd worse-and-pricier
+
+# Install dependencies
+npm install
+
+# Set up Firebase configuration
+# Add your Firebase config to apps/question-randomizer/src/environments/
+```
+
+### Development
+
+```bash
+# Run development server
 npx nx serve question-randomizer
+
+# The app will be available at http://localhost:4200
 ```
 
-To create a production bundle:
+### Building
 
-```sh
+```bash
+# Production build
 npx nx build question-randomizer
+
+# Build output will be in dist/apps/question-randomizer
 ```
 
-To see all available targets to run for a project, run:
+### Testing
 
-```sh
-npx nx show project question-randomizer
+```bash
+# Run unit tests
+npx nx test question-randomizer
+
+# Run e2e tests
+npx nx e2e question-randomizer-e2e
+
+# Lint
+npx nx lint question-randomizer
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## Project Structure
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+This is an Nx monorepo with domain-driven design:
 
-## Add new projects
+```
+apps/
+  └── question-randomizer/          # Main Angular application
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
+libs/
+  ├── design-system/                # Publishable design system
+  │   ├── tokens/                   # Design tokens
+  │   ├── styles/                   # Global styles & themes
+  │   └── ui/                       # UI components
+  │
+  └── question-randomizer/          # Application libraries
+      ├── auth/                     # Authentication domain
+      ├── dashboard/                # Dashboard domains
+      │   ├── questions/            # Question management
+      │   ├── categories/           # Category management
+      │   ├── qualifications/       # Qualification management
+      │   ├── randomization/        # Randomization logic
+      │   ├── interview/            # Interview mode
+      │   ├── settings/             # Settings
+      │   └── shared/               # Shared dashboard code
+      └── shared/                   # App-wide shared code
 ```
 
-To generate a new library, use:
+Each domain follows a layered architecture with:
+- **shell** - Routing and containers
+- **feature** - Smart components
+- **ui** - Presentational components
+- **data-access** - State management and services
+- **util** - Utilities and models
 
-```sh
-npx nx g @nx/angular:lib mylib
+## Architecture Highlights
+
+### State Management
+- Uses @ngrx/signals (SignalStore) for reactive state management
+- Normalized state pattern with entities and IDs
+- Shared stores provided at dashboard shell level
+- Optimistic client-side updates with Firebase sync
+
+### Module Boundaries
+- Strict ESLint rules enforce architectural boundaries
+- Dashboard domains are isolated (cannot depend on each other)
+- Shared concerns extracted to `dashboard-shared` libraries
+- See [`docs/MODULE_BOUNDARIES.md`](docs/MODULE_BOUNDARIES.md) for details
+
+### Design System
+- Comprehensive, publishable design system
+- Framework-agnostic tokens (colors, typography, spacing)
+- Angular UI component library with Storybook documentation
+- See [`libs/design-system/README.md`](libs/design-system/README.md) for details
+
+## Documentation
+
+- **[CLAUDE.md](CLAUDE.md)** - Complete project documentation for Claude Code users
+- **[Module Boundaries](docs/MODULE_BOUNDARIES.md)** - ESLint rules and architectural constraints
+- **[Design System](libs/design-system/README.md)** - Design system documentation
+- **[Design System Contributing](docs/DESIGN_SYSTEM_CONTRIBUTING.md)** - Contributing to design system
+
+## Development Workflow
+
+### Creating New Features
+
+1. Identify the correct domain (auth, dashboard subdomain, or shared)
+2. Use Nx generators to create libraries: `npx nx g @nx/angular:lib <name>`
+3. Follow the type pattern (feature, ui, data-access, util, shell)
+4. Use design system components instead of creating custom UI
+5. Respect module boundaries (run `npx nx lint` to check)
+
+### Working with Nx
+
+This project uses Nx MCP (Model Context Protocol) for enhanced Claude Code integration:
+
+```bash
+# View project structure
+npx nx graph
+
+# Run multiple targets
+npx nx run-many --target=test --all
+
+# See available commands
+npx nx list
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+## Firebase Configuration
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+The application requires Firebase configuration for authentication and data persistence:
 
-## Set up CI!
+1. Create a Firebase project at https://console.firebase.google.com
+2. Enable Email/Password authentication
+3. Create a Firestore database
+4. Add your Firebase config to `apps/question-randomizer/src/environments/`
 
-### Step 1
+## Contributing
 
-To connect to Nx Cloud, run the following command:
+Contributions are welcome! Please follow the existing architectural patterns and respect module boundaries.
 
-```sh
-npx nx connect
-```
+## License
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+MIT
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-### Step 2
+<a href="https://nx.dev" target="_blank" rel="noreferrer">
+  <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45" alt="Nx logo">
+</a>
 
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Built with [Nx](https://nx.dev)
