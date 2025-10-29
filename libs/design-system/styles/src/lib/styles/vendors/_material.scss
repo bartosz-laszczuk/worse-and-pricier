@@ -1,1 +1,23 @@
 // Customize Material variables here
+
+// Angular CDK Dialog Overlay Styles
+.cdk-overlay-backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.cdk-overlay-pane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.cdk-global-overlay-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 1000;
+}

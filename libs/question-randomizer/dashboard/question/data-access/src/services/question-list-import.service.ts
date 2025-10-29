@@ -83,7 +83,7 @@ export class QuestionListImportService {
           const csvText = reader.result as string;
 
           const parsedCsv = Papa.parse<string[]>(csvText, {
-            delimiter: '-;-',
+            delimiter: '[;]',
             skipEmptyLines: true,
             quoteChar: '"',
             escapeChar: '"',

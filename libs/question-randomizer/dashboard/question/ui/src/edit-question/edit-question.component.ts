@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {
+  ButtonComponent,
   InputRichTextEditorComponent,
   InputSelectComponent,
   InputTextComponent,
@@ -36,6 +37,7 @@ interface EditQuestionForm {
 @Component({
   selector: 'lib-edit-question',
   imports: [
+    ButtonComponent,
     InputTextComponent,
     ReactiveFormsModule,
     InputSelectComponent,

@@ -63,12 +63,12 @@ export const exportToCsv = <T extends Record<string, unknown>>(
 ): void => {
   if (!rows?.length) return;
 
-  const separator = '-;-';
+  const separator = '[;]';
   const actualKeys = keys ?? Object.keys(rows[0]);
   const actualHeaders = headers ?? actualKeys;
 
   const csvContent =
-    'sep=-;-\n' +
+    'sep=[;]\n' +
     actualHeaders.join(separator) +
     '\n' +
     rows

@@ -1,37 +1,42 @@
 <form [formGroup]="form">
-  <lib-input-text
-    label="Question"
-    type="text"
-    placeholder="Enter question"
-    formControlName="question"
-  ></lib-input-text>
-  <lib-input-rich-text-editor
-    label="Answer"
-    type="text"
-    placeholder="Enter answer"
-    formControlName="answer"
-  ></lib-input-rich-text-editor>
-  <lib-input-text
-    label="Answer Pl"
-    type="text"
-    placeholder="Enter answer Pl"
-    formControlName="answerPl"
-  ></lib-input-text>
-  <lib-input-select
-    label="Category"
-    placeholder="Choose category"
-    formControlName="categoryId"
-    [options]="categoryOptionItemList"
-  ></lib-input-select>
-  <lib-input-select
-    label="Qualification"
-    placeholder="Choose qualification"
-    formControlName="qualificationId"
-    [options]="qualificationOptionItemList"
-  ></lib-input-select>
-  <input type="checkbox" formControlName="isActive" /><span>Is active</span>
-  <button type="submit" [disabled]="form.invalid" (click)="onSubmit()">
-    Submit
-  </button>
-  <button type="button" (click)="onCancel()">Close</button>
+  <div class="form-fields">
+    <lib-input-text
+      label="Question"
+      type="text"
+      placeholder="Enter question"
+      formControlName="question"
+    ></lib-input-text>
+    <lib-input-rich-text-editor
+      label="Answer"
+      type="text"
+      placeholder="Enter answer"
+      formControlName="answer"
+    ></lib-input-rich-text-editor>
+    <lib-input-text
+      label="Answer Pl"
+      type="text"
+      placeholder="Enter answer Pl"
+      formControlName="answerPl"
+    ></lib-input-text>
+    <lib-input-select
+      label="Category"
+      placeholder="Choose category"
+      formControlName="categoryId"
+      [options]="categoryOptionItemList"
+    ></lib-input-select>
+    <lib-input-select
+      label="Qualification"
+      placeholder="Choose qualification"
+      formControlName="qualificationId"
+      [options]="qualificationOptionItemList"
+    ></lib-input-select>
+    <div class="checkbox-container">
+      <input type="checkbox" id="isActive" formControlName="isActive" />
+      <label for="isActive"><span>Is active</span></label>
+    </div>
+  </div>
+  <div class="button-group">
+    <lib-button [type]="'light'" (click)="onCancel()">Close</lib-button>
+    <lib-button [type]="'default'" [class.disabled]="form.invalid" (click)="onSubmit()">Submit</lib-button>
+  </div>
 </form>
