@@ -94,7 +94,7 @@ export class QuestionListImportService {
           // Skip sep=; and header row (assumed to be first 2 lines)
           const contentRows = allRows.slice(2);
           console.log('contentRows', contentRows);
-          const result: QuestionCsvListItem[] = contentRows
+          const mappedRows = contentRows
             .map((row: string[], index: number) => {
               if (row.length < 6) {
                 console.error(
@@ -105,6 +105,7 @@ export class QuestionListImportService {
                 return null;
               }
 
+              const tagsValue = row[6]?.trim();
               return {
                 question: row[0].trim(),
                 answer: row[1].trim(),
@@ -112,9 +113,11 @@ export class QuestionListImportService {
                 categoryName: row[3].trim(),
                 qualificationName: row[4]?.trim() || '',
                 isActive: row[5].trim().toLowerCase() === 'true',
+                ...(tagsValue ? { tags: tagsValue } : {}),
               };
-            })
-            .filter((r: QuestionCsvListItem | null): r is QuestionCsvListItem => r !== null);
+            });
+
+          const result: QuestionCsvListItem[] = mappedRows.filter((r): r is QuestionCsvListItem => r !== null);
 
           resolve(result);
         } catch (e) {

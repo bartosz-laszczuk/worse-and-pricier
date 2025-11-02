@@ -26,6 +26,7 @@ export class QuestionListExportService {
         ? qualificationDic[question.qualificationId]?.name ?? ''
         : '',
       isActive: question.isActive ?? true,
+      tags: question.tags?.join(';') ?? '',
     }));
 
     const fileName = `${new Date()
@@ -40,6 +41,7 @@ export class QuestionListExportService {
       'Category',
       'Qualification',
       'IsActive',
+      'Tags',
     ];
 
     const keys = [
@@ -49,6 +51,7 @@ export class QuestionListExportService {
       'categoryName',
       'qualificationName',
       'isActive',
+      'tags',
     ];
 
     exportToCsv(fileName, questionExportList, headers, keys);

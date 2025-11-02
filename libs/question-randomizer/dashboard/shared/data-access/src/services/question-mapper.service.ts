@@ -65,6 +65,7 @@ export class QuestionMapperService {
     const categoryId = categoryMap.get(importItem.categoryName)?.id ?? '';
     const qualificationId =
       qualificationMap.get(importItem.qualificationName)?.id ?? null;
+    const tags = this.parseTagsString(importItem.tags ?? '');
     return {
       id: questionId,
       question: importItem.question,
@@ -73,6 +74,7 @@ export class QuestionMapperService {
       categoryId,
       qualificationId,
       isActive: importItem.isActive,
+      tags: tags.length > 0 ? tags : undefined,
     };
   }
 
@@ -85,6 +87,7 @@ export class QuestionMapperService {
     const categoryId = categoryMap.get(importItem.categoryName)?.id ?? '';
     const qualificationId =
       qualificationMap.get(importItem.qualificationName)?.id ?? null;
+    const tags = this.parseTagsString(importItem.tags ?? '');
     return {
       question: importItem.question,
       answer: importItem.answer,
@@ -93,6 +96,7 @@ export class QuestionMapperService {
       qualificationId,
       isActive: importItem.isActive,
       userId,
+      tags: tags.length > 0 ? tags : undefined,
     };
   }
 }

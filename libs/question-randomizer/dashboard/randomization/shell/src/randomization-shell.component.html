@@ -32,6 +32,7 @@
     </div>
     @if(currentQuestion(); as question){
     <p>{{ question.question }}</p>
+    <p>{{ question.tags | formatTags }}</p>
     } @else {
     <p>No questions to display</p>
     }

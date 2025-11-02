@@ -7,7 +7,7 @@ import {
   InputCheckGroupComponent,
   ButtonGroupComponent,
 } from '@worse-and-pricier/design-system-ui';
-import { Randomization } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import { FormatTagsPipe, Randomization } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import {
   StatusBarComponent,
   StatusCardComponent,
@@ -21,7 +21,8 @@ import {
     StatusCardComponent,
     StatusBarComponent,
     ButtonGroupComponent,
-    ButtonIconComponent
+    ButtonIconComponent,
+    FormatTagsPipe
 ],
   templateUrl: './randomization-shell.component.html',
   styleUrl: './randomization-shell.component.scss',

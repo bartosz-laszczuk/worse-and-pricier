@@ -3,7 +3,6 @@
 // Angular CDK Dialog Overlay Styles
 .cdk-overlay-backdrop {
   background: rgba(0, 0, 0, 0.5);
-  // backdrop-filter: blur(2px); // Removed: causes poor animation performance (forces expensive GPU operations)
 }
 
 .cdk-overlay-pane {

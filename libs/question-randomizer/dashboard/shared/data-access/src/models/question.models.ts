@@ -5,7 +5,8 @@ export interface QuestionCsvListItem {
   categoryName: string;
   qualificationName: string;
   isActive: boolean;
-  [key: string]: string | boolean;
+  tags?: string;
+  [key: string]: string | boolean | undefined;
 }
 
 export interface CreateQuestionRequest {

@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'formatTags',
+  standalone: true,
 })
 export class FormatTagsPipe implements PipeTransform {
   transform(tags: string[] | undefined): string {
