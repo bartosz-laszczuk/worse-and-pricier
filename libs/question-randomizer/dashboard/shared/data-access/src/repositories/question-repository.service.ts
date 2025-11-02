@@ -14,7 +14,6 @@ import {
   writeBatch,
 } from '@angular/fire/firestore';
 import {
-  EditQuestionFormValue,
   Question,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { lastValueFrom, Observable, take } from 'rxjs';
@@ -77,17 +76,8 @@ export class QuestionRepositoryService {
 
   public updateQuestion(
     questionId: string,
-    data: EditQuestionFormValue
+    request: UpdateQuestionRequest
   ): Promise<void> {
-    const request: UpdateQuestionRequest = {
-      id: questionId,
-      question: data.question,
-      answer: data.answer,
-      answerPl: data.answerPl,
-      categoryId: data.categoryId,
-      qualificationId: data.qualificationId ?? null,
-      isActive: data.isActive,
-    };
     const questionDoc = doc(this.afDb, `questions/${questionId}`);
     return updateDoc(questionDoc, { ...request });
   }

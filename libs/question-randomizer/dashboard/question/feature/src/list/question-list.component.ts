@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import {
   EditQuestionFormValue,
+  FormatTagsPipe,
   Question,
   StripHtmlPipe,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
@@ -39,6 +40,7 @@ import { Dialog } from '@angular/cdk/dialog';
     ColumnDirective,
     SvgIconComponent,
     StripHtmlPipe,
+    FormatTagsPipe,
     ButtonComponent,
     ButtonGroupComponent,
   ],

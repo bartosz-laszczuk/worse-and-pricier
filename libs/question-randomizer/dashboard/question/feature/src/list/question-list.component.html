@@ -30,7 +30,9 @@
   <ng-template
     [libColumn]="{ propertyName: 'question', type: 'COLUMN' }"
     let-item="item"
-    ><div class="truncate">{{ item.question }}</div></ng-template
+    ><div class="truncate">
+      {{ item.question }} {{ item.tags | formatTags }}
+    </div></ng-template
   >
   <ng-template
     [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"

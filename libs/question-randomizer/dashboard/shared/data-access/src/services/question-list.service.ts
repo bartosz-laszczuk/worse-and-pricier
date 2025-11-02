@@ -47,9 +47,17 @@ export class QuestionListService {
       );
 
       const question: Question = {
-        ...createdQuestion,
+        question: createdQuestion.question,
+        answer: createdQuestion.answer,
+        answerPl: createdQuestion.answerPl,
+        categoryId: createdQuestion.categoryId,
+        categoryName: createdQuestion.categoryName,
+        qualificationId: createdQuestion.qualificationId,
+        qualificationName: createdQuestion.qualificationName,
+        isActive: createdQuestion.isActive,
         id: questionId,
         userId,
+        tags: createQuestionRequest.tags,
       };
 
       this.questionListStore.addQuestionToList(question);
@@ -72,6 +80,12 @@ export class QuestionListService {
   ) {
     this.questionListStore.startLoading();
     try {
+      const updateQuestionRequest =
+        this.questionMapperService.mapEditQuestionFormValueToUpdateQuestionRequest(
+          updatedQuestion,
+          questionId
+        );
+
       this.questionListStore.updateQuestionInList(questionId, updatedQuestion);
       const randomization = this.randomizationStore.entity();
       if (randomization?.currentQuestion?.id === questionId) {
@@ -81,7 +95,7 @@ export class QuestionListService {
 
       await this.questionRepositoryService.updateQuestion(
         questionId,
-        updatedQuestion
+        updateQuestionRequest
       );
       const questionCategory: QuestionCategory = {
         questionId,

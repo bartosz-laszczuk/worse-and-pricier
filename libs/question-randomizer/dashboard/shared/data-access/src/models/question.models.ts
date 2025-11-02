@@ -16,6 +16,7 @@ export interface CreateQuestionRequest {
   qualificationId: string | null;
   isActive: boolean;
   userId: string;
+  tags?: string[];
 }
 
 export interface UpdateQuestionRequest {
@@ -26,4 +27,5 @@ export interface UpdateQuestionRequest {
   categoryId: string;
   qualificationId: string | null;
   isActive: boolean;
+  tags?: string[];
 }

@@ -102,10 +102,26 @@ export const QuestionListStore = signalStore(
       patchState(store, (state) => {
         if (!state.entities || !state.entities[questionId]) return state;
 
+        // Parse tags from semicolon-separated string to array
+        const tags = data.tags && data.tags.trim() !== ''
+          ? data.tags.split(';').map(tag => tag.trim()).filter(tag => tag.length > 0)
+          : undefined;
+
         return {
           entities: {
             ...state.entities,
-            [questionId]: { ...state.entities[questionId], ...data },
+            [questionId]: {
+              ...state.entities[questionId],
+              question: data.question,
+              answer: data.answer,
+              answerPl: data.answerPl,
+              categoryId: data.categoryId,
+              categoryName: data.categoryName,
+              qualificationId: data.qualificationId,
+              qualificationName: data.qualificationName,
+              isActive: data.isActive,
+              tags
+            },
           },
           isLoading: false,
           error: null,

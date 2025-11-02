@@ -17,6 +17,12 @@
   (page)="onPage($event)"
 >
   <ng-template
+    [libColumn]="{ propertyName: 'question', type: 'COLUMN' }"
+    let-item="item"
+  >
+    <div>{{ item.question }} {{ item.tags | formatTags }}</div>
+  </ng-template>
+  <ng-template
     [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"
     let-item="item"
   >

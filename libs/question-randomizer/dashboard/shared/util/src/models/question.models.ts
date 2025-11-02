@@ -9,6 +9,7 @@ export interface Question {
   qualificationId?: string;
   isActive: boolean;
   userId: string;
+  tags?: string[];
 }
 
 export interface EditQuestionFormValue {
@@ -20,4 +21,5 @@ export interface EditQuestionFormValue {
   qualificationId?: string;
   qualificationName?: string;
   isActive: boolean;
+  tags: string;
 }

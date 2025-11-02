@@ -16,6 +16,7 @@ export class QuestionMapperService {
     formValue: EditQuestionFormValue,
     userId: string
   ): CreateQuestionRequest {
+    const tags = this.parseTagsString(formValue.tags);
     return {
       question: formValue.question,
       answer: formValue.answer,
@@ -24,7 +25,35 @@ export class QuestionMapperService {
       qualificationId: formValue.qualificationId ?? null,
       isActive: formValue.isActive,
       userId,
+      tags: tags.length > 0 ? tags : undefined,
     };
+  }
+
+  public mapEditQuestionFormValueToUpdateQuestionRequest(
+    formValue: EditQuestionFormValue,
+    questionId: string
+  ): UpdateQuestionRequest {
+    const tags = this.parseTagsString(formValue.tags);
+    return {
+      id: questionId,
+      question: formValue.question,
+      answer: formValue.answer,
+      answerPl: formValue.answerPl,
+      categoryId: formValue.categoryId,
+      qualificationId: formValue.qualificationId ?? null,
+      isActive: formValue.isActive,
+      tags: tags.length > 0 ? tags : undefined,
+    };
+  }
+
+  private parseTagsString(tagsString: string): string[] {
+    if (!tagsString || tagsString.trim() === '') {
+      return [];
+    }
+    return tagsString
+      .split(';')
+      .map(tag => tag.trim())
+      .filter(tag => tag.length > 0);
   }
 
   public mapQuestionCsvListItemToUpdateQuestionRequest(

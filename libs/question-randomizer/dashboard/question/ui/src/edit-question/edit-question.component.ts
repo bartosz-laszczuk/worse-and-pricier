@@ -32,6 +32,7 @@ interface EditQuestionForm {
   categoryId: FormControl<string>;
   qualificationId: FormControl<string | null>;
   isActive: FormControl<boolean>;
+  tags: FormControl<string>;
 }
 
 @Component({
@@ -77,6 +78,9 @@ export class EditQuestionComponent {
       nonNullable: true,
       validators: [Validators.required],
     }),
+    tags: this.fb.control<string>('', {
+      nonNullable: true,
+    }),
   });
 
   public constructor() {
@@ -93,6 +97,7 @@ export class EditQuestionComponent {
       categoryId: question.categoryId ?? '',
       qualificationId: question.qualificationId ?? null,
       isActive: question.isActive,
+      tags: question.tags?.join(';') ?? '',
     });
   }
 
@@ -115,6 +120,7 @@ export class EditQuestionComponent {
           (qualification) => qualification.value === qualificationId
         )?.label,
         isActive: this.form.controls.isActive.value,
+        tags: this.form.controls.tags.value,
       };
 
       this.dialogRef.close(question);

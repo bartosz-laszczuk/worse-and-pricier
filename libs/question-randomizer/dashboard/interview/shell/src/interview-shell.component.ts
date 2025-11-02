@@ -13,6 +13,7 @@ import { debounceTime } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InterviewShellFacade } from './interview-shell.facade';
 import {
+  FormatTagsPipe,
   NormalizeSpacePipe,
   Question,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
@@ -26,6 +27,7 @@ import { InterviewStore } from '@worse-and-pricier/question-randomizer-dashboard
     ReactiveFormsModule,
     ColumnDirective,
     NormalizeSpacePipe,
+    FormatTagsPipe,
   ],
   templateUrl: './interview-shell.component.html',
   styleUrl: './interview-shell.component.scss',
