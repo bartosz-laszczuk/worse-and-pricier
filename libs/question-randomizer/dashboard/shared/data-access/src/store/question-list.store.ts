@@ -64,7 +64,7 @@ export const QuestionListStore = signalStore(
 
       const searched = filterByTextUsingORLogic(
         questions,
-        ['question', 'answer', 'answerPl'],
+        ['question', 'answer', 'answerPl', 'tags'],
         store.searchText()
       );
 

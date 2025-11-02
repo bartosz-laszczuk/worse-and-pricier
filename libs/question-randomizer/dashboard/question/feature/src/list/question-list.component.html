@@ -38,7 +38,7 @@
     [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"
     let-item="item"
   >
-    <div class="truncate">{{ item.answer | stripHtml }}</div>
+    <div class="truncate" [innerHTML]="item.answer | normalizeSpace"></div>
   </ng-template>
   <ng-template
     [libColumn]="{ propertyName: 'isActive', type: 'COLUMN' }"

@@ -105,10 +105,19 @@ export const filterByTextUsingORLogic = <T>(
     ? entities.filter((entity) =>
         fields.some((field) => {
           const value = entity[field];
-          return (
-            typeof value === 'string' &&
-            value.toLowerCase().includes(searchText.toLowerCase())
-          );
+          // Handle string fields
+          if (typeof value === 'string') {
+            return value.toLowerCase().includes(searchText.toLowerCase());
+          }
+          // Handle array fields (e.g., tags: string[])
+          if (Array.isArray(value)) {
+            return value.some(
+              (item) =>
+                typeof item === 'string' &&
+                item.toLowerCase().includes(searchText.toLowerCase())
+            );
+          }
+          return false;
         })
       )
     : entities;

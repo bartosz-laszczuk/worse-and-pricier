@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   EditQuestionFormValue,
   FormatTagsPipe,
+  NormalizeSpacePipe,
   Question,
-  StripHtmlPipe,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { QuestionListFacade } from './question-list.facade';
 import {
@@ -39,7 +39,7 @@ import { Dialog } from '@angular/cdk/dialog';
     ReactiveFormsModule,
     ColumnDirective,
     SvgIconComponent,
-    StripHtmlPipe,
+    NormalizeSpacePipe,
     FormatTagsPipe,
     ButtonComponent,
     ButtonGroupComponent,
