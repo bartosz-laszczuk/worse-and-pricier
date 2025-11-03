@@ -7,11 +7,20 @@ import {
   InputCheckGroupComponent,
   ButtonGroupComponent,
 } from '@worse-and-pricier/design-system-ui';
-import { FormatTagsPipe, Randomization } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import {
+  EditQuestionFormValue,
+  FormatTagsPipe,
+  Randomization,
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import {
   StatusBarComponent,
   StatusCardComponent,
 } from '@worse-and-pricier/question-randomizer-dashboard-randomization-ui';
+import {
+  EditQuestionComponent,
+  EditQuestionDialogData,
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-ui';
+import { Dialog } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'lib-randomization-shell',
@@ -31,11 +40,14 @@ import {
 })
 export class RandomizationShellComponent {
   private readonly randomizationShellFacade = inject(RandomizationShellFacade);
+  private readonly dialog = inject(Dialog);
 
   public randomization = this.randomizationShellFacade.randomization;
   public currentQuestion = this.randomizationShellFacade.currentQuestion;
   public categoryOptionItemList =
     this.randomizationShellFacade.categoryOptionItemList;
+  public qualificationOptionItemList =
+    this.randomizationShellFacade.qualificationOptionItemList;
   public selectedCategoryIdList =
     this.randomizationShellFacade.selectedCategoryIdList;
   public usedQuestionListLength =
@@ -93,5 +105,27 @@ export class RandomizationShellComponent {
 
   public onReset(randomizationId: string) {
     this.randomizationShellFacade.resetRandomization(randomizationId);
+  }
+
+  public onEditQuestion() {
+    const question = this.currentQuestion();
+    if (!question) return;
+
+    const dialogRef = this.dialog.open<
+      EditQuestionFormValue | undefined,
+      EditQuestionDialogData
+    >(EditQuestionComponent, {
+      data: {
+        question,
+        categoryOptionItemList: this.categoryOptionItemList(),
+        qualificationOptionItemList: this.qualificationOptionItemList(),
+      },
+    });
+
+    dialogRef.closed.subscribe((result) => {
+      if (result) {
+        this.randomizationShellFacade.updateQuestion(question.id, result);
+      }
+    });
   }
 }

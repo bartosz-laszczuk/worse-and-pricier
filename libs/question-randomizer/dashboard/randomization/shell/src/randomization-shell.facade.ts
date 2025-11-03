@@ -2,6 +2,7 @@ import { computed, effect, inject, Injectable } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import {
   AvailableQuestion,
+  EditQuestionFormValue,
   PostponedQuestion,
   Randomization,
   UsedQuestion,
@@ -9,6 +10,7 @@ import {
 import {
   CategoryListStore,
   PostponedQuestionListService,
+  QualificationListStore,
   QuestionListService,
   QuestionListStore,
   RandomizationService,
@@ -34,9 +36,12 @@ export class RandomizationShellFacade {
   );
   private readonly userStore = inject(UserStore);
   private readonly categoryListStore = inject(CategoryListStore);
+  private readonly qualificationListStore = inject(QualificationListStore);
 
   public randomization = this.randomizationStore.randomization;
   public categoryOptionItemList = this.categoryListStore.categoryOptionItemList;
+  public qualificationOptionItemList =
+    this.qualificationListStore.qualificationOptionItemList;
   public usedQuestionListLength = computed(
     () =>
       (
@@ -70,9 +75,9 @@ export class RandomizationShellFacade {
   public selectedCategoryIdList = computed(
     () => this.randomizationStore.randomization()?.selectedCategoryIdList ?? []
   );
-  public currentQuestion = computed(() => {
-    return this.randomization()?.currentQuestion;
-  });
+  public currentQuestion = computed(
+    () => this.randomization()?.currentQuestion
+  );
 
   public loadRandomization() {
     effect(() => {
@@ -260,5 +265,12 @@ export class RandomizationShellFacade {
         questionDic
       );
     }
+  }
+
+  public async updateQuestion(
+    questionId: string,
+    updatedQuestion: EditQuestionFormValue
+  ) {
+    this.questionListService.updateQuestion(questionId, updatedQuestion);
   }
 }

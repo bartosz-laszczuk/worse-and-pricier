@@ -3,6 +3,7 @@ import {
   Category,
   EditQuestionFormValue,
   Qualification,
+  Question,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import {
   CreateQuestionRequest,
@@ -46,14 +47,35 @@ export class QuestionMapperService {
     };
   }
 
+  public mapEditQuestionFormValueToQuestion(
+    questionId: string,
+    formValue: EditQuestionFormValue,
+    userId: string
+  ): Question {
+    const tags = this.parseTagsString(formValue.tags);
+    return {
+      id: questionId,
+      question: formValue.question,
+      answer: formValue.answer,
+      answerPl: formValue.answerPl,
+      categoryId: formValue.categoryId,
+      categoryName: formValue.categoryName,
+      qualificationId: formValue.qualificationId,
+      qualificationName: formValue.qualificationName,
+      isActive: formValue.isActive,
+      userId,
+      tags: tags.length > 0 ? tags : undefined,
+    };
+  }
+
   private parseTagsString(tagsString: string): string[] {
     if (!tagsString || tagsString.trim() === '') {
       return [];
     }
     return tagsString
       .split(';')
-      .map(tag => tag.trim())
-      .filter(tag => tag.length > 0);
+      .map((tag) => tag.trim())
+      .filter((tag) => tag.length > 0);
   }
 
   public mapQuestionCsvListItemToUpdateQuestionRequest(

@@ -80,31 +80,49 @@ export class QuestionListService {
   ) {
     this.questionListStore.startLoading();
     try {
+      this.questionListStore.updateQuestionInList(questionId, updatedQuestion);
+
       const updateQuestionRequest =
         this.questionMapperService.mapEditQuestionFormValueToUpdateQuestionRequest(
           updatedQuestion,
           questionId
         );
-
-      this.questionListStore.updateQuestionInList(questionId, updatedQuestion);
-      const randomization = this.randomizationStore.entity();
-      if (randomization?.currentQuestion?.id === questionId) {
-        // this.randomizationService.clearCurrentQuestion(randomization.id);
-        randomization.currentQuestion = undefined;
-      }
-
       await this.questionRepositoryService.updateQuestion(
         questionId,
         updateQuestionRequest
       );
+
       const questionCategory: QuestionCategory = {
         questionId,
         categoryId: updatedQuestion.categoryId,
       };
-      console.log('updated category:', updatedQuestion.categoryId);
       await this.randomizationService.updateCategoryQuestionListsCategoryId(
         questionCategory
       );
+
+      const randomization = this.randomizationStore.entity();
+      if (randomization?.currentQuestion?.id === questionId) {
+        const userId = this.userStore.uid();
+        const questionDic = this.questionListStore.entities();
+        if (
+          updatedQuestion.isActive &&
+          userId &&
+          randomization.selectedCategoryIdList.includes(
+            updatedQuestion.categoryId
+          )
+        ) {
+          randomization.currentQuestion =
+            this.questionMapperService.mapEditQuestionFormValueToQuestion(
+              questionId,
+              updatedQuestion,
+              userId
+            );
+        } else if (questionDic) {
+          this.randomizationService.updateCurrentQuestionWithNextQuestion(
+            questionDic
+          );
+        }
+      }
     } catch (error: unknown) {
       this.questionListStore.logError(
         error instanceof Error ? error.message : 'Question update failed'
@@ -177,7 +195,9 @@ export class QuestionListService {
       );
     } catch (error: unknown) {
       this.questionListStore.logError(
-        error instanceof Error ? error.message : 'Failed to delete categoryId from questions'
+        error instanceof Error
+          ? error.message
+          : 'Failed to delete categoryId from questions'
       );
     }
   }
@@ -197,7 +217,9 @@ export class QuestionListService {
       );
     } catch (error: unknown) {
       this.questionListStore.logError(
-        error instanceof Error ? error.message : 'Failed to delete qualificationId from questions'
+        error instanceof Error
+          ? error.message
+          : 'Failed to delete qualificationId from questions'
       );
     }
   }

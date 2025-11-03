@@ -10,7 +10,7 @@ import { QuestionListFacade } from './question-list.facade';
 import {
   EditQuestionComponent,
   EditQuestionDialogData,
-} from '@worse-and-pricier/question-randomizer-dashboard-question-ui';
+} from '@worse-and-pricier/question-randomizer-dashboard-shared-ui';
 import {
   ButtonComponent,
   ButtonGroupComponent,
