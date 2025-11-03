@@ -4,6 +4,7 @@ import {
   EditQuestionFormValue,
   Qualification,
   Question,
+  Randomization,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { UserStore } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { QuestionRepositoryService } from '../repositories';
@@ -46,27 +47,14 @@ export class QuestionListService {
         createQuestionRequest
       );
 
-      const question: Question = {
-        question: createdQuestion.question,
-        answer: createdQuestion.answer,
-        answerPl: createdQuestion.answerPl,
-        categoryId: createdQuestion.categoryId,
-        categoryName: createdQuestion.categoryName,
-        qualificationId: createdQuestion.qualificationId,
-        qualificationName: createdQuestion.qualificationName,
-        isActive: createdQuestion.isActive,
-        id: questionId,
-        userId,
-        tags: createQuestionRequest.tags,
-      };
+      const question = this.questionMapperService.mapEditQuestionFormValueToQuestion(
+        questionId,
+        createdQuestion,
+        userId
+      );
 
       this.questionListStore.addQuestionToList(question);
-      this.randomizationStore.addAvailableQuestionsToRandomization([
-        {
-          questionId: question.id,
-          categoryId: question.categoryId,
-        },
-      ]);
+      this.syncNewQuestionWithRandomization(question);
     } catch (error: unknown) {
       this.questionListStore.logError(
         error instanceof Error ? error.message : 'Question creation failed'
@@ -82,47 +70,12 @@ export class QuestionListService {
     try {
       this.questionListStore.updateQuestionInList(questionId, updatedQuestion);
 
-      const updateQuestionRequest =
-        this.questionMapperService.mapEditQuestionFormValueToUpdateQuestionRequest(
-          updatedQuestion,
-          questionId
-        );
-      await this.questionRepositoryService.updateQuestion(
+      await this.persistQuestionUpdate(questionId, updatedQuestion);
+      await this.syncQuestionCategoryInRandomization(
         questionId,
-        updateQuestionRequest
+        updatedQuestion.categoryId
       );
-
-      const questionCategory: QuestionCategory = {
-        questionId,
-        categoryId: updatedQuestion.categoryId,
-      };
-      await this.randomizationService.updateCategoryQuestionListsCategoryId(
-        questionCategory
-      );
-
-      const randomization = this.randomizationStore.entity();
-      if (randomization?.currentQuestion?.id === questionId) {
-        const userId = this.userStore.uid();
-        const questionDic = this.questionListStore.entities();
-        if (
-          updatedQuestion.isActive &&
-          userId &&
-          randomization.selectedCategoryIdList.includes(
-            updatedQuestion.categoryId
-          )
-        ) {
-          randomization.currentQuestion =
-            this.questionMapperService.mapEditQuestionFormValueToQuestion(
-              questionId,
-              updatedQuestion,
-              userId
-            );
-        } else if (questionDic) {
-          this.randomizationService.updateCurrentQuestionWithNextQuestion(
-            questionDic
-          );
-        }
-      }
+      await this.updateCurrentQuestionIfNeeded(questionId, updatedQuestion);
     } catch (error: unknown) {
       this.questionListStore.logError(
         error instanceof Error ? error.message : 'Question update failed'
@@ -245,6 +198,100 @@ export class QuestionListService {
     }
 
     return undefined;
+  }
+
+  private syncNewQuestionWithRandomization(question: Question) {
+    this.randomizationStore.addAvailableQuestionsToRandomization([
+      {
+        questionId: question.id,
+        categoryId: question.categoryId,
+      },
+    ]);
+  }
+
+  private async persistQuestionUpdate(
+    questionId: string,
+    updatedQuestion: EditQuestionFormValue
+  ) {
+    const updateQuestionRequest =
+      this.questionMapperService.mapEditQuestionFormValueToUpdateQuestionRequest(
+        updatedQuestion,
+        questionId
+      );
+    await this.questionRepositoryService.updateQuestion(
+      questionId,
+      updateQuestionRequest
+    );
+  }
+
+  private async syncQuestionCategoryInRandomization(
+    questionId: string,
+    categoryId: string
+  ) {
+    const questionCategory: QuestionCategory = {
+      questionId,
+      categoryId,
+    };
+    await this.randomizationService.updateCategoryQuestionListsCategoryId(
+      questionCategory
+    );
+  }
+
+  private async updateCurrentQuestionIfNeeded(
+    questionId: string,
+    updatedQuestion: EditQuestionFormValue
+  ) {
+    const randomization = this.randomizationStore.entity();
+    if (randomization?.currentQuestion?.id !== questionId) {
+      return;
+    }
+
+    if (this.shouldUpdateCurrentQuestion(randomization, updatedQuestion)) {
+      this.updateCurrentQuestionWithUpdatedData(
+        questionId,
+        updatedQuestion,
+        randomization
+      );
+    } else {
+      this.replaceCurrentQuestionWithNext();
+    }
+  }
+
+  private shouldUpdateCurrentQuestion(
+    randomization: Randomization,
+    updatedQuestion: EditQuestionFormValue
+  ): boolean {
+    const userId = this.userStore.uid();
+    return (
+      updatedQuestion.isActive &&
+      !!userId &&
+      randomization.selectedCategoryIdList.includes(updatedQuestion.categoryId)
+    );
+  }
+
+  private updateCurrentQuestionWithUpdatedData(
+    questionId: string,
+    updatedQuestion: EditQuestionFormValue,
+    randomization: Randomization
+  ) {
+    const userId = this.userStore.uid();
+    if (!userId) return;
+
+    randomization.currentQuestion =
+      this.questionMapperService.mapEditQuestionFormValueToQuestion(
+        questionId,
+        updatedQuestion,
+        userId
+      );
+  }
+
+  private replaceCurrentQuestionWithNext() {
+    const questionDic = this.questionListStore.entities();
+    if (questionDic) {
+      this.randomizationService.updateCurrentQuestionWithNextQuestion(
+        questionDic
+      );
+    }
   }
 
   private async deleteUsedQuestionFromRandomization(questionId: string) {

@@ -40,7 +40,8 @@
       "Bash(if exist \"docs\\DESIGN_SYSTEM_CONTRIBUTING.md\" echo File exists)",
       "Bash(del \"C:\\D\\Repositories\\worse-and-pricier\\docs\\COMMANDS.md\")",
       "Bash(rm:*)",
-      "Bash(ping:*)"
+      "Bash(ping:*)",
+      "Bash(npx nx test question-randomizer-dashboard-shared-data-access)"
     ],
     "deny": [],
     "ask": []
