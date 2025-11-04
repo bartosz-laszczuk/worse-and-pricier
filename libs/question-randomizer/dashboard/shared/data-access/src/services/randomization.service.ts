@@ -40,22 +40,22 @@ export class RandomizationService {
    * Loads randomization state for a user from the repository.
    *
    * @param userId - The user ID to load randomization for
-   * @param questionDic - Dictionary of all available questions by ID
+   * @param questionMap - Dictionary of all available questions by ID
    * @param forceLoad - If true, bypasses cache and reloads from repository
    * @returns Promise that resolves when randomization is loaded
    *
    * @example
    * ```typescript
    * // Load randomization with caching (skips if already loaded)
-   * await randomizationService.loadRandomization('user123', questionDictionary);
+   * await randomizationService.loadRandomization('user123', questionMaptionary);
    *
    * // Force reload from repository
-   * await randomizationService.loadRandomization('user123', questionDictionary, true);
+   * await randomizationService.loadRandomization('user123', questionMaptionary, true);
    * ```
    */
   public async loadRandomization(
     userId: string,
-    questionDic: Record<string, Question>,
+    questionMap: Record<string, Question>,
     forceLoad = false
   ): Promise<void> {
     if (this.shouldSkipLoading(forceLoad)) return;
@@ -66,8 +66,8 @@ export class RandomizationService {
         await this.randomizationRepositoryService.getRandomization(userId);
 
       const randomization = response
-        ? await this.loadExistingRandomization(response, questionDic)
-        : await this.getNewRandomization(userId, questionDic);
+        ? await this.loadExistingRandomization(response, questionMap)
+        : await this.createNewRandomization(userId, questionMap);
 
       this.randomizationStore.setRandomization(randomization);
     } catch (error: unknown) {
@@ -78,11 +78,11 @@ export class RandomizationService {
   /**
    * Updates the current question with the next available question based on randomization logic.
    *
-   * @param questionDic - Dictionary of all available questions by ID
+   * @param questionMap - Dictionary of all available questions by ID
    * @returns Promise that resolves when the current question is updated
    */
-  public async updateCurrentQuestionWithNextQuestion(
-    questionDic: Record<string, Question>
+  public async advanceToNextQuestion(
+    questionMap: Record<string, Question>
   ): Promise<void> {
     try {
       const randomization = this.randomizationStore.entity();
@@ -90,7 +90,7 @@ export class RandomizationService {
 
       const newCurrentQuestion = this.selectNextQuestion(
         randomization,
-        questionDic
+        questionMap
       );
 
       if (this.shouldSkipUpdate(randomization, newCurrentQuestion)) {
@@ -132,7 +132,7 @@ export class RandomizationService {
    * @param newQuestionCategory - The question category with updated categoryId
    * @returns Promise that resolves when all question lists are updated
    */
-  public async updateCategoryQuestionListsCategoryId(
+  public async updateQuestionCategoryAcrossLists(
     newQuestionCategory: QuestionCategory
   ): Promise<void> {
     this.randomizationStore.startLoading();
@@ -202,16 +202,16 @@ export class RandomizationService {
    *
    * @param postponedQuestionIdList - List of postponed question IDs
    * @param selectedCategoryIdList - List of selected category IDs
-   * @param questionDic - Dictionary of all available questions by ID
+   * @param questionMap - Dictionary of all available questions by ID
    * @returns The first matching question or undefined if none found
    */
-  private findFirstQuestionForCategoryIdList(
+  private findFirstQuestionMatchingCategories(
     postponedQuestionIdList: string[],
     selectedCategoryIdList: string[],
-    questionDic: Record<string, Question>
+    questionMap: Record<string, Question>
   ): Question | undefined {
     for (const questionId of postponedQuestionIdList) {
-      const question = questionDic[questionId];
+      const question = questionMap[questionId];
 
       if (
         question &&
@@ -230,12 +230,12 @@ export class RandomizationService {
    * Creates a new randomization for a user.
    *
    * @param userId - The user ID to create randomization for
-   * @param questionDic - Dictionary of all available questions by ID
+   * @param questionMap - Dictionary of all available questions by ID
    * @returns Promise that resolves to the new randomization
    */
-  private async getNewRandomization(
+  private async createNewRandomization(
     userId: string,
-    questionDic: Record<string, Question>
+    questionMap: Record<string, Question>
   ): Promise<Randomization> {
     const randomizationId =
       await this.randomizationRepositoryService.createRandomization(userId);
@@ -247,7 +247,7 @@ export class RandomizationService {
       usedQuestionList: [],
       postponedQuestionList: [],
       selectedCategoryIdList: [],
-      availableQuestionList: Object.values(questionDic).map((question) => ({
+      availableQuestionList: Object.values(questionMap).map((question) => ({
         questionId: question.id,
         categoryId: question.categoryId,
       })),
@@ -268,19 +268,19 @@ export class RandomizationService {
    * Loads an existing randomization from the repository response.
    *
    * @param response - The randomization response from the repository
-   * @param questionDic - Dictionary of all available questions by ID
+   * @param questionMap - Dictionary of all available questions by ID
    * @returns Promise that resolves to the loaded randomization
    */
   private async loadExistingRandomization(
     response: GetRandomizationResponse,
-    questionDic: Record<string, Question>
+    questionMap: Record<string, Question>
   ): Promise<Randomization> {
     const [usedQuestionList, postponedQuestionList, selectedCategoryIdList] =
       await this.fetchRandomizationData(response.id);
 
     const currentQuestion = this.resolveCurrentQuestion(
       response.currentQuestionId,
-      questionDic
+      questionMap
     );
 
     return this.randomizationMapperService.mapGetRandomizationResponseToRandomization(
@@ -288,7 +288,7 @@ export class RandomizationService {
       usedQuestionList,
       postponedQuestionList,
       selectedCategoryIdList,
-      questionDic,
+      questionMap,
       currentQuestion
     );
   }
@@ -319,15 +319,15 @@ export class RandomizationService {
    * Resolves the current question from the question dictionary.
    *
    * @param currentQuestionId - The ID of the current question
-   * @param questionDic - Dictionary of all available questions by ID
+   * @param questionMap - Dictionary of all available questions by ID
    * @returns The current question or undefined if not found
    */
   private resolveCurrentQuestion(
     currentQuestionId: string | undefined,
-    questionDic: Record<string, Question>
+    questionMap: Record<string, Question>
   ): Question | undefined {
-    return currentQuestionId && questionDic[currentQuestionId]
-      ? questionDic[currentQuestionId]
+    return currentQuestionId && questionMap[currentQuestionId]
+      ? questionMap[currentQuestionId]
       : undefined;
   }
 
@@ -336,39 +336,39 @@ export class RandomizationService {
    * Priority order: available questions (random) → postponed questions (first match) → clear current.
    *
    * @param randomization - The current randomization state
-   * @param questionDic - Dictionary of all available questions by ID
+   * @param questionMap - Dictionary of all available questions by ID
    * @returns The next question or undefined if no questions available
    *
    * @example
    * ```typescript
-   * // Internally used by updateCurrentQuestionWithNextQuestion
-   * const nextQuestion = this.selectNextQuestion(randomization, questionDictionary);
+   * // Internally used by advanceToNextQuestion
+   * const nextQuestion = this.selectNextQuestion(randomization, questionMaptionary);
    * // Returns: random available question, or first postponed, or undefined
    * ```
    */
   private selectNextQuestion(
     randomization: Randomization,
-    questionDic: Record<string, Question>
+    questionMap: Record<string, Question>
   ): Question | undefined {
     const availableQuestions = this.getActiveQuestions(
       this.randomizationStore.filteredAvailableQuestionList(),
-      questionDic
+      questionMap
     );
 
     if (availableQuestions.length > 0) {
-      return this.selectRandomQuestion(availableQuestions, questionDic);
+      return this.selectRandomQuestion(availableQuestions, questionMap);
     }
 
     const postponedQuestions = this.getActiveQuestions(
       this.randomizationStore.filteredPostponedQuestionList(),
-      questionDic
+      questionMap
     );
 
     if (postponedQuestions.length > 0) {
-      return this.findFirstQuestionForCategoryIdList(
+      return this.findFirstQuestionMatchingCategories(
         randomization.postponedQuestionList.map((pq) => pq.questionId),
         randomization.selectedCategoryIdList,
-        questionDic
+        questionMap
       );
     }
 
@@ -380,29 +380,29 @@ export class RandomizationService {
    * Filters question list to only include active questions.
    *
    * @param questionList - List of question categories to filter
-   * @param questionDic - Dictionary of all available questions by ID
+   * @param questionMap - Dictionary of all available questions by ID
    * @returns Filtered list containing only active questions
    */
   private getActiveQuestions(
     questionList: QuestionCategory[],
-    questionDic: Record<string, Question>
+    questionMap: Record<string, Question>
   ): QuestionCategory[] {
-    return questionList.filter((qc) => questionDic[qc.questionId]?.isActive);
+    return questionList.filter((qc) => questionMap[qc.questionId]?.isActive);
   }
 
   /**
    * Selects a random question from the given list.
    *
    * @param questionList - List of question categories to select from
-   * @param questionDic - Dictionary of all available questions by ID
+   * @param questionMap - Dictionary of all available questions by ID
    * @returns A randomly selected question
    */
   private selectRandomQuestion(
     questionList: QuestionCategory[],
-    questionDic: Record<string, Question>
+    questionMap: Record<string, Question>
   ): Question {
     const randomIndex = Math.floor(Math.random() * questionList.length);
-    return questionDic[questionList[randomIndex].questionId];
+    return questionMap[questionList[randomIndex].questionId];
   }
 
   /**

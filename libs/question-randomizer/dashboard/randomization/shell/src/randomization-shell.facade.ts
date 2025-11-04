@@ -82,9 +82,9 @@ export class RandomizationShellFacade {
   public loadRandomization() {
     effect(() => {
       const userId = this.userStore.uid();
-      const questionDic = this.questionListStore.entities();
-      if (questionDic && userId)
-        this.randomizationService.loadRandomization(userId, questionDic);
+      const questionMap = this.questionListStore.entities();
+      if (questionMap && userId)
+        this.randomizationService.loadRandomization(userId, questionMap);
     });
 
     forkJoin([
@@ -93,10 +93,10 @@ export class RandomizationShellFacade {
         filter(Boolean),
         take(1)
       ),
-    ]).subscribe(([randomization, questionDic]) => {
+    ]).subscribe(([randomization, questionMap]) => {
       if (!randomization.currentQuestion)
-        this.randomizationService.updateCurrentQuestionWithNextQuestion(
-          questionDic
+        this.randomizationService.advanceToNextQuestion(
+          questionMap
         );
     });
   }
@@ -123,11 +123,11 @@ export class RandomizationShellFacade {
     }
 
     randomization = this.randomizationStore.entity();
-    const questionDic = this.questionListStore.entities();
+    const questionMap = this.questionListStore.entities();
 
-    if (randomization && questionDic) {
-      this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        questionDic
+    if (randomization && questionMap) {
+      this.randomizationService.advanceToNextQuestion(
+        questionMap
       );
     }
   }
@@ -161,11 +161,11 @@ export class RandomizationShellFacade {
     }
 
     randomization = this.randomizationStore.entity();
-    const questionDic = this.questionListStore.entities();
+    const questionMap = this.questionListStore.entities();
 
-    if (randomization && questionDic) {
-      this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        questionDic
+    if (randomization && questionMap) {
+      this.randomizationService.advanceToNextQuestion(
+        questionMap
       );
     }
   }
@@ -209,10 +209,10 @@ export class RandomizationShellFacade {
 
     const randomization = this.randomizationStore.entity();
     if (!randomization) return;
-    const questionDic = this.questionListStore.entities();
-    if (!randomization.currentQuestion && questionDic) {
-      this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        questionDic
+    const questionMap = this.questionListStore.entities();
+    if (!randomization.currentQuestion && questionMap) {
+      this.randomizationService.advanceToNextQuestion(
+        questionMap
       );
     }
   }
@@ -228,13 +228,13 @@ export class RandomizationShellFacade {
 
     const randomization = this.randomizationStore.entity();
     if (!randomization) return;
-    const questionDic = this.questionListStore.entities();
+    const questionMap = this.questionListStore.entities();
     if (
       randomization.currentQuestion?.categoryId === categoryId &&
-      questionDic
+      questionMap
     ) {
-      this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        questionDic
+      this.randomizationService.advanceToNextQuestion(
+        questionMap
       );
     }
   }
@@ -259,10 +259,10 @@ export class RandomizationShellFacade {
     this.randomizationStore.addAvailableQuestionsToRandomization(questionList);
 
     const randomization = this.randomizationStore.entity();
-    const questionDic = this.questionListStore.entities();
-    if (randomization && questionDic) {
-      this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        questionDic
+    const questionMap = this.questionListStore.entities();
+    if (randomization && questionMap) {
+      this.randomizationService.advanceToNextQuestion(
+        questionMap
       );
     }
   }

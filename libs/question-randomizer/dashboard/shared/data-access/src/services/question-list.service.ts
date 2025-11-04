@@ -181,13 +181,13 @@ export class QuestionListService {
     usedQuestionList: UsedQuestion[],
     selectedCategoryIdList: string[]
   ): Question | undefined {
-    const questionDic = this.questionListStore.entities();
+    const questionMap = this.questionListStore.entities();
 
-    if (!questionDic) return undefined;
+    if (!questionMap) return undefined;
 
     for (let i = usedQuestionList.length - 1; i >= 0; i--) {
       const usedQuestion = usedQuestionList[i];
-      const question = questionDic[usedQuestion.questionId];
+      const question = questionMap[usedQuestion.questionId];
 
       if (
         question &&
@@ -232,7 +232,7 @@ export class QuestionListService {
       questionId,
       categoryId,
     };
-    await this.randomizationService.updateCategoryQuestionListsCategoryId(
+    await this.randomizationService.updateQuestionCategoryAcrossLists(
       questionCategory
     );
   }
@@ -286,10 +286,10 @@ export class QuestionListService {
   }
 
   private replaceCurrentQuestionWithNext() {
-    const questionDic = this.questionListStore.entities();
-    if (questionDic) {
-      this.randomizationService.updateCurrentQuestionWithNextQuestion(
-        questionDic
+    const questionMap = this.questionListStore.entities();
+    if (questionMap) {
+      this.randomizationService.advanceToNextQuestion(
+        questionMap
       );
     }
   }

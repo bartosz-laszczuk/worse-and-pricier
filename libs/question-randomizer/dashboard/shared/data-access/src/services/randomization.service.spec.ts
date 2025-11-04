@@ -52,7 +52,7 @@ describe('RandomizationService', () => {
     userId: 'user1',
   };
 
-  const mockQuestionDic: Record<string, Question> = {
+  const mockQuestionMap: Record<string, Question> = {
     q1: mockQuestion,
     q2: { ...mockQuestion, id: 'q2', isActive: true },
     q3: { ...mockQuestion, id: 'q3', isActive: false },
@@ -132,7 +132,7 @@ describe('RandomizationService', () => {
     it('should skip loading if not forced and entity exists', async () => {
       randomizationStore.entity.set(mockRandomization);
 
-      await service.loadRandomization('user1', mockQuestionDic, false);
+      await service.loadRandomization('user1', mockQuestionMap, false);
 
       expect(randomizationStore.startLoading).not.toHaveBeenCalled();
       expect(randomizationRepositoryService.getRandomization).not.toHaveBeenCalled();
@@ -142,7 +142,7 @@ describe('RandomizationService', () => {
       randomizationRepositoryService.getRandomization.mockResolvedValue(null);
       randomizationRepositoryService.createRandomization.mockResolvedValue('newRandId');
 
-      await service.loadRandomization('user1', mockQuestionDic);
+      await service.loadRandomization('user1', mockQuestionMap);
 
       expect(randomizationStore.startLoading).toHaveBeenCalled();
       expect(randomizationRepositoryService.createRandomization).toHaveBeenCalledWith('user1');
@@ -171,7 +171,7 @@ describe('RandomizationService', () => {
       selectedCategoryListRepositoryService.getSelectedCategoryIdListForRandomization.mockResolvedValue(['cat1']);
       randomizationMapperService.mapGetRandomizationResponseToRandomization.mockReturnValue(mockRandomization);
 
-      await service.loadRandomization('user1', mockQuestionDic);
+      await service.loadRandomization('user1', mockQuestionMap);
 
       expect(randomizationMapperService.mapGetRandomizationResponseToRandomization).toHaveBeenCalled();
       expect(randomizationStore.setRandomization).toHaveBeenCalledWith(mockRandomization);
@@ -180,15 +180,15 @@ describe('RandomizationService', () => {
     it('should handle errors', async () => {
       randomizationRepositoryService.getRandomization.mockRejectedValue(new Error('Network error'));
 
-      await service.loadRandomization('user1', mockQuestionDic);
+      await service.loadRandomization('user1', mockQuestionMap);
 
       expect(randomizationStore.logError).toHaveBeenCalledWith('Network error');
     });
   });
 
-  describe('updateCurrentQuestionWithNextQuestion', () => {
+  describe('advanceToNextQuestion', () => {
     it('should return early if no randomization exists', async () => {
-      await service.updateCurrentQuestionWithNextQuestion(mockQuestionDic);
+      await service.advanceToNextQuestion(mockQuestionMap);
 
       expect(randomizationStore.setCurrentQuestion).not.toHaveBeenCalled();
     });
@@ -200,7 +200,7 @@ describe('RandomizationService', () => {
       ]);
       randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
 
-      await service.updateCurrentQuestionWithNextQuestion(mockQuestionDic);
+      await service.advanceToNextQuestion(mockQuestionMap);
 
       expect(randomizationStore.setCurrentQuestion).toHaveBeenCalledWith(mockQuestion);
     });
@@ -211,7 +211,7 @@ describe('RandomizationService', () => {
       randomizationStore.filteredPostponedQuestionList.mockReturnValue([]);
       randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
 
-      await service.updateCurrentQuestionWithNextQuestion(mockQuestionDic);
+      await service.advanceToNextQuestion(mockQuestionMap);
 
       expect(randomizationStore.setCurrentQuestion).toHaveBeenCalledWith(undefined);
     });
@@ -232,10 +232,10 @@ describe('RandomizationService', () => {
       ]);
       randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
 
-      await service.updateCurrentQuestionWithNextQuestion(mockQuestionDic);
+      await service.advanceToNextQuestion(mockQuestionMap);
 
       // Should select q1 (active), not q3 (inactive)
-      expect(randomizationStore.setCurrentQuestion).toHaveBeenCalledWith(mockQuestionDic['q1']);
+      expect(randomizationStore.setCurrentQuestion).toHaveBeenCalledWith(mockQuestionMap['q1']);
     });
   });
 
@@ -259,7 +259,7 @@ describe('RandomizationService', () => {
     });
   });
 
-  describe('updateCategoryQuestionListsCategoryId', () => {
+  describe('updateQuestionCategoryAcrossLists', () => {
     const mockQuestionCategory: QuestionCategory = {
       questionId: 'q1',
       categoryId: 'cat2',
@@ -269,7 +269,7 @@ describe('RandomizationService', () => {
       postponedQuestionListRepositoryService.updatePostponedQuestionCategoryId.mockResolvedValue(undefined);
       usedQuestionListRepositoryService.updateUsedQuestionCategoryId.mockResolvedValue(undefined);
 
-      await service.updateCategoryQuestionListsCategoryId(mockQuestionCategory);
+      await service.updateQuestionCategoryAcrossLists(mockQuestionCategory);
 
       expect(randomizationStore.startLoading).toHaveBeenCalled();
       expect(randomizationStore.updateQuestionCategoryListsCategoryId).toHaveBeenCalledWith(mockQuestionCategory);
