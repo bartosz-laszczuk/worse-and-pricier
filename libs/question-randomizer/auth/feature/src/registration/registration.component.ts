@@ -5,10 +5,11 @@ import { EmailPasswordCredentials } from '@worse-and-pricier/question-randomizer
 import { InputTextComponent } from '@worse-and-pricier/design-system-ui';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegistrationService } from '@worse-and-pricier/question-randomizer-auth-data-access';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'lib-registration',
-  imports: [InputTextComponent, ReactiveFormsModule],
+  imports: [InputTextComponent, ReactiveFormsModule, TranslocoModule],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
   providers: [RegistrationFacade, RegistrationService],

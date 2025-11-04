@@ -26,6 +26,7 @@ import { OptionItem } from '@worse-and-pricier/design-system-tokens';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputSelectComponent implements ControlValueAccessor {
+  public label = input<string>('');
   public options = input<OptionItem[] | undefined>();
   public placeholder = input('');
   public changed = output<string | number | boolean | null>();

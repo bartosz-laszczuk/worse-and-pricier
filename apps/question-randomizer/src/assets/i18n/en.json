@@ -1,0 +1,251 @@
+{
+  "common": {
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "add": "Add",
+      "create": "Create",
+      "update": "Update",
+      "confirm": "Confirm",
+      "close": "Close",
+      "back": "Back",
+      "next": "Next",
+      "submit": "Submit",
+      "search": "Search",
+      "filter": "Filter",
+      "clear": "Clear",
+      "reset": "Reset",
+      "export": "Export",
+      "import": "Import"
+    },
+    "labels": {
+      "yes": "Yes",
+      "no": "No",
+      "loading": "Loading...",
+      "noData": "No data available",
+      "error": "An error occurred",
+      "success": "Success!",
+      "warning": "Warning",
+      "info": "Information",
+      "total": "Total",
+      "selected": "Selected",
+      "all": "All",
+      "none": "None"
+    },
+    "validation": {
+      "required": "This field is required",
+      "email": "Invalid email address",
+      "minLength": "Input is too short",
+      "maxLength": "Input is too long",
+      "pattern": "Invalid format",
+      "min": "Value is too small",
+      "max": "Value is too large"
+    },
+    "messages": {
+      "confirmDelete": "Are you sure you want to delete this item?",
+      "unsavedChanges": "You have unsaved changes. Do you want to discard them?",
+      "operationSuccess": "Operation completed successfully",
+      "operationFailed": "Operation failed. Please try again."
+    }
+  },
+  "app": {
+    "title": "Question Randomizer",
+    "description": "Interview preparation tool"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter password",
+      "submitButton": "Submit",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "registration": {
+      "title": "Registration",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter password",
+      "passwordRepeatLabel": "Repeat password",
+      "passwordRepeatPlaceholder": "Enter password",
+      "submitButton": "Submit",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "email": {
+      "verify": {
+        "title": "Please, confirm your email",
+        "message": "Verification link has been sent to your email address",
+        "resendLink": "Resend verification link",
+        "checkInbox": "Check your inbox"
+      },
+      "verified": {
+        "title": "Email verified",
+        "message": "Your email has been successfully verified",
+        "continueButton": "Continue to application"
+      },
+      "notVerified": {
+        "title": "Your email is not verified!",
+        "message": "Please, confirm your email",
+        "verifiedButton": "I've verified my email",
+        "signOutButton": "Sign out"
+      }
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password",
+      "emailAlreadyInUse": "Email is already in use",
+      "weakPassword": "Password is too weak",
+      "userNotFound": "User not found",
+      "wrongPassword": "Wrong password",
+      "tooManyRequests": "Too many requests. Please try again later",
+      "networkError": "Network error. Please check your connection",
+      "unknownError": "An unknown error occurred"
+    }
+  },
+  "dashboard": {
+    "header": {
+      "title": "Randomizer",
+      "languages": {
+        "english": "English",
+        "polish": "Polish"
+      }
+    },
+    "navigation": {
+      "randomization": "Randomization",
+      "questions": "Questions",
+      "categories": "Categories",
+      "qualifications": "Qualifications",
+      "interview": "Interview",
+      "settings": "Settings"
+    },
+    "actions": {
+      "signOut": "Sign out",
+      "profile": "Profile",
+      "help": "Help"
+    }
+  },
+  "question": {
+    "title": "Questions",
+    "search": {
+      "placeholder": "Enter search text"
+    },
+    "actions": {
+      "import": "Import",
+      "export": "Export",
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "table": {
+      "columns": {
+        "question": "Question",
+        "answer": "Answer",
+        "category": "Category",
+        "qualification": "Qualification",
+        "active": "Active",
+        "tags": "Tags"
+      }
+    },
+    "dialog": {
+      "addTitle": "Add Question",
+      "editTitle": "Edit Question",
+      "questionLabel": "Question",
+      "questionPlaceholder": "Enter question text",
+      "answerLabel": "Answer",
+      "answerPlaceholder": "Enter answer",
+      "answerPlLabel": "Answer (Polish)",
+      "answerPlPlaceholder": "Enter Polish answer",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select category",
+      "qualificationLabel": "Qualification",
+      "qualificationPlaceholder": "Select qualification",
+      "tagsLabel": "Tags",
+      "tagsPlaceholder": "Enter tags (comma-separated)",
+      "activeLabel": "Active",
+      "submitButton": "Save",
+      "cancelButton": "Cancel"
+    },
+    "messages": {
+      "invalidFile": "Please import a valid .csv file.",
+      "importSuccess": "Questions imported successfully",
+      "importFailed": "Failed to import questions",
+      "exportSuccess": "Questions exported successfully",
+      "exportFailed": "Failed to export questions",
+      "createSuccess": "Question created successfully",
+      "createFailed": "Failed to create question",
+      "updateSuccess": "Question updated successfully",
+      "updateFailed": "Failed to update question",
+      "deleteSuccess": "Question deleted successfully",
+      "deleteFailed": "Failed to delete question",
+      "confirmDelete": "Are you sure you want to delete this question?"
+    }
+  },
+  "category": {
+    "title": "Categories",
+    "search": {
+      "placeholder": "Enter search text"
+    },
+    "actions": {
+      "import": "Import",
+      "export": "Export",
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "table": {
+      "columns": {
+        "name": "Name",
+        "description": "Description",
+        "questionCount": "Questions"
+      }
+    },
+    "dialog": {
+      "addTitle": "Add Category",
+      "editTitle": "Edit Category",
+      "nameLabel": "Name",
+      "namePlaceholder": "Enter category name",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Enter description",
+      "submitButton": "Save",
+      "cancelButton": "Cancel"
+    },
+    "messages": {
+      "invalidFile": "Please import a valid .csv file.",
+      "importSuccess": "Categories imported successfully",
+      "importFailed": "Failed to import categories",
+      "exportSuccess": "Categories exported successfully",
+      "exportFailed": "Failed to export categories",
+      "createSuccess": "Category created successfully",
+      "createFailed": "Failed to create category",
+      "updateSuccess": "Category updated successfully",
+      "updateFailed": "Failed to update category",
+      "deleteSuccess": "Category deleted successfully",
+      "deleteFailed": "Failed to delete category",
+      "confirmDelete": "Are you sure you want to delete this category?"
+    }
+  },
+  "randomization": {
+    "progress": {
+      "title": "Progress",
+      "answered": "ANSWERED",
+      "ahead": "AHEAD",
+      "postponed": "POSTPONED"
+    },
+    "question": {
+      "title": "Question",
+      "noQuestions": "No questions to display"
+    },
+    "categories": {
+      "title": "Categories"
+    },
+    "answer": {
+      "title": "Answer"
+    }
+  }
+}

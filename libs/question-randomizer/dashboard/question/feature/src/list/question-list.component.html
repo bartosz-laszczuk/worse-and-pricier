@@ -2,24 +2,19 @@
 <div class="search">
   <lib-input-text
     type="text"
-    placeholder="Enter search text"
+    [placeholder]="'question.search.placeholder' | transloco"
     [icon]="'search'"
     [formControl]="searchTextControl"
   ></lib-input-text>
-  <!-- <div class="buttons">
-    <lib-button (click)="onImport()" [type]="'light'">Import</lib-button>
-    <lib-button (click)="onExport()" [type]="'dark'">Export</lib-button>
-    <lib-button (click)="onAdd()">Add</lib-button>
-  </div> -->
   <lib-button-group class="buttons">
-    <lib-button (click)="onImport()" [type]="'light'">Import</lib-button>
-    <lib-button (click)="onExport()" [type]="'dark'">Export</lib-button>
-    <lib-button (click)="onAdd()">Add</lib-button>
+    <lib-button (click)="onImport()" [type]="'light'">{{ 'question.actions.import' | transloco }}</lib-button>
+    <lib-button (click)="onExport()" [type]="'dark'">{{ 'question.actions.export' | transloco }}</lib-button>
+    <lib-button (click)="onAdd()">{{ 'question.actions.add' | transloco }}</lib-button>
   </lib-button-group>
 </div>
 <lib-table
   [data]="questions()"
-  [columns]="columns"
+  [columns]="columns()"
   [sortDefinition]="sort()"
   [truncateHeaders]="true"
   [totalCount]="filteredCount()"

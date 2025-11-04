@@ -1,4 +1,5 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { UserService } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import {
   CategoryListService,
@@ -8,6 +9,7 @@ import {
   QuestionListService,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
 import { forkJoin } from 'rxjs';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Injectable()
 export class DashboardShellFacade {
@@ -17,15 +19,28 @@ export class DashboardShellFacade {
   private readonly categoryListStore = inject(CategoryListStore);
   private readonly qualificationListService = inject(QualificationListService);
   private readonly qualificationListStore = inject(QualificationListStore);
+  private readonly translocoService = inject(TranslocoService);
 
-  public currentLanguage = signal('english'); // TODO this.languageService.currentLanguage;
+  public currentLanguage = toSignal(this.translocoService.langChanges$, {
+    initialValue: this.translocoService.getActiveLang(),
+  });
+
+  constructor() {
+    // Load language from localStorage on initialization
+    const savedLanguage = localStorage.getItem('language');
+    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'pl')) {
+      this.translocoService.setActiveLang(savedLanguage);
+    }
+  }
 
   public signOut() {
     this.userService.signOut();
   }
 
-  public changeLanguage(/* _language: string, TODO Language */) {
-    // this.languageService.setLanguage(language);
+  public changeLanguage(language: string) {
+    const langCode = language === 'english' ? 'en' : 'pl';
+    this.translocoService.setActiveLang(langCode);
+    localStorage.setItem('language', langCode);
   }
 
   public loadLists() {

@@ -41,7 +41,12 @@
       "Bash(del \"C:\\D\\Repositories\\worse-and-pricier\\docs\\COMMANDS.md\")",
       "Bash(rm:*)",
       "Bash(ping:*)",
-      "Bash(npx nx test question-randomizer-dashboard-shared-data-access)"
+      "Bash(npx nx test question-randomizer-dashboard-shared-data-access)",
+      "WebFetch(domain:jsverse.gitbook.io)",
+      "Bash(npm install:*)",
+      "Bash(if exist \"apps\\question-randomizer\\src\\assets\\i18n\" echo Directory exists)",
+      "Bash(awk:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

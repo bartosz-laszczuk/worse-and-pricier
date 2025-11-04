@@ -18,6 +18,7 @@ import {
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { OptionItem } from '@worse-and-pricier/design-system-ui';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { TranslocoModule } from '@jsverse/transloco';
 
 export interface EditQuestionDialogData {
   question: Question;
@@ -42,14 +43,17 @@ interface EditQuestionForm {
     InputTextComponent,
     ReactiveFormsModule,
     InputSelectComponent,
-    InputRichTextEditorComponent
+    InputRichTextEditorComponent,
+    TranslocoModule,
   ],
   templateUrl: './edit-question.component.html',
   styleUrl: './edit-question.component.scss',
 })
 export class EditQuestionComponent {
   private readonly dialogData = inject(DIALOG_DATA) as EditQuestionDialogData;
-  private readonly dialogRef = inject(DialogRef<EditQuestionFormValue | undefined>);
+  private readonly dialogRef = inject(
+    DialogRef<EditQuestionFormValue | undefined>
+  );
   private readonly fb = inject(FormBuilder);
 
   // Initialize once - no getters to avoid re-execution on every change detection
@@ -86,7 +90,8 @@ export class EditQuestionComponent {
   public constructor() {
     // Initialize data from dialog once
     this.categoryOptionItemList = this.dialogData.categoryOptionItemList;
-    this.qualificationOptionItemList = this.dialogData.qualificationOptionItemList;
+    this.qualificationOptionItemList =
+      this.dialogData.qualificationOptionItemList;
 
     // Set form values once
     const question = this.dialogData.question;

@@ -20,6 +20,11 @@
           {
             "glob": "**/*",
             "input": "apps/question-randomizer/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/question-randomizer/src/assets",
+            "output": "/assets"
           }
         ],
         "styles": [

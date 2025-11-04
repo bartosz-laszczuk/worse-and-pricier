@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
 import {
   EditQuestionFormValue,
@@ -22,7 +22,7 @@ import {
   TableComponent,
 } from '@worse-and-pricier/design-system-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime, take } from 'rxjs';
 import {
   QuestionListExportService,
@@ -30,6 +30,7 @@ import {
 } from '@worse-and-pricier/question-randomizer-dashboard-question-data-access';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { Dialog } from '@angular/cdk/dialog';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'lib-question-list',
@@ -43,6 +44,7 @@ import { Dialog } from '@angular/cdk/dialog';
     FormatTagsPipe,
     ButtonComponent,
     ButtonGroupComponent,
+    TranslocoModule,
   ],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
@@ -56,6 +58,7 @@ import { Dialog } from '@angular/cdk/dialog';
 export class QuestionListComponent {
   private readonly questionListFacade = inject(QuestionListFacade);
   private readonly dialog = inject(Dialog);
+  private readonly translocoService = inject(TranslocoService);
 
   public questions = this.questionListFacade.questions;
   public sort = this.questionListFacade.sort;
@@ -69,24 +72,36 @@ export class QuestionListComponent {
   });
   public filteredCount = this.questionListFacade.filteredCount;
 
-  public columns: IColumn[] = [
-    {
-      displayName: 'Question',
-      propertyName: 'question',
-      sortable: true,
-      width: '35%',
-    },
-    { displayName: 'Answer', propertyName: 'answer', width: '25%' },
-    { displayName: 'Category', propertyName: 'categoryName' },
-    {
-      displayName: 'Active',
-      propertyName: 'isActive',
-      width: '5.5rem',
-      center: true,
-    },
-    { displayName: '', propertyName: 'edit', width: '3.5rem', center: true },
-    { displayName: '', propertyName: 'delete', width: '3.5rem', center: true },
-  ];
+  private readonly translationLoaded = toSignal(this.translocoService.events$);
+
+  public columns = computed<IColumn[]>(() => {
+    this.translationLoaded();
+    return [
+      {
+        displayName: this.translocoService.translate('question.table.columns.question'),
+        propertyName: 'question',
+        sortable: true,
+        width: '35%',
+      },
+      {
+        displayName: this.translocoService.translate('question.table.columns.answer'),
+        propertyName: 'answer',
+        width: '25%'
+      },
+      {
+        displayName: this.translocoService.translate('question.table.columns.category'),
+        propertyName: 'categoryName'
+      },
+      {
+        displayName: this.translocoService.translate('question.table.columns.active'),
+        propertyName: 'isActive',
+        width: '5.5rem',
+        center: true,
+      },
+      { displayName: '', propertyName: 'edit', width: '3.5rem', center: true },
+      { displayName: '', propertyName: 'delete', width: '3.5rem', center: true },
+    ];
+  });
 
   public constructor() {
     toObservable(this.questionListFacade.searchText)

@@ -1,4 +1,4 @@
-<h1>Your email is not verified!</h1>
-<p>Please, confirm your email</p>
-<button (click)="navigateToDashboard()">I've verified my email</button>
-<button (click)="onSignOut()">Sign out</button>
+<h1>{{ 'auth.email.notVerified.title' | transloco }}</h1>
+<p>{{ 'auth.email.notVerified.message' | transloco }}</p>
+<button (click)="navigateToDashboard()">{{ 'auth.email.notVerified.verifiedButton' | transloco }}</button>
+<button (click)="onSignOut()">{{ 'auth.email.notVerified.signOutButton' | transloco }}</button>

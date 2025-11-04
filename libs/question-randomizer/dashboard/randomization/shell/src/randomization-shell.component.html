@@ -1,20 +1,20 @@
 @if(randomization(); as randomization) {
 <div class="grid-container">
-  <lib-card class="item1" [title]="'Progress'">
+  <lib-card class="item1" [title]="'randomization.progress.title' | transloco">
     <div card-buttons>
       <!-- <lib-button-text-icon (click)="onReset(randomization.id)">Reset</lib-button-text-icon> -->
       <lib-button-icon (click)="onReset(randomization.id)" [icon]="'rotate-ccw'" [type]="'dark'"
         [animation]="'rotate360-counter'">Reset</lib-button-icon>
     </div>
     <div class="status-units margin-bottom-24">
-      <lib-status-card [count]="usedQuestionListLength()" [title]="'ANSWERED'" [type]="'gray-800'"></lib-status-card>
-      <lib-status-card [count]="availableQuestionListLength()" [title]="'AHEAD'" [type]="'gray-600'"></lib-status-card>
-      <lib-status-card [count]="postponedQuestionListLength()" [title]="'POSTPONED'"></lib-status-card>
+      <lib-status-card [count]="usedQuestionListLength()" [title]="'randomization.progress.answered' | transloco" [type]="'gray-800'"></lib-status-card>
+      <lib-status-card [count]="availableQuestionListLength()" [title]="'randomization.progress.ahead' | transloco" [type]="'gray-600'"></lib-status-card>
+      <lib-status-card [count]="postponedQuestionListLength()" [title]="'randomization.progress.postponed' | transloco"></lib-status-card>
     </div>
     <lib-status-bar [postponed]="postponedQuestionListLength()" [ahead]="availableQuestionListLength()"
       [answered]="usedQuestionListLength()"></lib-status-bar>
   </lib-card>
-  <lib-card class="item2" [title]="'Question'">
+  <lib-card class="item2" [title]="'randomization.question.title' | transloco">
     <div title-button>
       <lib-button-icon (click)="onEditQuestion()" [icon]="'edit'" [type]="'transparent'"></lib-button-icon>
     </div>
@@ -34,10 +34,10 @@
     <p>{{ question.question }}</p>
     <p>{{ question.tags | formatTags }}</p>
     } @else {
-    <p>No questions to display</p>
+    <p>{{ 'randomization.question.noQuestions' | transloco }}</p>
     }
   </lib-card>
-  <lib-card class="item3" [title]="'Categories'">
+  <lib-card class="item3" [title]="'randomization.categories.title' | transloco">
     <lib-input-check-group [items]="categoryOptionItemList()" [value]="selectedCategoryIdList()" (checkboxChanged)="
         onCheckboxChange(
           $event.value.toString(),
@@ -46,7 +46,7 @@
         )
       "></lib-input-check-group>
   </lib-card>
-  <lib-card class="item4" [title]="'Answer'">
+  <lib-card class="item4" [title]="'randomization.answer.title' | transloco">
     <div card-buttons>
       <lib-button-icon (click)="onToggleAnswer(randomization.showAnswer, randomization)"
         [icon]="randomization.showAnswer ? 'eye-off' : 'eye'"

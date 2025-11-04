@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
 import { EditCategoryComponent } from '@worse-and-pricier/question-randomizer-dashboard-category-ui';
 import { CategoryListFacade } from './category-list.facade';
@@ -13,9 +13,10 @@ import {
   TableComponent,
 } from '@worse-and-pricier/design-system-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime, take } from 'rxjs';
 import { SvgIconComponent } from 'angular-svg-icon';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'lib-category-list',
@@ -27,6 +28,7 @@ import { SvgIconComponent } from 'angular-svg-icon';
     ReactiveFormsModule,
     ColumnDirective,
     ButtonComponent,
+    TranslocoModule,
   ],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',
@@ -35,6 +37,8 @@ import { SvgIconComponent } from 'angular-svg-icon';
 })
 export class CategoryListComponent {
   private readonly categoryListFacade = inject(CategoryListFacade);
+  private readonly translocoService = inject(TranslocoService);
+
   public categories = this.categoryListFacade.categories;
   public sort = this.categoryListFacade.sort;
   public page = this.categoryListFacade.page;
@@ -44,15 +48,20 @@ export class CategoryListComponent {
     nonNullable: true,
   });
 
-  public columns: IColumn[] = [
-    {
-      displayName: 'Name',
-      propertyName: 'name',
-      sortable: true,
-    },
-    { displayName: '', propertyName: 'edit', width: '3.5rem', center: true },
-    { displayName: '', propertyName: 'delete', width: '3.5rem', center: true },
-  ];
+  private readonly translationLoaded = toSignal(this.translocoService.events$);
+
+  public columns = computed<IColumn[]>(() => {
+    this.translationLoaded();
+    return [
+      {
+        displayName: this.translocoService.translate('category.table.columns.name'),
+        propertyName: 'name',
+        sortable: true,
+      },
+      { displayName: '', propertyName: 'edit', width: '3.5rem', center: true },
+      { displayName: '', propertyName: 'delete', width: '3.5rem', center: true },
+    ];
+  });
 
   public constructor() {
     toObservable(this.categoryListFacade.searchText)

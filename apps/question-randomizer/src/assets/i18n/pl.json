@@ -1,0 +1,251 @@
+{
+  "common": {
+    "actions": {
+      "save": "Zapisz",
+      "cancel": "Anuluj",
+      "delete": "Usuń",
+      "edit": "Edytuj",
+      "add": "Dodaj",
+      "create": "Utwórz",
+      "update": "Zaktualizuj",
+      "confirm": "Potwierdź",
+      "close": "Zamknij",
+      "back": "Wstecz",
+      "next": "Dalej",
+      "submit": "Wyślij",
+      "search": "Szukaj",
+      "filter": "Filtruj",
+      "clear": "Wyczyść",
+      "reset": "Resetuj",
+      "export": "Eksportuj",
+      "import": "Importuj"
+    },
+    "labels": {
+      "yes": "Tak",
+      "no": "Nie",
+      "loading": "Ładowanie...",
+      "noData": "Brak danych",
+      "error": "Wystąpił błąd",
+      "success": "Sukces!",
+      "warning": "Ostrzeżenie",
+      "info": "Informacja",
+      "total": "Razem",
+      "selected": "Wybrano",
+      "all": "Wszystkie",
+      "none": "Brak"
+    },
+    "validation": {
+      "required": "To pole jest wymagane",
+      "email": "Nieprawidłowy adres email",
+      "minLength": "Wprowadzona wartość jest za krótka",
+      "maxLength": "Wprowadzona wartość jest za długa",
+      "pattern": "Nieprawidłowy format",
+      "min": "Wartość jest za mała",
+      "max": "Wartość jest za duża"
+    },
+    "messages": {
+      "confirmDelete": "Czy na pewno chcesz usunąć ten element?",
+      "unsavedChanges": "Masz niezapisane zmiany. Czy chcesz je odrzucić?",
+      "operationSuccess": "Operacja zakończona pomyślnie",
+      "operationFailed": "Operacja nie powiodła się. Spróbuj ponownie."
+    }
+  },
+  "app": {
+    "title": "Losowanie Pytań",
+    "description": "Narzędzie do przygotowania do rozmowy kwalifikacyjnej"
+  },
+  "auth": {
+    "login": {
+      "title": "Logowanie",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Wprowadź email",
+      "passwordLabel": "Hasło",
+      "passwordPlaceholder": "Wprowadź hasło",
+      "submitButton": "Wyślij",
+      "forgotPassword": "Zapomniałeś hasła?",
+      "noAccount": "Nie masz konta?",
+      "signUp": "Zarejestruj się"
+    },
+    "registration": {
+      "title": "Rejestracja",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Wprowadź email",
+      "passwordLabel": "Hasło",
+      "passwordPlaceholder": "Wprowadź hasło",
+      "passwordRepeatLabel": "Powtórz hasło",
+      "passwordRepeatPlaceholder": "Wprowadź hasło",
+      "submitButton": "Wyślij",
+      "haveAccount": "Masz już konto?",
+      "signIn": "Zaloguj się"
+    },
+    "email": {
+      "verify": {
+        "title": "Proszę, potwierdź swój email",
+        "message": "Link weryfikacyjny został wysłany na Twój adres email",
+        "resendLink": "Wyślij ponownie link weryfikacyjny",
+        "checkInbox": "Sprawdź swoją skrzynkę pocztową"
+      },
+      "verified": {
+        "title": "Email zweryfikowany",
+        "message": "Twój email został pomyślnie zweryfikowany",
+        "continueButton": "Kontynuuj do aplikacji"
+      },
+      "notVerified": {
+        "title": "Twój email nie jest zweryfikowany!",
+        "message": "Proszę, potwierdź swój email",
+        "verifiedButton": "Zweryfikowałem swój email",
+        "signOutButton": "Wyloguj się"
+      }
+    },
+    "errors": {
+      "invalidCredentials": "Nieprawidłowy email lub hasło",
+      "emailAlreadyInUse": "Email jest już w użyciu",
+      "weakPassword": "Hasło jest za słabe",
+      "userNotFound": "Użytkownik nie znaleziony",
+      "wrongPassword": "Nieprawidłowe hasło",
+      "tooManyRequests": "Za dużo żądań. Spróbuj ponownie później",
+      "networkError": "Błąd sieci. Sprawdź swoje połączenie",
+      "unknownError": "Wystąpił nieznany błąd"
+    }
+  },
+  "dashboard": {
+    "header": {
+      "title": "Losowanie",
+      "languages": {
+        "english": "Angielski",
+        "polish": "Polski"
+      }
+    },
+    "navigation": {
+      "randomization": "Losowanie",
+      "questions": "Pytania",
+      "categories": "Kategorie",
+      "qualifications": "Kwalifikacje",
+      "interview": "Rozmowa kwalifikacyjna",
+      "settings": "Ustawienia"
+    },
+    "actions": {
+      "signOut": "Wyloguj się",
+      "profile": "Profil",
+      "help": "Pomoc"
+    }
+  },
+  "question": {
+    "title": "Pytania",
+    "search": {
+      "placeholder": "Wprowadź tekst wyszukiwania"
+    },
+    "actions": {
+      "import": "Importuj",
+      "export": "Eksportuj",
+      "add": "Dodaj",
+      "edit": "Edytuj",
+      "delete": "Usuń"
+    },
+    "table": {
+      "columns": {
+        "question": "Pytanie",
+        "answer": "Odpowiedź",
+        "category": "Kategoria",
+        "qualification": "Kwalifikacja",
+        "active": "Aktywne",
+        "tags": "Tagi"
+      }
+    },
+    "dialog": {
+      "addTitle": "Dodaj pytanie",
+      "editTitle": "Edytuj pytanie",
+      "questionLabel": "Pytanie",
+      "questionPlaceholder": "Wprowadź tekst pytania",
+      "answerLabel": "Odpowiedź",
+      "answerPlaceholder": "Wprowadź odpowiedź",
+      "answerPlLabel": "Odpowiedź (po polsku)",
+      "answerPlPlaceholder": "Wprowadź odpowiedź w języku polskim",
+      "categoryLabel": "Kategoria",
+      "categoryPlaceholder": "Wybierz kategorię",
+      "qualificationLabel": "Kwalifikacja",
+      "qualificationPlaceholder": "Wybierz kwalifikację",
+      "tagsLabel": "Tagi",
+      "tagsPlaceholder": "Wprowadź tagi (rozdzielone przecinkami)",
+      "activeLabel": "Aktywne",
+      "submitButton": "Zapisz",
+      "cancelButton": "Anuluj"
+    },
+    "messages": {
+      "invalidFile": "Proszę zaimportować prawidłowy plik .csv.",
+      "importSuccess": "Pytania zaimportowane pomyślnie",
+      "importFailed": "Nie udało się zaimportować pytań",
+      "exportSuccess": "Pytania wyeksportowane pomyślnie",
+      "exportFailed": "Nie udało się wyeksportować pytań",
+      "createSuccess": "Pytanie utworzone pomyślnie",
+      "createFailed": "Nie udało się utworzyć pytania",
+      "updateSuccess": "Pytanie zaktualizowane pomyślnie",
+      "updateFailed": "Nie udało się zaktualizować pytania",
+      "deleteSuccess": "Pytanie usunięte pomyślnie",
+      "deleteFailed": "Nie udało się usunąć pytania",
+      "confirmDelete": "Czy na pewno chcesz usunąć to pytanie?"
+    }
+  },
+  "category": {
+    "title": "Kategorie",
+    "search": {
+      "placeholder": "Wprowadź tekst wyszukiwania"
+    },
+    "actions": {
+      "import": "Importuj",
+      "export": "Eksportuj",
+      "add": "Dodaj",
+      "edit": "Edytuj",
+      "delete": "Usuń"
+    },
+    "table": {
+      "columns": {
+        "name": "Nazwa",
+        "description": "Opis",
+        "questionCount": "Pytania"
+      }
+    },
+    "dialog": {
+      "addTitle": "Dodaj kategorię",
+      "editTitle": "Edytuj kategorię",
+      "nameLabel": "Nazwa",
+      "namePlaceholder": "Wprowadź nazwę kategorii",
+      "descriptionLabel": "Opis",
+      "descriptionPlaceholder": "Wprowadź opis",
+      "submitButton": "Zapisz",
+      "cancelButton": "Anuluj"
+    },
+    "messages": {
+      "invalidFile": "Proszę zaimportować prawidłowy plik .csv.",
+      "importSuccess": "Kategorie zaimportowane pomyślnie",
+      "importFailed": "Nie udało się zaimportować kategorii",
+      "exportSuccess": "Kategorie wyeksportowane pomyślnie",
+      "exportFailed": "Nie udało się wyeksportować kategorii",
+      "createSuccess": "Kategoria utworzona pomyślnie",
+      "createFailed": "Nie udało się utworzyć kategorii",
+      "updateSuccess": "Kategoria zaktualizowana pomyślnie",
+      "updateFailed": "Nie udało się zaktualizować kategorii",
+      "deleteSuccess": "Kategoria usunięta pomyślnie",
+      "deleteFailed": "Nie udało się usunąć kategorii",
+      "confirmDelete": "Czy na pewno chcesz usunąć tę kategorię?"
+    }
+  },
+  "randomization": {
+    "progress": {
+      "title": "Postęp",
+      "answered": "ODPOWIEDZIANE",
+      "ahead": "DO PRZODU",
+      "postponed": "ODROCZONE"
+    },
+    "question": {
+      "title": "Pytanie",
+      "noQuestions": "Brak pytań do wyświetlenia"
+    },
+    "categories": {
+      "title": "Kategorie"
+    },
+    "answer": {
+      "title": "Odpowiedź"
+    }
+  }
+}

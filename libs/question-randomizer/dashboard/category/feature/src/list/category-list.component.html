@@ -2,17 +2,17 @@
 <div class="search">
   <lib-input-text
     type="text"
-    placeholder="Enter search text"
+    [placeholder]="'category.search.placeholder' | transloco"
     [icon]="'search'"
     [formControl]="searchTextControl"
   ></lib-input-text>
   <div class="buttons">
-    <lib-button (click)="onAdd()">Add</lib-button>
+    <lib-button (click)="onAdd()">{{ 'category.actions.add' | transloco }}</lib-button>
   </div>
 </div>
 <lib-table
   [data]="categories"
-  [columns]="columns"
+  [columns]="columns()"
   [sortDefinition]="sort()"
   [truncateHeaders]="true"
   [totalCount]="filteredCount()"

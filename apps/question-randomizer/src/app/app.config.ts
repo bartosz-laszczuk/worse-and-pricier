@@ -9,6 +9,8 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideQuillConfig } from 'ngx-quill/config';
 import { provideAngularSvgIcon } from 'angular-svg-icon';
 import { provideHttpClient } from '@angular/common/http';
+import { provideTransloco } from '@jsverse/transloco';
+import { TranslocoHttpLoader } from './transloco-loader';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,6 +32,15 @@ export const appConfig: ApplicationConfig = {
           ['link', 'image'],
         ],
       },
+    }),
+    provideTransloco({
+      config: {
+        availableLangs: ['en', 'pl'],
+        defaultLang: 'en',
+        reRenderOnLangChange: true,
+        prodMode: environment.production,
+      },
+      loader: TranslocoHttpLoader,
     }),
   ],
 };

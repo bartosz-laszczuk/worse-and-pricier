@@ -5,10 +5,11 @@ import {
   UserService,
   UserStore,
 } from '@worse-and-pricier/question-randomizer-shared-data-access';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'lib-email-verified',
-  imports: [RouterModule],
+  imports: [RouterModule, TranslocoModule],
   templateUrl: './email-verified.component.html',
   styleUrl: './email-verified.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

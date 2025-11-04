@@ -1,32 +1,21 @@
 <header>
-  <h2 class="header">Randomizer</h2>
+  <h2 class="header">{{ 'dashboard.header.title' | transloco }}</h2>
   <lib-button-toggle-group
-    [value]="currentLanguage()"
+    [value]="languageToggleValue()"
     (toggled)="changeLanguage.emit($event ?? '')"
   >
-    <lib-button-toggle value="english">English</lib-button-toggle>
-    <lib-button-toggle value="polish">Polish</lib-button-toggle>
+    <lib-button-toggle value="english">{{ 'dashboard.header.languages.english' | transloco }}</lib-button-toggle>
+    <lib-button-toggle value="polish">{{ 'dashboard.header.languages.polish' | transloco }}</lib-button-toggle>
   </lib-button-toggle-group>
 </header>
 <nav class="sidebar-nav">
-  <!-- <button
-    *ngFor="let item of navItems"
-    [routerLink]="item.route"
-    routerLinkActive="active"
-  >
-    <svg-icon
-      src="icons/{{ item.icon }}.svg"
-      [svgStyle]="{ width: '16px', height: '16px', strokeWidth: 2 }"
-    ></svg-icon
-    ><span>{{ item.label }}</span>
-  </button> -->
   @for (item of navItems; track item) {
   <a [routerLink]="item.route" routerLinkActive="active" class="nav-item">
     <svg-icon
       src="icons/{{ item.icon }}.svg"
       [svgStyle]="{ width: '16px', height: '16px', strokeWidth: 2 }"
     ></svg-icon>
-    <span>{{ item.label }}</span>
+    <span>{{ 'dashboard.navigation.' + item.route | transloco }}</span>
   </a>
   @if (item.divider) {
   <hr class="divider" />

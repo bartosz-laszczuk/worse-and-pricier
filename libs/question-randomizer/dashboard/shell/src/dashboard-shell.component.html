@@ -2,10 +2,9 @@
   <lib-dashboard-navigation-bar
     (logout)="onSignOut()"
   ></lib-dashboard-navigation-bar>
-  <!-- TODO onChangeLanguage($event) -->
   <lib-dashboard-sidebar
     [currentLanguage]="currentLanguage()"
-    (changeLanguage)="onChangeLanguage()"
+    (changeLanguage)="onChangeLanguage($event)"
   ></lib-dashboard-sidebar>
 
   <div class="main">

@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import {
@@ -6,6 +6,7 @@ import {
   ButtonToggleGroupComponent,
 } from '@worse-and-pricier/design-system-ui';
 import { SvgIconComponent } from 'angular-svg-icon';
+import { TranslocoModule } from '@jsverse/transloco';
 
 export interface NavigationItem {
   label: string;
@@ -21,13 +22,20 @@ export interface NavigationItem {
     ButtonToggleComponent,
     ButtonToggleGroupComponent,
     SvgIconComponent,
+    TranslocoModule,
   ],
   templateUrl: './dashboard-sidebar.component.html',
   styleUrl: './dashboard-sidebar.component.scss',
 })
 export class DashboardSidebarComponent {
-  public currentLanguage = input.required<string /* TODO Language */>();
-  public changeLanguage = output<string /* TODO Language */>();
+  public currentLanguage = input.required<string>();
+  public changeLanguage = output<string>();
+
+  // Convert Transloco language codes (en/pl) to button toggle values (english/polish)
+  public languageToggleValue = computed(() => {
+    const lang = this.currentLanguage();
+    return lang === 'en' ? 'english' : 'polish';
+  });
 
   navItems: NavigationItem[] = [
     {

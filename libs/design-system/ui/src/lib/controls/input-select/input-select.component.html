@@ -1,3 +1,6 @@
+@if(label()) {
+  <label class="input-label">{{ label() }}</label>
+}
 <div class="select app-input" [class.select_disabled]="isDisabled">
   <select
     [value]="value"
@@ -5,7 +8,7 @@
     (change)="onChangedPureHtmlSelect($event)"
     (blur)="onBlur()"
     >
-    <option value=""></option>
+    <option value="">{{ placeholder() }}</option>
     @for (option of options(); track option) {
       <option
         [value]="option.value"

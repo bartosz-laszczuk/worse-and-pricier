@@ -1,48 +1,48 @@
 <form [formGroup]="form">
   <div class="form-fields">
     <lib-input-text
-      label="Question"
+      [label]="'question.dialog.questionLabel' | transloco"
       type="text"
-      placeholder="Enter question"
+      [placeholder]="'question.dialog.questionPlaceholder' | transloco"
       formControlName="question"
     ></lib-input-text>
     <lib-input-rich-text-editor
-      label="Answer"
+      [label]="'question.dialog.answerLabel' | transloco"
       type="text"
-      placeholder="Enter answer"
+      [placeholder]="'question.dialog.answerPlaceholder' | transloco"
       formControlName="answer"
     ></lib-input-rich-text-editor>
     <lib-input-rich-text-editor
-      label="Answer Pl"
+      [label]="'question.dialog.answerPlLabel' | transloco"
       type="text"
-      placeholder="Enter answer Pl"
+      [placeholder]="'question.dialog.answerPlPlaceholder' | transloco"
       formControlName="answerPl"
     ></lib-input-rich-text-editor>
     <lib-input-text
-      label="Tags"
+      [label]="'question.dialog.tagsLabel' | transloco"
       type="text"
-      placeholder="Enter tags separated by ;"
+      [placeholder]="'question.dialog.tagsPlaceholder' | transloco"
       formControlName="tags"
     ></lib-input-text>
     <lib-input-select
-      label="Category"
-      placeholder="Choose category"
+      [label]="'question.dialog.categoryLabel' | transloco"
+      [placeholder]="'question.dialog.categoryPlaceholder' | transloco"
       formControlName="categoryId"
       [options]="categoryOptionItemList"
     ></lib-input-select>
     <lib-input-select
-      label="Qualification"
-      placeholder="Choose qualification"
+      [label]="'question.dialog.qualificationLabel' | transloco"
+      [placeholder]="'question.dialog.qualificationPlaceholder' | transloco"
       formControlName="qualificationId"
       [options]="qualificationOptionItemList"
     ></lib-input-select>
     <div class="checkbox-container">
       <input type="checkbox" id="isActive" formControlName="isActive" />
-      <label for="isActive"><span>Is active</span></label>
+      <label for="isActive"><span>{{ 'question.dialog.activeLabel' | transloco }}</span></label>
     </div>
   </div>
   <div class="button-group">
-    <lib-button [type]="'light'" (click)="onCancel()">Close</lib-button>
-    <lib-button [type]="'default'" [class.disabled]="form.invalid" (click)="onSubmit()">Submit</lib-button>
+    <lib-button [type]="'light'" (click)="onCancel()">{{ 'question.dialog.cancelButton' | transloco }}</lib-button>
+    <lib-button [type]="'default'" [class.disabled]="form.invalid" (click)="onSubmit()">{{ 'question.dialog.submitButton' | transloco }}</lib-button>
   </div>
 </form>

@@ -21,6 +21,7 @@ import {
   EditQuestionDialogData,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-ui';
 import { Dialog } from '@angular/cdk/dialog';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'lib-randomization-shell',
@@ -31,7 +32,8 @@ import { Dialog } from '@angular/cdk/dialog';
     StatusBarComponent,
     ButtonGroupComponent,
     ButtonIconComponent,
-    FormatTagsPipe
+    FormatTagsPipe,
+    TranslocoModule
 ],
   templateUrl: './randomization-shell.component.html',
   styleUrl: './randomization-shell.component.scss',

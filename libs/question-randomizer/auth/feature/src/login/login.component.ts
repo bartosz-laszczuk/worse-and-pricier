@@ -5,10 +5,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EmailPasswordCredentials } from '@worse-and-pricier/question-randomizer-auth-util';
 import { LoginFacade } from './login.facade';
 import { LoginService } from '@worse-and-pricier/question-randomizer-auth-data-access';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'lib-login',
-  imports: [InputTextComponent, ReactiveFormsModule],
+  imports: [InputTextComponent, ReactiveFormsModule, TranslocoModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
