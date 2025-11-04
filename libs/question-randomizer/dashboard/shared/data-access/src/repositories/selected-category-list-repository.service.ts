@@ -61,7 +61,7 @@ export class SelectedCategoryListRepositoryService {
     await Promise.all(deletions);
   }
 
-  async getSelectedCategoryIdListForRandomiozation(
+  async getSelectedCategoryIdListForRandomization(
     randomizationId: string
   ): Promise<string[]> {
     const ref = collection(this.firestore, 'selectedCategories');

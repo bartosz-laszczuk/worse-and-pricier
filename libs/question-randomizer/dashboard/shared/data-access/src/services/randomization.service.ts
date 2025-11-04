@@ -4,18 +4,21 @@ import {
   SelectedCategoryListRepositoryService,
   UsedQuestionListRepositoryService,
 } from '../repositories';
-import { Question } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
-import { RandomizationMapperService } from './randomization-mapper.service';
 import {
+  Question,
   QuestionCategory,
   Randomization,
   RandomizationStatus,
+  UNCATEGORIZED_ID,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
+import { RandomizationMapperService } from './randomization-mapper.service';
 import { RandomizationStore } from '../store';
 import { PostponedQuestionListRepositoryService } from '../repositories/postponed-question-list-repository.service';
+import { GetRandomizationResponse } from '../models';
 
 @Injectable()
 export class RandomizationService {
+
   private readonly randomizationStore = inject(RandomizationStore);
   private readonly randomizationRepositoryService = inject(
     RandomizationRepositoryService
@@ -33,134 +36,107 @@ export class RandomizationService {
     PostponedQuestionListRepositoryService
   );
 
+  /**
+   * Loads randomization state for a user from the repository.
+   *
+   * @param userId - The user ID to load randomization for
+   * @param questionDic - Dictionary of all available questions by ID
+   * @param forceLoad - If true, bypasses cache and reloads from repository
+   * @returns Promise that resolves when randomization is loaded
+   *
+   * @example
+   * ```typescript
+   * // Load randomization with caching (skips if already loaded)
+   * await randomizationService.loadRandomization('user123', questionDictionary);
+   *
+   * // Force reload from repository
+   * await randomizationService.loadRandomization('user123', questionDictionary, true);
+   * ```
+   */
   public async loadRandomization(
     userId: string,
     questionDic: Record<string, Question>,
     forceLoad = false
-  ) {
-    if (!forceLoad && this.randomizationStore.entity() !== null) return;
+  ): Promise<void> {
+    if (this.shouldSkipLoading(forceLoad)) return;
 
     this.randomizationStore.startLoading();
     try {
-      const response =
+      const response: GetRandomizationResponse | null =
         await this.randomizationRepositoryService.getRandomization(userId);
 
-      if (!response) {
-        this.randomizationStore.setRandomization(
-          await this.getNewRandomization(userId, questionDic)
-        );
-      } else {
-        const usedQuestionList =
-          await this.usedQuestionListRepositoryService.getUsedQuestionIdListForRandomization(
-            response.id
-          );
-        const postponedQuestionList =
-          await this.postponedQuestionListRepositoryService.getPostponedQuestionIdListForRandomization(
-            response.id
-          );
-        const selectedCategoryIdList =
-          await this.selectedCategoryListRepositoryService.getSelectedCategoryIdListForRandomiozation(
-            response.id
-          );
+      const randomization = response
+        ? await this.loadExistingRandomization(response, questionDic)
+        : await this.getNewRandomization(userId, questionDic);
 
-        let currentQuestion: Question | undefined = undefined;
-        if (
-          response.currentQuestionId &&
-          questionDic[response.currentQuestionId]
-        ) {
-          currentQuestion = questionDic[response.currentQuestionId];
-        }
-
-        const randomization =
-          this.randomizationMapperService.mapGetRandomizationResopnseToRandomization(
-            response,
-            usedQuestionList,
-            postponedQuestionList,
-            selectedCategoryIdList,
-            questionDic,
-            currentQuestion
-          );
-
-        this.randomizationStore.setRandomization(randomization);
-      }
+      this.randomizationStore.setRandomization(randomization);
     } catch (error: unknown) {
-      this.randomizationStore.logError(
-        error instanceof Error ? error.message : 'Failed to load Randomization.'
-      );
+      this.handleError(error, 'Failed to load Randomization.');
     }
   }
 
+  /**
+   * Updates the current question with the next available question based on randomization logic.
+   *
+   * @param questionDic - Dictionary of all available questions by ID
+   * @returns Promise that resolves when the current question is updated
+   */
   public async updateCurrentQuestionWithNextQuestion(
     questionDic: Record<string, Question>
   ): Promise<void> {
     try {
       const randomization = this.randomizationStore.entity();
       if (!randomization) return;
-      let newCurrentQuestion: Question | undefined = undefined;
-      const availableQuestionList = this.randomizationStore
-        .filteredAvailableQuestionList()
-        .filter((qc) => questionDic[qc.questionId].isActive);
-      const postponedQuestionList = this.randomizationStore
-        .filteredPostponedQuestionList()
-        .filter((qc) => questionDic[qc.questionId].isActive);
 
-      if (availableQuestionList.length > 0) {
-        const nextQuestionId =
-          availableQuestionList[
-            Math.floor(Math.random() * availableQuestionList.length)
-          ].questionId;
-        newCurrentQuestion = questionDic[nextQuestionId];
-      } else if (postponedQuestionList.length > 0) {
-        const nextQuestion = this.findFirstQuestionForCategoryIdList(
-          randomization.postponedQuestionList.map((pq) => pq.questionId),
-          randomization.selectedCategoryIdList,
-          questionDic
-        );
-        newCurrentQuestion = nextQuestion;
-      } else if (randomization.currentQuestion) {
-        newCurrentQuestion = undefined;
-      } else {
+      const newCurrentQuestion = this.selectNextQuestion(
+        randomization,
+        questionDic
+      );
+
+      if (this.shouldSkipUpdate(randomization, newCurrentQuestion)) {
         return;
       }
 
-      randomization.showAnswer = false;
-      randomization.currentQuestion = newCurrentQuestion;
-
-      this.randomizationStore.startLoading();
-      this.randomizationStore.setCurrentQuestion(newCurrentQuestion);
-      await this.randomizationRepositoryService.updateRandomization(
-        randomization
-      );
+      await this.updateCurrentQuestion(randomization, newCurrentQuestion);
     } catch (error: unknown) {
-      this.randomizationStore.logError(
-        error instanceof Error
-          ? error.message
-          : 'Failed to update current question with next question.'
+      this.handleError(
+        error,
+        'Failed to update current question with next question.'
       );
     }
   }
 
-  public async updateRandomization(randomization: Randomization) {
+  /**
+   * Updates the randomization state in both the store and repository.
+   *
+   * @param randomization - The randomization object to update
+   * @returns Promise that resolves when the randomization is updated
+   */
+  public async updateRandomization(
+    randomization: Randomization
+  ): Promise<void> {
+    this.randomizationStore.startLoading();
     try {
-      this.randomizationStore.startLoading();
       this.randomizationStore.setRandomization(randomization);
       await this.randomizationRepositoryService.updateRandomization(
         randomization
       );
     } catch (error: unknown) {
-      this.randomizationStore.logError(
-        error instanceof Error
-          ? error.message
-          : 'Failed to update randomization.'
-      );
+      this.handleError(error, 'Failed to update randomization.');
     }
   }
 
+  /**
+   * Updates the category ID for questions in all question lists (postponed and used).
+   *
+   * @param newQuestionCategory - The question category with updated categoryId
+   * @returns Promise that resolves when all question lists are updated
+   */
   public async updateCategoryQuestionListsCategoryId(
     newQuestionCategory: QuestionCategory
-  ) {
+  ): Promise<void> {
+    this.randomizationStore.startLoading();
     try {
-      this.randomizationStore.startLoading();
       this.randomizationStore.updateQuestionCategoryListsCategoryId(
         newQuestionCategory
       );
@@ -173,36 +149,43 @@ export class RandomizationService {
         ),
       ]);
     } catch (error: unknown) {
-      this.randomizationStore.logError(
-        error instanceof Error
-          ? error.message
-          : 'Failed to update postponed question.'
-      );
+      this.handleError(error, 'Failed to update question category.');
     }
   }
 
-  public async setQuestionAsCurrentQuestion(question: Question) {
+  /**
+   * Sets a specific question as the current question in the randomization.
+   *
+   * @param question - The question to set as current
+   * @returns Promise that resolves when the current question is set
+   */
+  public async setQuestionAsCurrentQuestion(question: Question): Promise<void> {
     this.randomizationStore.startLoading();
 
     try {
       const randomization = this.randomizationStore.entity();
       if (!randomization) return;
 
-      randomization.currentQuestion = question;
-      this.randomizationStore.setRandomization(randomization);
+      const updatedRandomization = {
+        ...randomization,
+        currentQuestion: question,
+      };
+      this.randomizationStore.setRandomization(updatedRandomization);
       await this.randomizationRepositoryService.updateRandomization(
-        randomization
+        updatedRandomization
       );
     } catch (error: unknown) {
-      this.randomizationStore.logError(
-        error instanceof Error
-          ? error.message
-          : 'Failed to set question as current question.'
-      );
+      this.handleError(error, 'Failed to set question as current question.');
     }
   }
 
-  public async clearCurrentQuestion(randomizationId: string) {
+  /**
+   * Clears the current question from the randomization.
+   *
+   * @param randomizationId - The ID of the randomization to clear the current question from
+   * @returns Promise that resolves when the current question is cleared
+   */
+  public async clearCurrentQuestion(randomizationId: string): Promise<void> {
     this.randomizationStore.startLoading();
     try {
       this.randomizationStore.clearCurrentQuestion();
@@ -210,26 +193,31 @@ export class RandomizationService {
         randomizationId
       );
     } catch (error: unknown) {
-      this.randomizationStore.logError(
-        error instanceof Error
-          ? error.message
-          : 'Failed to clear current question.'
-      );
+      this.handleError(error, 'Failed to clear current question.');
     }
   }
 
+  /**
+   * Finds the first question from postponed list that matches selected categories.
+   *
+   * @param postponedQuestionIdList - List of postponed question IDs
+   * @param selectedCategoryIdList - List of selected category IDs
+   * @param questionDic - Dictionary of all available questions by ID
+   * @returns The first matching question or undefined if none found
+   */
   private findFirstQuestionForCategoryIdList(
     postponedQuestionIdList: string[],
     selectedCategoryIdList: string[],
     questionDic: Record<string, Question>
   ): Question | undefined {
-    for (let i = 0; i < postponedQuestionIdList.length; i++) {
-      const questionId = postponedQuestionIdList[i];
+    for (const questionId of postponedQuestionIdList) {
       const question = questionDic[questionId];
 
       if (
         question &&
-        selectedCategoryIdList.includes(question.categoryId ?? '')
+        selectedCategoryIdList.includes(
+          question.categoryId ?? UNCATEGORIZED_ID
+        )
       ) {
         return question;
       }
@@ -238,6 +226,13 @@ export class RandomizationService {
     return undefined;
   }
 
+  /**
+   * Creates a new randomization for a user.
+   *
+   * @param userId - The user ID to create randomization for
+   * @param questionDic - Dictionary of all available questions by ID
+   * @returns Promise that resolves to the new randomization
+   */
   private async getNewRandomization(
     userId: string,
     questionDic: Record<string, Question>
@@ -257,5 +252,206 @@ export class RandomizationService {
         categoryId: question.categoryId,
       })),
     };
+  }
+
+  /**
+   * Determines if randomization loading should be skipped.
+   *
+   * @param forceLoad - Whether to force load regardless of cache
+   * @returns True if loading should be skipped, false otherwise
+   */
+  private shouldSkipLoading(forceLoad: boolean): boolean {
+    return !forceLoad && this.randomizationStore.entity() !== null;
+  }
+
+  /**
+   * Loads an existing randomization from the repository response.
+   *
+   * @param response - The randomization response from the repository
+   * @param questionDic - Dictionary of all available questions by ID
+   * @returns Promise that resolves to the loaded randomization
+   */
+  private async loadExistingRandomization(
+    response: GetRandomizationResponse,
+    questionDic: Record<string, Question>
+  ): Promise<Randomization> {
+    const [usedQuestionList, postponedQuestionList, selectedCategoryIdList] =
+      await this.fetchRandomizationData(response.id);
+
+    const currentQuestion = this.resolveCurrentQuestion(
+      response.currentQuestionId,
+      questionDic
+    );
+
+    return this.randomizationMapperService.mapGetRandomizationResponseToRandomization(
+      response,
+      usedQuestionList,
+      postponedQuestionList,
+      selectedCategoryIdList,
+      questionDic,
+      currentQuestion
+    );
+  }
+
+  /**
+   * Fetches all randomization-related data from repositories in parallel.
+   *
+   * @param randomizationId - The randomization ID to fetch data for
+   * @returns Promise that resolves to tuple of [usedQuestions, postponedQuestions, selectedCategories]
+   */
+  private async fetchRandomizationData(
+    randomizationId: string
+  ): Promise<[QuestionCategory[], QuestionCategory[], string[]]> {
+    return Promise.all([
+      this.usedQuestionListRepositoryService.getUsedQuestionIdListForRandomization(
+        randomizationId
+      ),
+      this.postponedQuestionListRepositoryService.getPostponedQuestionIdListForRandomization(
+        randomizationId
+      ),
+      this.selectedCategoryListRepositoryService.getSelectedCategoryIdListForRandomization(
+        randomizationId
+      ),
+    ]);
+  }
+
+  /**
+   * Resolves the current question from the question dictionary.
+   *
+   * @param currentQuestionId - The ID of the current question
+   * @param questionDic - Dictionary of all available questions by ID
+   * @returns The current question or undefined if not found
+   */
+  private resolveCurrentQuestion(
+    currentQuestionId: string | undefined,
+    questionDic: Record<string, Question>
+  ): Question | undefined {
+    return currentQuestionId && questionDic[currentQuestionId]
+      ? questionDic[currentQuestionId]
+      : undefined;
+  }
+
+  /**
+   * Selects the next question based on randomization logic.
+   * Priority order: available questions (random) → postponed questions (first match) → clear current.
+   *
+   * @param randomization - The current randomization state
+   * @param questionDic - Dictionary of all available questions by ID
+   * @returns The next question or undefined if no questions available
+   *
+   * @example
+   * ```typescript
+   * // Internally used by updateCurrentQuestionWithNextQuestion
+   * const nextQuestion = this.selectNextQuestion(randomization, questionDictionary);
+   * // Returns: random available question, or first postponed, or undefined
+   * ```
+   */
+  private selectNextQuestion(
+    randomization: Randomization,
+    questionDic: Record<string, Question>
+  ): Question | undefined {
+    const availableQuestions = this.getActiveQuestions(
+      this.randomizationStore.filteredAvailableQuestionList(),
+      questionDic
+    );
+
+    if (availableQuestions.length > 0) {
+      return this.selectRandomQuestion(availableQuestions, questionDic);
+    }
+
+    const postponedQuestions = this.getActiveQuestions(
+      this.randomizationStore.filteredPostponedQuestionList(),
+      questionDic
+    );
+
+    if (postponedQuestions.length > 0) {
+      return this.findFirstQuestionForCategoryIdList(
+        randomization.postponedQuestionList.map((pq) => pq.questionId),
+        randomization.selectedCategoryIdList,
+        questionDic
+      );
+    }
+
+    // No questions available - clear current question by returning undefined
+    return undefined;
+  }
+
+  /**
+   * Filters question list to only include active questions.
+   *
+   * @param questionList - List of question categories to filter
+   * @param questionDic - Dictionary of all available questions by ID
+   * @returns Filtered list containing only active questions
+   */
+  private getActiveQuestions(
+    questionList: QuestionCategory[],
+    questionDic: Record<string, Question>
+  ): QuestionCategory[] {
+    return questionList.filter((qc) => questionDic[qc.questionId]?.isActive);
+  }
+
+  /**
+   * Selects a random question from the given list.
+   *
+   * @param questionList - List of question categories to select from
+   * @param questionDic - Dictionary of all available questions by ID
+   * @returns A randomly selected question
+   */
+  private selectRandomQuestion(
+    questionList: QuestionCategory[],
+    questionDic: Record<string, Question>
+  ): Question {
+    const randomIndex = Math.floor(Math.random() * questionList.length);
+    return questionDic[questionList[randomIndex].questionId];
+  }
+
+  /**
+   * Determines if the current question update should be skipped.
+   *
+   * @param randomization - The current randomization state
+   * @param newCurrentQuestion - The new current question to set
+   * @returns True if update should be skipped, false otherwise
+   */
+  private shouldSkipUpdate(
+    randomization: Randomization,
+    newCurrentQuestion: Question | undefined
+  ): boolean {
+    return !randomization.currentQuestion && !newCurrentQuestion;
+  }
+
+  /**
+   * Updates the current question in the store and repository.
+   *
+   * @param randomization - The randomization to update
+   * @param newCurrentQuestion - The new current question to set
+   * @returns Promise that resolves when update is complete
+   */
+  private async updateCurrentQuestion(
+    randomization: Randomization,
+    newCurrentQuestion: Question | undefined
+  ): Promise<void> {
+    const updatedRandomization = {
+      ...randomization,
+      showAnswer: false,
+      currentQuestion: newCurrentQuestion,
+    };
+
+    this.randomizationStore.startLoading();
+    this.randomizationStore.setCurrentQuestion(newCurrentQuestion);
+    await this.randomizationRepositoryService.updateRandomization(
+      updatedRandomization
+    );
+  }
+
+  /**
+   * Handles errors by logging them to the store with a consistent format.
+   *
+   * @param error - The error that occurred
+   * @param defaultMessage - The default error message to use if error is not an Error instance
+   */
+  private handleError(error: unknown, defaultMessage: string): void {
+    const errorMessage =
+      error instanceof Error ? error.message : defaultMessage;
+    this.randomizationStore.logError(errorMessage);
   }
 }

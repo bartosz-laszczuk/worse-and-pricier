@@ -47,7 +47,12 @@
       "Bash(if exist \"apps\\question-randomizer\\src\\assets\\i18n\" echo Directory exists)",
       "Bash(awk:*)",
       "Bash(cat:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "Bash(if exist \".claude\" dir .claude)",
+      "Bash(npx tsc:*)",
+      "Bash(npx nx test question-randomizer-dashboard-shared-data-access --codeCoverage)",
+      "Bash(npx nx test:*)",
+      "Bash(nul)"
     ],
     "deny": [],
     "ask": []

@@ -9,7 +9,7 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class RandomizationMapperService {
-  public mapGetRandomizationResopnseToRandomization(
+  public mapGetRandomizationResponseToRandomization(
     response: GetRandomizationResponse,
     usedQuestionList: UsedQuestion[],
     postponedQuestionList: PostponedQuestion[],
