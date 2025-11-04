@@ -2,6 +2,7 @@
   <h2 class="header">{{ 'dashboard.header.title' | transloco }}</h2>
   <lib-button-toggle-group
     [value]="languageToggleValue()"
+    [allowDeselect]="false"
     (toggled)="changeLanguage.emit($event ?? '')"
   >
     <lib-button-toggle value="english">{{ 'dashboard.header.languages.english' | transloco }}</lib-button-toggle>

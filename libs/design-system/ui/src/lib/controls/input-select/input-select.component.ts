@@ -34,6 +34,7 @@ export class InputSelectComponent implements ControlValueAccessor {
 
   value?: string | number | boolean | null;
   isDisabled = false;
+  inputId = `select-${crypto.randomUUID()}`;
 
   private propagateChange: (value: string | number | boolean | null) => void = () => {
     /* CVA callback */

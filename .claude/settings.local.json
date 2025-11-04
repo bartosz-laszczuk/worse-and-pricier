@@ -46,7 +46,8 @@
       "Bash(npm install:*)",
       "Bash(if exist \"apps\\question-randomizer\\src\\assets\\i18n\" echo Directory exists)",
       "Bash(awk:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm run lint)"
     ],
     "deny": [],
     "ask": []

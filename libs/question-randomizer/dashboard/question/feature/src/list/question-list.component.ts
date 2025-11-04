@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from '@angular/core';
 
 import {
   EditQuestionFormValue,
@@ -22,7 +27,11 @@ import {
   TableComponent,
 } from '@worse-and-pricier/design-system-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import {
+  takeUntilDestroyed,
+  toObservable,
+  toSignal,
+} from '@angular/core/rxjs-interop';
 import { debounceTime, take } from 'rxjs';
 import {
   QuestionListExportService,
@@ -41,7 +50,6 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
     ColumnDirective,
     SvgIconComponent,
     NormalizeSpacePipe,
-    FormatTagsPipe,
     ButtonComponent,
     ButtonGroupComponent,
     TranslocoModule,
@@ -74,32 +82,50 @@ export class QuestionListComponent {
 
   private readonly translationLoaded = toSignal(this.translocoService.events$);
 
+  // Language-aware answer selection
+  public currentLanguage = toSignal(this.translocoService.langChanges$, {
+    initialValue: this.translocoService.getActiveLang(),
+  });
+
   public columns = computed<IColumn[]>(() => {
     this.translationLoaded();
     return [
       {
-        displayName: this.translocoService.translate('question.table.columns.question'),
+        displayName: this.translocoService.translate(
+          'question.table.columns.question'
+        ),
         propertyName: 'question',
         sortable: true,
         width: '35%',
       },
       {
-        displayName: this.translocoService.translate('question.table.columns.answer'),
+        displayName: this.translocoService.translate(
+          'question.table.columns.answer'
+        ),
         propertyName: 'answer',
-        width: '25%'
+        width: '25%',
       },
       {
-        displayName: this.translocoService.translate('question.table.columns.category'),
-        propertyName: 'categoryName'
+        displayName: this.translocoService.translate(
+          'question.table.columns.category'
+        ),
+        propertyName: 'categoryName',
       },
       {
-        displayName: this.translocoService.translate('question.table.columns.active'),
+        displayName: this.translocoService.translate(
+          'question.table.columns.active'
+        ),
         propertyName: 'isActive',
         width: '5.5rem',
         center: true,
       },
       { displayName: '', propertyName: 'edit', width: '3.5rem', center: true },
-      { displayName: '', propertyName: 'delete', width: '3.5rem', center: true },
+      {
+        displayName: '',
+        propertyName: 'delete',
+        width: '3.5rem',
+        center: true,
+      },
     ];
   });
 
@@ -115,23 +141,23 @@ export class QuestionListComponent {
   }
 
   public onAdd() {
-    const dialogRef = this.dialog.open<EditQuestionFormValue | undefined, EditQuestionDialogData>(
-      EditQuestionComponent,
-      {
-        data: {
-          question: {
-            id: '',
-            question: '',
-            answer: '',
-            answerPl: '',
-            isActive: true,
-            userId: '',
-          },
-          categoryOptionItemList: this.categoryOptionItemList(),
-          qualificationOptionItemList: this.qualificationOptionItemList(),
+    const dialogRef = this.dialog.open<
+      EditQuestionFormValue | undefined,
+      EditQuestionDialogData
+    >(EditQuestionComponent, {
+      data: {
+        question: {
+          id: '',
+          question: '',
+          answer: '',
+          answerPl: '',
+          isActive: true,
+          userId: '',
         },
-      }
-    );
+        categoryOptionItemList: this.categoryOptionItemList(),
+        qualificationOptionItemList: this.qualificationOptionItemList(),
+      },
+    });
 
     dialogRef.closed.subscribe((result) => {
       if (result) {
@@ -141,16 +167,16 @@ export class QuestionListComponent {
   }
 
   public onEdit(question: Question) {
-    const dialogRef = this.dialog.open<EditQuestionFormValue | undefined, EditQuestionDialogData>(
-      EditQuestionComponent,
-      {
-        data: {
-          question,
-          categoryOptionItemList: this.categoryOptionItemList(),
-          qualificationOptionItemList: this.qualificationOptionItemList(),
-        },
-      }
-    );
+    const dialogRef = this.dialog.open<
+      EditQuestionFormValue | undefined,
+      EditQuestionDialogData
+    >(EditQuestionComponent, {
+      data: {
+        question,
+        categoryOptionItemList: this.categoryOptionItemList(),
+        qualificationOptionItemList: this.qualificationOptionItemList(),
+      },
+    });
 
     dialogRef.closed.subscribe((result) => {
       if (result) {
@@ -195,5 +221,10 @@ export class QuestionListComponent {
     this.questionListFacade.importQuestionListFile(file);
 
     input.value = '';
+  }
+
+  public getAnswer(question: Question): string {
+    const language = this.currentLanguage();
+    return language === 'pl' ? question.answerPl : question.answer;
   }
 }

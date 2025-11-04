@@ -10,7 +10,7 @@ import {
 } from '@worse-and-pricier/design-system-ui';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { InterviewShellFacade } from './interview-shell.facade';
 import {
   FormatTagsPipe,
@@ -18,6 +18,7 @@ import {
   Question,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { InterviewStore } from '@worse-and-pricier/question-randomizer-dashboard-interview-data-access';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'lib-interview-shell',
@@ -35,6 +36,8 @@ import { InterviewStore } from '@worse-and-pricier/question-randomizer-dashboard
 })
 export class InterviewShellComponent {
   private readonly interviewShellFacade = inject(InterviewShellFacade);
+  private readonly translocoService = inject(TranslocoService);
+
   public questions = this.interviewShellFacade.questions;
   public filteredCount = this.interviewShellFacade.filteredCount;
   public sort = this.interviewShellFacade.sort;
@@ -47,6 +50,11 @@ export class InterviewShellComponent {
     { displayName: 'Question', propertyName: 'question', width: '200px' },
     { displayName: 'Answer', propertyName: 'answer' },
   ];
+
+  // Language-aware answer selection
+  public currentLanguage = toSignal(this.translocoService.langChanges$, {
+    initialValue: this.translocoService.getActiveLang(),
+  });
 
   public constructor() {
     this.interviewShellFacade.initQuestions();
@@ -61,5 +69,10 @@ export class InterviewShellComponent {
 
   public onPage(page: PageEvent): void {
     this.interviewShellFacade.setPage(page);
+  }
+
+  public getAnswer(question: Question): string {
+    const language = this.currentLanguage();
+    return language === 'pl' ? question.answerPl : question.answer;
   }
 }

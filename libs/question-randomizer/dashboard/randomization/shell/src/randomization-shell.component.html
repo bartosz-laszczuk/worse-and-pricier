@@ -55,9 +55,9 @@
         {{ randomization.showAnswer ? 'Hide ' : 'Show ' }}answer
       </button> -->
     </div>
-    @if (randomization.showAnswer){ @if(currentQuestion(); as question){
-    <div [innerHTML]="question.answer"></div>
-    }}
+    @if (randomization.showAnswer){
+    <div [innerHTML]="currentAnswer()"></div>
+    }
   </lib-card>
 </div>
 }

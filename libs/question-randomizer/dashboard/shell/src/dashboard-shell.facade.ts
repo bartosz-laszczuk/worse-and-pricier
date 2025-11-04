@@ -38,7 +38,15 @@ export class DashboardShellFacade {
   }
 
   public changeLanguage(language: string) {
-    const langCode = language === 'english' ? 'en' : 'pl';
+    let langCode: string;
+    if (language === 'english') {
+      langCode = 'en';
+    } else if (language === 'polish') {
+      langCode = 'pl';
+    } else {
+      // Invalid/empty value - do nothing (happens when clicking already-selected button)
+      return;
+    }
     this.translocoService.setActiveLang(langCode);
     localStorage.setItem('language', langCode);
   }

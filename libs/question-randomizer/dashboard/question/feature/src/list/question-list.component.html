@@ -7,9 +7,15 @@
     [formControl]="searchTextControl"
   ></lib-input-text>
   <lib-button-group class="buttons">
-    <lib-button (click)="onImport()" [type]="'light'">{{ 'question.actions.import' | transloco }}</lib-button>
-    <lib-button (click)="onExport()" [type]="'dark'">{{ 'question.actions.export' | transloco }}</lib-button>
-    <lib-button (click)="onAdd()">{{ 'question.actions.add' | transloco }}</lib-button>
+    <lib-button (click)="onImport()" [type]="'light'">{{
+      'question.actions.import' | transloco
+    }}</lib-button>
+    <lib-button (click)="onExport()" [type]="'dark'">{{
+      'question.actions.export' | transloco
+    }}</lib-button>
+    <lib-button (click)="onAdd()">{{
+      'question.actions.add' | transloco
+    }}</lib-button>
   </lib-button-group>
 </div>
 <lib-table
@@ -26,14 +32,14 @@
     [libColumn]="{ propertyName: 'question', type: 'COLUMN' }"
     let-item="item"
     ><div class="truncate">
-      {{ item.question }} {{ item.tags | formatTags }}
+      {{ item.question }}
     </div></ng-template
   >
   <ng-template
     [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"
     let-item="item"
   >
-    <div class="truncate" [innerHTML]="item.answer | normalizeSpace"></div>
+    <div class="truncate" [innerHTML]="getAnswer(item) | normalizeSpace"></div>
   </ng-template>
   <ng-template
     [libColumn]="{ propertyName: 'isActive', type: 'COLUMN' }"

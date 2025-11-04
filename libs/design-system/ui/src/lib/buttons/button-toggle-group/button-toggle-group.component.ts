@@ -25,6 +25,7 @@ import { ButtonToggleComponent } from '../button-toggle/button-toggle.component'
 export class ButtonToggleGroupComponent<T = unknown> implements AfterContentInit {
   public value = input<T | undefined>();
   public toggled = output<T | undefined>();
+  public allowDeselect = input<boolean>(true);
   @ContentChildren(ButtonToggleComponent)
   toggles!: QueryList<ButtonToggleComponent<T>>;
 
@@ -46,7 +47,8 @@ export class ButtonToggleGroupComponent<T = unknown> implements AfterContentInit
   }
 
   handleToggle(val: T) {
-    const newValue = this.selectedValue() === val ? undefined : val;
+    const isCurrentlySelected = this.selectedValue() === val;
+    const newValue = isCurrentlySelected && this.allowDeselect() ? undefined : val;
     this.selectedValue.set(newValue);
     this.toggled.emit(newValue);
   }

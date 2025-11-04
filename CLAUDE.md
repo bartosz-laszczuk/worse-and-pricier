@@ -205,6 +205,38 @@ import { ButtonComponent, InputTextComponent, OptionItem, SortDefinition, PageEv
 
 **For contributing:** [`/docs/DESIGN_SYSTEM_CONTRIBUTING.md`](docs/DESIGN_SYSTEM_CONTRIBUTING.md)
 
+## Internationalization (i18n)
+
+The application supports **multi-language functionality** using [@jsverse/transloco](https://jsverse.github.io/transloco/) with:
+
+- **Supported languages:** English (`en`) and Polish (`pl`)
+- **Default language:** English
+- **Translation files:** `apps/question-randomizer/src/assets/i18n/en.json` and `pl.json`
+- **Language switching:** Runtime language switching with localStorage persistence
+- **Translation management:** Automated key extraction and validation
+
+### Quick Usage
+
+```typescript
+// In templates (most common)
+{{ 'auth.login.title' | transloco }}
+
+// In TypeScript
+import { TranslocoService } from '@jsverse/transloco';
+const translation = this.translocoService.translate('auth.login.title');
+```
+
+**Component requirement:** Import `TranslocoModule` in components using the `transloco` pipe.
+
+### NPM Scripts
+
+```bash
+npm run i18n:extract    # Extract translation keys from codebase
+npm run i18n:find       # Find translation key usage
+```
+
+**For complete documentation:** [`/docs/INTERNATIONALIZATION.md`](docs/INTERNATIONALIZATION.md)
+
 ## Development Notes
 
 - **Jest** is used for unit testing
@@ -224,7 +256,8 @@ import { ButtonComponent, InputTextComponent, OptionItem, SortDefinition, PageEv
 5. Follow the normalized state pattern for stores if using @ngrx/signals
 6. Use dependency injection and standalone components (Angular 20+)
 7. **Use design-system components** instead of creating custom UI components (see [Design System](#design-system) section)
-8. Respect module boundaries - see [`/docs/MODULE_BOUNDARIES.md`](docs/MODULE_BOUNDARIES.md)
+8. **Use translation keys** for all user-facing text - import `TranslocoModule` and use the `transloco` pipe (see [Internationalization](#internationalization-i18n) section)
+9. Respect module boundaries - see [`/docs/MODULE_BOUNDARIES.md`](docs/MODULE_BOUNDARIES.md)
 
 ---
 

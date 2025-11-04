@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { RandomizationShellFacade } from './randomization-shell.facade';
 import {
@@ -21,7 +22,7 @@ import {
   EditQuestionDialogData,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-ui';
 import { Dialog } from '@angular/cdk/dialog';
-import { TranslocoModule } from '@jsverse/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'lib-randomization-shell',
@@ -43,6 +44,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 export class RandomizationShellComponent {
   private readonly randomizationShellFacade = inject(RandomizationShellFacade);
   private readonly dialog = inject(Dialog);
+  private readonly translocoService = inject(TranslocoService);
 
   public randomization = this.randomizationShellFacade.randomization;
   public currentQuestion = this.randomizationShellFacade.currentQuestion;
@@ -58,6 +60,20 @@ export class RandomizationShellComponent {
     this.randomizationShellFacade.postponedQuestionListLength;
   public availableQuestionListLength =
     this.randomizationShellFacade.availableQuestionListLength;
+
+  // Language-aware answer selection
+  public currentLanguage = toSignal(this.translocoService.langChanges$, {
+    initialValue: this.translocoService.getActiveLang(),
+  });
+
+  public currentAnswer = computed(() => {
+    const question = this.currentQuestion();
+    const language = this.currentLanguage();
+
+    if (!question) return '';
+
+    return language === 'pl' ? question.answerPl : question.answer;
+  });
 
   constructor() {
     this.randomizationShellFacade.loadRandomization();

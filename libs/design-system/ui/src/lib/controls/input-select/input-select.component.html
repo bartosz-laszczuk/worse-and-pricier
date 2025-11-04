@@ -1,8 +1,9 @@
 @if(label()) {
-  <label class="input-label">{{ label() }}</label>
+  <label [for]="inputId" class="input-label">{{ label() }}</label>
 }
 <div class="select app-input" [class.select_disabled]="isDisabled">
   <select
+    [id]="inputId"
     [value]="value"
     [disabled]="isDisabled"
     (change)="onChangedPureHtmlSelect($event)"

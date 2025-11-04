@@ -110,7 +110,7 @@
   },
   "dashboard": {
     "header": {
-      "title": "Losowanie",
+      "title": "Randomizer",
       "languages": {
         "english": "Angielski",
         "polish": "Polski"
@@ -234,7 +234,7 @@
     "progress": {
       "title": "Postęp",
       "answered": "ODPOWIEDZIANE",
-      "ahead": "DO PRZODU",
+      "ahead": "Z PRZODU",
       "postponed": "ODROCZONE"
     },
     "question": {
