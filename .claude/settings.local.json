@@ -52,7 +52,8 @@
       "Bash(npx tsc:*)",
       "Bash(npx nx test question-randomizer-dashboard-shared-data-access --codeCoverage)",
       "Bash(npx nx test:*)",
-      "Bash(nul)"
+      "Bash(nul)",
+      "Bash(if exist \"libs\\question-randomizer\\dashboard\\shared\\data-access\\src\\services\\question-list.service.spec.ts\" echo File exists)"
     ],
     "deny": [],
     "ask": []

@@ -67,7 +67,7 @@ export class RandomizationService {
 
       const randomization = response
         ? await this.loadExistingRandomization(response, questionMap)
-        : await this.createNewRandomization(userId, questionMap);
+        : await this.initializeNewRandomization(userId, questionMap);
 
       this.randomizationStore.setRandomization(randomization);
     } catch (error: unknown) {
@@ -205,7 +205,7 @@ export class RandomizationService {
    * @param questionMap - Dictionary of all available questions by ID
    * @returns The first matching question or undefined if none found
    */
-  private findFirstQuestionMatchingCategories(
+  private findFirstMatchingQuestion(
     postponedQuestionIdList: string[],
     selectedCategoryIdList: string[],
     questionMap: Record<string, Question>
@@ -227,13 +227,14 @@ export class RandomizationService {
   }
 
   /**
-   * Creates a new randomization for a user.
+   * Initializes a new randomization for a user.
+   * Creates the randomization in the repository and builds the initial state object.
    *
    * @param userId - The user ID to create randomization for
    * @param questionMap - Dictionary of all available questions by ID
-   * @returns Promise that resolves to the new randomization
+   * @returns Promise that resolves to the initialized randomization
    */
-  private async createNewRandomization(
+  private async initializeNewRandomization(
     userId: string,
     questionMap: Record<string, Question>
   ): Promise<Randomization> {
@@ -365,8 +366,8 @@ export class RandomizationService {
     );
 
     if (postponedQuestions.length > 0) {
-      return this.findFirstQuestionMatchingCategories(
-        randomization.postponedQuestionList.map((pq) => pq.questionId),
+      return this.findFirstMatchingQuestion(
+        postponedQuestions.map((pq) => pq.questionId),
         randomization.selectedCategoryIdList,
         questionMap
       );
@@ -391,6 +392,17 @@ export class RandomizationService {
   }
 
   /**
+   * Generates a random index for array access.
+   * Protected to allow spying in tests for deterministic behavior.
+   *
+   * @param max - Maximum value (exclusive)
+   * @returns Random index between 0 and max-1
+   */
+  protected getRandomIndex(max: number): number {
+    return Math.floor(Math.random() * max);
+  }
+
+  /**
    * Selects a random question from the given list.
    *
    * @param questionList - List of question categories to select from
@@ -401,7 +413,7 @@ export class RandomizationService {
     questionList: QuestionCategory[],
     questionMap: Record<string, Question>
   ): Question {
-    const randomIndex = Math.floor(Math.random() * questionList.length);
+    const randomIndex = this.getRandomIndex(questionList.length);
     return questionMap[questionList[randomIndex].questionId];
   }
 
