@@ -129,6 +129,21 @@ export const QuestionListStore = signalStore(
       });
     },
 
+    restoreQuestion(question: Question) {
+      patchState(store, (state) => {
+        if (!state.entities) return state;
+
+        return {
+          entities: {
+            ...state.entities,
+            [question.id]: question,
+          },
+          isLoading: false,
+          error: null,
+        };
+      });
+    },
+
     deleteQuestionFromList(questionId: string) {
       patchState(store, (state) => {
         if (!state.entities || !state.ids) return state;

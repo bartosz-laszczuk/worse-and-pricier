@@ -7,8 +7,6 @@ import {
 
 import {
   EditQuestionFormValue,
-  FormatTagsPipe,
-  NormalizeSpacePipe,
   Question,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { QuestionListFacade } from './question-list.facade';
@@ -49,7 +47,6 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
     ReactiveFormsModule,
     ColumnDirective,
     SvgIconComponent,
-    NormalizeSpacePipe,
     ButtonComponent,
     ButtonGroupComponent,
     TranslocoModule,

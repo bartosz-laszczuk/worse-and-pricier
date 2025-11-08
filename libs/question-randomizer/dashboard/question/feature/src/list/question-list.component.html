@@ -39,7 +39,7 @@
     [libColumn]="{ propertyName: 'answer', type: 'COLUMN' }"
     let-item="item"
   >
-    <div class="truncate" [innerHTML]="getAnswer(item) | normalizeSpace"></div>
+    <div class="truncate" [innerHTML]="getAnswer(item)"></div>
   </ng-template>
   <ng-template
     [libColumn]="{ propertyName: 'isActive', type: 'COLUMN' }"

@@ -146,7 +146,7 @@ export class QuestionListService {
     } catch (error: unknown) {
       // Rollback optimistic update on error
       if (previousQuestion) {
-        this.questionListStore.addQuestionToList(previousQuestion);
+        this.questionListStore.restoreQuestion(previousQuestion);
       }
       this.handleOperationError(error, 'Question update');
     }

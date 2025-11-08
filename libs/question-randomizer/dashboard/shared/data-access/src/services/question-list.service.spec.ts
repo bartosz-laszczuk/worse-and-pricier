@@ -95,6 +95,7 @@ describe('QuestionListService', () => {
       startLoading: jest.fn(),
       addQuestionToList: jest.fn(),
       updateQuestionInList: jest.fn(),
+      restoreQuestion: jest.fn(),
       deleteQuestionFromList: jest.fn(),
       loadQuestionList: jest.fn(),
       deleteCategoryIdFromQuestions: jest.fn(),
@@ -253,7 +254,7 @@ describe('QuestionListService', () => {
 
       // Assert
       expect(questionListStore.updateQuestionInList).toHaveBeenCalledTimes(1); // Optimistic update
-      expect(questionListStore.addQuestionToList).toHaveBeenCalledWith(mockQuestion); // Rollback
+      expect(questionListStore.restoreQuestion).toHaveBeenCalledWith(mockQuestion); // Rollback
       expect(questionListStore.logError).toHaveBeenCalledWith('Update failed');
     });
 
@@ -269,7 +270,7 @@ describe('QuestionListService', () => {
 
       // Assert
       expect(questionListStore.updateQuestionInList).toHaveBeenCalledTimes(1); // Only optimistic update
-      expect(questionListStore.addQuestionToList).not.toHaveBeenCalled(); // No rollback
+      expect(questionListStore.restoreQuestion).not.toHaveBeenCalled(); // No rollback
       expect(questionListStore.logError).toHaveBeenCalledWith('Update failed');
     });
   });

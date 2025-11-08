@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { RandomizationShellFacade } from './randomization-shell.facade';
@@ -11,6 +16,7 @@ import {
 import {
   EditQuestionFormValue,
   FormatTagsPipe,
+  NormalizeSpacePipe,
   Randomization,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import {
@@ -34,8 +40,9 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
     ButtonGroupComponent,
     ButtonIconComponent,
     FormatTagsPipe,
-    TranslocoModule
-],
+    TranslocoModule,
+    NormalizeSpacePipe,
+  ],
   templateUrl: './randomization-shell.component.html',
   styleUrl: './randomization-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

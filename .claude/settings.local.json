@@ -53,7 +53,14 @@
       "Bash(npx nx test question-randomizer-dashboard-shared-data-access --codeCoverage)",
       "Bash(npx nx test:*)",
       "Bash(nul)",
-      "Bash(if exist \"libs\\question-randomizer\\dashboard\\shared\\data-access\\src\\services\\question-list.service.spec.ts\" echo File exists)"
+      "Bash(if exist \"libs\\question-randomizer\\dashboard\\shared\\data-access\\src\\services\\question-list.service.spec.ts\" echo File exists)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.anthropic.com)",
+      "WebFetch(domain:www.freecodecamp.org)",
+      "Bash(npm run build:*)",
+      "Bash(if exist \"learning-library\\dist\\index.js\" echo \"Learning Library built\")",
+      "Bash(if exist \"code-snippets\\dist\\index.js\" echo \"Code Snippets built\")",
+      "Bash(if exist \"task-manager\\dist\\index.js\" echo \"Task Manager built\")"
     ],
     "deny": [],
     "ask": []

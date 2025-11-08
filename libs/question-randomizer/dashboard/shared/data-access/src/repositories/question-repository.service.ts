@@ -4,6 +4,7 @@ import {
   collection,
   collectionData,
   deleteDoc,
+  deleteField,
   doc,
   Firestore,
   getDoc,
@@ -79,7 +80,16 @@ export class QuestionRepositoryService {
     request: UpdateQuestionRequest
   ): Promise<void> {
     const questionDoc = doc(this.afDb, `questions/${questionId}`);
-    return updateDoc(questionDoc, { ...request });
+    const { id, tags, ...updateData } = request;
+
+    // If tags is undefined, explicitly delete the field from Firestore
+    // Otherwise, Firestore would ignore undefined and leave the existing value
+    const tagsUpdate = tags === undefined ? deleteField() : tags;
+
+    return updateDoc(questionDoc, {
+      ...updateData,
+      tags: tagsUpdate,
+    });
   }
 
   public async updateQuestions(

@@ -166,7 +166,7 @@
       "qualificationLabel": "Qualification",
       "qualificationPlaceholder": "Select qualification",
       "tagsLabel": "Tags",
-      "tagsPlaceholder": "Enter tags (comma-separated)",
+      "tagsPlaceholder": "Enter tags (semicolon-separated)",
       "activeLabel": "Active",
       "submitButton": "Save",
       "cancelButton": "Cancel"
