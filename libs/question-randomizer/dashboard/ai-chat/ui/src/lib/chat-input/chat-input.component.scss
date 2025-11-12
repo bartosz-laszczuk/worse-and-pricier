@@ -41,6 +41,7 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
   height: fit-content;
+  align-self: center;
 
   &:hover:not(:disabled) {
     opacity: 0.9;
