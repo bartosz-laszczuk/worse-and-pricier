@@ -18,7 +18,7 @@ export class QuestionMapperService {
     userId: string
   ): CreateQuestionRequest {
     const tags = this.parseTagsString(formValue.tags);
-    return {
+    const request: CreateQuestionRequest = {
       question: formValue.question,
       answer: formValue.answer,
       answerPl: formValue.answerPl,
@@ -26,8 +26,14 @@ export class QuestionMapperService {
       qualificationId: formValue.qualificationId ?? null,
       isActive: formValue.isActive,
       userId,
-      tags: tags.length > 0 ? tags : undefined,
     };
+
+    // Only include tags field if there are actual tags
+    if (tags.length > 0) {
+      request.tags = tags;
+    }
+
+    return request;
   }
 
   public mapEditQuestionFormValueToUpdateQuestionRequest(
@@ -35,7 +41,7 @@ export class QuestionMapperService {
     questionId: string
   ): UpdateQuestionRequest {
     const tags = this.parseTagsString(formValue.tags);
-    return {
+    const request: UpdateQuestionRequest = {
       id: questionId,
       question: formValue.question,
       answer: formValue.answer,
@@ -43,8 +49,14 @@ export class QuestionMapperService {
       categoryId: formValue.categoryId,
       qualificationId: formValue.qualificationId ?? null,
       isActive: formValue.isActive,
-      tags: tags.length > 0 ? tags : undefined,
     };
+
+    // Only include tags field if there are actual tags
+    if (tags.length > 0) {
+      request.tags = tags;
+    }
+
+    return request;
   }
 
   public mapEditQuestionFormValueToQuestion(
@@ -53,7 +65,7 @@ export class QuestionMapperService {
     userId: string
   ): Question {
     const tags = this.parseTagsString(formValue.tags);
-    return {
+    const question: Question = {
       id: questionId,
       question: formValue.question,
       answer: formValue.answer,
@@ -64,8 +76,14 @@ export class QuestionMapperService {
       qualificationName: formValue.qualificationName,
       isActive: formValue.isActive,
       userId,
-      tags: tags.length > 0 ? tags : undefined,
     };
+
+    // Only include tags field if there are actual tags
+    if (tags.length > 0) {
+      question.tags = tags;
+    }
+
+    return question;
   }
 
   private parseTagsString(tagsString: string): string[] {
@@ -88,7 +106,7 @@ export class QuestionMapperService {
     const qualificationId =
       qualificationMap.get(importItem.qualificationName)?.id ?? null;
     const tags = this.parseTagsString(importItem.tags ?? '');
-    return {
+    const request: UpdateQuestionRequest = {
       id: questionId,
       question: importItem.question,
       answer: importItem.answer,
@@ -96,8 +114,14 @@ export class QuestionMapperService {
       categoryId,
       qualificationId,
       isActive: importItem.isActive,
-      tags: tags.length > 0 ? tags : undefined,
     };
+
+    // Only include tags field if there are actual tags
+    if (tags.length > 0) {
+      request.tags = tags;
+    }
+
+    return request;
   }
 
   public mapQuestionCsvListItemToCreateQuestionRequest(
@@ -110,7 +134,7 @@ export class QuestionMapperService {
     const qualificationId =
       qualificationMap.get(importItem.qualificationName)?.id ?? null;
     const tags = this.parseTagsString(importItem.tags ?? '');
-    return {
+    const request: CreateQuestionRequest = {
       question: importItem.question,
       answer: importItem.answer,
       answerPl: importItem.answerPl,
@@ -118,7 +142,13 @@ export class QuestionMapperService {
       qualificationId,
       isActive: importItem.isActive,
       userId,
-      tags: tags.length > 0 ? tags : undefined,
     };
+
+    // Only include tags field if there are actual tags
+    if (tags.length > 0) {
+      request.tags = tags;
+    }
+
+    return request;
   }
 }
