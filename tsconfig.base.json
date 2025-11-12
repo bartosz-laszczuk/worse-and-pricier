@@ -39,6 +39,15 @@
       "@worse-and-pricier/question-randomizer-auth-util": [
         "libs/question-randomizer/auth/util/src/index.ts"
       ],
+      "@worse-and-pricier/question-randomizer-dashboard-ai-chat-data-access": [
+        "libs/question-randomizer/dashboard/ai-chat/data-access/src/index.ts"
+      ],
+      "@worse-and-pricier/question-randomizer-dashboard-ai-chat-shell": [
+        "libs/question-randomizer/dashboard/ai-chat/shell/src/index.ts"
+      ],
+      "@worse-and-pricier/question-randomizer-dashboard-ai-chat-ui": [
+        "libs/question-randomizer/dashboard/ai-chat/ui/src/index.ts"
+      ],
       "@worse-and-pricier/question-randomizer-dashboard-category-feature": [
         "libs/question-randomizer/dashboard/category/feature/src/index.ts"
       ],

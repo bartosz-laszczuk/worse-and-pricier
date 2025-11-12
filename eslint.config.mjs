@@ -70,6 +70,7 @@ export default [
                 'scope:randomization',
                 'scope:interview',
                 'scope:settings',
+                'scope:dashboard-ai-chat',
               ],
             },
             {
@@ -80,6 +81,7 @@ export default [
                 'scope:randomization',
                 'scope:interview',
                 'scope:settings',
+                'scope:dashboard-ai-chat',
               ],
             },
             {
@@ -90,6 +92,7 @@ export default [
                 'scope:randomization',
                 'scope:interview',
                 'scope:settings',
+                'scope:dashboard-ai-chat',
               ],
             },
             {
@@ -100,6 +103,7 @@ export default [
                 'scope:qualification',
                 'scope:interview',
                 'scope:settings',
+                'scope:dashboard-ai-chat',
               ],
             },
             {
@@ -110,6 +114,7 @@ export default [
                 'scope:qualification',
                 'scope:randomization',
                 'scope:settings',
+                'scope:dashboard-ai-chat',
               ],
             },
             {
@@ -120,6 +125,18 @@ export default [
                 'scope:qualification',
                 'scope:randomization',
                 'scope:interview',
+                'scope:dashboard-ai-chat',
+              ],
+            },
+            {
+              sourceTag: 'scope:dashboard-ai-chat',
+              notDependOnLibsWithTags: [
+                'scope:question',
+                'scope:category',
+                'scope:qualification',
+                'scope:randomization',
+                'scope:interview',
+                'scope:settings',
               ],
             },
           ],

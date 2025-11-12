@@ -46,7 +46,8 @@ export class DashboardSidebarComponent {
     { label: 'Questions', icon: 'help-circle', route: 'questions' },
     { label: 'Categories', icon: 'tag', route: 'categories' },
     { label: 'Qualifications', icon: 'award', route: 'qualifications' },
-    { label: 'Interview', icon: 'mic', route: 'interview', divider: true },
+    { label: 'Interview', icon: 'mic', route: 'interview' },
+    { label: 'AI Chat', icon: 'message-circle', route: 'ai-chat', divider: true },
     { label: 'Settings', icon: 'settings', route: 'settings' },
   ];
 }

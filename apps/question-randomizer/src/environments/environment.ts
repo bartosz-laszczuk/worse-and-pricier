@@ -20,6 +20,7 @@ export const environment: AppConfig = {
       handleCodeInApp: true,
     },
   },
+  aiAgentApiUrl: 'http://localhost:3001/api',
 };
 
 /*

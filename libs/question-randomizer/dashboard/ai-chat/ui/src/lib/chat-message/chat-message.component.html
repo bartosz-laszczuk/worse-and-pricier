@@ -1,0 +1,9 @@
+<div class="chat-message" [class.user-message]="message().role === 'user'" [class.assistant-message]="message().role === 'assistant'">
+  <div class="message-header">
+    <span class="message-role">{{ message().role === 'user' ? 'You' : 'AI Assistant' }}</span>
+    <span class="message-timestamp">{{ message().timestamp | date:'short' }}</span>
+  </div>
+  <div class="message-content">
+    {{ message().content }}
+  </div>
+</div>

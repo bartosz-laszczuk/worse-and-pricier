@@ -60,7 +60,10 @@
       "Bash(npm run build:*)",
       "Bash(if exist \"learning-library\\dist\\index.js\" echo \"Learning Library built\")",
       "Bash(if exist \"code-snippets\\dist\\index.js\" echo \"Code Snippets built\")",
-      "Bash(if exist \"task-manager\\dist\\index.js\" echo \"Task Manager built\")"
+      "Bash(if exist \"task-manager\\dist\\index.js\" echo \"Task Manager built\")",
+      "mcp__nx-mcp__nx_generators",
+      "mcp__nx-mcp__nx_generator_schema",
+      "Bash(npx nx:*)"
     ],
     "deny": [],
     "ask": []

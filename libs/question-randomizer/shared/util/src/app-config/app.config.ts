@@ -14,4 +14,5 @@ export interface AppConfig {
       handleCodeInApp: boolean;
     };
   };
+  aiAgentApiUrl?: string;
 }

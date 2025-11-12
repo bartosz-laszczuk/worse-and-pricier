@@ -55,6 +55,13 @@ export const dashboardShellRoutes: Route[] = [
             '@worse-and-pricier/question-randomizer-dashboard-randomization-shell'
           ).then((r) => r.RandomizationShellComponent),
       },
+      {
+        path: 'ai-chat',
+        loadComponent: () =>
+          import(
+            '@worse-and-pricier/question-randomizer-dashboard-ai-chat-shell'
+          ).then((r) => r.AiChatShellComponent),
+      },
       // {
       //   path: 'static',
       //   loadChildren: () =>
