@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Category } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { UserStore } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { CategoryListStore, RandomizationStore } from '../store';
-import { CategoryRepositoryService } from '../repositories';
+import { CategoryRepository } from '../repositories';
 import { QuestionListService } from './question-list.service';
 import { RandomizationService } from './randomization.service';
 import { UsedQuestionListService } from './used-question-list.service';
@@ -13,9 +13,7 @@ import { SelectedCategoryListService } from './selected-category-list.service';
 export class CategoryListService {
   private readonly userStore = inject(UserStore);
   private readonly categoryListStore = inject(CategoryListStore);
-  private readonly categoryRepositoryService = inject(
-    CategoryRepositoryService
-  );
+  private readonly categoryRepository = inject(CategoryRepository);
   private readonly questionListService = inject(QuestionListService);
   private readonly randomizationService = inject(RandomizationService);
   private readonly randomizationStore = inject(RandomizationStore);
@@ -64,7 +62,7 @@ export class CategoryListService {
     try {
       this.categoryListStore.startLoading();
 
-      const categoryId = await this.categoryRepositoryService.createCategory(
+      const categoryId = await this.categoryRepository.createCategory(
         createdCategory,
         userId
       );
@@ -119,7 +117,7 @@ export class CategoryListService {
     this.categoryListStore.startLoading();
 
     try {
-      await this.categoryRepositoryService.updateCategory(updatedCategory.id, {
+      await this.categoryRepository.updateCategory(updatedCategory.id, {
         name: updatedCategory.name,
       });
       this.categoryListStore.updateCategoryInList(updatedCategory.id, {
@@ -165,7 +163,7 @@ export class CategoryListService {
       this.categoryListStore.deleteCategoryFromList(categoryId);
       this.randomizationStore.resetAvailableQuestionsCategoryId(categoryId);
       await Promise.all([
-        this.categoryRepositoryService.deleteCategory(categoryId),
+        this.categoryRepository.deleteCategory(categoryId),
         this.questionListService.deleteCategoryIdFromQuestions(categoryId),
         this.deselectCategoryFromRandomization(categoryId),
         this.resetUsedQuestionsCategoryId(categoryId),
@@ -208,7 +206,7 @@ export class CategoryListService {
     this.categoryListStore.startLoading();
 
     try {
-      const categories = await this.categoryRepositoryService.getCategories(
+      const categories = await this.categoryRepository.getCategories(
         userId
       );
 

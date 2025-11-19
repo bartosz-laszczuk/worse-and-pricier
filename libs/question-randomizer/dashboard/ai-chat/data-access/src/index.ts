@@ -3,10 +3,10 @@ export * from './lib/models/chat.models';
 
 // Services
 export * from './lib/services/chat.service';
-export * from './lib/services/ai-chat-api.service';
 
 // Repositories
-export * from './lib/repositories/chat-repository.service';
+export * from './lib/repositories/chat.repository';
+export * from './lib/repositories/ai-chat-api.repository';
 
 // Store
 export * from './lib/store/chat.store';

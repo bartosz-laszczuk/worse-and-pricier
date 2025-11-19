@@ -23,13 +23,13 @@ Domain models and TypeScript interfaces:
 
 Firebase Firestore data access layer:
 
-- **`category-repository.service.ts`** - CRUD operations for categories
-- **`qualification-repository.service.ts`** - CRUD operations for qualifications
-- **`question-repository.service.ts`** - CRUD operations for questions
-- **`randomization-repository.service.ts`** - Randomization settings persistence
-- **`selected-category-list-repository.service.ts`** - Selected categories tracking
-- **`used-question-list-repository.service.ts`** - Used questions tracking
-- **`postponed-question-list-repository.service.ts`** - Postponed questions tracking
+- **`category.repository.ts`** - CRUD operations for categories
+- **`qualification.repository.ts`** - CRUD operations for qualifications
+- **`question.repository.ts`** - CRUD operations for questions
+- **`randomization.repository.ts`** - Randomization settings persistence
+- **`selected-category-list.repository.ts`** - Selected categories tracking
+- **`used-question-list.repository.ts`** - Used questions tracking
+- **`postponed-question-list.repository.ts`** - Postponed questions tracking
 
 ### 3. Services (`src/services/`)
 

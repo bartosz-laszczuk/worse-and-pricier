@@ -21,7 +21,7 @@ import { lastValueFrom, Observable, take } from 'rxjs';
 import { CreateQuestionRequest, UpdateQuestionRequest } from '../models';
 
 @Injectable({ providedIn: 'root' })
-export class QuestionRepositoryService {
+export class QuestionRepository {
   private readonly afDb = inject(Firestore);
 
   private questionsCollection = collection(this.afDb, 'questions');

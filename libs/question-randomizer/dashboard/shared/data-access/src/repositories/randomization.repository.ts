@@ -21,7 +21,7 @@ import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 @Injectable({
   providedIn: 'root',
 })
-export class RandomizationRepositoryService {
+export class RandomizationRepository {
   private readonly firestore = inject(Firestore);
   private readonly collectionName = 'randomizations';
 

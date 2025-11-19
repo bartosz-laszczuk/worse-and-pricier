@@ -17,10 +17,10 @@ import { Observable, from, map } from 'rxjs';
 import { ChatMessage, Conversation } from '../models/chat.models';
 
 /**
- * Repository service for chat-related Firestore operations
+ * Repository for chat-related Firestore operations
  */
 @Injectable({ providedIn: 'root' })
-export class ChatRepositoryService {
+export class ChatRepository {
   private readonly firestore = inject(Firestore);
   private readonly conversationsCollection = 'conversations';
   private readonly messagesCollection = 'messages';

@@ -1,13 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { UsedQuestionListRepositoryService } from '../repositories';
+import { UsedQuestionListRepository } from '../repositories';
 import { UsedQuestion } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { RandomizationStore } from '../store';
 
 @Injectable()
 export class UsedQuestionListService {
   private readonly randomizationStore = inject(RandomizationStore);
-  private readonly usedQuestionListRepositoryService = inject(
-    UsedQuestionListRepositoryService
+  private readonly usedQuestionListRepository = inject(
+    UsedQuestionListRepository
   );
 
   public async deleteUsedQuestionFromRandomization(
@@ -17,7 +17,7 @@ export class UsedQuestionListService {
     this.randomizationStore.startLoading();
     try {
       this.randomizationStore.deleteUsedQuestionFromRandomization(questionId);
-      await this.usedQuestionListRepositoryService.deleteQuestionFromUsedQuestions(
+      await this.usedQuestionListRepository.deleteQuestionFromUsedQuestions(
         randomizationId,
         questionId
       );
@@ -35,7 +35,7 @@ export class UsedQuestionListService {
     this.randomizationStore.startLoading();
     try {
       this.randomizationStore.resetUsedQuestionsCategoryId(categoryId);
-      await this.usedQuestionListRepositoryService.resetUsedQuestionsCategoryId(
+      await this.usedQuestionListRepository.resetUsedQuestionsCategoryId(
         randomizationId,
         categoryId
       );
@@ -52,7 +52,7 @@ export class UsedQuestionListService {
     this.randomizationStore.startLoading();
     try {
       this.randomizationStore.clearUsedQuestions();
-      await this.usedQuestionListRepositoryService.deleteAllUsedQuestionsFromRandomization(
+      await this.usedQuestionListRepository.deleteAllUsedQuestionsFromRandomization(
         randomizationId
       );
     } catch (error: unknown) {
@@ -72,7 +72,7 @@ export class UsedQuestionListService {
     try {
       this.randomizationStore.addUsedQuestionToRandomization(usedQuestion);
 
-      await this.usedQuestionListRepositoryService.addQuestionToUsedQuestions(
+      await this.usedQuestionListRepository.addQuestionToUsedQuestions(
         randomizationId,
         usedQuestion
       );

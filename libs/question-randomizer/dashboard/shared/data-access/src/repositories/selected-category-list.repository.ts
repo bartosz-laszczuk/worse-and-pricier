@@ -11,7 +11,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
-export class SelectedCategoryListRepositoryService {
+export class SelectedCategoryListRepository {
   private firestore = inject(Firestore);
 
   async addSelectedCategoryToRandomization(

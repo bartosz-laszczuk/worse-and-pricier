@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { RandomizationService } from './randomization.service';
 import {
-  RandomizationRepositoryService,
-  SelectedCategoryListRepositoryService,
-  UsedQuestionListRepositoryService,
+  RandomizationRepository,
+  SelectedCategoryListRepository,
+  UsedQuestionListRepository,
 } from '../repositories';
 import { RandomizationMapperService } from './randomization-mapper.service';
 import { RandomizationStore } from '../store';
-import { PostponedQuestionListRepositoryService } from '../repositories/postponed-question-list-repository.service';
+import { PostponedQuestionListRepository } from '../repositories/postponed-question-list.repository';
 import {
   Question,
   QuestionCategory,
@@ -36,11 +36,11 @@ interface MockRandomizationStore {
 describe('RandomizationService', () => {
   let service: RandomizationService;
   let randomizationStore: MockRandomizationStore;
-  let randomizationRepositoryService: jest.Mocked<RandomizationRepositoryService>;
+  let randomizationRepository: jest.Mocked<RandomizationRepository>;
   let randomizationMapperService: jest.Mocked<RandomizationMapperService>;
-  let selectedCategoryListRepositoryService: jest.Mocked<SelectedCategoryListRepositoryService>;
-  let usedQuestionListRepositoryService: jest.Mocked<UsedQuestionListRepositoryService>;
-  let postponedQuestionListRepositoryService: jest.Mocked<PostponedQuestionListRepositoryService>;
+  let selectedCategoryListRepository: jest.Mocked<SelectedCategoryListRepository>;
+  let usedQuestionListRepository: jest.Mocked<UsedQuestionListRepository>;
+  let postponedQuestionListRepository: jest.Mocked<PostponedQuestionListRepository>;
 
   const mockQuestion: Question = {
     id: 'q1',
@@ -84,7 +84,7 @@ describe('RandomizationService', () => {
       logError: jest.fn(),
     };
 
-    randomizationRepositoryService = {
+    randomizationRepository = {
       getRandomization: jest.fn(),
       createRandomization: jest.fn(),
       updateRandomization: jest.fn(),
@@ -95,16 +95,16 @@ describe('RandomizationService', () => {
       mapGetRandomizationResponseToRandomization: jest.fn(),
     } as any;
 
-    selectedCategoryListRepositoryService = {
+    selectedCategoryListRepository = {
       getSelectedCategoryIdListForRandomization: jest.fn(),
     } as any;
 
-    usedQuestionListRepositoryService = {
+    usedQuestionListRepository = {
       getUsedQuestionIdListForRandomization: jest.fn(),
       updateUsedQuestionCategoryId: jest.fn(),
     } as any;
 
-    postponedQuestionListRepositoryService = {
+    postponedQuestionListRepository = {
       getPostponedQuestionIdListForRandomization: jest.fn(),
       updatePostponedQuestionCategoryId: jest.fn(),
     } as any;
@@ -113,11 +113,11 @@ describe('RandomizationService', () => {
       providers: [
         RandomizationService,
         { provide: RandomizationStore, useValue: randomizationStore },
-        { provide: RandomizationRepositoryService, useValue: randomizationRepositoryService },
+        { provide: RandomizationRepository, useValue: randomizationRepository },
         { provide: RandomizationMapperService, useValue: randomizationMapperService },
-        { provide: SelectedCategoryListRepositoryService, useValue: selectedCategoryListRepositoryService },
-        { provide: UsedQuestionListRepositoryService, useValue: usedQuestionListRepositoryService },
-        { provide: PostponedQuestionListRepositoryService, useValue: postponedQuestionListRepositoryService },
+        { provide: SelectedCategoryListRepository, useValue: selectedCategoryListRepository },
+        { provide: UsedQuestionListRepository, useValue: usedQuestionListRepository },
+        { provide: PostponedQuestionListRepository, useValue: postponedQuestionListRepository },
       ],
     });
 
@@ -135,28 +135,28 @@ describe('RandomizationService', () => {
       await service.loadRandomization('user1', mockQuestionMap, false);
 
       expect(randomizationStore.startLoading).not.toHaveBeenCalled();
-      expect(randomizationRepositoryService.getRandomization).not.toHaveBeenCalled();
+      expect(randomizationRepository.getRandomization).not.toHaveBeenCalled();
     });
 
     it('should force reload when forceLoad is true even if entity exists', async () => {
       randomizationStore.entity.set(mockRandomization);
-      randomizationRepositoryService.getRandomization.mockResolvedValue(null);
-      randomizationRepositoryService.createRandomization.mockResolvedValue('newRandId');
+      randomizationRepository.getRandomization.mockResolvedValue(null);
+      randomizationRepository.createRandomization.mockResolvedValue('newRandId');
 
       await service.loadRandomization('user1', mockQuestionMap, true);
 
       expect(randomizationStore.startLoading).toHaveBeenCalled();
-      expect(randomizationRepositoryService.getRandomization).toHaveBeenCalledWith('user1');
+      expect(randomizationRepository.getRandomization).toHaveBeenCalledWith('user1');
     });
 
     it('should create new randomization when none exists', async () => {
-      randomizationRepositoryService.getRandomization.mockResolvedValue(null);
-      randomizationRepositoryService.createRandomization.mockResolvedValue('newRandId');
+      randomizationRepository.getRandomization.mockResolvedValue(null);
+      randomizationRepository.createRandomization.mockResolvedValue('newRandId');
 
       await service.loadRandomization('user1', mockQuestionMap);
 
       expect(randomizationStore.startLoading).toHaveBeenCalled();
-      expect(randomizationRepositoryService.createRandomization).toHaveBeenCalledWith('user1');
+      expect(randomizationRepository.createRandomization).toHaveBeenCalledWith('user1');
       expect(randomizationStore.setRandomization).toHaveBeenCalledWith(
         expect.objectContaining({
           id: 'newRandId',
@@ -167,8 +167,8 @@ describe('RandomizationService', () => {
     });
 
     it('should initialize availableQuestionList with all questions when creating new randomization', async () => {
-      randomizationRepositoryService.getRandomization.mockResolvedValue(null);
-      randomizationRepositoryService.createRandomization.mockResolvedValue('newRandId');
+      randomizationRepository.getRandomization.mockResolvedValue(null);
+      randomizationRepository.createRandomization.mockResolvedValue('newRandId');
 
       await service.loadRandomization('user1', mockQuestionMap);
 
@@ -196,10 +196,10 @@ describe('RandomizationService', () => {
         created: null as any,
       };
 
-      randomizationRepositoryService.getRandomization.mockResolvedValue(mockResponse);
-      usedQuestionListRepositoryService.getUsedQuestionIdListForRandomization.mockResolvedValue([]);
-      postponedQuestionListRepositoryService.getPostponedQuestionIdListForRandomization.mockResolvedValue([]);
-      selectedCategoryListRepositoryService.getSelectedCategoryIdListForRandomization.mockResolvedValue(['cat1']);
+      randomizationRepository.getRandomization.mockResolvedValue(mockResponse);
+      usedQuestionListRepository.getUsedQuestionIdListForRandomization.mockResolvedValue([]);
+      postponedQuestionListRepository.getPostponedQuestionIdListForRandomization.mockResolvedValue([]);
+      selectedCategoryListRepository.getSelectedCategoryIdListForRandomization.mockResolvedValue(['cat1']);
       randomizationMapperService.mapGetRandomizationResponseToRandomization.mockReturnValue(mockRandomization);
 
       await service.loadRandomization('user1', mockQuestionMap);
@@ -209,7 +209,7 @@ describe('RandomizationService', () => {
     });
 
     it('should handle errors', async () => {
-      randomizationRepositoryService.getRandomization.mockRejectedValue(new Error('Network error'));
+      randomizationRepository.getRandomization.mockRejectedValue(new Error('Network error'));
 
       await service.loadRandomization('user1', mockQuestionMap);
 
@@ -217,7 +217,7 @@ describe('RandomizationService', () => {
     });
 
     it('should handle non-Error exceptions', async () => {
-      randomizationRepositoryService.getRandomization.mockRejectedValue('String error');
+      randomizationRepository.getRandomization.mockRejectedValue('String error');
 
       await service.loadRandomization('user1', mockQuestionMap);
 
@@ -237,7 +237,7 @@ describe('RandomizationService', () => {
       randomizationStore.filteredAvailableQuestionList.mockReturnValue([
         { questionId: 'q1', categoryId: 'cat1' },
       ]);
-      randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+      randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
       await service.advanceToNextQuestion(mockQuestionMap);
 
@@ -261,7 +261,7 @@ describe('RandomizationService', () => {
         { questionId: 'q2', categoryId: 'cat1' },
         { questionId: 'q1', categoryId: 'cat1' },
       ]);
-      randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+      randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
       await service.advanceToNextQuestion(mockQuestionMap);
 
@@ -282,7 +282,7 @@ describe('RandomizationService', () => {
       await service.advanceToNextQuestion(mockQuestionMap);
 
       expect(randomizationStore.setCurrentQuestion).not.toHaveBeenCalled();
-      expect(randomizationRepositoryService.updateRandomization).not.toHaveBeenCalled();
+      expect(randomizationRepository.updateRandomization).not.toHaveBeenCalled();
     });
 
     it('should reset showAnswer to false when updating current question', async () => {
@@ -295,7 +295,7 @@ describe('RandomizationService', () => {
       randomizationStore.filteredAvailableQuestionList.mockReturnValue([
         { questionId: 'q1', categoryId: 'cat1' },
       ]);
-      randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+      randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
       await service.advanceToNextQuestion(mockQuestionMap);
 
@@ -310,7 +310,7 @@ describe('RandomizationService', () => {
       randomizationStore.entity.set(mockRandomization);
       randomizationStore.filteredAvailableQuestionList.mockReturnValue([]);
       randomizationStore.filteredPostponedQuestionList.mockReturnValue([]);
-      randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+      randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
       await service.advanceToNextQuestion(mockQuestionMap);
 
@@ -331,7 +331,7 @@ describe('RandomizationService', () => {
         { questionId: 'q1', categoryId: 'cat1' },
         { questionId: 'q3', categoryId: 'cat1' },
       ]);
-      randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+      randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
       await service.advanceToNextQuestion(mockQuestionMap);
 
@@ -344,7 +344,7 @@ describe('RandomizationService', () => {
       randomizationStore.filteredAvailableQuestionList.mockReturnValue([
         { questionId: 'q1', categoryId: 'cat1' },
       ]);
-      randomizationRepositoryService.updateRandomization.mockRejectedValue(new Error('Update failed'));
+      randomizationRepository.updateRandomization.mockRejectedValue(new Error('Update failed'));
 
       await service.advanceToNextQuestion(mockQuestionMap);
 
@@ -356,7 +356,7 @@ describe('RandomizationService', () => {
       randomizationStore.filteredAvailableQuestionList.mockReturnValue([
         { questionId: 'q1', categoryId: 'cat1' },
       ]);
-      randomizationRepositoryService.updateRandomization.mockRejectedValue('String error');
+      randomizationRepository.updateRandomization.mockRejectedValue('String error');
 
       await service.advanceToNextQuestion(mockQuestionMap);
 
@@ -366,17 +366,17 @@ describe('RandomizationService', () => {
 
   describe('updateRandomization', () => {
     it('should update randomization in store and repository', async () => {
-      randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+      randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
       await service.updateRandomization(mockRandomization);
 
       expect(randomizationStore.startLoading).toHaveBeenCalled();
       expect(randomizationStore.setRandomization).toHaveBeenCalledWith(mockRandomization);
-      expect(randomizationRepositoryService.updateRandomization).toHaveBeenCalledWith(mockRandomization);
+      expect(randomizationRepository.updateRandomization).toHaveBeenCalledWith(mockRandomization);
     });
 
     it('should handle errors', async () => {
-      randomizationRepositoryService.updateRandomization.mockRejectedValue(new Error('Update error'));
+      randomizationRepository.updateRandomization.mockRejectedValue(new Error('Update error'));
 
       await service.updateRandomization(mockRandomization);
 
@@ -391,26 +391,26 @@ describe('RandomizationService', () => {
     };
 
     it('should update category in store and repositories', async () => {
-      postponedQuestionListRepositoryService.updatePostponedQuestionCategoryId.mockResolvedValue(undefined);
-      usedQuestionListRepositoryService.updateUsedQuestionCategoryId.mockResolvedValue(undefined);
+      postponedQuestionListRepository.updatePostponedQuestionCategoryId.mockResolvedValue(undefined);
+      usedQuestionListRepository.updateUsedQuestionCategoryId.mockResolvedValue(undefined);
 
       await service.updateQuestionCategoryAcrossLists(mockQuestionCategory);
 
       expect(randomizationStore.startLoading).toHaveBeenCalled();
       expect(randomizationStore.updateQuestionCategoryListsCategoryId).toHaveBeenCalledWith(mockQuestionCategory);
-      expect(postponedQuestionListRepositoryService.updatePostponedQuestionCategoryId).toHaveBeenCalledWith(
+      expect(postponedQuestionListRepository.updatePostponedQuestionCategoryId).toHaveBeenCalledWith(
         mockQuestionCategory
       );
-      expect(usedQuestionListRepositoryService.updateUsedQuestionCategoryId).toHaveBeenCalledWith(
+      expect(usedQuestionListRepository.updateUsedQuestionCategoryId).toHaveBeenCalledWith(
         mockQuestionCategory
       );
     });
 
     it('should handle errors', async () => {
-      postponedQuestionListRepositoryService.updatePostponedQuestionCategoryId.mockRejectedValue(
+      postponedQuestionListRepository.updatePostponedQuestionCategoryId.mockRejectedValue(
         new Error('Repository error')
       );
-      usedQuestionListRepositoryService.updateUsedQuestionCategoryId.mockResolvedValue(undefined);
+      usedQuestionListRepository.updateUsedQuestionCategoryId.mockResolvedValue(undefined);
 
       await service.updateQuestionCategoryAcrossLists(mockQuestionCategory);
 
@@ -418,7 +418,7 @@ describe('RandomizationService', () => {
     });
 
     it('should handle non-Error exceptions', async () => {
-      postponedQuestionListRepositoryService.updatePostponedQuestionCategoryId.mockRejectedValue('String error');
+      postponedQuestionListRepository.updatePostponedQuestionCategoryId.mockRejectedValue('String error');
 
       await service.updateQuestionCategoryAcrossLists(mockQuestionCategory);
 
@@ -429,7 +429,7 @@ describe('RandomizationService', () => {
   describe('setQuestionAsCurrentQuestion', () => {
     it('should set question as current with immutable object', async () => {
       randomizationStore.entity.set(mockRandomization);
-      randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+      randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
       const newQuestion: Question = { ...mockQuestion, id: 'q2' };
 
@@ -451,7 +451,7 @@ describe('RandomizationService', () => {
 
     it('should handle errors', async () => {
       randomizationStore.entity.set(mockRandomization);
-      randomizationRepositoryService.updateRandomization.mockRejectedValue(new Error('Set question error'));
+      randomizationRepository.updateRandomization.mockRejectedValue(new Error('Set question error'));
 
       await service.setQuestionAsCurrentQuestion(mockQuestion);
 
@@ -460,7 +460,7 @@ describe('RandomizationService', () => {
 
     it('should handle non-Error exceptions', async () => {
       randomizationStore.entity.set(mockRandomization);
-      randomizationRepositoryService.updateRandomization.mockRejectedValue('String error');
+      randomizationRepository.updateRandomization.mockRejectedValue('String error');
 
       await service.setQuestionAsCurrentQuestion(mockQuestion);
 
@@ -470,17 +470,17 @@ describe('RandomizationService', () => {
 
   describe('clearCurrentQuestion', () => {
     it('should clear current question in store and repository', async () => {
-      randomizationRepositoryService.clearCurrentQuestion.mockResolvedValue(undefined);
+      randomizationRepository.clearCurrentQuestion.mockResolvedValue(undefined);
 
       await service.clearCurrentQuestion('rand1');
 
       expect(randomizationStore.startLoading).toHaveBeenCalled();
       expect(randomizationStore.clearCurrentQuestion).toHaveBeenCalled();
-      expect(randomizationRepositoryService.clearCurrentQuestion).toHaveBeenCalledWith('rand1');
+      expect(randomizationRepository.clearCurrentQuestion).toHaveBeenCalledWith('rand1');
     });
 
     it('should handle errors', async () => {
-      randomizationRepositoryService.clearCurrentQuestion.mockRejectedValue(new Error('Clear error'));
+      randomizationRepository.clearCurrentQuestion.mockRejectedValue(new Error('Clear error'));
 
       await service.clearCurrentQuestion('rand1');
 
@@ -488,7 +488,7 @@ describe('RandomizationService', () => {
     });
 
     it('should handle non-Error exceptions', async () => {
-      randomizationRepositoryService.clearCurrentQuestion.mockRejectedValue('String error');
+      randomizationRepository.clearCurrentQuestion.mockRejectedValue('String error');
 
       await service.clearCurrentQuestion('rand1');
 
@@ -505,7 +505,7 @@ describe('RandomizationService', () => {
         randomizationStore.filteredAvailableQuestionList.mockReturnValue([
           { questionId: 'q1', categoryId: 'cat1' },
         ]);
-        randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+        randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
         await service.advanceToNextQuestion(emptyQuestionMap);
 

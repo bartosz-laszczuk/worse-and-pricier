@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { QuestionListService } from './question-list.service';
-import { QuestionRepositoryService } from '../repositories';
+import { QuestionRepository } from '../repositories';
 import { QuestionListStore, RandomizationStore } from '../store';
 import { QuestionMapperService } from './question-mapper.service';
 import { RandomizationService } from './randomization.service';
@@ -19,7 +19,7 @@ import {
 describe('QuestionListService', () => {
   let service: QuestionListService;
   let userStore: any;
-  let questionRepositoryService: jest.Mocked<QuestionRepositoryService>;
+  let questionRepository: jest.Mocked<QuestionRepository>;
   let questionMapperService: jest.Mocked<QuestionMapperService>;
   let questionListStore: any;
   let randomizationService: jest.Mocked<RandomizationService>;
@@ -76,7 +76,7 @@ describe('QuestionListService', () => {
       uid: jest.fn().mockReturnValue(mockUserId),
     };
 
-    const questionRepositoryServiceMock = {
+    const questionRepositoryMock = {
       createQuestion: jest.fn(),
       updateQuestion: jest.fn(),
       deleteQuestion: jest.fn(),
@@ -128,7 +128,7 @@ describe('QuestionListService', () => {
       providers: [
         QuestionListService,
         { provide: UserStore, useValue: userStoreMock },
-        { provide: QuestionRepositoryService, useValue: questionRepositoryServiceMock },
+        { provide: QuestionRepository, useValue: questionRepositoryMock },
         { provide: QuestionMapperService, useValue: questionMapperServiceMock },
         { provide: QuestionListStore, useValue: questionListStoreMock },
         { provide: RandomizationService, useValue: randomizationServiceMock },
@@ -140,7 +140,7 @@ describe('QuestionListService', () => {
 
     service = TestBed.inject(QuestionListService);
     userStore = TestBed.inject(UserStore);
-    questionRepositoryService = TestBed.inject(QuestionRepositoryService) as jest.Mocked<QuestionRepositoryService>;
+    questionRepository = TestBed.inject(QuestionRepository) as jest.Mocked<QuestionRepository>;
     questionMapperService = TestBed.inject(QuestionMapperService) as jest.Mocked<QuestionMapperService>;
     questionListStore = TestBed.inject(QuestionListStore);
     randomizationService = TestBed.inject(RandomizationService) as jest.Mocked<RandomizationService>;
@@ -160,7 +160,7 @@ describe('QuestionListService', () => {
       const newQuestionId = 'new-question-123';
 
       questionMapperService.mapEditQuestionFormValueToCreateQuestionRequest.mockReturnValue(createQuestionRequest as any);
-      questionRepositoryService.createQuestion.mockResolvedValue(newQuestionId);
+      questionRepository.createQuestion.mockResolvedValue(newQuestionId);
       questionMapperService.mapEditQuestionFormValueToQuestion.mockReturnValue(mockQuestion);
 
       // Act
@@ -172,7 +172,7 @@ describe('QuestionListService', () => {
         mockEditQuestionFormValue,
         mockUserId
       );
-      expect(questionRepositoryService.createQuestion).toHaveBeenCalledWith(createQuestionRequest);
+      expect(questionRepository.createQuestion).toHaveBeenCalledWith(createQuestionRequest);
       expect(questionMapperService.mapEditQuestionFormValueToQuestion).toHaveBeenCalledWith(
         newQuestionId,
         mockEditQuestionFormValue,
@@ -193,13 +193,13 @@ describe('QuestionListService', () => {
 
       // Assert
       expect(questionListStore.startLoading).not.toHaveBeenCalled();
-      expect(questionRepositoryService.createQuestion).not.toHaveBeenCalled();
+      expect(questionRepository.createQuestion).not.toHaveBeenCalled();
     });
 
     it('should handle errors and log them', async () => {
       // Arrange
       const error = new Error('Creation failed');
-      questionRepositoryService.createQuestion.mockRejectedValue(error);
+      questionRepository.createQuestion.mockRejectedValue(error);
       questionMapperService.mapEditQuestionFormValueToCreateQuestionRequest.mockReturnValue({} as any);
 
       // Act
@@ -211,7 +211,7 @@ describe('QuestionListService', () => {
 
     it('should handle non-Error exceptions', async () => {
       // Arrange
-      questionRepositoryService.createQuestion.mockRejectedValue('String error');
+      questionRepository.createQuestion.mockRejectedValue('String error');
       questionMapperService.mapEditQuestionFormValueToCreateQuestionRequest.mockReturnValue({} as any);
 
       // Act
@@ -227,7 +227,7 @@ describe('QuestionListService', () => {
       // Arrange
       const updateQuestionRequest = { text: 'Updated' };
       questionMapperService.mapEditQuestionFormValueToUpdateQuestionRequest.mockReturnValue(updateQuestionRequest as any);
-      questionRepositoryService.updateQuestion.mockResolvedValue();
+      questionRepository.updateQuestion.mockResolvedValue();
       randomizationService.updateQuestionCategoryAcrossLists.mockResolvedValue();
 
       // Act
@@ -236,7 +236,7 @@ describe('QuestionListService', () => {
       // Assert
       expect(questionListStore.startLoading).toHaveBeenCalled();
       expect(questionListStore.updateQuestionInList).toHaveBeenCalledWith(mockQuestionId, mockEditQuestionFormValue);
-      expect(questionRepositoryService.updateQuestion).toHaveBeenCalledWith(mockQuestionId, updateQuestionRequest);
+      expect(questionRepository.updateQuestion).toHaveBeenCalledWith(mockQuestionId, updateQuestionRequest);
       expect(randomizationService.updateQuestionCategoryAcrossLists).toHaveBeenCalledWith({
         questionId: mockQuestionId,
         categoryId: mockEditQuestionFormValue.categoryId,
@@ -247,7 +247,7 @@ describe('QuestionListService', () => {
       // Arrange
       const error = new Error('Update failed');
       questionMapperService.mapEditQuestionFormValueToUpdateQuestionRequest.mockReturnValue({} as any);
-      questionRepositoryService.updateQuestion.mockRejectedValue(error);
+      questionRepository.updateQuestion.mockRejectedValue(error);
 
       // Act
       await service.updateQuestion(mockQuestionId, mockEditQuestionFormValue);
@@ -263,7 +263,7 @@ describe('QuestionListService', () => {
       questionListStore.entities.mockReturnValue({});
       const error = new Error('Update failed');
       questionMapperService.mapEditQuestionFormValueToUpdateQuestionRequest.mockReturnValue({} as any);
-      questionRepositoryService.updateQuestion.mockRejectedValue(error);
+      questionRepository.updateQuestion.mockRejectedValue(error);
 
       // Act
       await service.updateQuestion(mockQuestionId, mockEditQuestionFormValue);
@@ -278,7 +278,7 @@ describe('QuestionListService', () => {
   describe('deleteQuestion', () => {
     it('should delete a question successfully', async () => {
       // Arrange
-      questionRepositoryService.deleteQuestion.mockResolvedValue();
+      questionRepository.deleteQuestion.mockResolvedValue();
       usedQuestionListService.deleteUsedQuestionFromRandomization.mockResolvedValue();
       postponedQuestionListService.deletePostponedQuestionFromRandomization.mockResolvedValue();
 
@@ -289,13 +289,13 @@ describe('QuestionListService', () => {
       expect(questionListStore.startLoading).toHaveBeenCalled();
       expect(questionListStore.deleteQuestionFromList).toHaveBeenCalledWith(mockQuestionId);
       expect(randomizationStore.deleteAvailableQuestionFromRandomization).toHaveBeenCalledWith(mockQuestionId);
-      expect(questionRepositoryService.deleteQuestion).toHaveBeenCalledWith(mockQuestionId);
+      expect(questionRepository.deleteQuestion).toHaveBeenCalledWith(mockQuestionId);
     });
 
     it('should rollback optimistic deletion on error', async () => {
       // Arrange
       const error = new Error('Deletion failed');
-      questionRepositoryService.deleteQuestion.mockRejectedValue(error);
+      questionRepository.deleteQuestion.mockRejectedValue(error);
 
       // Act
       await service.deleteQuestion(mockQuestionId);
@@ -313,7 +313,7 @@ describe('QuestionListService', () => {
       // Arrange
       questionListStore.entities.mockReturnValue({});
       const error = new Error('Deletion failed');
-      questionRepositoryService.deleteQuestion.mockRejectedValue(error);
+      questionRepository.deleteQuestion.mockRejectedValue(error);
 
       // Act
       await service.deleteQuestion(mockQuestionId);
@@ -348,14 +348,14 @@ describe('QuestionListService', () => {
         },
       ] as Question[];
       questionListStore.entities.mockReturnValue(null); // Not loaded yet
-      questionRepositoryService.getQuestions.mockResolvedValue(rawQuestions);
+      questionRepository.getQuestions.mockResolvedValue(rawQuestions);
 
       // Act
       await service.loadQuestionList(categoryMap, qualificationMap);
 
       // Assert
       expect(questionListStore.startLoading).toHaveBeenCalled();
-      expect(questionRepositoryService.getQuestions).toHaveBeenCalledWith(mockUserId);
+      expect(questionRepository.getQuestions).toHaveBeenCalledWith(mockUserId);
       expect(questionListStore.loadQuestionList).toHaveBeenCalledWith([
         {
           ...rawQuestions[0],
@@ -373,20 +373,20 @@ describe('QuestionListService', () => {
       await service.loadQuestionList(categoryMap, qualificationMap, false);
 
       // Assert
-      expect(questionRepositoryService.getQuestions).not.toHaveBeenCalled();
+      expect(questionRepository.getQuestions).not.toHaveBeenCalled();
     });
 
     it('should load if forceLoad is true even if already loaded', async () => {
       // Arrange
       const rawQuestions = [mockQuestion];
       questionListStore.entities.mockReturnValue({ [mockQuestionId]: mockQuestion });
-      questionRepositoryService.getQuestions.mockResolvedValue(rawQuestions);
+      questionRepository.getQuestions.mockResolvedValue(rawQuestions);
 
       // Act
       await service.loadQuestionList(categoryMap, qualificationMap, true);
 
       // Assert
-      expect(questionRepositoryService.getQuestions).toHaveBeenCalledWith(mockUserId);
+      expect(questionRepository.getQuestions).toHaveBeenCalledWith(mockUserId);
     });
 
     it('should return early if userId is null', async () => {
@@ -399,14 +399,14 @@ describe('QuestionListService', () => {
 
       // Assert
       expect(questionListStore.startLoading).not.toHaveBeenCalled();
-      expect(questionRepositoryService.getQuestions).not.toHaveBeenCalled();
+      expect(questionRepository.getQuestions).not.toHaveBeenCalled();
     });
 
     it('should handle errors', async () => {
       // Arrange
       const error = new Error('Load failed');
       questionListStore.entities.mockReturnValue(null);
-      questionRepositoryService.getQuestions.mockRejectedValue(error);
+      questionRepository.getQuestions.mockRejectedValue(error);
 
       // Act
       await service.loadQuestionList(categoryMap, qualificationMap);
@@ -430,7 +430,7 @@ describe('QuestionListService', () => {
         } as Question,
       ];
       questionListStore.entities.mockReturnValue(null);
-      questionRepositoryService.getQuestions.mockResolvedValue(rawQuestions);
+      questionRepository.getQuestions.mockResolvedValue(rawQuestions);
 
       // Act
       await service.loadQuestionList(categoryMap, qualificationMap);
@@ -461,7 +461,7 @@ describe('QuestionListService', () => {
         } as Question,
       ];
       questionListStore.entities.mockReturnValue(null);
-      questionRepositoryService.getQuestions.mockResolvedValue(rawQuestions);
+      questionRepository.getQuestions.mockResolvedValue(rawQuestions);
 
       // Act
       await service.loadQuestionList(categoryMap, qualificationMap);
@@ -536,7 +536,7 @@ describe('QuestionListService', () => {
     it('should delete categoryId from questions successfully', async () => {
       // Arrange
       const categoryId = 'category-1';
-      questionRepositoryService.removeCategoryIdFromQuestions.mockResolvedValue();
+      questionRepository.removeCategoryIdFromQuestions.mockResolvedValue();
 
       // Act
       await service.deleteCategoryIdFromQuestions(categoryId);
@@ -544,7 +544,7 @@ describe('QuestionListService', () => {
       // Assert
       expect(questionListStore.startLoading).toHaveBeenCalled();
       expect(questionListStore.deleteCategoryIdFromQuestions).toHaveBeenCalledWith(categoryId);
-      expect(questionRepositoryService.removeCategoryIdFromQuestions).toHaveBeenCalledWith(categoryId, mockUserId);
+      expect(questionRepository.removeCategoryIdFromQuestions).toHaveBeenCalledWith(categoryId, mockUserId);
     });
 
     it('should return early if entities is null', async () => {
@@ -572,7 +572,7 @@ describe('QuestionListService', () => {
     it('should handle errors', async () => {
       // Arrange
       const error = new Error('Delete category failed');
-      questionRepositoryService.removeCategoryIdFromQuestions.mockRejectedValue(error);
+      questionRepository.removeCategoryIdFromQuestions.mockRejectedValue(error);
 
       // Act
       await service.deleteCategoryIdFromQuestions('category-1');
@@ -586,7 +586,7 @@ describe('QuestionListService', () => {
     it('should delete qualificationId from questions successfully', async () => {
       // Arrange
       const qualificationId = 'qualification-1';
-      questionRepositoryService.removeQualificationIdFromQuestions.mockResolvedValue();
+      questionRepository.removeQualificationIdFromQuestions.mockResolvedValue();
 
       // Act
       await service.deleteQualificationIdFromQuestions(qualificationId);
@@ -594,7 +594,7 @@ describe('QuestionListService', () => {
       // Assert
       expect(questionListStore.startLoading).toHaveBeenCalled();
       expect(questionListStore.deleteQualificationIdFromQuestions).toHaveBeenCalledWith(qualificationId);
-      expect(questionRepositoryService.removeQualificationIdFromQuestions).toHaveBeenCalledWith(
+      expect(questionRepository.removeQualificationIdFromQuestions).toHaveBeenCalledWith(
         qualificationId,
         mockUserId
       );
@@ -625,7 +625,7 @@ describe('QuestionListService', () => {
     it('should handle errors', async () => {
       // Arrange
       const error = new Error('Delete qualification failed');
-      questionRepositoryService.removeQualificationIdFromQuestions.mockRejectedValue(error);
+      questionRepository.removeQualificationIdFromQuestions.mockRejectedValue(error);
 
       // Act
       await service.deleteQualificationIdFromQuestions('qualification-1');

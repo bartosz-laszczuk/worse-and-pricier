@@ -17,7 +17,7 @@ import { lastValueFrom, Observable, take } from 'rxjs';
 import { CreateCategoryRequest } from '../models';
 
 @Injectable({ providedIn: 'root' })
-export class CategoryRepositoryService {
+export class CategoryRepository {
   private readonly afDb = inject(Firestore);
 
   private categoriesCollection = collection(this.afDb, 'categories');

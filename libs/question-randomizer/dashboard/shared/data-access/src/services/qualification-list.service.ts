@@ -2,16 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { Qualification } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { UserStore } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { QualificationListStore } from '../store';
-import { QualificationRepositoryService } from '../repositories';
+import { QualificationRepository } from '../repositories';
 import { QuestionListService } from './question-list.service';
 
 @Injectable()
 export class QualificationListService {
   private readonly userStore = inject(UserStore);
   private readonly qualificationListStore = inject(QualificationListStore);
-  private readonly qualificationRepositoryService = inject(
-    QualificationRepositoryService
-  );
+  private readonly qualificationRepository = inject(QualificationRepository);
   private readonly questionListService = inject(QuestionListService);
 
   public async createQualification(createdQualification: Qualification) {
@@ -22,7 +20,7 @@ export class QualificationListService {
       this.qualificationListStore.startLoading();
 
       const qualificationId =
-        await this.qualificationRepositoryService.createQualification(
+        await this.qualificationRepository.createQualification(
           createdQualification,
           userId
         );
@@ -51,7 +49,7 @@ export class QualificationListService {
           name: updatedQualification.name,
         }
       );
-      await this.qualificationRepositoryService.updateQualification(
+      await this.qualificationRepository.updateQualification(
         updatedQualification.id,
         {
           name: updatedQualification.name,
@@ -70,7 +68,7 @@ export class QualificationListService {
     try {
       this.qualificationListStore.deleteQualificationFromList(qualificationId);
       await Promise.all([
-        this.qualificationRepositoryService.deleteQualification(
+        this.qualificationRepository.deleteQualification(
           qualificationId
         ),
         this.questionListService.deleteQualificationIdFromQuestions(
@@ -92,7 +90,7 @@ export class QualificationListService {
     this.qualificationListStore.startLoading();
     try {
       const qualifications =
-        await this.qualificationRepositoryService.getQualifications(userId);
+        await this.qualificationRepository.getQualifications(userId);
       this.qualificationListStore.loadQualificationList(qualifications);
     } catch (error: unknown) {
       this.qualificationListStore.logError(

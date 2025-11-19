@@ -36,6 +36,7 @@ Define **domain boundaries** (not folder structure):
 - `scope:qualification` - Qualification management domain
 - `scope:randomization` - Randomization domain
 - `scope:interview` - Interview mode domain
+- `scope:dashboard-ai-chat` - AI chat assistant domain
 - `scope:settings` - Settings domain
 
 ## Type-Based Dependency Rules
@@ -111,7 +112,7 @@ These rules prevent coupling between dashboard domains, enforcing **horizontal s
 
 ### Dashboard Domain Isolation
 
-All dashboard domains (`question`, `category`, `qualification`, `randomization`, `interview`, `settings`) **CANNOT depend on each other**.
+All dashboard domains (`question`, `category`, `qualification`, `randomization`, `interview`, `dashboard-ai-chat`, `settings`) **CANNOT depend on each other**.
 
 **Example from `eslint.config.mjs:65-124`:**
 ```javascript

@@ -17,7 +17,7 @@ import { lastValueFrom, Observable, take } from 'rxjs';
 import { CreateQualificationRequest } from '../models';
 
 @Injectable({ providedIn: 'root' })
-export class QualificationRepositoryService {
+export class QualificationRepository {
   private readonly afDb = inject(Firestore);
 
   private qualificationsCollection = collection(this.afDb, 'qualifications');

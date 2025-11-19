@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, tap, catchError, of, switchMap } from 'rxjs';
 import { ChatStore } from '../store/chat.store';
-import { ChatRepositoryService } from '../repositories/chat-repository.service';
-import { AiChatApiService } from './ai-chat-api.service';
+import { ChatRepository } from '../repositories/chat.repository';
+import { AiChatApiRepository } from '../repositories/ai-chat-api.repository';
 import { ChatMessage, Conversation } from '../models/chat.models';
 import { Auth } from '@angular/fire/auth';
 
@@ -12,8 +12,8 @@ import { Auth } from '@angular/fire/auth';
 @Injectable({ providedIn: 'root' })
 export class ChatService {
   private readonly store = inject(ChatStore);
-  private readonly repository = inject(ChatRepositoryService);
-  private readonly apiService = inject(AiChatApiService);
+  private readonly chatRepository = inject(ChatRepository);
+  private readonly aiChatApiRepository = inject(AiChatApiRepository);
   private readonly auth = inject(Auth);
 
   /**
@@ -29,7 +29,7 @@ export class ChatService {
 
     this.store.startLoading();
 
-    return this.repository.getConversations(userId).pipe(
+    return this.chatRepository.getConversations(userId).pipe(
       tap(conversations => this.store.loadConversations(conversations)),
       catchError(error => {
         console.error('Error loading conversations:', error);
@@ -52,7 +52,7 @@ export class ChatService {
 
     this.store.startLoading();
 
-    return this.repository.createConversation(userId, title).pipe(
+    return this.chatRepository.createConversation(userId, title).pipe(
       tap(conversation => {
         this.store.addConversation(conversation);
         this.store.setCurrentConversation(conversation.id);
@@ -72,7 +72,7 @@ export class ChatService {
     this.store.setCurrentConversation(conversationId);
     this.store.startLoading();
 
-    return this.repository.getMessages(conversationId).pipe(
+    return this.chatRepository.getMessages(conversationId).pipe(
       tap(messages => this.store.loadMessages(messages)),
       catchError(error => {
         console.error('Error loading messages:', error);
@@ -110,14 +110,14 @@ export class ChatService {
     this.store.addOptimisticMessage(userMessage);
 
     // Send to backend
-    return this.apiService.sendMessage(conversationId, message).pipe(
+    return this.aiChatApiRepository.sendMessage(conversationId, message).pipe(
       switchMap(response => {
         // Remove optimistic message and add real messages from backend
         this.store.removeOptimisticMessage(tempUserId);
 
         // Backend saves both user and assistant messages to Firestore
         // So we need to reload messages to get the real IDs
-        return this.repository.getMessages(conversationId).pipe(
+        return this.chatRepository.getMessages(conversationId).pipe(
           tap(messages => {
             this.store.loadMessages(messages);
             this.updateConversationTimestamp(conversationId);
@@ -140,7 +140,7 @@ export class ChatService {
   deleteConversation(conversationId: string): Observable<boolean> {
     this.store.startLoading();
 
-    return this.repository.deleteConversation(conversationId).pipe(
+    return this.chatRepository.deleteConversation(conversationId).pipe(
       tap(() => this.store.deleteConversation(conversationId)),
       switchMap(() => of(true)),
       catchError(error => {
@@ -155,7 +155,7 @@ export class ChatService {
    * Update conversation timestamp
    */
   private updateConversationTimestamp(conversationId: string): void {
-    this.repository.updateConversationTimestamp(conversationId).subscribe({
+    this.chatRepository.updateConversationTimestamp(conversationId).subscribe({
       next: () => {
         this.store.updateConversation(conversationId, {
           updatedAt: new Date()

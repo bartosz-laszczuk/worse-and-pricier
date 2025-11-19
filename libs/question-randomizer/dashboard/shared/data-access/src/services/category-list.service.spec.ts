@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CategoryListService } from './category-list.service';
-import { CategoryRepositoryService } from '../repositories';
+import { CategoryRepository } from '../repositories';
 import { CategoryListStore, RandomizationStore } from '../store';
 import { UserStore } from '@worse-and-pricier/question-randomizer-shared-data-access';
 import { QuestionListService } from './question-list.service';
@@ -17,7 +17,7 @@ jest.mock('@angular/fire/firestore', () => ({}));
 
 describe('CategoryListService', () => {
   let service: CategoryListService;
-  let categoryRepositoryService: jest.Mocked<CategoryRepositoryService>;
+  let categoryRepository: jest.Mocked<CategoryRepository>;
   let categoryListStore: any;
   let userStore: any;
   let questionListService: jest.Mocked<QuestionListService>;
@@ -38,8 +38,8 @@ describe('CategoryListService', () => {
   };
 
   beforeEach(() => {
-    // Mock CategoryRepositoryService
-    const categoryRepositoryServiceMock = {
+    // Mock CategoryRepository
+    const categoryRepositoryMock = {
       createCategory: jest.fn(),
       updateCategory: jest.fn(),
       deleteCategory: jest.fn(),
@@ -92,7 +92,7 @@ describe('CategoryListService', () => {
     TestBed.configureTestingModule({
       providers: [
         CategoryListService,
-        { provide: CategoryRepositoryService, useValue: categoryRepositoryServiceMock },
+        { provide: CategoryRepository, useValue: categoryRepositoryMock },
         { provide: CategoryListStore, useValue: categoryListStoreMock },
         { provide: UserStore, useValue: userStoreMock },
         { provide: QuestionListService, useValue: questionListServiceMock },
@@ -105,7 +105,7 @@ describe('CategoryListService', () => {
     });
 
     service = TestBed.inject(CategoryListService);
-    categoryRepositoryService = TestBed.inject(CategoryRepositoryService) as jest.Mocked<CategoryRepositoryService>;
+    categoryRepository = TestBed.inject(CategoryRepository) as jest.Mocked<CategoryRepository>;
     categoryListStore = TestBed.inject(CategoryListStore);
     userStore = TestBed.inject(UserStore);
     questionListService = TestBed.inject(QuestionListService) as jest.Mocked<QuestionListService>;
@@ -129,12 +129,12 @@ describe('CategoryListService', () => {
       };
       const createdCategoryId = 'new-category-id';
 
-      categoryRepositoryService.createCategory.mockResolvedValue(createdCategoryId);
+      categoryRepository.createCategory.mockResolvedValue(createdCategoryId);
 
       await service.createCategory(newCategory);
 
       expect(categoryListStore.startLoading).toHaveBeenCalled();
-      expect(categoryRepositoryService.createCategory).toHaveBeenCalledWith(newCategory, mockUserId);
+      expect(categoryRepository.createCategory).toHaveBeenCalledWith(newCategory, mockUserId);
       expect(categoryListStore.addCategoryToList).toHaveBeenCalledWith({
         ...newCategory,
         id: createdCategoryId,
@@ -152,7 +152,7 @@ describe('CategoryListService', () => {
 
       await service.createCategory(newCategory);
 
-      expect(categoryRepositoryService.createCategory).not.toHaveBeenCalled();
+      expect(categoryRepository.createCategory).not.toHaveBeenCalled();
       expect(categoryListStore.addCategoryToList).not.toHaveBeenCalled();
     });
 
@@ -164,7 +164,7 @@ describe('CategoryListService', () => {
       };
       const errorMessage = 'Creation failed';
 
-      categoryRepositoryService.createCategory.mockRejectedValue(new Error(errorMessage));
+      categoryRepository.createCategory.mockRejectedValue(new Error(errorMessage));
 
       await service.createCategory(newCategory);
 
@@ -186,7 +186,7 @@ describe('CategoryListService', () => {
         userId: '',
       };
 
-      categoryRepositoryService.createCategory.mockRejectedValue({});
+      categoryRepository.createCategory.mockRejectedValue({});
 
       await service.createCategory(newCategory);
 
@@ -207,7 +207,7 @@ describe('CategoryListService', () => {
 
       await service.createCategory(newCategory);
 
-      expect(categoryRepositoryService.createCategory).not.toHaveBeenCalled();
+      expect(categoryRepository.createCategory).not.toHaveBeenCalled();
       expect(categoryListStore.addCategoryToList).not.toHaveBeenCalled();
       expect(categoryListStore.logError).toHaveBeenCalledWith(
         'Category name is required and must be between 1 and 100 characters'
@@ -223,7 +223,7 @@ describe('CategoryListService', () => {
 
       await service.createCategory(newCategory);
 
-      expect(categoryRepositoryService.createCategory).not.toHaveBeenCalled();
+      expect(categoryRepository.createCategory).not.toHaveBeenCalled();
       expect(categoryListStore.logError).toHaveBeenCalledWith(
         'Category name is required and must be between 1 and 100 characters'
       );
@@ -238,7 +238,7 @@ describe('CategoryListService', () => {
 
       await service.createCategory(newCategory);
 
-      expect(categoryRepositoryService.createCategory).not.toHaveBeenCalled();
+      expect(categoryRepository.createCategory).not.toHaveBeenCalled();
       expect(categoryListStore.logError).toHaveBeenCalledWith(
         'Category name is required and must be between 1 and 100 characters'
       );
@@ -253,12 +253,12 @@ describe('CategoryListService', () => {
         userId: mockUserId,
       };
 
-      categoryRepositoryService.updateCategory.mockResolvedValue();
+      categoryRepository.updateCategory.mockResolvedValue();
 
       await service.updateCategory(updatedCategory);
 
       expect(categoryListStore.startLoading).toHaveBeenCalled();
-      expect(categoryRepositoryService.updateCategory).toHaveBeenCalledWith(mockCategoryId, {
+      expect(categoryRepository.updateCategory).toHaveBeenCalledWith(mockCategoryId, {
         name: 'Updated Category',
       });
       expect(categoryListStore.updateCategoryInList).toHaveBeenCalledWith(mockCategoryId, {
@@ -266,7 +266,7 @@ describe('CategoryListService', () => {
       });
 
       // Verify Firestore update happens before store update (pessimistic pattern)
-      const repositoryCallOrder = categoryRepositoryService.updateCategory.mock.invocationCallOrder[0];
+      const repositoryCallOrder = categoryRepository.updateCategory.mock.invocationCallOrder[0];
       const storeCallOrder = categoryListStore.updateCategoryInList.mock.invocationCallOrder[0];
       expect(repositoryCallOrder).toBeLessThan(storeCallOrder);
     });
@@ -279,7 +279,7 @@ describe('CategoryListService', () => {
       };
       const errorMessage = 'Update failed';
 
-      categoryRepositoryService.updateCategory.mockRejectedValue(new Error(errorMessage));
+      categoryRepository.updateCategory.mockRejectedValue(new Error(errorMessage));
 
       await service.updateCategory(updatedCategory);
 
@@ -301,7 +301,7 @@ describe('CategoryListService', () => {
         userId: mockUserId,
       };
 
-      categoryRepositoryService.updateCategory.mockRejectedValue({});
+      categoryRepository.updateCategory.mockRejectedValue({});
 
       await service.updateCategory(updatedCategory);
 
@@ -320,7 +320,7 @@ describe('CategoryListService', () => {
         userId: mockUserId,
       };
 
-      categoryRepositoryService.updateCategory.mockRejectedValue(new Error('Update failed'));
+      categoryRepository.updateCategory.mockRejectedValue(new Error('Update failed'));
 
       await service.updateCategory(updatedCategory);
 
@@ -337,7 +337,7 @@ describe('CategoryListService', () => {
 
       await service.updateCategory(updatedCategory);
 
-      expect(categoryRepositoryService.updateCategory).not.toHaveBeenCalled();
+      expect(categoryRepository.updateCategory).not.toHaveBeenCalled();
       expect(categoryListStore.updateCategoryInList).not.toHaveBeenCalled();
       expect(categoryListStore.logError).toHaveBeenCalledWith(
         'Category name is required and must be between 1 and 100 characters'
@@ -348,7 +348,7 @@ describe('CategoryListService', () => {
   describe('deleteCategory', () => {
     beforeEach(() => {
       randomizationStore.entity.set({ id: mockRandomizationId });
-      categoryRepositoryService.deleteCategory.mockResolvedValue();
+      categoryRepository.deleteCategory.mockResolvedValue();
       questionListService.deleteCategoryIdFromQuestions.mockResolvedValue();
       selectedCategoryListService.deselectSelectedCategoryFromRandomization.mockResolvedValue();
       usedQuestionListService.resetUsedQuestionsCategoryId.mockResolvedValue();
@@ -361,7 +361,7 @@ describe('CategoryListService', () => {
       expect(categoryListStore.startLoading).toHaveBeenCalled();
       expect(categoryListStore.deleteCategoryFromList).toHaveBeenCalledWith(mockCategoryId);
       expect(randomizationStore.resetAvailableQuestionsCategoryId).toHaveBeenCalledWith(mockCategoryId);
-      expect(categoryRepositoryService.deleteCategory).toHaveBeenCalledWith(mockCategoryId);
+      expect(categoryRepository.deleteCategory).toHaveBeenCalledWith(mockCategoryId);
       expect(questionListService.deleteCategoryIdFromQuestions).toHaveBeenCalledWith(mockCategoryId);
       expect(selectedCategoryListService.deselectSelectedCategoryFromRandomization).toHaveBeenCalledWith(
         mockRandomizationId,
@@ -421,7 +421,7 @@ describe('CategoryListService', () => {
 
       await service.deleteCategory(mockCategoryId);
 
-      expect(categoryRepositoryService.deleteCategory).toHaveBeenCalled();
+      expect(categoryRepository.deleteCategory).toHaveBeenCalled();
       expect(selectedCategoryListService.deselectSelectedCategoryFromRandomization).not.toHaveBeenCalled();
       expect(usedQuestionListService.resetUsedQuestionsCategoryId).not.toHaveBeenCalled();
       expect(postponedQuestionListService.resetPostponedQuestionsCategoryId).not.toHaveBeenCalled();
@@ -429,7 +429,7 @@ describe('CategoryListService', () => {
 
     it('should handle errors during category deletion', async () => {
       const errorMessage = 'Deletion failed';
-      categoryRepositoryService.deleteCategory.mockRejectedValue(new Error(errorMessage));
+      categoryRepository.deleteCategory.mockRejectedValue(new Error(errorMessage));
 
       await service.deleteCategory(mockCategoryId);
 
@@ -442,7 +442,7 @@ describe('CategoryListService', () => {
     });
 
     it('should handle errors without message during category deletion', async () => {
-      categoryRepositoryService.deleteCategory.mockRejectedValue({});
+      categoryRepository.deleteCategory.mockRejectedValue({});
 
       await service.deleteCategory(mockCategoryId);
 
@@ -462,12 +462,12 @@ describe('CategoryListService', () => {
         { id: '2', name: 'Category 2', userId: mockUserId },
       ];
 
-      categoryRepositoryService.getCategories.mockResolvedValue(categories);
+      categoryRepository.getCategories.mockResolvedValue(categories);
 
       await service.loadCategoryList();
 
       expect(categoryListStore.startLoading).toHaveBeenCalled();
-      expect(categoryRepositoryService.getCategories).toHaveBeenCalledWith(mockUserId);
+      expect(categoryRepository.getCategories).toHaveBeenCalledWith(mockUserId);
       expect(categoryListStore.loadCategoryList).toHaveBeenCalledWith(categories);
     });
 
@@ -476,7 +476,7 @@ describe('CategoryListService', () => {
 
       await service.loadCategoryList(false);
 
-      expect(categoryRepositoryService.getCategories).not.toHaveBeenCalled();
+      expect(categoryRepository.getCategories).not.toHaveBeenCalled();
     });
 
     it('should reload categories if skipCache is true', async () => {
@@ -485,11 +485,11 @@ describe('CategoryListService', () => {
         { id: '1', name: 'Category 1', userId: mockUserId },
       ];
 
-      categoryRepositoryService.getCategories.mockResolvedValue(categories);
+      categoryRepository.getCategories.mockResolvedValue(categories);
 
       await service.loadCategoryList(true);
 
-      expect(categoryRepositoryService.getCategories).toHaveBeenCalledWith(mockUserId);
+      expect(categoryRepository.getCategories).toHaveBeenCalledWith(mockUserId);
       expect(categoryListStore.loadCategoryList).toHaveBeenCalledWith(categories);
     });
 
@@ -498,12 +498,12 @@ describe('CategoryListService', () => {
 
       await service.loadCategoryList();
 
-      expect(categoryRepositoryService.getCategories).not.toHaveBeenCalled();
+      expect(categoryRepository.getCategories).not.toHaveBeenCalled();
     });
 
     it('should handle errors during category list loading', async () => {
       const errorMessage = 'Load failed';
-      categoryRepositoryService.getCategories.mockRejectedValue(new Error(errorMessage));
+      categoryRepository.getCategories.mockRejectedValue(new Error(errorMessage));
 
       await service.loadCategoryList();
 
@@ -516,7 +516,7 @@ describe('CategoryListService', () => {
     });
 
     it('should handle errors without message during category list loading', async () => {
-      categoryRepositoryService.getCategories.mockRejectedValue({});
+      categoryRepository.getCategories.mockRejectedValue({});
 
       await service.loadCategoryList();
 
@@ -536,7 +536,7 @@ describe('CategoryListService', () => {
         name: 'Test Category Name',
         userId: '',
       };
-      categoryRepositoryService.createCategory.mockRejectedValue(new Error('Network error'));
+      categoryRepository.createCategory.mockRejectedValue(new Error('Network error'));
 
       await service.createCategory(newCategory);
 
@@ -552,7 +552,7 @@ describe('CategoryListService', () => {
         name: 'Updated Name',
         userId: mockUserId,
       };
-      categoryRepositoryService.updateCategory.mockRejectedValue(new Error('Update error'));
+      categoryRepository.updateCategory.mockRejectedValue(new Error('Update error'));
 
       await service.updateCategory(updatedCategory);
 
@@ -563,7 +563,7 @@ describe('CategoryListService', () => {
     });
 
     it('should include categoryId in deleteCategory error context', async () => {
-      categoryRepositoryService.deleteCategory.mockRejectedValue(new Error('Delete error'));
+      categoryRepository.deleteCategory.mockRejectedValue(new Error('Delete error'));
 
       await service.deleteCategory(mockCategoryId);
 
@@ -573,7 +573,7 @@ describe('CategoryListService', () => {
     });
 
     it('should include userId in loadCategoryList error context', async () => {
-      categoryRepositoryService.getCategories.mockRejectedValue(new Error('Fetch error'));
+      categoryRepository.getCategories.mockRejectedValue(new Error('Fetch error'));
 
       await service.loadCategoryList();
 
@@ -592,7 +592,7 @@ describe('CategoryListService', () => {
           userId: '',
         };
         const timeoutError = new Error('Request timeout');
-        categoryRepositoryService.createCategory.mockRejectedValue(timeoutError);
+        categoryRepository.createCategory.mockRejectedValue(timeoutError);
 
         await service.createCategory(newCategory);
 
@@ -603,7 +603,7 @@ describe('CategoryListService', () => {
 
       it('should handle network errors during category list loading', async () => {
         const networkError = new Error('Network connection failed');
-        categoryRepositoryService.getCategories.mockRejectedValue(networkError);
+        categoryRepository.getCategories.mockRejectedValue(networkError);
 
         await service.loadCategoryList();
 
@@ -621,7 +621,7 @@ describe('CategoryListService', () => {
           userId: '',
         };
         const permissionError = new Error('Permission denied');
-        categoryRepositoryService.createCategory.mockRejectedValue(permissionError);
+        categoryRepository.createCategory.mockRejectedValue(permissionError);
 
         await service.createCategory(newCategory);
 
@@ -633,7 +633,7 @@ describe('CategoryListService', () => {
       it('should handle permission errors during category deletion', async () => {
         randomizationStore.entity.set({ id: mockRandomizationId });
         const permissionError = new Error('Insufficient permissions');
-        categoryRepositoryService.deleteCategory.mockRejectedValue(permissionError);
+        categoryRepository.deleteCategory.mockRejectedValue(permissionError);
 
         await service.deleteCategory(mockCategoryId);
 
@@ -646,7 +646,7 @@ describe('CategoryListService', () => {
     describe('Partial Failure Scenarios', () => {
       it('should log error if questionListService fails during deletion', async () => {
         randomizationStore.entity.set({ id: mockRandomizationId });
-        categoryRepositoryService.deleteCategory.mockResolvedValue();
+        categoryRepository.deleteCategory.mockResolvedValue();
         questionListService.deleteCategoryIdFromQuestions.mockRejectedValue(
           new Error('Failed to update questions')
         );
@@ -660,7 +660,7 @@ describe('CategoryListService', () => {
 
       it('should log error if selectedCategoryListService fails during deletion', async () => {
         randomizationStore.entity.set({ id: mockRandomizationId });
-        categoryRepositoryService.deleteCategory.mockResolvedValue();
+        categoryRepository.deleteCategory.mockResolvedValue();
         questionListService.deleteCategoryIdFromQuestions.mockResolvedValue();
         selectedCategoryListService.deselectSelectedCategoryFromRandomization.mockRejectedValue(
           new Error('Failed to deselect category')
@@ -684,7 +684,7 @@ describe('CategoryListService', () => {
 
         await service.createCategory(newCategory);
 
-        expect(categoryRepositoryService.createCategory).not.toHaveBeenCalled();
+        expect(categoryRepository.createCategory).not.toHaveBeenCalled();
         expect(categoryListStore.addCategoryToList).not.toHaveBeenCalled();
         expect(categoryListStore.logError).toHaveBeenCalledWith(
           'Category name is required and must be between 1 and 100 characters'
@@ -692,7 +692,7 @@ describe('CategoryListService', () => {
       });
 
       it('should handle empty categories array during load', async () => {
-        categoryRepositoryService.getCategories.mockResolvedValue([]);
+        categoryRepository.getCategories.mockResolvedValue([]);
 
         await service.loadCategoryList();
 
@@ -704,7 +704,7 @@ describe('CategoryListService', () => {
       it('should handle multiple simultaneous category creations', async () => {
         const category1: Category = { id: '', name: 'Cat1', userId: '' };
         const category2: Category = { id: '', name: 'Cat2', userId: '' };
-        categoryRepositoryService.createCategory
+        categoryRepository.createCategory
           .mockResolvedValueOnce('id1')
           .mockResolvedValueOnce('id2');
 
@@ -718,8 +718,8 @@ describe('CategoryListService', () => {
 
       it('should handle simultaneous load and create operations', async () => {
         const newCategory: Category = { id: '', name: 'New Cat', userId: '' };
-        categoryRepositoryService.getCategories.mockResolvedValue([mockCategory]);
-        categoryRepositoryService.createCategory.mockResolvedValue('new-id');
+        categoryRepository.getCategories.mockResolvedValue([mockCategory]);
+        categoryRepository.createCategory.mockResolvedValue('new-id');
 
         await Promise.all([
           service.loadCategoryList(),
@@ -734,7 +734,7 @@ describe('CategoryListService', () => {
     describe('State Consistency', () => {
       it('should maintain store state consistency when creation fails', async () => {
         const newCategory: Category = { id: '', name: 'New Category', userId: '' };
-        categoryRepositoryService.createCategory.mockRejectedValue(new Error('Creation failed'));
+        categoryRepository.createCategory.mockRejectedValue(new Error('Creation failed'));
 
         await service.createCategory(newCategory);
 
@@ -748,7 +748,7 @@ describe('CategoryListService', () => {
           id: mockRandomizationId,
           currentQuestion: { id: 'q1', categoryId: mockCategoryId }
         });
-        categoryRepositoryService.deleteCategory.mockResolvedValue();
+        categoryRepository.deleteCategory.mockResolvedValue();
         questionListService.deleteCategoryIdFromQuestions.mockResolvedValue();
         selectedCategoryListService.deselectSelectedCategoryFromRandomization.mockResolvedValue();
         usedQuestionListService.resetUsedQuestionsCategoryId.mockResolvedValue();
@@ -758,7 +758,7 @@ describe('CategoryListService', () => {
 
         expect(categoryListStore.deleteCategoryFromList).toHaveBeenCalledWith(mockCategoryId);
         expect(randomizationStore.resetAvailableQuestionsCategoryId).toHaveBeenCalledWith(mockCategoryId);
-        expect(categoryRepositoryService.deleteCategory).toHaveBeenCalled();
+        expect(categoryRepository.deleteCategory).toHaveBeenCalled();
         expect(questionListService.deleteCategoryIdFromQuestions).toHaveBeenCalled();
         expect(selectedCategoryListService.deselectSelectedCategoryFromRandomization).toHaveBeenCalled();
         expect(usedQuestionListService.resetUsedQuestionsCategoryId).toHaveBeenCalled();

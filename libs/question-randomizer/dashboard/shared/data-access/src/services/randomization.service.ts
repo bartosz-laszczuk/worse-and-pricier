@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  RandomizationRepositoryService,
-  SelectedCategoryListRepositoryService,
-  UsedQuestionListRepositoryService,
+  RandomizationRepository,
+  SelectedCategoryListRepository,
+  UsedQuestionListRepository,
+  PostponedQuestionListRepository,
 } from '../repositories';
 import {
   Question,
@@ -13,27 +14,24 @@ import {
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { RandomizationMapperService } from './randomization-mapper.service';
 import { RandomizationStore } from '../store';
-import { PostponedQuestionListRepositoryService } from '../repositories/postponed-question-list-repository.service';
 import { GetRandomizationResponse } from '../models';
 
 @Injectable()
 export class RandomizationService {
 
   private readonly randomizationStore = inject(RandomizationStore);
-  private readonly randomizationRepositoryService = inject(
-    RandomizationRepositoryService
-  );
+  private readonly randomizationRepository = inject(RandomizationRepository);
   private readonly randomizationMapperService = inject(
     RandomizationMapperService
   );
-  private readonly selectedCategoryListRepositoryService = inject(
-    SelectedCategoryListRepositoryService
+  private readonly selectedCategoryListRepository = inject(
+    SelectedCategoryListRepository
   );
-  private readonly usedQuestionListRepositoryService = inject(
-    UsedQuestionListRepositoryService
+  private readonly usedQuestionListRepository = inject(
+    UsedQuestionListRepository
   );
-  private readonly postponedQuestionListRepositoryService = inject(
-    PostponedQuestionListRepositoryService
+  private readonly postponedQuestionListRepository = inject(
+    PostponedQuestionListRepository
   );
 
   /**
@@ -63,7 +61,7 @@ export class RandomizationService {
     this.randomizationStore.startLoading();
     try {
       const response: GetRandomizationResponse | null =
-        await this.randomizationRepositoryService.getRandomization(userId);
+        await this.randomizationRepository.getRandomization(userId);
 
       const randomization = response
         ? await this.loadExistingRandomization(response, questionMap)
@@ -118,7 +116,7 @@ export class RandomizationService {
     this.randomizationStore.startLoading();
     try {
       this.randomizationStore.setRandomization(randomization);
-      await this.randomizationRepositoryService.updateRandomization(
+      await this.randomizationRepository.updateRandomization(
         randomization
       );
     } catch (error: unknown) {
@@ -141,10 +139,10 @@ export class RandomizationService {
         newQuestionCategory
       );
       await Promise.all([
-        this.postponedQuestionListRepositoryService.updatePostponedQuestionCategoryId(
+        this.postponedQuestionListRepository.updatePostponedQuestionCategoryId(
           newQuestionCategory
         ),
-        this.usedQuestionListRepositoryService.updateUsedQuestionCategoryId(
+        this.usedQuestionListRepository.updateUsedQuestionCategoryId(
           newQuestionCategory
         ),
       ]);
@@ -171,7 +169,7 @@ export class RandomizationService {
         currentQuestion: question,
       };
       this.randomizationStore.setRandomization(updatedRandomization);
-      await this.randomizationRepositoryService.updateRandomization(
+      await this.randomizationRepository.updateRandomization(
         updatedRandomization
       );
     } catch (error: unknown) {
@@ -189,7 +187,7 @@ export class RandomizationService {
     this.randomizationStore.startLoading();
     try {
       this.randomizationStore.clearCurrentQuestion();
-      await this.randomizationRepositoryService.clearCurrentQuestion(
+      await this.randomizationRepository.clearCurrentQuestion(
         randomizationId
       );
     } catch (error: unknown) {
@@ -239,7 +237,7 @@ export class RandomizationService {
     questionMap: Record<string, Question>
   ): Promise<Randomization> {
     const randomizationId =
-      await this.randomizationRepositoryService.createRandomization(userId);
+      await this.randomizationRepository.createRandomization(userId);
 
     return {
       id: randomizationId,
@@ -304,13 +302,13 @@ export class RandomizationService {
     randomizationId: string
   ): Promise<[QuestionCategory[], QuestionCategory[], string[]]> {
     return Promise.all([
-      this.usedQuestionListRepositoryService.getUsedQuestionIdListForRandomization(
+      this.usedQuestionListRepository.getUsedQuestionIdListForRandomization(
         randomizationId
       ),
-      this.postponedQuestionListRepositoryService.getPostponedQuestionIdListForRandomization(
+      this.postponedQuestionListRepository.getPostponedQuestionIdListForRandomization(
         randomizationId
       ),
-      this.selectedCategoryListRepositoryService.getSelectedCategoryIdListForRandomization(
+      this.selectedCategoryListRepository.getSelectedCategoryIdListForRandomization(
         randomizationId
       ),
     ]);
@@ -450,7 +448,7 @@ export class RandomizationService {
 
     this.randomizationStore.startLoading();
     this.randomizationStore.setCurrentQuestion(newCurrentQuestion);
-    await this.randomizationRepositoryService.updateRandomization(
+    await this.randomizationRepository.updateRandomization(
       updatedRandomization
     );
   }

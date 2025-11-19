@@ -1,13 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { RandomizationStore } from '../store';
-import { PostponedQuestionListRepositoryService } from '../repositories/postponed-question-list-repository.service';
+import { PostponedQuestionListRepository } from '../repositories';
 import { PostponedQuestion } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 
 @Injectable()
 export class PostponedQuestionListService {
   private readonly randomizationStore = inject(RandomizationStore);
-  private readonly postponedQuestionListRepositoryService = inject(
-    PostponedQuestionListRepositoryService
+  private readonly postponedQuestionListRepository = inject(
+    PostponedQuestionListRepository
   );
 
   public async deletePostponedQuestionFromRandomization(
@@ -19,7 +19,7 @@ export class PostponedQuestionListService {
       this.randomizationStore.deletePostponedQuestionFromRandomization(
         questionId
       );
-      await this.postponedQuestionListRepositoryService.deleteQuestionFromPostponedQuestions(
+      await this.postponedQuestionListRepository.deleteQuestionFromPostponedQuestions(
         randomizationId,
         questionId
       );
@@ -42,7 +42,7 @@ export class PostponedQuestionListService {
         postponedQuestion
       );
 
-      await this.postponedQuestionListRepositoryService.addQuestionToPostponedQuestions(
+      await this.postponedQuestionListRepository.addQuestionToPostponedQuestions(
         randomizationId,
         postponedQuestion
       );
@@ -59,7 +59,7 @@ export class PostponedQuestionListService {
     try {
       this.randomizationStore.startLoading();
       this.randomizationStore.movePostponedQuestionToEnd(postponedQuestion);
-      await this.postponedQuestionListRepositoryService.updatePostponedQuestionCreateDate(
+      await this.postponedQuestionListRepository.updatePostponedQuestionCreateDate(
         postponedQuestion.questionId
       );
     } catch (error: unknown) {
@@ -76,7 +76,7 @@ export class PostponedQuestionListService {
     this.randomizationStore.startLoading();
     try {
       this.randomizationStore.resetPostponedQuestionsCategoryId(categoryId);
-      await this.postponedQuestionListRepositoryService.resetPostponedQuestionsCategoryId(
+      await this.postponedQuestionListRepository.resetPostponedQuestionsCategoryId(
         randomizationId,
         categoryId
       );
@@ -93,7 +93,7 @@ export class PostponedQuestionListService {
     this.randomizationStore.startLoading();
     try {
       this.randomizationStore.clearPostponedQuestions();
-      await this.postponedQuestionListRepositoryService.deleteAllPostponedQuestionsFromRandomization(
+      await this.postponedQuestionListRepository.deleteAllPostponedQuestionsFromRandomization(
         randomizationId
       );
     } catch (error: unknown) {

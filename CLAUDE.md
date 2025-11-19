@@ -54,6 +54,7 @@ Libraries follow a layered architecture pattern organized by domain:
   - `dashboard/qualifications/` - Qualification management domain
   - `dashboard/randomization/` - Question randomization domain
   - `dashboard/interview/` - Interview mode domain
+  - `dashboard/ai-chat/` - AI chat assistant domain (conversational interface for managing data)
   - `dashboard/settings/` - Settings domain
   - `dashboard/shared/` - Shared dashboard code (cross-cutting stores, services)
 - `question-randomizer/shared/` - App-wide shared code (utilities, services used across all app domains)
@@ -82,7 +83,7 @@ The workspace enforces strict module boundaries using ESLint's `@nx/enforce-modu
 
 - UI libraries can only depend on: other UI, util, and styles libraries
 - Feature libraries can depend on: UI, data-access, and util libraries
-- Dashboard domains (question, category, qualification, randomization, interview, settings) **cannot depend on each other**
+- Dashboard domains (question, category, qualification, randomization, interview, ai-chat, settings) **cannot depend on each other**
 - All dashboard domains **can depend on** `dashboard-shared` for cross-cutting concerns
 
 **For detailed module boundary rules, dependency constraints, and examples, see:** **[`/docs/MODULE_BOUNDARIES.md`](docs/MODULE_BOUNDARIES.md)**
@@ -99,6 +100,10 @@ Key stores are located in `libs/question-randomizer/dashboard/shared/data-access
 - `qualification-list.store.ts` - Qualification management
 - `question-list.store.ts` - Question management
 - `randomization.store.ts` - Randomization state
+
+Additionally, the AI chat domain has its own store at `libs/question-randomizer/dashboard/ai-chat/data-access/src/lib/store/`:
+
+- `chat.store.ts` - Conversation and message management with normalized state pattern
 
 Each store follows a normalized state pattern with:
 
@@ -138,6 +143,7 @@ The app uses Angular's lazy-loaded routes organized by domain:
   ├── /qualifications           # Qualification management
   ├── /randomization            # Main randomization interface (default)
   ├── /interview                # Interview mode
+  ├── /ai-chat                  # AI chat assistant
   └── /settings                 # Settings
 ```
 
@@ -164,7 +170,7 @@ See **[Design System](#design-system)** section for design system import example
 Firebase is used for:
 
 - Authentication (email/password with verification)
-- Firestore database for questions, categories, qualifications, randomization state
+- Firestore database for questions, categories, qualifications, randomization state, conversations, and messages
 - Configuration in `apps/question-randomizer/src/environments/`
 
 Repository pattern with services:

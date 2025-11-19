@@ -7,7 +7,7 @@ import {
   Randomization,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-util';
 import { UserStore } from '@worse-and-pricier/question-randomizer-shared-data-access';
-import { QuestionRepositoryService } from '../repositories';
+import { QuestionRepository } from '../repositories';
 import { QuestionListStore, RandomizationStore } from '../store';
 import { QuestionMapperService } from './question-mapper.service';
 import { RandomizationService } from './randomization.service';
@@ -21,9 +21,7 @@ import { PostponedQuestionListService } from './postponed-question-list.service'
 @Injectable()
 export class QuestionListService {
   private readonly userStore = inject(UserStore);
-  private readonly questionRepositoryService = inject(
-    QuestionRepositoryService
-  );
+  private readonly questionRepository = inject(QuestionRepository);
   private readonly questionMapperService = inject(QuestionMapperService);
   private readonly questionListStore = inject(QuestionListStore);
   private readonly randomizationService = inject(RandomizationService);
@@ -67,7 +65,7 @@ export class QuestionListService {
           createdQuestion,
           userId
         );
-      const questionId = await this.questionRepositoryService.createQuestion(
+      const questionId = await this.questionRepository.createQuestion(
         createQuestionRequest
       );
 
@@ -197,7 +195,7 @@ export class QuestionListService {
 
       // Backend operations
       await Promise.all([
-        this.questionRepositoryService.deleteQuestion(questionId),
+        this.questionRepository.deleteQuestion(questionId),
         this.deleteUsedQuestionFromRandomization(questionId),
         this.deletePostponedQuestionFromRandomization(questionId),
         this.updateCurrentQuestionAfterQuestionDeletion(questionId),
@@ -261,7 +259,7 @@ export class QuestionListService {
 
     try {
       const rawQuestions =
-        await this.questionRepositoryService.getQuestions(userId);
+        await this.questionRepository.getQuestions(userId);
       const enrichedQuestions = this.enrichQuestionsWithNames(
         rawQuestions,
         categoryMap,
@@ -302,7 +300,7 @@ export class QuestionListService {
 
     try {
       this.questionListStore.deleteCategoryIdFromQuestions(categoryId);
-      await this.questionRepositoryService.removeCategoryIdFromQuestions(
+      await this.questionRepository.removeCategoryIdFromQuestions(
         categoryId,
         userId
       );
@@ -344,7 +342,7 @@ export class QuestionListService {
       this.questionListStore.deleteQualificationIdFromQuestions(
         qualificationId
       );
-      await this.questionRepositoryService.removeQualificationIdFromQuestions(
+      await this.questionRepository.removeQualificationIdFromQuestions(
         qualificationId,
         userId
       );
@@ -427,7 +425,7 @@ export class QuestionListService {
         updatedQuestion,
         questionId
       );
-    await this.questionRepositoryService.updateQuestion(
+    await this.questionRepository.updateQuestion(
       questionId,
       updateQuestionRequest
     );

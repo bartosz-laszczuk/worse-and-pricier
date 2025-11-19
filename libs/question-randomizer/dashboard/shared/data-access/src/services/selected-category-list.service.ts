@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { RandomizationStore } from '../store';
-import { SelectedCategoryListRepositoryService } from '../repositories';
+import { SelectedCategoryListRepository } from '../repositories';
 
 @Injectable()
 export class SelectedCategoryListService {
   private readonly randomizationStore = inject(RandomizationStore);
-  private readonly selectedCategoryListRepositoryService = inject(
-    SelectedCategoryListRepositoryService
+  private readonly selectedCategoryListRepository = inject(
+    SelectedCategoryListRepository
   );
 
   public async addSelectedCategoryToRandomization(
@@ -18,7 +18,7 @@ export class SelectedCategoryListService {
     try {
       this.randomizationStore.addSelectedCategoryIdToRandomization(categoryId);
 
-      await this.selectedCategoryListRepositoryService.addSelectedCategoryToRandomization(
+      await this.selectedCategoryListRepository.addSelectedCategoryToRandomization(
         randomizationId,
         categoryId
       );
@@ -40,7 +40,7 @@ export class SelectedCategoryListService {
         categoryId
       );
 
-      await this.selectedCategoryListRepositoryService.deleteSelectedCategoryFromRandomization(
+      await this.selectedCategoryListRepository.deleteSelectedCategoryFromRandomization(
         randomizationId,
         categoryId
       );

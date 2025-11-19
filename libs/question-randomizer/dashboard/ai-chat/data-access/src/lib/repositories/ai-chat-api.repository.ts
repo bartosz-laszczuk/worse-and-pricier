@@ -11,10 +11,10 @@ import {
 } from '../models/chat.models';
 
 /**
- * Service for communicating with the AI Agent backend API
+ * Repository for communicating with the AI Agent backend API
  */
 @Injectable({ providedIn: 'root' })
-export class AiChatApiService {
+export class AiChatApiRepository {
   private readonly http = inject(HttpClient);
   private readonly auth = inject(Auth);
   private readonly appConfig = inject(APP_CONFIG);

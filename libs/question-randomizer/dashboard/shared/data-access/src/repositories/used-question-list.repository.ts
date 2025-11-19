@@ -19,7 +19,7 @@ import { orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
 @Injectable({
   providedIn: 'root',
 })
-export class UsedQuestionListRepositoryService {
+export class UsedQuestionListRepository {
   private readonly firestore = inject(Firestore);
   private usedQuestionsCollection: CollectionReference = collection(this.firestore, 'usedQuestions');
 

@@ -1,15 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import {
   CategoryListStore,
-  CategoryRepositoryService,
+  CategoryRepository,
   CreateQuestionRequest,
   QualificationListStore,
-  QualificationRepositoryService,
+  QualificationRepository,
   QuestionCsvListItem,
   QuestionListService,
   QuestionListStore,
   QuestionMapperService,
-  QuestionRepositoryService,
+  QuestionRepository,
   RandomizationStore,
   UpdateQuestionRequest,
 } from '@worse-and-pricier/question-randomizer-dashboard-shared-data-access';
@@ -29,15 +29,9 @@ export class QuestionListImportService {
   private readonly qualificationListStore = inject(QualificationListStore);
   private readonly questionMapperService = inject(QuestionMapperService);
   private readonly randomizationStore = inject(RandomizationStore);
-  private readonly questionRepositoryService = inject(
-    QuestionRepositoryService
-  );
-  private readonly categoryRepositoryService = inject(
-    CategoryRepositoryService
-  );
-  private readonly qualificationRepositoryService = inject(
-    QualificationRepositoryService
-  );
+  private readonly questionRepository = inject(QuestionRepository);
+  private readonly categoryRepository = inject(CategoryRepository);
+  private readonly qualificationRepository = inject(QualificationRepository);
   private readonly userStore = inject(UserStore);
 
   public async importQuestionList(importItemList: QuestionCsvListItem[]) {
@@ -177,11 +171,11 @@ export class QuestionListImportService {
 
     try {
       const updatePromise = questionListToUpdate.length
-        ? this.questionRepositoryService.updateQuestions(questionListToUpdate)
+        ? this.questionRepository.updateQuestions(questionListToUpdate)
         : Promise.resolve();
 
       const createPromise = questionListToCreate.length
-        ? this.questionRepositoryService.createQuestions(questionListToCreate)
+        ? this.questionRepository.createQuestions(questionListToCreate)
         : Promise.resolve();
 
       await Promise.all([createPromise, updatePromise]);
@@ -204,7 +198,7 @@ export class QuestionListImportService {
 
     if (missingCategories.length > 0) {
       const newCategoryList =
-        await this.categoryRepositoryService.createCategoriesByNameList(
+        await this.categoryRepository.createCategoriesByNameList(
           missingCategories,
           userId
         );
@@ -229,7 +223,7 @@ export class QuestionListImportService {
 
     if (missingQualifications.length > 0) {
       const newQualificationList =
-        await this.qualificationRepositoryService.createQualificationByNameList(
+        await this.qualificationRepository.createQualificationByNameList(
           missingQualifications,
           userId
         );
