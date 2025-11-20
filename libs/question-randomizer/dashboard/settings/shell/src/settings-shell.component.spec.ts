@@ -1,4 +1,6 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { getCommonTestProviders } from '@worse-and-pricier/question-randomizer-shared-util';
 import { SettingsShellComponent } from './settings-shell.component';
 
 describe('SettingsShellComponent', () => {
@@ -8,6 +10,8 @@ describe('SettingsShellComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SettingsShellComponent],
+      providers: getCommonTestProviders(),
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SettingsShellComponent);

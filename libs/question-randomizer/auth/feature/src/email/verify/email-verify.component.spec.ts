@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { getCommonTestProviders } from '@worse-and-pricier/question-randomizer-shared-util';
 import { EmailVerifyComponent } from './email-verify.component';
 
 describe('EmailVerifyComponent', () => {
@@ -8,6 +9,9 @@ describe('EmailVerifyComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [EmailVerifyComponent],
+      providers: [
+        ...getCommonTestProviders(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EmailVerifyComponent);

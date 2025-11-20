@@ -98,6 +98,9 @@
       ],
       "@worse-and-pricier/question-randomizer-shared-util": [
         "libs/question-randomizer/shared/util/src/index.ts"
+      ],
+      "@worse-and-pricier/question-randomizer-shared-util/jest-setup": [
+        "libs/question-randomizer/shared/util/src/jest-setup.ts"
       ]
     }
   },

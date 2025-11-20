@@ -89,24 +89,29 @@ describe('RandomizationService', () => {
       createRandomization: jest.fn(),
       updateRandomization: jest.fn(),
       clearCurrentQuestion: jest.fn(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
 
     randomizationMapperService = {
       mapGetRandomizationResponseToRandomization: jest.fn(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
 
     selectedCategoryListRepository = {
       getSelectedCategoryIdListForRandomization: jest.fn(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
 
     usedQuestionListRepository = {
       getUsedQuestionIdListForRandomization: jest.fn(),
       updateUsedQuestionCategoryId: jest.fn(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
 
     postponedQuestionListRepository = {
       getPostponedQuestionIdListForRandomization: jest.fn(),
       updatePostponedQuestionCategoryId: jest.fn(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
 
     TestBed.configureTestingModule({
@@ -193,6 +198,7 @@ describe('RandomizationService', () => {
         showAnswer: false,
         status: RandomizationStatus.Ongoing,
         userId: 'user1',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         created: null as any,
       };
 
@@ -299,7 +305,7 @@ describe('RandomizationService', () => {
 
       await service.advanceToNextQuestion(mockQuestionMap);
 
-      expect(randomizationRepositoryService.updateRandomization).toHaveBeenCalledWith(
+      expect(randomizationRepository.updateRandomization).toHaveBeenCalledWith(
         expect.objectContaining({
           showAnswer: false,
         })
@@ -515,8 +521,8 @@ describe('RandomizationService', () => {
 
       it('should handle empty availableQuestionList when creating new randomization', async () => {
         const emptyQuestionMap: Record<string, Question> = {};
-        randomizationRepositoryService.getRandomization.mockResolvedValue(null);
-        randomizationRepositoryService.createRandomization.mockResolvedValue('newRandId');
+        randomizationRepository.getRandomization.mockResolvedValue(null);
+        randomizationRepository.createRandomization.mockResolvedValue('newRandId');
 
         await service.loadRandomization('user1', emptyQuestionMap);
 
@@ -545,8 +551,9 @@ describe('RandomizationService', () => {
         ]);
 
         // Mock getRandomIndex to return 0 (invalid-id first)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         jest.spyOn(service as any, 'getRandomIndex').mockReturnValue(0);
-        randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+        randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
         await service.advanceToNextQuestion(mockQuestionMap);
 
@@ -580,7 +587,7 @@ describe('RandomizationService', () => {
         randomizationStore.filteredPostponedQuestionList.mockReturnValue([
           { questionId: 'q-uncat', categoryId: undefined },
         ]);
-        randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+        randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
         await service.advanceToNextQuestion(questionMapWithUncategorized);
 
@@ -610,7 +617,7 @@ describe('RandomizationService', () => {
           { questionId: 'q2', categoryId: 'cat1' },
         ]);
         randomizationStore.filteredPostponedQuestionList.mockReturnValue([]);
-        randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+        randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
         await service.advanceToNextQuestion(allInactiveMap);
 
@@ -640,7 +647,7 @@ describe('RandomizationService', () => {
           { questionId: 'q1', categoryId: 'cat1' },
           { questionId: 'q2', categoryId: 'cat1' },
         ]);
-        randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+        randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
         await service.advanceToNextQuestion(mixedActivityMap);
 
@@ -660,8 +667,9 @@ describe('RandomizationService', () => {
         randomizationStore.filteredAvailableQuestionList.mockReturnValue(availableQuestions);
 
         // Spy on getRandomIndex to verify it's called correctly
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const getRandomIndexSpy = jest.spyOn(service as any, 'getRandomIndex').mockReturnValue(1);
-        randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+        randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
         await service.advanceToNextQuestion(mockQuestionMap);
 
@@ -698,7 +706,7 @@ describe('RandomizationService', () => {
           { questionId: 'q2', categoryId: 'cat2' },
           { questionId: 'q3', categoryId: 'cat3' },
         ]);
-        randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+        randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
         await service.advanceToNextQuestion(multiCategoryMap);
 
@@ -728,7 +736,7 @@ describe('RandomizationService', () => {
           { questionId: 'q1', categoryId: 'cat1' },
           { questionId: 'q2', categoryId: 'cat2' },
         ]);
-        randomizationRepositoryService.updateRandomization.mockResolvedValue(undefined);
+        randomizationRepository.updateRandomization.mockResolvedValue(undefined);
 
         await service.advanceToNextQuestion(multiCategoryMap);
 

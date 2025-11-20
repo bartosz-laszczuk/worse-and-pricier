@@ -63,7 +63,10 @@
       "Bash(if exist \"task-manager\\dist\\index.js\" echo \"Task Manager built\")",
       "mcp__nx-mcp__nx_generators",
       "mcp__nx-mcp__nx_generator_schema",
-      "Bash(npx nx:*)"
+      "Bash(npx nx:*)",
+      "Bash(npm run test)",
+      "Bash(npm run test:*)",
+      "Bash(git check-ignore:*)"
     ],
     "deny": [],
     "ask": []

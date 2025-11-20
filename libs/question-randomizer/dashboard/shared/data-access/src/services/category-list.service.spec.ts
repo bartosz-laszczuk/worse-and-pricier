@@ -18,10 +18,13 @@ jest.mock('@angular/fire/firestore', () => ({}));
 describe('CategoryListService', () => {
   let service: CategoryListService;
   let categoryRepository: jest.Mocked<CategoryRepository>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let categoryListStore: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let userStore: any;
   let questionListService: jest.Mocked<QuestionListService>;
   let randomizationService: jest.Mocked<RandomizationService>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let randomizationStore: any;
   let usedQuestionListService: jest.Mocked<UsedQuestionListService>;
   let postponedQuestionListService: jest.Mocked<PostponedQuestionListService>;

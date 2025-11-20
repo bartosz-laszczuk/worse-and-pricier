@@ -1,7 +1,6 @@
 export default {
   displayName: 'ui',
   preset: '../../../jest.preset.js',
-  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../../coverage/libs/design-system/ui',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
@@ -12,7 +11,6 @@ export default {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

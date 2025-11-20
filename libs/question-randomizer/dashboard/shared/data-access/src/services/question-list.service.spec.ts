@@ -18,11 +18,14 @@ import {
 
 describe('QuestionListService', () => {
   let service: QuestionListService;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let userStore: any;
   let questionRepository: jest.Mocked<QuestionRepository>;
   let questionMapperService: jest.Mocked<QuestionMapperService>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let questionListStore: any;
   let randomizationService: jest.Mocked<RandomizationService>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let randomizationStore: any;
   let usedQuestionListService: jest.Mocked<UsedQuestionListService>;
   let postponedQuestionListService: jest.Mocked<PostponedQuestionListService>;
@@ -159,6 +162,7 @@ describe('QuestionListService', () => {
       const createQuestionRequest = { text: 'Test' };
       const newQuestionId = 'new-question-123';
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       questionMapperService.mapEditQuestionFormValueToCreateQuestionRequest.mockReturnValue(createQuestionRequest as any);
       questionRepository.createQuestion.mockResolvedValue(newQuestionId);
       questionMapperService.mapEditQuestionFormValueToQuestion.mockReturnValue(mockQuestion);
@@ -200,6 +204,7 @@ describe('QuestionListService', () => {
       // Arrange
       const error = new Error('Creation failed');
       questionRepository.createQuestion.mockRejectedValue(error);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       questionMapperService.mapEditQuestionFormValueToCreateQuestionRequest.mockReturnValue({} as any);
 
       // Act
@@ -212,6 +217,7 @@ describe('QuestionListService', () => {
     it('should handle non-Error exceptions', async () => {
       // Arrange
       questionRepository.createQuestion.mockRejectedValue('String error');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       questionMapperService.mapEditQuestionFormValueToCreateQuestionRequest.mockReturnValue({} as any);
 
       // Act
@@ -226,6 +232,7 @@ describe('QuestionListService', () => {
     it('should update a question successfully', async () => {
       // Arrange
       const updateQuestionRequest = { text: 'Updated' };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       questionMapperService.mapEditQuestionFormValueToUpdateQuestionRequest.mockReturnValue(updateQuestionRequest as any);
       questionRepository.updateQuestion.mockResolvedValue();
       randomizationService.updateQuestionCategoryAcrossLists.mockResolvedValue();
@@ -246,6 +253,7 @@ describe('QuestionListService', () => {
     it('should rollback optimistic update on error', async () => {
       // Arrange
       const error = new Error('Update failed');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       questionMapperService.mapEditQuestionFormValueToUpdateQuestionRequest.mockReturnValue({} as any);
       questionRepository.updateQuestion.mockRejectedValue(error);
 
@@ -262,6 +270,7 @@ describe('QuestionListService', () => {
       // Arrange
       questionListStore.entities.mockReturnValue({});
       const error = new Error('Update failed');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       questionMapperService.mapEditQuestionFormValueToUpdateQuestionRequest.mockReturnValue({} as any);
       questionRepository.updateQuestion.mockRejectedValue(error);
 

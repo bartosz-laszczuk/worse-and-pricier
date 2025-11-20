@@ -245,13 +245,19 @@ npm run i18n:find       # Find translation key usage
 
 ## Development Notes
 
-- **Jest** is used for unit testing
+- **Jest** is used for unit testing (fully automatic configuration)
 - **Playwright** is used for e2e testing
 - **Storybook** is used for design system component documentation
 - **ESLint** with Angular ESLint rules
 - **Prettier** for code formatting
 - Main branch: `main`
 - Default dev server: `http://localhost:4200`
+
+### Testing
+
+**Testing is fully automatic** - Jest configuration is inherited from `jest.preset.js` for all libraries. No setup required when creating new libraries.
+
+**For complete testing documentation:** [`/docs/TESTING.md`](docs/TESTING.md)
 
 ### When Creating New Features
 

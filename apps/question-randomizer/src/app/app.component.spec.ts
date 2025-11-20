@@ -9,18 +9,22 @@ describe('AppComponent', () => {
     }).compileComponents();
   });
 
-  it('should render title', () => {
+  it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain(
-      'Welcome question-randomizer'
-    );
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'question-randomizer'`, () => {
+  it('should have as title "question-randomizer"', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('question-randomizer');
+  });
+
+  it('should render router-outlet', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });

@@ -7,6 +7,7 @@ import {
   output,
   signal,
   effect,
+  forwardRef,
 } from '@angular/core';
 
 import { ButtonToggleComponent } from '../button-toggle/button-toggle.component';
@@ -26,7 +27,7 @@ export class ButtonToggleGroupComponent<T = unknown> implements AfterContentInit
   public value = input<T | undefined>();
   public toggled = output<T | undefined>();
   public allowDeselect = input<boolean>(true);
-  @ContentChildren(ButtonToggleComponent)
+  @ContentChildren(forwardRef(() => ButtonToggleComponent))
   toggles!: QueryList<ButtonToggleComponent<T>>;
 
   // Signal for tracking the current selected value

@@ -1,7 +1,6 @@
 export default {
   displayName: 'question-randomizer-dashboard-shared-ui',
   preset: '../../../../../jest.preset.js',
-  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
     '../../../../../coverage/libs/question-randomizer/dashboard/shared/ui',
   transform: {
@@ -13,7 +12,6 @@ export default {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

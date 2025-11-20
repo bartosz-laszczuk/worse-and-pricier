@@ -80,7 +80,8 @@ export class QuestionRepository {
     request: UpdateQuestionRequest
   ): Promise<void> {
     const questionDoc = doc(this.afDb, `questions/${questionId}`);
-    const { id, tags, ...updateData } = request;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _id, tags, ...updateData } = request;
 
     // If tags is undefined, explicitly delete the field from Firestore
     // Otherwise, Firestore would ignore undefined and leave the existing value

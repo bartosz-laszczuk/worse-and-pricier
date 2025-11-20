@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { getCommonTestProviders } from '@worse-and-pricier/question-randomizer-shared-util';
 import { AuthShellComponent } from './auth-shell.component';
 
 describe('AuthShellComponent', () => {
@@ -8,6 +9,7 @@ describe('AuthShellComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AuthShellComponent],
+      providers: getCommonTestProviders(),
     }).compileComponents();
 
     fixture = TestBed.createComponent(AuthShellComponent);

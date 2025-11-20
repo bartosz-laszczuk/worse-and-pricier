@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InputSelectComponent } from './input-select.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('InputSelectComponent', () => {
   let component: InputSelectComponent;
@@ -7,7 +8,7 @@ describe('InputSelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InputSelectComponent],
+      imports: [InputSelectComponent, ReactiveFormsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InputSelectComponent);
