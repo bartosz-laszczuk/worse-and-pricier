@@ -169,7 +169,7 @@ export class ChatService {
 
   /**
    * Send a message with real-time streaming support
-   * Uses SSE to stream agent responses in real-time
+   * Uses SignalR to stream agent responses in real-time
    */
   sendMessageWithStreaming(message: string): Observable<AgentStreamEvent> {
     const conversationId = this.store.currentConversationId();

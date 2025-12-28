@@ -12,8 +12,7 @@ import {
   QueueTaskResponse,
   AgentStreamEvent
 } from '../models/chat.models';
-import { SSEStreamReaderService } from '../services/sse-stream-reader.service';
-import { ReconnectionStrategy } from '../utils/reconnection-strategy.util';
+import { SignalRAgentStreamService } from '../services/signalr-agent-stream.service';
 
 /**
  * Repository for communicating with the AI Agent backend API
@@ -23,7 +22,7 @@ export class AiChatApiRepository {
   private readonly http = inject(HttpClient);
   private readonly auth = inject(Auth);
   private readonly appConfig = inject(APP_CONFIG);
-  private readonly sseReader = inject(SSEStreamReaderService);
+  private readonly signalRService = inject(SignalRAgentStreamService);
   private readonly apiUrl = this.appConfig.aiAgentApiUrl || 'http://localhost:3001/api';
 
   /**
@@ -71,128 +70,10 @@ export class AiChatApiRepository {
 
   /**
    * Stream real-time updates for a queued agent task
-   * Uses SSE streaming with automatic reconnection
+   * Uses SignalR with automatic reconnection
    */
   streamAgentTask(taskId: string): Observable<AgentStreamEvent> {
-    return new Observable<AgentStreamEvent>(observer => {
-      const user = this.auth.currentUser;
-
-      if (!user) {
-        observer.error(new Error('User not authenticated'));
-        return;
-      }
-
-      const reconnectionStrategy = new ReconnectionStrategy(5, 1000, 10000);
-      let abortController: AbortController | null = null;
-      let shouldReconnect = true;
-
-      const connectStream = async (): Promise<void> => {
-        if (!reconnectionStrategy.incrementAttempt()) {
-          observer.error(new Error(`Failed to connect after ${reconnectionStrategy.getMaxAttempts()} attempts`));
-          return;
-        }
-
-        if (reconnectionStrategy.getCurrentAttempt() > 1) {
-          console.log(`[AgentStream] Reconnecting... (attempt ${reconnectionStrategy.getCurrentAttempt()}/${reconnectionStrategy.getMaxAttempts()})`);
-        }
-
-        try {
-          // Get fresh auth token
-          const token = await user.getIdToken();
-
-          // Create new abort controller for this connection
-          abortController = new AbortController();
-
-          // Connect and read stream
-          await this.sseReader.connectAndRead(
-            {
-              url: `${this.apiUrl}/agent/tasks/${taskId}/stream`,
-              headers: { 'Authorization': `Bearer ${token}` },
-              signal: abortController.signal
-            },
-            (event) => this.handleSSEEvent(event, observer, () => { shouldReconnect = false; }),
-            (error) => this.handleStreamError(error, reconnectionStrategy, shouldReconnect, connectStream, observer),
-            () => console.log('[AgentStream] Stream ended by server')
-          );
-
-          // Reset reconnection strategy on successful connection
-          reconnectionStrategy.reset();
-          console.log('[AgentStream] Connected successfully');
-        } catch (error) {
-          await this.handleStreamError(error, reconnectionStrategy, shouldReconnect, connectStream, observer);
-        }
-      };
-
-      // Start the stream
-      connectStream();
-
-      // Cleanup function
-      return () => {
-        console.log('[AgentStream] Closing stream');
-        shouldReconnect = false;
-        if (abortController) {
-          abortController.abort();
-        }
-      };
-    });
-  }
-
-  /**
-   * Handle individual SSE events
-   */
-  private handleSSEEvent(
-    event: { type: string; data: string },
-    observer: { next: (value: AgentStreamEvent) => void; complete: () => void; error: (err: Error) => void },
-    stopReconnect: () => void
-  ): void {
-    try {
-      const data = JSON.parse(event.data);
-      const agentEvent: AgentStreamEvent = {
-        ...data,
-        type: event.type as AgentStreamEvent['type'],
-        timestamp: new Date(data.timestamp)
-      };
-
-      observer.next(agentEvent);
-
-      // Check for terminal events
-      if (event.type === 'completed') {
-        stopReconnect();
-        observer.complete();
-      } else if (event.type === 'error') {
-        stopReconnect();
-        observer.error(new Error(data.message || 'Stream error'));
-      }
-    } catch (parseError) {
-      console.warn('[AgentStream] Failed to parse event data:', event.data, parseError);
-    }
-  }
-
-  /**
-   * Handle stream errors with reconnection logic
-   */
-  private async handleStreamError(
-    error: unknown,
-    reconnectionStrategy: ReconnectionStrategy,
-    shouldReconnect: boolean,
-    connectStream: () => Promise<void>,
-    observer: { error: (err: Error) => void }
-  ): Promise<void> {
-    console.error('[AgentStream] Connection error:', error);
-
-    if (!shouldReconnect || reconnectionStrategy.isExhausted()) {
-      observer.error(
-        error instanceof Error
-          ? error
-          : new Error(`Failed to connect after ${reconnectionStrategy.getMaxAttempts()} attempts`)
-      );
-      return;
-    }
-
-    const delay = reconnectionStrategy.getNextDelay();
-    console.log(`[AgentStream] Retrying in ${delay}ms...`);
-    await new Promise(resolve => setTimeout(resolve, delay));
-    return connectStream();
+    return this.signalRService.streamTaskUpdates(taskId);
   }
 
   /**
