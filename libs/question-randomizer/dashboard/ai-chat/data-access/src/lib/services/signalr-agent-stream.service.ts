@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { Observable, from, TimeoutError } from 'rxjs';
+import { map, switchMap, timeout } from 'rxjs/operators';
 import { Auth } from '@angular/fire/auth';
-import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder, HubConnectionState, IStreamResult } from '@microsoft/signalr';
 import { APP_CONFIG } from '@worse-and-pricier/question-randomizer-shared-util';
 import { AgentStreamEvent } from '../models/chat.models';
 
@@ -17,6 +18,9 @@ export class SignalRAgentStreamService {
   private connection: HubConnection | null = null;
   private connectionPromise: Promise<HubConnection> | null = null;
 
+  /** Timeout for waiting for next stream event (5 minutes for long-running AI tasks) */
+  private readonly STREAM_TIMEOUT_MS = 5 * 60 * 1000;
+
   constructor() {
     const baseUrl = this.appConfig.aiAgentApiUrl || 'http://localhost:5000';
     this.hubUrl = `${baseUrl}/agentHub`;
@@ -24,54 +28,34 @@ export class SignalRAgentStreamService {
 
   /**
    * Stream real-time updates for a queued agent task
+   * @throws TimeoutError if no event received within timeout period
    */
   streamTaskUpdates(taskId: string): Observable<AgentStreamEvent> {
-    return new Observable<AgentStreamEvent>(observer => {
-      let isActive = true;
+    return from(this.ensureConnection()).pipe(
+      switchMap(connection => this.toObservable<AgentStreamEvent>(connection.stream<AgentStreamEvent>('StreamTaskUpdates', taskId))),
+      timeout({
+        each: this.STREAM_TIMEOUT_MS,
+        meta: { taskId }
+      }),
+      map(event => ({
+        ...event,
+        timestamp: new Date(event.timestamp)
+      }))
+    );
+  }
 
-      // Ensure connection then subscribe to stream
-      from(this.ensureConnection())
-        .subscribe({
-          next: (connection) => {
-            if (!isActive) return;
+  /**
+   * Convert SignalR IStreamResult to RxJS Observable
+   */
+  private toObservable<T>(stream: IStreamResult<T>): Observable<T> {
+    return new Observable<T>(observer => {
+      const subscription = stream.subscribe({
+        next: (value: T) => observer.next(value),
+        error: (error) => observer.error(error),
+        complete: () => observer.complete()
+      });
 
-            // Subscribe to the server-to-client stream
-            connection.stream<AgentStreamEvent>('StreamTaskUpdates', taskId).subscribe({
-              next: (event) => {
-                if (isActive) {
-                  // Parse timestamp from string to Date
-                  observer.next({
-                    ...event,
-                    timestamp: new Date(event.timestamp)
-                  });
-                }
-              },
-              error: (error) => {
-                console.error('[SignalR] Stream error:', error);
-                if (isActive) {
-                  observer.error(error);
-                }
-              },
-              complete: () => {
-                console.log('[SignalR] Stream completed');
-                if (isActive) {
-                  observer.complete();
-                }
-              }
-            });
-          },
-          error: (error) => {
-            console.error('[SignalR] Connection error:', error);
-            if (isActive) {
-              observer.error(error);
-            }
-          }
-        });
-
-      // Cleanup
-      return () => {
-        isActive = false;
-      };
+      return () => subscription.dispose();
     });
   }
 
@@ -116,7 +100,8 @@ export class SignalRAgentStreamService {
         accessTokenFactory: async () => {
           // Get fresh token for each request
           return await this.auth.currentUser?.getIdToken() || token;
-        }
+        },
+        timeout: 30000, // 30s connection timeout
       })
       .withAutomaticReconnect({
         nextRetryDelayInMilliseconds: (retryContext) => {
@@ -130,6 +115,8 @@ export class SignalRAgentStreamService {
           return delay;
         }
       })
+      .withServerTimeout(6 * 60 * 1000) // 6 minutes (must be > stream timeout)
+      .withKeepAliveInterval(30000) // 30s keepalive
       .build();
 
     // Set up lifecycle event handlers
