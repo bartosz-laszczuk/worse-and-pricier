@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, from, TimeoutError } from 'rxjs';
-import { map, switchMap, timeout } from 'rxjs/operators';
+import { Observable, from, TimeoutError, timer } from 'rxjs';
+import { map, switchMap, timeout, retry } from 'rxjs/operators';
 import { Auth } from '@angular/fire/auth';
 import { HubConnection, HubConnectionBuilder, HubConnectionState, IStreamResult } from '@microsoft/signalr';
 import { APP_CONFIG } from '@worse-and-pricier/question-randomizer-shared-util';
@@ -20,6 +20,8 @@ export class SignalRAgentStreamService {
 
   /** Timeout for waiting for next stream event (5 minutes for long-running AI tasks) */
   private readonly STREAM_TIMEOUT_MS = 5 * 60 * 1000;
+  /** Maximum reconnection attempts for stream */
+  private readonly MAX_STREAM_RETRIES = 5;
 
   constructor() {
     const baseUrl = this.appConfig.aiAgentApiUrl || 'http://localhost:5000';
@@ -28,11 +30,14 @@ export class SignalRAgentStreamService {
 
   /**
    * Stream real-time updates for a queued agent task
-   * @throws TimeoutError if no event received within timeout period
+   * Automatically retries stream subscription when connection drops
+   * @throws Error if max retries exceeded or task not found
    */
   streamTaskUpdates(taskId: string): Observable<AgentStreamEvent> {
     return from(this.ensureConnection()).pipe(
-      switchMap(connection => this.toObservable<AgentStreamEvent>(connection.stream<AgentStreamEvent>('StreamTaskUpdates', taskId))),
+      switchMap(connection => this.toObservable<AgentStreamEvent>(
+        connection.stream<AgentStreamEvent>('StreamTaskUpdates', taskId)
+      )),
       timeout({
         each: this.STREAM_TIMEOUT_MS,
         meta: { taskId }
@@ -40,7 +45,25 @@ export class SignalRAgentStreamService {
       map(event => ({
         ...event,
         timestamp: new Date(event.timestamp)
-      }))
+      })),
+      // Retry stream subscription when connection drops
+      retry({
+        count: this.MAX_STREAM_RETRIES,
+        delay: (error, retryCount) => {
+          // Don't retry on timeout errors (task is taking too long)
+          if (error instanceof TimeoutError) {
+            console.error(`[SignalR] Stream timeout for task ${taskId}`);
+            throw error;
+          }
+
+          // Calculate exponential backoff delay
+          const delay = Math.min(1000 * Math.pow(2, retryCount), 10000);
+          console.log(`[SignalR] Stream error for task ${taskId}, retrying in ${delay}ms... (attempt ${retryCount + 1}/${this.MAX_STREAM_RETRIES})`, error);
+
+          // Wait before retrying (this allows SignalR to reconnect)
+          return timer(delay);
+        }
+      })
     );
   }
 
