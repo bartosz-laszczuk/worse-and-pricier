@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, tap, catchError, of, switchMap } from 'rxjs';
+import { Observable, tap, catchError, of, switchMap, finalize } from 'rxjs';
 import { ChatStore } from '../store/chat.store';
 import { ChatRepository } from '../repositories/chat.repository';
 import { AiChatApiRepository } from '../repositories/ai-chat-api.repository';
-import { ChatMessage, Conversation } from '../models/chat.models';
+import { ChatMessage, Conversation, AgentStreamEvent } from '../models/chat.models';
 import { Auth } from '@angular/fire/auth';
 
 /**
@@ -165,6 +165,113 @@ export class ChatService {
         console.error('Error updating conversation timestamp:', error);
       }
     });
+  }
+
+  /**
+   * Send a message with real-time streaming support
+   * Uses SSE to stream agent responses in real-time
+   */
+  sendMessageWithStreaming(message: string): Observable<AgentStreamEvent> {
+    const conversationId = this.store.currentConversationId();
+
+    if (!conversationId) {
+      this.store.logError('No conversation selected');
+      return of({
+        type: 'error' as const,
+        message: 'No conversation selected',
+        timestamp: new Date()
+      } as AgentStreamEvent);
+    }
+
+    // Stop any ongoing loading
+    this.store.stopLoading();
+
+    // Create optimistic user message
+    const tempUserId = `temp-user-${Date.now()}`;
+    const userMessage: ChatMessage = {
+      id: tempUserId,
+      conversationId,
+      role: 'user',
+      content: message,
+      timestamp: new Date()
+    };
+
+    // Add optimistic message to UI
+    this.store.addOptimisticMessage(userMessage);
+
+    // Track if we've added the assistant message
+    let assistantMessageAdded = false;
+    let assistantContent = '';
+
+    // Stream the response
+    return this.aiChatApiRepository.sendMessageWithStreaming(conversationId, message).pipe(
+      tap(event => {
+        console.log('[ChatService] Stream event:', event);
+
+        // Handle different event types
+        switch (event.type) {
+          case 'started':
+            console.log('[ChatService] Task started, waiting for processing...');
+            break;
+
+          case 'status_change':
+            console.log('[ChatService] Status changed:', event.output);
+            break;
+
+          case 'completed':
+            // Remove optimistic message
+            this.store.removeOptimisticMessage(tempUserId);
+
+            // Store the assistant's response content
+            assistantContent = event.content || event.output || '';
+
+            // Add assistant message optimistically
+            if (!assistantMessageAdded) {
+              const tempAssistantId = `temp-assistant-${Date.now()}`;
+              const assistantMessage: ChatMessage = {
+                id: tempAssistantId,
+                conversationId,
+                role: 'assistant',
+                content: assistantContent,
+                timestamp: new Date()
+              };
+              this.store.addOptimisticMessage(assistantMessage);
+              assistantMessageAdded = true;
+
+              // Reload messages from Firestore to get real IDs
+              this.chatRepository.getMessages(conversationId).subscribe({
+                next: messages => {
+                  this.store.loadMessages(messages);
+                  this.updateConversationTimestamp(conversationId);
+                },
+                error: error => {
+                  console.error('Error reloading messages:', error);
+                }
+              });
+            }
+            break;
+
+          case 'error':
+            console.error('[ChatService] Stream error:', event.message);
+            this.store.removeOptimisticMessage(tempUserId);
+            this.store.logError(event.message || 'Failed to process message');
+            break;
+        }
+      }),
+      catchError(error => {
+        console.error('[ChatService] Streaming error:', error);
+        this.store.removeOptimisticMessage(tempUserId);
+        this.store.logError('Failed to send message');
+        return of({
+          type: 'error' as const,
+          message: error.message || 'Unknown error',
+          timestamp: new Date()
+        } as AgentStreamEvent);
+      }),
+      finalize(() => {
+        console.log('[ChatService] Stream completed');
+      })
+    );
   }
 
   /**

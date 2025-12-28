@@ -43,3 +43,35 @@ export interface ChatResponse {
 export interface CreateConversationRequest {
   title: string;
 }
+
+/**
+ * Agent task request
+ */
+export interface AgentTaskRequest {
+  task: string;
+  conversationId?: string;
+}
+
+/**
+ * Queue task response
+ */
+export interface QueueTaskResponse {
+  taskId: string;
+  message: string;
+}
+
+/**
+ * Agent stream event types
+ */
+export type AgentStreamEventType = 'started' | 'status_change' | 'completed' | 'error';
+
+/**
+ * Agent stream event
+ */
+export interface AgentStreamEvent {
+  type: AgentStreamEventType;
+  message?: string;
+  content?: string;
+  output?: string;
+  timestamp: Date;
+}
