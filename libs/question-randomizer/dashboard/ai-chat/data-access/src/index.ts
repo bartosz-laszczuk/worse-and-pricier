@@ -3,7 +3,7 @@ export * from './lib/models/chat.models';
 
 // Services
 export * from './lib/services/chat.service';
-export * from './lib/services/signalr-agent-stream.service';
+export * from './lib/services/agent-stream.service';
 
 // Repositories
 export * from './lib/repositories/chat.repository';

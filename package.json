@@ -51,7 +51,6 @@
     "@angular/platform-browser-dynamic": "20.3.3",
     "@angular/router": "20.3.3",
     "@jsverse/transloco": "^8.1.0",
-    "@microsoft/signalr": "^10.0.0",
     "@ngrx/signals": "^20.0.0",
     "angular-svg-icon": "^19.1.1",
     "ngx-quill": "^28.0.0",

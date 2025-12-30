@@ -214,8 +214,22 @@ export class ChatService {
             console.log('[ChatService] Task started, waiting for processing...');
             break;
 
-          case 'status_change':
-            console.log('[ChatService] Status changed:', event.output);
+          case 'thinking':
+            console.log('[ChatService] Agent is thinking...');
+            break;
+
+          case 'text_chunk':
+            // Real-time text streaming (ChatGPT-like)
+            console.log('[ChatService] Text chunk:', event.content);
+            // TODO: Implement progressive text display in UI
+            break;
+
+          case 'tool_call':
+            console.log('[ChatService] Calling tool:', event.toolName);
+            break;
+
+          case 'tool_result':
+            console.log('[ChatService] Tool result:', event.toolResult);
             break;
 
           case 'completed':
@@ -223,7 +237,7 @@ export class ChatService {
             this.store.removeOptimisticMessage(tempUserId);
 
             // Store the assistant's response content
-            assistantContent = event.content || event.output || '';
+            assistantContent = event.content || '';
 
             // Add assistant message optimistically
             if (!assistantMessageAdded) {

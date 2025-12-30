@@ -45,25 +45,16 @@ export interface CreateConversationRequest {
 }
 
 /**
- * Agent task request
- */
-export interface AgentTaskRequest {
-  task: string;
-  conversationId?: string;
-}
-
-/**
- * Queue task response
- */
-export interface QueueTaskResponse {
-  taskId: string;
-  message: string;
-}
-
-/**
  * Agent stream event types
  */
-export type AgentStreamEventType = 'started' | 'status_change' | 'completed' | 'error';
+export type AgentStreamEventType =
+  | 'started'        // Task execution started
+  | 'thinking'       // Agent is analyzing/planning
+  | 'text_chunk'     // Streaming response text (ChatGPT-like)
+  | 'tool_call'      // Agent calling a tool
+  | 'tool_result'    // Tool execution completed
+  | 'completed'      // Task finished successfully
+  | 'error';         // Task failed with error
 
 /**
  * Agent stream event
@@ -72,6 +63,8 @@ export interface AgentStreamEvent {
   type: AgentStreamEventType;
   message?: string;
   content?: string;
-  output?: string;
-  timestamp: Date;
+  toolName?: string;      // Tool name for tool_call events
+  toolInput?: unknown;    // Tool input for tool_call events
+  toolResult?: string;    // Tool result for tool_result events
+  timestamp?: Date;
 }
