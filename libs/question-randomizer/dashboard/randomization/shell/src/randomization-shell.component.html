@@ -1,107 +1,109 @@
 @if(randomization(); as randomization) {
-<div class="grid-container">
-  <lib-card class="item1" [title]="'randomization.progress.title' | transloco">
-    <div card-buttons>
-      <!-- <lib-button-text-icon (click)="onReset(randomization.id)">Reset</lib-button-text-icon> -->
-      <lib-button-icon
-        (click)="onReset(randomization.id)"
-        [icon]="'rotate-ccw'"
-        [type]="'dark'"
-        [animation]="'rotate360-counter'"
-        >Reset</lib-button-icon
-      >
+<div class="layout">
+  <div class="main-content">
+      <lib-card [title]="'randomization.progress.title' | transloco">
+        <div card-buttons>
+          <!-- <lib-button-text-icon (click)="onReset(randomization.id)">Reset</lib-button-text-icon> -->
+          <lib-button-icon
+            (click)="onReset(randomization.id)"
+            [icon]="'rotate-ccw'"
+            [type]="'dark'"
+            [animation]="'rotate360-counter'"
+            >Reset</lib-button-icon
+          >
+        </div>
+        <div class="status-units margin-bottom-24">
+          <lib-status-card
+            [count]="usedQuestionListLength()"
+            [title]="'randomization.progress.answered' | transloco"
+            [type]="'gray-800'"
+          ></lib-status-card>
+          <lib-status-card
+            [count]="availableQuestionListLength()"
+            [title]="'randomization.progress.ahead' | transloco"
+            [type]="'gray-600'"
+          ></lib-status-card>
+          <lib-status-card
+            [count]="postponedQuestionListLength()"
+            [title]="'randomization.progress.postponed' | transloco"
+          ></lib-status-card>
+        </div>
+        <lib-status-bar
+          [postponed]="postponedQuestionListLength()"
+          [ahead]="availableQuestionListLength()"
+          [answered]="usedQuestionListLength()"
+        ></lib-status-bar>
+      </lib-card>
+      <lib-card [title]="'randomization.question.title' | transloco">
+        <div title-button>
+          <lib-button-icon
+            (click)="onEditQuestion()"
+            [icon]="'edit'"
+            [type]="'transparent'"
+          ></lib-button-icon>
+        </div>
+        <div card-buttons>
+          <lib-button-group>
+            <lib-button-icon
+              (click)="onPreviousQuestion(randomization.id)"
+              [icon]="'arrow-left'"
+              [type]="'light'"
+              [animation]="'bounce-right-left'"
+            ></lib-button-icon>
+            <lib-button-icon
+              (click)="onPostponeQuestion(randomization.id)"
+              [icon]="'corner-up-right'"
+            ></lib-button-icon>
+            <lib-button-icon
+              (click)="onNextQuestion(randomization.id)"
+              [icon]="'arrow-right'"
+              [type]="'light'"
+              [animation]="'bounce-left-right'"
+            ></lib-button-icon>
+          </lib-button-group>
+          <!-- <button (click)="onPreviousQuestion(randomization.id)">Previous</button>
+          <button (click)="onNextQuestion(randomization.id)">Next</button>
+          <button (click)="onPostponeQuestion(randomization.id)">Postpone</button> -->
+        </div>
+        @if(currentQuestion(); as question){
+        <p>{{ question.question }}</p>
+        <p>{{ question.tags | formatTags }}</p>
+        } @else {
+        <p>{{ 'randomization.question.noQuestions' | transloco }}</p>
+        }
+      </lib-card>
+      <lib-card [title]="'randomization.answer.title' | transloco">
+        <div card-buttons>
+          <lib-button-icon
+            (click)="onToggleAnswer(randomization.showAnswer, randomization)"
+            [icon]="randomization.showAnswer ? 'eye-off' : 'eye'"
+            [type]="randomization.showAnswer ? 'dark' : 'light'"
+          ></lib-button-icon>
+          <!-- <button (click)="onToggleAnswer(randomization.showAnswer, randomization)">
+            {{ randomization.showAnswer ? 'Hide ' : 'Show ' }}answer
+          </button> -->
+        </div>
+        @if (randomization.showAnswer){
+        <div [innerHTML]="currentAnswer() | normalizeSpace"></div>
+        }
+      </lib-card>
     </div>
-    <div class="status-units margin-bottom-24">
-      <lib-status-card
-        [count]="usedQuestionListLength()"
-        [title]="'randomization.progress.answered' | transloco"
-        [type]="'gray-800'"
-      ></lib-status-card>
-      <lib-status-card
-        [count]="availableQuestionListLength()"
-        [title]="'randomization.progress.ahead' | transloco"
-        [type]="'gray-600'"
-      ></lib-status-card>
-      <lib-status-card
-        [count]="postponedQuestionListLength()"
-        [title]="'randomization.progress.postponed' | transloco"
-      ></lib-status-card>
-    </div>
-    <lib-status-bar
-      [postponed]="postponedQuestionListLength()"
-      [ahead]="availableQuestionListLength()"
-      [answered]="usedQuestionListLength()"
-    ></lib-status-bar>
-  </lib-card>
-  <lib-card class="item2" [title]="'randomization.question.title' | transloco">
-    <div title-button>
-      <lib-button-icon
-        (click)="onEditQuestion()"
-        [icon]="'edit'"
-        [type]="'transparent'"
-      ></lib-button-icon>
-    </div>
-    <div card-buttons>
-      <lib-button-group>
-        <lib-button-icon
-          (click)="onPreviousQuestion(randomization.id)"
-          [icon]="'arrow-left'"
-          [type]="'light'"
-          [animation]="'bounce-right-left'"
-        ></lib-button-icon>
-        <lib-button-icon
-          (click)="onPostponeQuestion(randomization.id)"
-          [icon]="'corner-up-right'"
-        ></lib-button-icon>
-        <lib-button-icon
-          (click)="onNextQuestion(randomization.id)"
-          [icon]="'arrow-right'"
-          [type]="'light'"
-          [animation]="'bounce-left-right'"
-        ></lib-button-icon>
-      </lib-button-group>
-      <!-- <button (click)="onPreviousQuestion(randomization.id)">Previous</button>
-      <button (click)="onNextQuestion(randomization.id)">Next</button>
-      <button (click)="onPostponeQuestion(randomization.id)">Postpone</button> -->
-    </div>
-    @if(currentQuestion(); as question){
-    <p>{{ question.question }}</p>
-    <p>{{ question.tags | formatTags }}</p>
-    } @else {
-    <p>{{ 'randomization.question.noQuestions' | transloco }}</p>
-    }
-  </lib-card>
-  <lib-card
-    class="item3"
-    [title]="'randomization.categories.title' | transloco"
-  >
-    <lib-input-check-group
-      [items]="categoryOptionItemList()"
-      [value]="selectedCategoryIdList()"
-      (checkboxChanged)="
-        onCheckboxChange(
-          $event.value.toString(),
-          $event.checked,
-          randomization.id
-        )
-      "
-    ></lib-input-check-group>
-  </lib-card>
-  <lib-card class="item4" [title]="'randomization.answer.title' | transloco">
-    <div card-buttons>
-      <lib-button-icon
-        (click)="onToggleAnswer(randomization.showAnswer, randomization)"
-        [icon]="randomization.showAnswer ? 'eye-off' : 'eye'"
-        [type]="randomization.showAnswer ? 'dark' : 'light'"
-      ></lib-button-icon>
-      <!-- <button (click)="onToggleAnswer(randomization.showAnswer, randomization)">
-        {{ randomization.showAnswer ? 'Hide ' : 'Show ' }}answer
-      </button> -->
-    </div>
-    @if (randomization.showAnswer){
-    <div [innerHTML]="currentAnswer() | normalizeSpace"></div>
-    }
-  </lib-card>
+    <lib-card
+      class="categories"
+      [title]="'randomization.categories.title' | transloco"
+    >
+      <lib-input-check-group
+        [items]="categoryOptionItemList()"
+        [value]="selectedCategoryIdList()"
+        (checkboxChanged)="
+          onCheckboxChange(
+            $event.value.toString(),
+            $event.checked,
+            randomization.id
+          )
+        "
+      ></lib-input-check-group>
+    </lib-card>
 </div>
 }
 

@@ -21,6 +21,12 @@ dd {
   margin: 0;
 }
 
+ul,
+ol {
+  margin: 0;
+  padding-left: 1rem;
+}
+
 /* Remove list styles on ul, ol elements with a list role */
 ul[role='list'],
 ol[role='list'] {
