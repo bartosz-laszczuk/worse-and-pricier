@@ -79,13 +79,15 @@ export const CategoryListStore = signalStore(
     );
 
     const categoryOptionItemList = computed(() =>
-      Object.values(store.entities() ?? {}).map(
-        (category) =>
-          ({
-            value: category.id,
-            label: category.name,
-          } as OptionItem)
-      )
+      Object.values(store.entities() ?? {})
+        .map(
+          (category) =>
+            ({
+              value: category.id,
+              label: category.name,
+            } as OptionItem)
+        )
+        .sort((a, b) => a.label.localeCompare(b.label))
     );
 
     return {
