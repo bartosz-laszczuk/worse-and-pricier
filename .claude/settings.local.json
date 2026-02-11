@@ -71,5 +71,8 @@
     "deny": [],
     "ask": []
   },
-  "enableAllProjectMcpServers": true
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "nx-mcp"
+  ]
 }

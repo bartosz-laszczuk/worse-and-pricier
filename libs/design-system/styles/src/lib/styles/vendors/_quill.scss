@@ -1,12 +1,24 @@
-// .ql-editor {
-//   font-size: 1rem;
-//   font-family: 'Inter', sans-serif;
-//   min-height: 200px;
-//   padding: 1rem;
-//   background-color: #fff;
-// }
+@use 'variables' as *;
 
-// .ql-toolbar {
-//   border-radius: 0.5rem;
-//   background-color: #f9fafb;
-// }
+.ql-container {
+  font-family: $font-family;
+  font-size: $font-size;
+  ul,
+  ol {
+    margin: 0;
+    padding-left: 1.5rem;
+    padding-inline-start: 1.5rem;
+    li {
+      padding: 0;
+    }
+  }
+
+  .ql-editor li[data-list='bullet'] > .ql-ui:before {
+    margin-left: -1.8em;
+    margin-top: 0.1rem;
+  }
+
+  .ql-editor li[data-list=ordered] > .ql-ui:before {
+    margin-top: 0.2rem;
+}
+}
