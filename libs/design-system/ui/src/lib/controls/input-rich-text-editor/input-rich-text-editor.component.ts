@@ -88,8 +88,10 @@ export class InputRichTextEditorComponent
   }
 
   onContentChanged(event: ContentChange): void {
+    if (event.source !== 'user') {
+      return;
+    }
     const html = event.editor.root.innerHTML;
-    this.value = html;
     this.onChange(html);
   }
 
