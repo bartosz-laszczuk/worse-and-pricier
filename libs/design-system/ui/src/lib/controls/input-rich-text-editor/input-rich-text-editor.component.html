@@ -8,6 +8,7 @@
     [ngModel]="value"
     [placeholder]="placeholder()"
     [readOnly]="disabled"
+    [spellcheck]="false"
     [attr.aria-invalid]="control.invalid"
     [attr.aria-describedby]="hint() ? inputId + '-hint' : null"
     [ngClass]="{
