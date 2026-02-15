@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { QuillModule } from 'ngx-quill';
+import { ContentChange, QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'lib-input-rich-text-editor',
@@ -85,6 +85,12 @@ export class InputRichTextEditorComponent
     // No custom validation - let Angular's built-in validators handle it
     // (e.g., Validators.required checks for empty string)
     return null;
+  }
+
+  onContentChanged(event: ContentChange): void {
+    const html = event.editor.root.innerHTML;
+    this.value = html;
+    this.onChange(html);
   }
 
   markAsTouched(): void {

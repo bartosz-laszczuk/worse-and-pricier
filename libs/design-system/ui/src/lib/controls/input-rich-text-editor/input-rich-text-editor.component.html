@@ -5,7 +5,7 @@
 
   <quill-editor
     [id]="inputId"
-    [(ngModel)]="value"
+    [ngModel]="value"
     [placeholder]="placeholder()"
     [readOnly]="disabled"
     [attr.aria-invalid]="control.invalid"
@@ -13,7 +13,7 @@
     [ngClass]="{
       'is-invalid': control.invalid && (control.touched || control.dirty)
     }"
-    (ngModelChange)="onChange($event)"
+    (onContentChanged)="onContentChanged($event)"
     (blur)="markAsTouched()"
   ></quill-editor>
 
