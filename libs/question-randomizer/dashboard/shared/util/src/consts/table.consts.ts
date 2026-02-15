@@ -96,6 +96,16 @@ export const paginateEntities = <T>(
 //   return filtered.slice(start, end);
 // };
 
+const stripHtmlForSearch = (html: string): string =>
+  html
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'");
+
 export const filterByTextUsingORLogic = <T>(
   entities: T[],
   fields: (keyof T)[],
@@ -107,7 +117,9 @@ export const filterByTextUsingORLogic = <T>(
           const value = entity[field];
           // Handle string fields
           if (typeof value === 'string') {
-            return value.toLowerCase().includes(searchText.toLowerCase());
+            return stripHtmlForSearch(value)
+              .toLowerCase()
+              .includes(searchText.toLowerCase());
           }
           // Handle array fields (e.g., tags: string[])
           if (Array.isArray(value)) {
