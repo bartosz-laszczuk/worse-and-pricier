@@ -106,6 +106,23 @@ const stripHtmlForSearch = (html: string): string =>
     .replace(/&quot;/gi, '"')
     .replace(/&#39;/gi, "'");
 
+const CATEGORY_SEARCH_PREFIXES = ['cat: ', 'category: ', 'cat:', 'category:'];
+
+export const parseCategorySearch = (
+  searchText: string
+): { isCategorySearch: boolean; phrase: string } => {
+  const lower = searchText.toLowerCase();
+  for (const prefix of CATEGORY_SEARCH_PREFIXES) {
+    if (lower.startsWith(prefix)) {
+      return {
+        isCategorySearch: true,
+        phrase: searchText.slice(prefix.length),
+      };
+    }
+  }
+  return { isCategorySearch: false, phrase: searchText };
+};
+
 export const filterByTextUsingORLogic = <T>(
   entities: T[],
   fields: (keyof T)[],

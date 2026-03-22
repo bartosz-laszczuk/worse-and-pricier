@@ -2,6 +2,7 @@ import { computed } from '@angular/core';
 import {
   filterByTextUsingORLogic,
   filterEntities,
+  parseCategorySearch,
   paginateEntities,
   Question,
   sortEntities,
@@ -52,11 +53,10 @@ export const InterviewStore = signalStore(
 
       const questions = ids.map((id) => entities[id]);
 
-      const searched = filterByTextUsingORLogic(
-        questions,
-        ['question', 'answer', 'answerPl', 'tags'],
-        store.searchText()
-      );
+      const { isCategorySearch, phrase } = parseCategorySearch(store.searchText());
+      const searched = isCategorySearch
+        ? filterByTextUsingORLogic(questions, ['categoryName'], phrase)
+        : filterByTextUsingORLogic(questions, ['question', 'answer', 'answerPl', 'tags'], store.searchText());
 
       return filterEntities(searched, store.filters());
     });
