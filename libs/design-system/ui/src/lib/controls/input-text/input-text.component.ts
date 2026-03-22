@@ -64,6 +64,8 @@ export class InputTextComponent implements ControlValueAccessor, Validator {
   public hint = input<string | undefined>();
   /** Additional CSS classes to apply */
   public classes = input<string>('');
+  /** When true, the input stretches to fill its container width */
+  public stretch = input<boolean>(false);
   /** Optional icon name to display */
   public icon = input<string>('');
   /** Custom error messages for validation errors */

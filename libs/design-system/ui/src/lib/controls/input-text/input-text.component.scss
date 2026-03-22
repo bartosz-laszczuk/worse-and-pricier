@@ -2,6 +2,10 @@
 .input-container {
   position: relative;
   width: fit-content;
+
+  &--stretch {
+    width: 100%;
+  }
 }
 
 /* Input field */
