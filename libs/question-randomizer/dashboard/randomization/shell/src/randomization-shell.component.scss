@@ -23,3 +23,8 @@
     flex: 1;
   }
 }
+
+.category-check-group {
+  overflow: auto;
+  max-height: calc(100vh - 20.375rem);
+}
