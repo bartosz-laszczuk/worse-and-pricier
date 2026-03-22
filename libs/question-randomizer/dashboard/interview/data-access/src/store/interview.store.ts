@@ -53,10 +53,16 @@ export const InterviewStore = signalStore(
 
       const questions = ids.map((id) => entities[id]);
 
-      const { isCategorySearch, phrase } = parseCategorySearch(store.searchText());
-      const searched = isCategorySearch
-        ? filterByTextUsingORLogic(questions, ['categoryName'], phrase)
-        : filterByTextUsingORLogic(questions, ['question', 'answer', 'answerPl', 'tags'], store.searchText());
+      const { isCategorySearch, categoryPhrase, textPhrase } = parseCategorySearch(store.searchText());
+      let searched: Question[];
+      if (isCategorySearch) {
+        const byCategory = filterByTextUsingORLogic(questions, ['categoryName'], categoryPhrase);
+        searched = textPhrase
+          ? filterByTextUsingORLogic(byCategory, ['question', 'answer', 'answerPl', 'tags'], textPhrase)
+          : byCategory;
+      } else {
+        searched = filterByTextUsingORLogic(questions, ['question', 'answer', 'answerPl', 'tags'], store.searchText());
+      }
 
       return filterEntities(searched, store.filters());
     });
