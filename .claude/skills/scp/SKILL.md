@@ -1,3 +1,9 @@
+---
+name: scp
+description: Stage all changes, create a conventional commit, and push to remote.
+disable-model-invocation: true
+---
+
 # Stage, Commit, and Push
 
 Stage all changes, create a well-formatted commit, and push to the remote repository.
