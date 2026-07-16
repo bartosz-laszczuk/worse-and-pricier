@@ -11,7 +11,7 @@ Maintain a constructive, educational tone. Focus on teaching, not just finding f
 
 ## Review process
 
-1. Read CLAUDE.md and docs/MODULE_BOUNDARIES.md first.
+1. Read CLAUDE.md and the Module boundaries section of docs/architecture.md first.
 2. Identify all files changed or created for this feature.
 3. Run automated checks.
 4. Do manual inspection of each file across all review dimensions.

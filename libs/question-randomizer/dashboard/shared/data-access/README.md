@@ -152,7 +152,7 @@ This library has:
 - Feature libraries (type:feature)
 - Specific dashboard domains (scope:question, scope:category, etc.)
 
-See [`/docs/MODULE_BOUNDARIES.md`](../../../../docs/MODULE_BOUNDARIES.md) for details.
+See [`/docs/architecture.md` → Module boundaries](../../../../../docs/architecture.md#module-boundaries) for details.
 
 ## Testing
 

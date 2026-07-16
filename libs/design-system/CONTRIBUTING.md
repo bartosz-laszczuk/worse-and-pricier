@@ -2,7 +2,7 @@
 
 This guide provides instructions for contributing to the design system packages located in `libs/design-system/`.
 
-**For usage documentation, see:** [`/libs/design-system/README.md`](../libs/design-system/README.md)
+**For usage documentation, see:** [`README.md`](./README.md)
 
 ## Before You Start
 
@@ -129,7 +129,7 @@ The design system follows strict ESLint module boundaries:
 'type:ui', 'type:util', 'type:styles'
 ```
 
-**See:** [`/docs/MODULE_BOUNDARIES.md`](./MODULE_BOUNDARIES.md) for detailed rules.
+**See:** [`/docs/architecture.md` → Module boundaries](../../docs/architecture.md#module-boundaries) for detailed rules.
 
 ### 6. Storybook Documentation
 
@@ -189,7 +189,7 @@ npx nx storybook @worse-and-pricier/design-system-ui
 
 ## Resources
 
-- **Design System Documentation:** [`/libs/design-system/README.md`](../libs/design-system/README.md)
+- **Design System Documentation:** [`README.md`](./README.md)
 - **Storybook:** `npx nx storybook @worse-and-pricier/design-system-ui`
-- **Module Boundaries:** [`/docs/MODULE_BOUNDARIES.md`](./MODULE_BOUNDARIES.md)
-- **Quick Command Reference:** See [CLAUDE.md](../CLAUDE.md#quick-command-reference)
+- **Module Boundaries:** [`/docs/architecture.md` → Module boundaries](../../docs/architecture.md#module-boundaries)
+- **Run / build / test commands:** See [`README.md`](../../README.md)

@@ -410,6 +410,8 @@ This architecture provides maximum flexibility for different use cases:
 
 ## Contributing
 
+Full guide: [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+
 When adding new components or tokens:
 
 1. Add components to appropriate library

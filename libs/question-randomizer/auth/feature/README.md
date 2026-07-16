@@ -126,7 +126,7 @@ This library has:
 - Shell libraries
 - Dashboard domain libraries
 
-See [`/docs/MODULE_BOUNDARIES.md`](../../../../docs/MODULE_BOUNDARIES.md) for details.
+See [`/docs/architecture.md` → Module boundaries](../../../../docs/architecture.md#module-boundaries) for details.
 
 ## Authentication Flow
 

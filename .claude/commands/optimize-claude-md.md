@@ -8,8 +8,8 @@ This command helps maintain an optimized CLAUDE.md file by checking its size, an
    - Read the current CLAUDE.md file
    - Count total lines and identify sections
    - Check for duplication with:
-     - `/docs/MODULE_BOUNDARIES.md`
-     - `/docs/DESIGN_SYSTEM_CONTRIBUTING.md`
+     - `/docs/architecture.md` (Module boundaries section)
+     - `/libs/design-system/CONTRIBUTING.md`
      - `/libs/design-system/README.md`
 
 2. **Report findings:**
@@ -48,20 +48,20 @@ This command helps maintain an optimized CLAUDE.md file by checking its size, an
 - Project overview
 - Quick command reference (common Nx commands)
 - Architecture overview
-- Module boundaries summary (link to /docs/MODULE_BOUNDARIES.md)
+- Module boundaries summary (link to /docs/architecture.md#module-boundaries)
 - State management patterns
 - Routing structure
 - Import paths
 - Design system reference (link to /libs/design-system/README.md)
 - Development guidelines
 
-**`/docs/MODULE_BOUNDARIES.md`**:
+**`/docs/architecture.md` (Module boundaries section)**:
 - Detailed ESLint configuration
 - Type and scope tag explanations
 - Dependency rules with rationale
 - Examples of violations and correct patterns
 
-**`/docs/DESIGN_SYSTEM_CONTRIBUTING.md`**:
+**`/libs/design-system/CONTRIBUTING.md`**:
 - Contributing to design system
 - Adding components and tokens
 - Publishing workflow

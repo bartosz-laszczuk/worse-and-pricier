@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Question Randomizer — frontend data contract (Firestore)",
+  "description": "Data shapes this frontend reads/writes DIRECTLY in Firestore, scoped by userId. This is the single source of truth for these shapes; TypeScript models under libs/**/models must conform. AI-chat data (conversations/messages) is owned by the backend and specified in api.md, not here.",
+  "version": "baseline-2026-07-16",
+  "definitions": {
+    "Question": {
+      "type": "object",
+      "collection": "questions",
+      "required": ["id", "question", "answer", "answerPl", "isActive", "userId"],
+      "properties": {
+        "id": { "type": "string" },
+        "question": { "type": "string" },
+        "answer": { "type": "string", "description": "Answer in English (may contain rich-text/HTML)" },
+        "answerPl": { "type": "string", "description": "Answer in Polish" },
+        "categoryName": { "type": "string" },
+        "categoryId": { "type": ["string", "null"], "description": "Nulled when the referenced category is deleted" },
+        "qualificationName": { "type": "string" },
+        "qualificationId": { "type": ["string", "null"], "description": "Nulled when the referenced qualification is deleted" },
+        "isActive": { "type": "boolean", "description": "Only active questions are eligible for randomization" },
+        "userId": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" }, "description": "Absent field (deleteField) means no tags" }
+      }
+    },
+    "Category": {
+      "type": "object",
+      "collection": "categories",
+      "required": ["id", "name", "userId"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "userId": { "type": "string" }
+      }
+    },
+    "Qualification": {
+      "type": "object",
+      "collection": "qualifications",
+      "required": ["id", "name", "userId"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "userId": { "type": "string" }
+      }
+    },
+    "Randomization": {
+      "type": "object",
+      "collection": "randomizations",
+      "description": "One active randomization document per user. currentQuestion is hydrated client-side; only currentQuestionId is persisted.",
+      "required": ["id", "showAnswer", "status", "userId"],
+      "properties": {
+        "id": { "type": "string" },
+        "currentQuestionId": { "type": ["string", "null"] },
+        "showAnswer": { "type": "boolean" },
+        "status": { "type": "integer", "enum": [1, 2], "description": "RandomizationStatus: 1 = Ongoing, 2 = Finished" },
+        "userId": { "type": "string" },
+        "created": { "type": "string", "format": "date-time", "description": "Firestore serverTimestamp" }
+      }
+    },
+    "SelectedCategory": {
+      "type": "object",
+      "collection": "selectedCategories",
+      "description": "Categories the user selected to scope the current randomization session.",
+      "required": ["userId"],
+      "properties": {
+        "id": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "userId": { "type": "string" }
+      }
+    },
+    "UsedQuestion": {
+      "type": "object",
+      "collection": "usedQuestions",
+      "description": "Questions already drawn in the current session (not eligible again this session).",
+      "required": ["questionId", "userId"],
+      "properties": {
+        "id": { "type": "string" },
+        "questionId": { "type": "string" },
+        "categoryId": { "type": ["string", "null"] },
+        "userId": { "type": "string" }
+      }
+    },
+    "PostponedQuestion": {
+      "type": "object",
+      "collection": "postponedQuestions",
+      "description": "Questions the user deferred; re-offered before the session finishes.",
+      "required": ["questionId", "userId"],
+      "properties": {
+        "id": { "type": "string" },
+        "questionId": { "type": "string" },
+        "categoryId": { "type": ["string", "null"] },
+        "userId": { "type": "string" }
+      }
+    }
+  },
+  "userIsolation": "Every collection carries userId. All reads filter `where('userId','==', currentUserId)`; the client must never read or write documents belonging to another user. Enforcement also belongs in Firestore security rules (owned outside this repo)."
+}

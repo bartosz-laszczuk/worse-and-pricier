@@ -116,7 +116,7 @@ This library has:
 - Other feature libraries
 - Shell libraries
 
-See [`/docs/MODULE_BOUNDARIES.md`](../../../../../docs/MODULE_BOUNDARIES.md) for details.
+See [`/docs/architecture.md` → Module boundaries](../../../../../docs/architecture.md#module-boundaries) for details.
 
 ## Features in Detail
 

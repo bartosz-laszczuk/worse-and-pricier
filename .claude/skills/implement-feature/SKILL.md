@@ -14,7 +14,7 @@ Spawn the `feature-implementer` agent with this exact prompt:
 
 > Implement the following feature: $ARGUMENTS
 >
-> Before writing anything, read CLAUDE.md and docs/MODULE_BOUNDARIES.md, then read at least one existing file of the same type you are about to create.
+> Before writing anything, read CLAUDE.md and the Module boundaries section of docs/architecture.md, then read at least one existing file of the same type you are about to create.
 
 Wait for it to finish.
 
