@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Question Randomizer — frontend data contract (Firestore)",
-  "description": "Data shapes this frontend reads/writes DIRECTLY in Firestore, scoped by userId. This is the single source of truth for these shapes; TypeScript models under libs/**/models must conform. AI-chat data (conversations/messages) is owned by the backend and specified in api.md, not here.",
+  "description": "Data shapes this frontend reads/writes DIRECTLY in Firestore, scoped by userId. This is the single source of truth for these shapes; TypeScript models under libs/**/models must conform. Includes conversations/messages, which ChatRepository accesses directly in Firestore (the backend is used only for agent execution via POST /api/agent/execute — see api.md).",
   "version": "baseline-2026-07-16",
   "definitions": {
     "Question": {
@@ -89,6 +89,32 @@
         "questionId": { "type": "string" },
         "categoryId": { "type": ["string", "null"] },
         "userId": { "type": "string" }
+      }
+    },
+    "Conversation": {
+      "type": "object",
+      "collection": "conversations",
+      "description": "AI-chat conversation. Read/written directly by ChatRepository (Firestore). Deleting a conversation also deletes its messages (batch).",
+      "required": ["userId"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": ["string", "null"] },
+        "userId": { "type": "string" },
+        "createdAt": { "type": ["string", "null"], "format": "date-time" },
+        "updatedAt": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "collection": "messages",
+      "description": "A chat message within a conversation. Read/written directly by ChatRepository (Firestore).",
+      "required": ["conversationId", "role", "content"],
+      "properties": {
+        "id": { "type": "string" },
+        "conversationId": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "assistant"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": ["string", "null"], "format": "date-time" }
       }
     }
   },

@@ -22,18 +22,20 @@ How this frontend is structured and the technology decisions behind it. Product 
 This frontend does **not** talk to a single backend. It has two distinct upstream surfaces, and
 which one a feature uses is a deliberate architectural fact:
 
-1. **Firestore, accessed directly** (via `@angular/fire`) for the core domain data —
-   questions, categories, qualifications, and randomization state. There is no backend hop; the
-   client reads/writes Firestore collections directly, scoped by `userId`. The collections and
-   shapes are specified in [`schema.json`](schema.json).
-2. **Backend AI Agent HTTP API** (`http://localhost:5000/api` by default, configured via
-   `AppConfig.aiAgentApiUrl`) used **only** by the AI chat feature. Requests carry a Firebase ID
-   token as a bearer credential. The contract is specified in [`api.md`](api.md).
+1. **Firestore, accessed directly** (via `@angular/fire`) for essentially **all** data —
+   questions, categories, qualifications, randomization state, **and AI-chat conversations/messages**
+   (`ChatRepository`). No backend hop; the client reads/writes Firestore directly, scoped by
+   `userId`. Collections and shapes: [`schema.json`](schema.json).
+2. **Backend AI Agent HTTP API** (`AppConfig.aiAgentApiUrl`, default `http://localhost:5000`) used
+   for **one thing only: agent task execution** — `POST /api/agent/execute` (SSE), with a Firebase
+   ID token bearer credential. Contract: [`api.md`](api.md).
 
 > ⚠️ **DRIFT NOTE.** The system-level coordination repo states "Frontend talks ONLY to Backend
-> API via HTTPS." That is **not** how this app currently works — core CRUD is direct-to-Firestore,
-> and only AI chat uses the backend. Either the code or the coordination doc must change; this
-> spec records the *current* reality. Flagged for reconciliation.
+> API via HTTPS." That is **not** how this app currently works — nearly everything (including chat
+> history) is direct-to-Firestore, and the backend is used *only* for agent execution. A legacy
+> `POST /chat` call also exists in `AiChatApiRepository` with no backend endpoint (see
+> [`api.md`](api.md)). Either the code or the coordination doc must change; this spec records the
+> *current* reality. Flagged for reconciliation.
 
 ## Monorepo layout
 

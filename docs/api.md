@@ -1,39 +1,44 @@
 # API — consumed contracts
 
-This frontend is a **consumer**, not a producer. It does not own an OpenAPI file. This document
-specifies the one HTTP contract it depends on. Direct Firestore data shapes are specified
-separately in [`schema.json`](schema.json); the rationale for the two-surface split is in
-[`architecture.md`](architecture.md).
+This frontend is a **consumer**, not a producer. It does not own an OpenAPI file. The **only**
+backend HTTP contract it truly depends on is the AI **agent execution** endpoint (SSE). Everything
+else the AI-chat feature needs — conversations and messages — is read/written **directly in
+Firestore** (see [`schema.json`](schema.json)), like the rest of the app's data. Rationale for the
+data-surface split: [`architecture.md`](architecture.md).
 
-## Backend AI Agent API
+## Backend AI Agent API — the one real dependency
 
-- **Base URL:** `AppConfig.aiAgentApiUrl` (default `http://localhost:5000/api`).
-- **Auth:** every request sends `Authorization: Bearer <Firebase ID token>`. Unauthenticated calls
-  must fail before dispatch.
-- **Owner:** `question-randomizer-backend`. That repo owns the canonical contract.
+- **Endpoint:** `POST {aiAgentApiUrl}/api/agent/execute` (default base `http://localhost:5000`).
+- **Auth:** `Authorization: Bearer <Firebase ID token>`; unauthenticated calls fail before dispatch.
+- **Request:** `{ task: string, conversationId?: string | null }`, `Accept: text/event-stream`.
+- **Response:** a **Server-Sent Events** stream of `AgentStreamEvent` (see below).
+- **Owner:** `question-randomizer-backend` (that repo owns the canonical contract).
 
-### Single-source-of-truth strategy (target)
-
-> ⚠️ **DRIFT / TODO.** The request/response types below are currently **hand-maintained** in
-> `libs/question-randomizer/dashboard/ai-chat/data-access/src/lib/models/chat.models.ts`. That is a
-> duplication of the backend's contract. Target state: the backend publishes its OpenAPI spec and
-> this app **generates** these types from it (with a CI freshness check), so there is exactly one
-> source of truth. Until then, treat `chat.models.ts` as a mirror that must be reconciled on every
-> backend contract change.
-
-### Endpoints consumed
-
-| Method | Path | Request | Response |
-|--------|------|---------|----------|
-| POST | `/chat` | `ChatRequest { conversationId, message }` | `ChatResponse { response, conversationId, messageId }` |
-| POST | `/conversations` | `CreateConversationRequest { title }` | `Conversation { id, userId, title, createdAt, updatedAt }` |
-| GET (SSE) | agent task stream | task text (+ optional `conversationId`) | stream of `AgentStreamEvent` |
+Implemented by `AgentStreamService` (`agent-stream.service.ts`); this matches the backend's real
+`POST /api/agent/execute`.
 
 ### Streaming events (`AgentStreamEvent`)
 
-Server-Sent Events power the ChatGPT-like live response. Event `type` is one of:
-`started`, `thinking`, `text_chunk`, `tool_call`, `tool_result`, `completed`, `error`.
-Payload fields: `message?`, `content?`, `toolName?`, `toolInput?`, `toolResult?`, `timestamp?`.
+Event `type` is one of: `started`, `thinking`, `text_chunk`, `tool_call`, `tool_result`,
+`completed`, `error`. Payload fields: `message?`, `content?`, `toolName?`, `toolInput?`,
+`toolResult?`, `timestamp?`. The stream completes on `completed` or `error`. Behavioral
+requirements: [`features/ai-chat-assistant.md`](features/ai-chat-assistant.md).
 
-Behavioral requirements for consuming the stream are specified in
-[`features/ai-chat-assistant.md`](features/ai-chat-assistant.md).
+## Conversations & messages — Firestore-direct (not the backend)
+
+`ChatRepository` (`chat.repository.ts`) reads/writes the `conversations` and `messages` collections
+**directly in Firestore** (list/create conversation, list/add message, update timestamp, delete
+conversation + its messages). These are specified in [`schema.json`](schema.json), not here.
+
+## ⚠️ Drift / dead code to reconcile
+
+- **`AiChatApiRepository.sendMessage` → `POST {aiAgentApiUrl}/chat`** and
+  **`createConversation` → `POST {aiAgentApiUrl}/conversations`** exist in
+  `ai-chat-api.repository.ts`, but:
+  - the backend exposes **no `/api/chat` endpoint** (only `/api/agent/execute`), so the `/chat` call
+    has no counterpart — it appears to be **legacy** superseded by the SSE streaming path;
+  - conversation creation actually goes through the **Firestore-direct** `ChatRepository`, not this
+    HTTP method.
+- **`chat.models.ts`** hand-maintains the request/response types. If any real HTTP contract remains,
+  target state is to **generate** types from the backend's OpenAPI with a CI freshness check rather
+  than mirror them by hand.

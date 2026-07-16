@@ -2,8 +2,9 @@
 
 ## Purpose
 A conversational interface (`/dashboard/ai-chat`) that lets a user manage their data and ask
-questions in natural language, backed by the server-side AI agent. This is the **only** feature that
-uses the backend HTTP API rather than direct Firestore access.
+questions in natural language, backed by the server-side AI agent. It is the **only** feature that
+calls the backend HTTP API — but only for **agent execution** (`POST /api/agent/execute`, SSE);
+its conversations and messages are stored **directly in Firestore** like the rest of the app.
 
 ## Actors
 Verified user.
@@ -22,16 +23,18 @@ Verified user.
   → `completed`, and an `error` event surfaces a visible error state.
 - **Given** a `text_chunk` stream, **then** the assistant message is appended incrementally, not only
   on completion.
-- **Given** a new conversation, **when** created, **then** it is associated with the user's `userId`
-  (server-assigned) and can host subsequent messages.
+- **Given** a new conversation, **when** created, **then** it is written to Firestore
+  (`conversations`) with the user's `userId` and can host subsequent messages.
+- **Given** a conversation is deleted, **then** its messages are deleted with it (batch).
 
 ## Data touched
-Backend AI Agent API only — endpoints, request/response types, and stream event shapes are specified
-in [`api.md`](../api.md). Conversations/messages are owned and persisted by the backend, **not** by
-this repo's [`schema.json`](../schema.json).
+- **Agent execution:** backend `POST /api/agent/execute` (SSE) — contract in [`api.md`](../api.md).
+- **Conversations & messages:** written **directly to Firestore** by `ChatRepository`
+  (`conversations`, `messages`) — shapes in [`schema.json`](../schema.json).
 
 ## Dependencies
-Backend running and reachable at `AppConfig.aiAgentApiUrl`.
+Backend reachable at `AppConfig.aiAgentApiUrl` (for agent execution only); Firestore (for chat
+history).
 
 ## Out of scope
 Agent tool implementations and background processing (owned by `question-randomizer-backend`).
