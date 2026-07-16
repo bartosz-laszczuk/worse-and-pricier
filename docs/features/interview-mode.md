@@ -1,35 +1,50 @@
 # Feature: Interview mode
 
 ## Purpose
-A focused practice/interview surface (`/dashboard/interview`) for working through a randomized set
-of questions as a session — geared toward conducting or simulating a real interview rather than the
-quick-drill randomization view.
+A read-only **reference/browse view** (`/dashboard/interview`) of the user's entire question bank
+with answers visible, designed for use *during* an interview: quickly search, sort, and page
+through all questions and read the answer in the active language. Unlike
+[randomization](randomization.md), it does not draw, hide, or track questions — everything is
+visible and lookup-oriented.
 
 ## Actors
-Verified user (candidate practicing, or interviewer running a session).
+Verified user (typically an interviewer referencing their bank while conducting an interview).
 
 ## Behavior
-- Present questions from the user's pool for an interview session, tracking progress through the set.
-- Reveal answers per question during the session.
-- Review state for a completed session.
+- On entry, load **all** of the user's questions from the shared `QuestionListStore` (a one-time
+  read of the in-memory question dictionary; no separate fetch).
+- Present them in a table with two columns: **Question** and **Answer**.
+- **Answer is language-aware:** show `answerPl` when the active Transloco language is `pl`,
+  otherwise `answer`. Switching language re-renders the answers immediately.
+- **Search** (debounced ~50 ms) filters client-side:
+  - Plain text matches across `question`, `answer`, `answerPl`, and `tags` (OR logic).
+  - Category-prefix search syntax is supported: a category phrase filters by `categoryName`, with
+    an optional trailing text phrase further filtering the remaining columns (shared
+    `parseCategorySearch` behavior).
+- **Sort** by column (default `question`, ascending) and **paginate** (default page size 10).
+- The view is **read-only** — no create/edit/delete, no reveal/hide toggle (both question and
+  answer are always shown), no session or progress state, and nothing is persisted.
 
-> ⚠️ **SPEC GAP.** This behavior is reverse-derived from the route and store presence
-> (`interview.store.ts`, `InterviewShellComponent`). The precise rules — how the interview set is
-> chosen, whether it shares session state with [randomization](randomization.md), and what "review
-> mode" persists — must be confirmed against the implementation and pinned down here before this
-> feature is treated as fully specified.
-
-## Acceptance criteria (provisional — confirm against implementation)
-- **Given** a verified user, **when** they enter interview mode, **then** they are presented
-  questions from their own pool only.
-- **Given** an in-progress interview, **when** they advance, **then** progress through the set is
-  tracked and reflected in the UI.
-- **Given** a completed interview, **when** they review it, **then** the questions/answers covered
-  are viewable.
+## Acceptance criteria
+- **Given** a verified user with questions, **when** they open interview mode, **then** the table
+  shows their questions with both Question and Answer columns; only their own questions appear.
+- **Given** the active language is `pl`, **when** the table renders, **then** each row's Answer
+  shows `answerPl`; **when** the user switches to `en`, **then** answers re-render as `answer`
+  without a reload.
+- **Given** a search term, **when** entered, **then** after the debounce the list is filtered
+  client-side across question/answer/answerPl/tags (OR logic) and pagination resets to page 0.
+- **Given** a category-prefix search with a trailing text phrase, **then** results are narrowed by
+  `categoryName` and then by the text phrase.
+- **Given** a sort or page change, **then** the displayed rows update accordingly; the default sort
+  is `question` ascending and default page size is 10.
+- **Given** interview mode, **then** no data is written and no Firestore document is created or
+  updated.
 
 ## Data touched
-Interview store state; reads `questions`. Confirm whether any session data is persisted to Firestore
-and, if so, add the collection to [`schema.json`](../schema.json).
+Reads the user's questions in memory via the shared `QuestionListStore` (sourced from the
+`questions` collection — see [`schema.json`](../schema.json)). No writes; no interview-specific
+collection.
 
 ## Out of scope
-Randomization drill loop (see [randomization](randomization.md)).
+The randomization drill loop, used/postponed tracking, and answer reveal/hide (see
+[randomization](randomization.md)); question CRUD (see [question-management](question-management.md)).

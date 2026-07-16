@@ -1,96 +1,75 @@
 # Optimize CLAUDE.md
 
-This command helps maintain an optimized CLAUDE.md file by checking its size, analyzing duplication, and suggesting improvements.
+This command keeps `CLAUDE.md` a **lean agent operating manual** — directives plus a
+single-source-of-truth doc map — with no descriptive content that duplicates the owner documents.
+
+## Model: what CLAUDE.md is (and is not)
+
+`CLAUDE.md` is **not** a reference hub that restates the project. Every descriptive topic has a
+single owner elsewhere; `CLAUDE.md` only *points* to them and adds agent-specific directives.
+
+**CLAUDE.md SHOULD contain:**
+- The documentation map (single-source-of-truth table)
+- The Spec-Driven Development workflow
+- Nx MCP directives (mandatory tool-use rules)
+- The feature-creation checklist (as ordered steps that link to owners)
+- MCP integrations reference
+
+**CLAUDE.md SHOULD NOT contain** (these live in their owners — see the map in CLAUDE.md):
+- Project overview / what-why-who → `docs/overview.md`
+- Architecture, state management, routing, import paths → `docs/architecture.md`
+- Module boundary rules → `docs/architecture.md#module-boundaries`
+- Feature behavior → `docs/features/`
+- Data shapes → `docs/schema.json`; consumed API → `docs/api.md`
+- i18n / testing → `docs/guides/`
+- Design system → `libs/design-system/README.md` + `CONTRIBUTING.md`
+- Run/build/test commands → `README.md`
 
 ## Your Task
 
 1. **Analyze CLAUDE.md:**
-   - Read the current CLAUDE.md file
-   - Count total lines and identify sections
-   - Check for duplication with:
-     - `/docs/architecture.md` (Module boundaries section)
-     - `/libs/design-system/CONTRIBUTING.md`
-     - `/libs/design-system/README.md`
+   - Read `CLAUDE.md` and confirm every section maps to a "SHOULD contain" item above.
+   - Flag any prose that duplicates an owner document (a "SHOULD NOT contain" topic that has crept
+     back in) — that is the primary defect to catch.
 
-2. **Report findings:**
-   - Current line count
-   - Sections that could be condensed
-   - Any duplication with supporting docs
-   - Broken or missing links
+2. **Check the doc map:**
+   - Every owner document that exists is listed in the map.
+   - Every link in the map (and elsewhere in CLAUDE.md) resolves to a real file/anchor.
+   - No entry points at a moved or deleted path.
 
-3. **Provide optimization recommendations:**
-   - Which sections should be extracted or condensed
-   - Suggested file structure changes
-   - Link updates needed
+3. **Report findings:**
+   - Sections that duplicate an owner (with the owner they belong to)
+   - Missing or broken links; missing doc-map entries
+   - Any descriptive content that should be extracted
 
-4. **If user approves, perform optimization:**
-   - Extract duplicated content to appropriate docs
-   - Update CLAUDE.md with references
-   - Validate all links work correctly
-   - Report final line count reduction
+4. **If the user approves, apply:**
+   - Move duplicated content into its owner document (do not leave a copy behind).
+   - Replace it in CLAUDE.md with a link to that owner.
+   - Validate all links resolve.
+   - Report what moved and where.
 
-## Optimization Principles
+## Principles
 
-- **CLAUDE.md should be ~200-300 lines** - Quick reference hub
-- **Extract detailed documentation** to `/docs/` or existing READMEs
-- **Use links liberally** to supporting documentation
-- **Avoid duplication** - Single source of truth for each topic
-- **Keep essential context** in CLAUDE.md:
-  - Project overview
-  - Architecture fundamentals
-  - State management patterns
-  - Import path examples
-  - Feature creation guidelines
+- **Single source of truth** — each topic lives in exactly one owner; everywhere else links.
+- **No duplication** — CLAUDE.md must not restate owner content.
+- **Directives over description** — keep imperative agent guidance (Nx MCP, SDD workflow); push
+  description out to owners.
+- **Leanness is a side effect**, not a line-count target — there is no fixed line budget; the goal
+  is zero duplication and accurate pointers.
 
-## File Organization Strategy
+## Validation checklist
 
-**CLAUDE.md** (quick reference):
-- Project overview
-- Quick command reference (common Nx commands)
-- Architecture overview
-- Module boundaries summary (link to /docs/architecture.md#module-boundaries)
-- State management patterns
-- Routing structure
-- Import paths
-- Design system reference (link to /libs/design-system/README.md)
-- Development guidelines
+- [ ] No CLAUDE.md section duplicates an owner document
+- [ ] Doc-map table lists every existing owner
+- [ ] All CLAUDE.md links (and anchors) resolve
+- [ ] Descriptive content lives only in owners under `docs/`, `libs/design-system/`, or `README.md`
+- [ ] `docs/` root still contains only SDD artifacts (spec files + `features/`; supporting docs in `docs/guides/`)
 
-**`/docs/architecture.md` (Module boundaries section)**:
-- Detailed ESLint configuration
-- Type and scope tag explanations
-- Dependency rules with rationale
-- Examples of violations and correct patterns
-
-**`/libs/design-system/CONTRIBUTING.md`**:
-- Contributing to design system
-- Adding components and tokens
-- Publishing workflow
-- Storybook documentation
-
-**`/libs/design-system/README.md`**:
-- Complete design system documentation
-- Package architecture
-- Usage examples
-- Configuration
-
-## Validation Checklist
-
-After optimization, verify:
-
-- [ ] All links in CLAUDE.md resolve correctly
-- [ ] No duplication between CLAUDE.md and supporting docs
-- [ ] CLAUDE.md is 200-300 lines
-- [ ] Supporting docs are organized in `/docs/`
-- [ ] Design system docs remain in `/libs/design-system/`
-- [ ] Essential context remains in CLAUDE.md
-- [ ] Cross-references between docs work correctly
-
-## Example Usage
+## Example usage
 
 User runs: `/optimize-claude-md`
 
 Expected output:
-1. Analysis report of current state
-2. Recommendations for optimization
-3. If approved, perform optimizations
-4. Final report with line count reduction and changes made
+1. Analysis: which sections (if any) duplicate owners; link/anchor validation results
+2. Recommendations
+3. If approved, the moves applied + a summary of what changed
