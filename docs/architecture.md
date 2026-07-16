@@ -14,8 +14,8 @@ How this frontend is structured and the technology decisions behind it. Product 
 | Auth & data | Firebase — Authentication + Firestore (`@angular/fire`) |
 | AI features | Backend AI Agent HTTP API (see [`api.md`](api.md)) |
 | Styling | SCSS + in-repo design system (`libs/design-system/`) |
-| i18n | Transloco — English + Polish (details: [`guides/INTERNATIONALIZATION.md`](guides/INTERNATIONALIZATION.md)) |
-| Testing | Jest (unit), Playwright (e2e) — details: [`guides/TESTING.md`](guides/TESTING.md) |
+| i18n | Transloco — English + Polish (details: [`guides/internationalization.md`](guides/internationalization.md)) |
+| Testing | Jest (unit), Playwright (e2e) — details: [`guides/testing.md`](guides/testing.md) |
 
 ## Two upstream data surfaces (important)
 
@@ -131,5 +131,5 @@ Lazy-loaded, domain-organized. `/` redirects to `/dashboard/randomization`. `/au
 
 - **Design system** — use its components instead of bespoke UI. Docs: `libs/design-system/README.md`;
   contributing: [`../libs/design-system/CONTRIBUTING.md`](../libs/design-system/CONTRIBUTING.md).
-- **i18n** — all user-facing text via Transloco keys (en/pl). Details: [`guides/INTERNATIONALIZATION.md`](guides/INTERNATIONALIZATION.md).
+- **i18n** — all user-facing text via Transloco keys (en/pl). Details: [`guides/internationalization.md`](guides/internationalization.md).
 - **Config** — `APP_CONFIG` injection token (`AppConfig`) carries Firebase config and `aiAgentApiUrl`.

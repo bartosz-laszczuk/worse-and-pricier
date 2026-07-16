@@ -16,8 +16,8 @@ Each topic has exactly one owner. Read the owner; do not duplicate its content e
 | Module boundary rules | [`docs/architecture.md` → Module boundaries](docs/architecture.md#module-boundaries) |
 | Firestore data shapes | [`docs/schema.json`](docs/schema.json) |
 | Consumed backend API contract | [`docs/api.md`](docs/api.md) |
-| Internationalization | [`docs/guides/INTERNATIONALIZATION.md`](docs/guides/INTERNATIONALIZATION.md) |
-| Testing | [`docs/guides/TESTING.md`](docs/guides/TESTING.md) |
+| Internationalization | [`docs/guides/internationalization.md`](docs/guides/internationalization.md) |
+| Testing | [`docs/guides/testing.md`](docs/guides/testing.md) |
 | Design system | [`libs/design-system/README.md`](libs/design-system/README.md), [`libs/design-system/CONTRIBUTING.md`](libs/design-system/CONTRIBUTING.md) |
 | Run / build / test commands | [`README.md`](README.md) |
 

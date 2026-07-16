@@ -18,7 +18,7 @@ Any signed-in user.
 - **Given** the language switcher, **when** the user selects Polish, **then** all user-facing text
   re-renders via Transloco `pl` keys without a full reload, and the choice persists.
 - **Given** a missing translation key, **then** behavior follows the i18n fallback policy in
-  [`INTERNATIONALIZATION.md`](../guides/INTERNATIONALIZATION.md) (default language `en`).
+  [`internationalization.md`](../guides/internationalization.md) (default language `en`).
 
 ## Data touched
 Client-side only: `ThemeService` state and `localStorage` (theme + active language). No Firestore
@@ -26,7 +26,7 @@ collection.
 
 ## Dependencies
 Design-system `ThemeService`; Transloco. Mechanics are owned by
-[`INTERNATIONALIZATION.md`](../guides/INTERNATIONALIZATION.md) and the design-system docs — not restated
+[`internationalization.md`](../guides/internationalization.md) and the design-system docs — not restated
 here.
 
 ## Out of scope
